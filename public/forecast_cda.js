@@ -3,9 +3,17 @@ document.addEventListener('DOMContentLoaded', function () {
     const loadingIndicator = document.getElementById('loading_forecast');
     loadingIndicator.style.display = 'block';
 
-    // Gage control json file URL
-    const jsonFileURL = 'https://wm.mvs.ds.usace.army.mil/php-data-api/public/json/gage_control.json';
-    console.log("jsonFileURL = ", jsonFileURL);
+    // Gage control json file
+    let jsonFileURL = null;
+    if (cda === "public") {
+        jsonFileURL = '../../../php_data_api/public/json/gage_control.json';
+    } else if (cda === "internal") {
+        jsonFileURL = '../../../php_data_api/public/json/gage_control.json';
+    } else {
+        jsonFileURL = '../../../php_data_api/public/json/gage_control.json';
+    }
+    console.log('jsonFileURL: ', jsonFileURL);
+
     
     // Fetch JSON data from the specified URL
     fetch(jsonFileURL)
