@@ -14,7 +14,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     console.log('jsonFileURL: ', jsonFileURL);
 
-    
     // Fetch JSON data from the specified URL
     fetch(jsonFileURL)
         .then(response => {
