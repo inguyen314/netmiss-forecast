@@ -30,15 +30,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Filter and sort the data
             const filteredData = data.reduce((accumulator, currentValue) => {
-                // Extract the 'gages' array
+                // Extract the 'gages' array, defaulting to an empty array if not present
                 const gages = currentValue.gages || [];
-
-                // Filter out gages where tsid_forecast_location is true
-                const filteredGages = gages.filter(gage => gage.tsid_forecast_location === true);
-
-                // Push filtered gages to the accumulator
+            
+                // Filter out gages where either tsid_forecast_location or tsid_interpolate_location is true
+                const filteredGages = gages.filter(gage => gage.tsid_forecast_location === true || gage.tsid_interpolate_location === true);
+            
+                // Accumulate the filtered gages into the accumulator
                 accumulator.push(...filteredGages);
-
+            
+                // Return the accumulator for the next iteration
                 return accumulator;
             }, []);
 

@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadingIndicator.style.display = 'block';
 
     // Define the path to the JSON file
-    const jsonFilePath = 'https://wm.mvs.ds.usace.army.mil/php-data-api/public/json/gage_control.json';
+    const jsonFilePath = 'https://wm.mvs.ds.usace.army.mil/php_data_api/public/json/gage_control.json';
     
     // Fetch the initial gage control data
     fetch(jsonFilePath)
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Create an array of promises for the second fetch based on basin data
             const fetchPromises = gageControlData.map(async item => {
                 const basin = item.basin;
-                const secondFetchUrl = `https://wm.mvs.ds.usace.army.mil/php-data-api/public/get_gage_control_by_basin.php?basin=${basin}`;
+                const secondFetchUrl = `https://wm.mvs.ds.usace.army.mil/php_data_api/public/get_gage_control_by_basin.php?basin=${basin}`;
                 console.log('secondFetchUrl:', secondFetchUrl);
 
                 // Return the fetch promise for each basin
@@ -55,16 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     filteredBasins.sort((a, b) => customOrder.indexOf(a.basin) - customOrder.indexOf(b.basin));
                     console.log('filteredBasins: ', filteredBasins);
 
-                    function combineGages(basins) {
-                        let combinedGages = [];
-                    
-                        basins.forEach(basin => {
-                            combinedGages = combinedGages.concat(basin.gages);
-                        });
-                    
-                        return combinedGages;
-                    }
-
                     const combinedGages = combineGages(filteredBasins);
                     console.log("combinedGages: ", combinedGages);
 
@@ -89,6 +79,17 @@ document.addEventListener('DOMContentLoaded', () => {
             loadingIndicator.style.display = 'none';
         });
 });
+
+// Function to conbine gages from basins
+function combineGages(basins) {
+    let combinedGages = [];
+
+    basins.forEach(basin => {
+        combinedGages = combinedGages.concat(basin.gages);
+    });
+
+    return combinedGages;
+}
 
 // Function to merge two jsons based on basin and location
 function mergeData(data, secondDataArray) {
@@ -580,4 +581,3 @@ function fetchFirstNetmissDay(tsid_netmiss) {
             throw error; // Rethrow the error to be caught by the caller
         });    
 }
-
