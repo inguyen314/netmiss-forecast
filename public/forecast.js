@@ -375,7 +375,7 @@ function fetchAndUpdateData(location_id, tsid_netmiss, tsid_netmiss_observe, row
     console.log('queryString:', queryString);
 
     // Make an AJAX request to the PHP script, passing all the variables
-    const url = `https://wm.mvs.ds.usace.army.mil/php-data-api/public/get_netmiss_forecast.php?${queryString}`;
+    const url = `https://wm.mvs.ds.usace.army.mil/php_data_api/public/get_netmiss_forecast.php?${queryString}`;
     console.log('url:', url);
 
     fetch(url)
@@ -550,7 +550,7 @@ function fetchFirstNetmissDay(tsid_netmiss) {
     };
 
     const queryString = Object.keys(dataToSend).map(key => key + '=' + dataToSend[key]).join('&');
-    const url = `https://wm.mvs.ds.usace.army.mil/php-data-api/public/get_netmiss.php?${queryString}`;
+    const url = `https://wm.mvs.ds.usace.army.mil/php_data_api/public/get_netmiss.php?${queryString}`;
     console.log('url :', url);
 
     return fetch(url)
