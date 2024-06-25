@@ -526,6 +526,7 @@ function checkForDuplicates(data) {
     return dateTimes.length === uniqueDateTimes.size;
 }
 
+// Function to fetch two urls, netmiss and stagerev
 async function fetchTwoUrls(url1, url2) {
     try {
         // Set the fetch options with method and headers
@@ -568,6 +569,7 @@ async function fetchTwoUrls(url1, url2) {
     }
 }
 
+// Function to get lastest 6am value
 function getLatest6AMValue(data) {
     // Extract the values array from the data
     const values = data.values;
@@ -605,6 +607,7 @@ function getLatest6AMValue(data) {
     return latest6AMValue;
 }
 
+// Function to check for values length
 function checkValuesArrayLength(data) {
     const valuesArray = data.values;
     const expectedLength = 7;
@@ -618,6 +621,7 @@ function checkValuesArrayLength(data) {
     }
 }
 
+// Function to get first netmiss value 
 function getFirstNetmissValue(data) {
     // Extract the values array from the data
     const values = data.values;
@@ -642,6 +646,7 @@ function getFirstNetmissValue(data) {
     return firstNetmissValue;
 }
 
+// Function to convert UTC to Central
 function convertUTCtoCentralTime(data) {
     // Define the Central Time timezone
     const centralTimeZone = 'America/Chicago';
