@@ -296,15 +296,20 @@ function createTable(filteredData) {
 
 // Function to fetch ld summary data
 function fetchFirstNetmissDay(tsid, begin, end, cda) {
+    if (!tsid) {
+        throw new Error('tsid cannot be null or undefined');
+    }
+
     let url = null;
     if (cda === "internal") {
         url = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/timeseries?name=${tsid}&begin=${begin.toISOString()}&end=${end.toISOString()}&office=MVS&timezone=CST6CDT`;
     } else if (cda === "public") {
         url = `https://cwms-data.usace.army.mil/cwms-data/timeseries?name=${tsid}&begin=${begin.toISOString()}&end=${end.toISOString()}&office=MVS&timezone=CST6CDT`;
     } else {
-        url = null;
+        throw new Error('Invalid value for cda');
     }
-    console.log("url = ",  url);
+
+    console.log("url = ", url);
 
     return fetch(url, {
             method: 'GET',
@@ -354,8 +359,9 @@ function fetchFirstNetmissDay(tsid, begin, end, cda) {
         .catch(error => {
             console.error('Error:', error);
             throw error; // Rethrow the error to be caught by the caller
-        });    
+        });
 }
+
 
 // Function to get current data time
 function subtractHoursFromDate(date, hoursToSubtract) {
@@ -368,14 +374,8 @@ function plusHoursFromDate(date, hoursToSubtract) {
 }
 
 function populateTableCells(filteredData, table) {
+    console.log("filteredData @ populateTableCells", filteredData);
     filteredData.forEach(location => {
-        // console.log("Location ID:", location.location_id);
-        // console.log("Public Name:", location.public_name);
-        // console.log("Order:", location.order);
-        // console.log("TS ID:", location.tsid_precip_raw);
-        // console.log("River Mile:", location.station);
-        // console.log("Netmiss Observe:", location.tsid_netmiss_observe);
-
         // Create a new row for each data object
         const row = table.insertRow();
         console.log("Calling fetchAndUpdateData");
@@ -410,7 +410,8 @@ function fetchAndUpdateData(location_id, tsid1, tsid2, row, begin, end1, end2) {
 
     console.log("location_id = ",  location_id);
 
-    fetchTwoUrls(url1, url2).then(({ data1, data2 }) => {
+    fetchTwoUrls(url1, url2)
+        .then(({ data1, data2 }) => {
         // Do something with the fetched data
         console.log("data1 test = ", data1);
         console.log("data2 test = ", data2);
@@ -421,11 +422,8 @@ function fetchAndUpdateData(location_id, tsid1, tsid2, row, begin, end1, end2) {
         const isArrayLengthGreaterThanSeven = checkValuesArrayLength(data1);
         console.log("isArrayLengthGreaterThanSeven:", isArrayLengthGreaterThanSeven);
 
-        // const firstNetmissValue = getFirstNetmissValue(data1);
-        // console.log("First Netmiss Value Array:", firstNetmissValue);
-
         const latest6AMValue = getLatest6AMValue(data2);
-        console.log(latest6AMValue); 
+        console.log("latest6AMValue: ", latest6AMValue); 
 
         if (isArrayLengthGreaterThanSeven === true) {
             // LOCATION
@@ -515,6 +513,9 @@ function fetchAndUpdateData(location_id, tsid1, tsid2, row, begin, end1, end2) {
             day7Cell.innerHTML = day7;
         }
         
+    })
+    .catch(error => {
+        console.error('Error fetching data:', error);
     });
 }
 
@@ -528,44 +529,38 @@ function checkForDuplicates(data) {
 
 // Function to fetch two urls, netmiss and stagerev
 async function fetchTwoUrls(url1, url2) {
-    try {
-        // Set the fetch options with method and headers
-        const fetchOptions = {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json;version=2'
-            }
-        };
+    const fetchOptions = {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json;version=2'
+        }
+    };
 
-        // Fetch both URLs with the specified options
+    try {
         const response1Promise = fetch(url1, fetchOptions);
         const response2Promise = fetch(url2, fetchOptions);
 
-        // Wait for both fetches to complete
-        const response1 = await response1Promise;
-        const response2 = await response2Promise;
+        const [response1, response2] = await Promise.all([response1Promise, response2Promise]);
 
-        // Check if both fetches were successful
-        if (!response1.ok || !response2.ok) {
-            throw new Error('One or both fetch requests failed');
+        let data1 = null;
+        let data2 = null;
+
+        if (response1.ok) {
+            data1 = await response1.json();
+        } else {
+            console.error(`Fetch request to ${url1} failed with status ${response1.status}`);
         }
 
-        // Parse both responses as JSON
-        const data1Promise = response1.json();
-        const data2Promise = response2.json();
+        if (response2.ok) {
+            data2 = await response2.json();
+        } else {
+            console.error(`Fetch request to ${url2} failed with status ${response2.status}`);
+        }
 
-        // Wait for both JSON parses to complete
-        const data1 = await data1Promise;
-        const data2 = await data2Promise;
-
-        // Use the data
-        // console.log('Data from URL 1:', data1);
-        // console.log('Data from URL 2:', data2);
-        
-        // Return the data if needed
         return { data1, data2 };
     } catch (error) {
-        console.error('Error fetching the URLs:', error);
+        console.error('Error fetching the URLs:', error.message);
+        return { data1: null, data2: null }; // return null data if any error occurs
     }
 }
 
@@ -648,6 +643,11 @@ function getFirstNetmissValue(data) {
 
 // Function to convert UTC to Central
 function convertUTCtoCentralTime(data) {
+    // Return null if data is null
+    if (data === null) {
+        return null;
+    }
+
     // Define the Central Time timezone
     const centralTimeZone = 'America/Chicago';
 
