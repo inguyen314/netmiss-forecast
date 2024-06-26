@@ -84,7 +84,7 @@ $current_date_time   = date("Y-m-d H:i", $time);
 						<div id="topPane" class="col-md backend-cp-collapsible">
 							<div class="box-usace">
 								<h2 class="box-header-striped">
-									<span class="titleLabel title">MVS Operational 7-Day River Forecast - PHP V1.0</span>
+									<span class="titleLabel title">7-Day Operational River Forecast PHP</span>
 									<span class="rss"></span>
 								</h2>
 								<div class="box-content" style="background-color:white;margin:auto">
