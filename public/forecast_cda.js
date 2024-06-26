@@ -422,8 +422,9 @@ function fetchAndUpdateData(location_id, tsid1, tsid2, row, begin, end1, end2) {
         const isArrayLengthGreaterThanSeven = checkValuesArrayLength(data1);
         console.log("isArrayLengthGreaterThanSeven:", isArrayLengthGreaterThanSeven);
 
-        const latest6AMValue = getLatest6AMValue(data2);
-        console.log("latest6AMValue: ", latest6AMValue); 
+        const result = getLatest6AMValue(data2);
+        const latest6AMValue = result.latest6AMValue;
+        const tsid = result.tsid;
 
         if (isArrayLengthGreaterThanSeven === true) {
             // LOCATION
@@ -432,7 +433,10 @@ function fetchAndUpdateData(location_id, tsid1, tsid2, row, begin, end1, end2) {
 
             // OBSERVED 6AM
             const level6AmCell = row.insertCell();
-            level6AmCell.innerHTML = "<div title='" + latest6AMValue.date + "'>" + "<a href='../../chart/public/chart.html' target='_blank'>" + (parseFloat(latest6AMValue.value).toFixed(2)) + "</a>" + "</div>";
+            level6AmCell.innerHTML = "<div title='" + latest6AMValue.date + "'>" +
+            "<a href='../../chart/public/chart.html?cwms_ts_id=" + tsid + "' target='_blank'>" +
+            (parseFloat(latest6AMValue.value).toFixed(2)) + "</a>" +
+            "</div>";
 
             // DAY1
             const day1Cell = row.insertCell();
@@ -569,6 +573,9 @@ function getLatest6AMValue(data) {
     // Extract the values array from the data
     const values = data.values;
 
+    // Extract the tsid from the data
+    const tsid = data.name;
+
     // Initialize a variable to store the latest 6 AM value
     let latest6AMValue = null;
 
@@ -592,14 +599,17 @@ function getLatest6AMValue(data) {
         if (centralDate.getHours() === 6 && centralDate.getMinutes() === 0 && centralDate.getSeconds() === 0) {
             // If the current timestamp is later than the previously stored one, update the latest value
             if (timestamp > latest6AMTimestamp) {
-                latest6AMValue = { date: centralDate, value, qualityCode };
+                latest6AMValue = { date: centralDate.toISOString(), value, qualityCode };
                 latest6AMTimestamp = timestamp;
             }
         }
     }
 
-    // Return the latest 6 AM value found
-    return latest6AMValue;
+    // Return the latest 6 AM value found and tsid
+    return {
+        latest6AMValue,
+        tsid
+    };
 }
 
 // Function to check for values length
