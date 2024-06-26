@@ -432,7 +432,7 @@ function fetchAndUpdateData(location_id, tsid1, tsid2, row, begin, end1, end2) {
 
             // OBSERVED 6AM
             const level6AmCell = row.insertCell();
-            level6AmCell.innerHTML = "<div title='" + latest6AMValue.date + "'>" + (parseFloat(latest6AMValue.value).toFixed(2)) + "</div>";
+            level6AmCell.innerHTML = "<div title='" + latest6AMValue.date + "'>" + "<a href='../../chart/public/chart.html' target='_blank'>" + (parseFloat(latest6AMValue.value).toFixed(2)) + "</a>" + "</div>";
 
             // DAY1
             const day1Cell = row.insertCell();
