@@ -604,6 +604,18 @@ function getLatest6AMValue(data) {
 
 // Function to check for values length
 function checkValuesArrayLength(data) {
+    // Check if data is null or undefined
+    if (!data) {
+        console.log('Data is null or undefined.');
+        return false;
+    }
+
+    // Check if data.values is null or undefined
+    if (!data.values) {
+        console.log('Data.values is null or undefined.');
+        return false;
+    }
+
     const valuesArray = data.values;
     const expectedLength = 7;
 
