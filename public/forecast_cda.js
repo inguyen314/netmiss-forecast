@@ -33,9 +33,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Extract the 'gages' array, defaulting to an empty array if not present
                 const gages = currentValue.gages || [];
             
-                // Filter out gages where either tsid_forecast_location or tsid_interpolate_location is true
-                const filteredGages = gages.filter(gage => gage.tsid_forecast_location === true || gage.tsid_interpolate_location === true);
-            
+                let filteredGages = null;
+                if (interpolate === "true") {
+                    // Filter out gages where either tsid_forecast_location or tsid_interpolate_location is true
+                    filteredGages = gages.filter(gage => gage.tsid_forecast_location === true || gage.tsid_interpolate_location === true);
+                } else {
+                    // Filter out gages where tsid_forecast_location is true
+                    filteredGages = gages.filter(gage => gage.tsid_forecast_location === true);
+                }
+
                 // Accumulate the filtered gages into the accumulator
                 accumulator.push(...filteredGages);
             
