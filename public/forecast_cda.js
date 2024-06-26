@@ -388,12 +388,32 @@ function populateTableCells(filteredData, table) {
         const currentDateTime = new Date();
         const currentDateTimePlus7Days = plusHoursFromDate(currentDateTime, 168);
         const currentDateMinus30Hours = subtractHoursFromDate(currentDateTime, 30);
-        fetchAndUpdateData(location.location_id, location.tsid_netmiss, location.tsid_netmiss_observe, row, currentDateTime, currentDateTimePlus7Days, currentDateMinus30Hours);
+        fetchAndUpdateData(location.location_id
+                            ,location.tsid_netmiss
+                            ,location.tsid_netmiss_observe
+                            ,row
+                            ,currentDateTime
+                            ,currentDateTimePlus7Days
+                            ,currentDateMinus30Hours
+                            ,location.level_id_flood
+                            ,location.level_id_effective_date_flood
+                            ,location.level_id_unit_id_flood
+                        );
     });
 }
 
-// Function to fetch ld summary data
-function fetchAndUpdateData(location_id, tsid1, tsid2, row, begin, end1, end2) {
+// Function to fetch all data needed to run forecast
+function fetchAndUpdateData(location_id
+                            ,tsid1
+                            ,tsid2
+                            ,row
+                            ,begin
+                            ,end1
+                            ,end2
+                            ,level_id_flood
+                            ,level_id_effective_date_flood
+                            ,level_id_unit_id_flood
+                        ) {
     let url1 = null;
     if (cda === "internal") {
         url1 = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/timeseries?name=${tsid1}&begin=${begin.toISOString()}&end=${end1.toISOString()}&office=MVS&timezone=CST6CDT`;
@@ -414,13 +434,23 @@ function fetchAndUpdateData(location_id, tsid1, tsid2, row, begin, end1, end2) {
     }
     console.log("url2 = ",  url2);
 
+    let url3 = null;
+    if (cda === "public") {
+        url3 = `https://water.usace.army.mil/cwms-data/levels/${level_id_flood}?office=MVS&effective-date=${level_id_effective_date_flood}&unit=${level_id_unit_id_flood}`;
+    } else if (cda === "internal") {
+        url3 = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/levels/${level_id_flood}?office=MVS&effective-date=${level_id_effective_date_flood}&unit=${level_id_unit_id_flood}`;
+    }
+    console.log('url3: ', url3);
+    
+
     console.log("location_id = ",  location_id);
 
-    fetchTwoUrls(url1, url2)
-        .then(({ data1, data2 }) => {
+    fetchThreeUrls(url1, url2, url3)
+        .then(({ data1, data2, data3 }) => {
         // Do something with the fetched data
-        console.log("data1 test = ", data1);
-        console.log("data2 test = ", data2);
+        console.log("data1 = ", data1);
+        console.log("data2 = ", data2);
+        console.log("data3 = ", data3);
 
         const convertedData = convertUTCtoCentralTime(data1);
         console.log("convertedData = ", convertedData);
@@ -538,7 +568,7 @@ function checkForDuplicates(data) {
 }
 
 // Function to fetch two urls, netmiss and stagerev
-async function fetchTwoUrls(url1, url2) {
+async function fetchThreeUrls(url1, url2, url3) {
     const fetchOptions = {
         method: 'GET',
         headers: {
@@ -549,11 +579,13 @@ async function fetchTwoUrls(url1, url2) {
     try {
         const response1Promise = fetch(url1, fetchOptions);
         const response2Promise = fetch(url2, fetchOptions);
+        const response3Promise = fetch(url3, fetchOptions);
 
-        const [response1, response2] = await Promise.all([response1Promise, response2Promise]);
+        const [response1, response2, response3] = await Promise.all([response1Promise, response2Promise, response3Promise]);
 
         let data1 = null;
         let data2 = null;
+        let data3 = null;
 
         if (response1.ok) {
             data1 = await response1.json();
@@ -567,10 +599,16 @@ async function fetchTwoUrls(url1, url2) {
             console.error(`Fetch request to ${url2} failed with status ${response2.status}`);
         }
 
-        return { data1, data2 };
+        if (response3.ok) {
+            data3 = await response3.json();
+        } else {
+            console.error(`Fetch request to ${url3} failed with status ${response3.status}`);
+        }
+
+        return { data1, data2, data3 };
     } catch (error) {
         console.error('Error fetching the URLs:', error.message);
-        return { data1: null, data2: null }; // return null data if any error occurs
+        return { data1: null, data2: null, data3: null }; // return null data if any error occurs
     }
 }
 
