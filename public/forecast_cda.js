@@ -398,6 +398,7 @@ function populateTableCells(filteredData, table) {
                             ,location.level_id_flood
                             ,location.level_id_effective_date_flood
                             ,location.level_id_unit_id_flood
+                            ,location.tsid_forecast_location
                         );
     });
 }
@@ -413,6 +414,7 @@ function fetchAndUpdateData(location_id
                             ,level_id_flood
                             ,level_id_effective_date_flood
                             ,level_id_unit_id_flood
+                            ,tsid_forecast_location
                         ) {
     let url1 = null;
     if (cda === "internal") {
@@ -452,12 +454,14 @@ function fetchAndUpdateData(location_id
         console.log("data2 = ", data2);
         console.log("data3 = ", data3);
 
+        // Process data1 - netmiss forecast data
         const convertedData = convertUTCtoCentralTime(data1);
         console.log("convertedData = ", convertedData);
 
         const isArrayLengthGreaterThanSeven = checkValuesArrayLength(data1);
         console.log("isArrayLengthGreaterThanSeven:", isArrayLengthGreaterThanSeven);
 
+        // Process data2 - 6am level
         const result = getLatest6AMValue(data2);
         const latest6AMValue = result.latest6AMValue;
         const tsid = result.tsid;
@@ -471,8 +475,9 @@ function fetchAndUpdateData(location_id
             const level6AmCell = row.insertCell();
             level6AmCell.innerHTML = "<div title='" + latest6AMValue.date + "'>" +
             "<a href='../../chart/public/chart.html?cwms_ts_id=" + tsid + "' target='_blank'>" +
-            (parseFloat(latest6AMValue.value).toFixed(2)) + "</a>" +
+            (tsid_forecast_location !== null ? "<strong>" + parseFloat(latest6AMValue.value).toFixed(2) + "</strong>" : parseFloat(latest6AMValue.value).toFixed(2)) + "</a>" +
             "</div>";
+
 
             // DAY1
             const day1Cell = row.insertCell();
