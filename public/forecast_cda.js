@@ -475,56 +475,56 @@ function fetchAndUpdateData(location_id
             const level6AmCell = row.insertCell();
             level6AmCell.innerHTML = "<div title='" + latest6AMValue.date + "'>" +
             "<a href='../../chart/public/chart.html?cwms_ts_id=" + tsid + "' target='_blank'>" +
-            (tsid_forecast_location !== null ? "<strong>" + parseFloat(latest6AMValue.value).toFixed(2) + "</strong>" : parseFloat(latest6AMValue.value).toFixed(2)) + "</a>" +
+            (tsid_forecast_location === true ? "<strong>" + parseFloat(latest6AMValue.value).toFixed(2) + "</strong>" : parseFloat(latest6AMValue.value).toFixed(2)) + "</a>" +
             "</div>";
 
 
             // DAY1
             const day1Cell = row.insertCell();
             const day1 = "<div title='" + convertedData.values[0] + "'>" + 
-                (tsid_forecast_location !== null ? "<strong>" + (convertedData.values[0][1]).toFixed(2) + "</strong>" : (convertedData.values[0][1]).toFixed(2)) + 
+                (tsid_forecast_location === true ? "<strong>" + (convertedData.values[0][1]).toFixed(2) + "</strong>" : (convertedData.values[0][1]).toFixed(2)) + 
                 "</div>";
             day1Cell.innerHTML = day1;
 
             // DAY2
             const day2Cell = row.insertCell();
             const day2 = "<div title='" + convertedData.values[1] + "'>" + 
-                (tsid_forecast_location !== null ? "<strong>" + (convertedData.values[1][1]).toFixed(2) + "</strong>" : (convertedData.values[1][1]).toFixed(2)) + 
+                (tsid_forecast_location === true ? "<strong>" + (convertedData.values[1][1]).toFixed(2) + "</strong>" : (convertedData.values[1][1]).toFixed(2)) + 
                 "</div>";
             day2Cell.innerHTML = day2;
 
             // DAY3
             const day3Cell = row.insertCell();
             const day3 = "<div title='" + convertedData.values[2] + "'>" + 
-                (tsid_forecast_location !== null ? "<strong>" + (convertedData.values[2][1]).toFixed(2) + "</strong>" : (convertedData.values[2][1]).toFixed(2)) + 
+                (tsid_forecast_location === true ? "<strong>" + (convertedData.values[2][1]).toFixed(2) + "</strong>" : (convertedData.values[2][1]).toFixed(2)) + 
                 "</div>";
             day3Cell.innerHTML = day3;
 
             // DAY4
             const day4Cell = row.insertCell();
             const day4 = "<div title='" + convertedData.values[3] + "'>" + 
-                (tsid_forecast_location !== null ? "<strong>" + (convertedData.values[3][1]).toFixed(2) + "</strong>" : (convertedData.values[3][1]).toFixed(2)) + 
+                (tsid_forecast_location === true ? "<strong>" + (convertedData.values[3][1]).toFixed(2) + "</strong>" : (convertedData.values[3][1]).toFixed(2)) + 
                 "</div>";
             day4Cell.innerHTML = day4;
 
             // DAY5
             const day5Cell = row.insertCell();
             const day5 = "<div title='" + convertedData.values[4] + "'>" + 
-                (tsid_forecast_location !== null ? "<strong>" + (convertedData.values[4][1]).toFixed(2) + "</strong>" : (convertedData.values[4][1]).toFixed(2)) + 
+                (tsid_forecast_location === true ? "<strong>" + (convertedData.values[4][1]).toFixed(2) + "</strong>" : (convertedData.values[4][1]).toFixed(2)) + 
                 "</div>";
             day5Cell.innerHTML = day5;
 
             // DAY6
             const day6Cell = row.insertCell();
             const day6 = "<div title='" + convertedData.values[5] + "'>" + 
-                (tsid_forecast_location !== null ? "<strong>" + (convertedData.values[5][1]).toFixed(2) + "</strong>" : (convertedData.values[5][1]).toFixed(2)) + 
+                (tsid_forecast_location === true ? "<strong>" + (convertedData.values[5][1]).toFixed(2) + "</strong>" : (convertedData.values[5][1]).toFixed(2)) + 
                 "</div>";
             day6Cell.innerHTML = day6;
 
             // DAY7
             const day7Cell = row.insertCell();
             const day7 = "<div title='" + convertedData.values[6] + "'>" + 
-                (tsid_forecast_location !== null ? "<strong>" + (convertedData.values[6][1]).toFixed(2) + "</strong>" : (convertedData.values[6][1]).toFixed(2)) + 
+                (tsid_forecast_location === true ? "<strong>" + (convertedData.values[6][1]).toFixed(2) + "</strong>" : (convertedData.values[6][1]).toFixed(2)) + 
                 "</div>";
             day7Cell.innerHTML = day7;
         } else {
@@ -536,37 +536,49 @@ function fetchAndUpdateData(location_id
             const level6AmCell = row.insertCell();
             level6AmCell.innerHTML = "<div title='" + latest6AMValue.date + "'>" +
             "<a href='../../chart/public/chart.html?cwms_ts_id=" + tsid + "' target='_blank'>" +
-            (parseFloat(latest6AMValue.value).toFixed(2)) + "</a>" +
+            (tsid_forecast_location === true ? "<strong>" + parseFloat(latest6AMValue.value).toFixed(2) + "</strong>" : parseFloat(latest6AMValue.value).toFixed(2)) + "</a>" +
             "</div>";
 
             // DAY1
             const day1Cell = row.insertCell();
-            const day1 = "<div title='" + convertedData.values[0] + "'>" + (convertedData.values[0][1]).toFixed(2) + "</div>";
+            const day1 = "<div title='" + convertedData.values[0] + "'>" + 
+                (tsid_forecast_location === true ? "<strong>" + (convertedData.values[0][1]).toFixed(2) + "</strong>" : (convertedData.values[0][1]).toFixed(2)) + 
+                "</div>";
             day1Cell.innerHTML = day1;
 
             // DAY2
             const day2Cell = row.insertCell();
-            const day2 = "<div title='" + convertedData.values[1] + "'>" + (convertedData.values[1][1]).toFixed(2) + "</div>";
+            const day2 = "<div title='" + convertedData.values[1] + "'>" + 
+                (tsid_forecast_location === true ? "<strong>" + (convertedData.values[1][1]).toFixed(2) + "</strong>" : (convertedData.values[1][1]).toFixed(2)) + 
+                "</div>";
             day2Cell.innerHTML = day2;
 
             // DAY3
             const day3Cell = row.insertCell();
-            const day3 = "<div title='" + convertedData.values[2] + "'>" + (convertedData.values[2][1]).toFixed(2) + "</div>";
+            const day3 = "<div title='" + convertedData.values[2] + "'>" + 
+                (tsid_forecast_location === true ? "<strong>" + (convertedData.values[2][1]).toFixed(2) + "</strong>" : (convertedData.values[2][1]).toFixed(2)) + 
+                "</div>";
             day3Cell.innerHTML = day3;
 
             // DAY4
             const day4Cell = row.insertCell();
-            const day4 = "<div title='" + convertedData.values[3] + "'>" + (convertedData.values[3][1]).toFixed(2) + "</div>";
+            const day4 = "<div title='" + convertedData.values[3] + "'>" + 
+                (tsid_forecast_location === true ? "<strong>" + (convertedData.values[3][1]).toFixed(2) + "</strong>" : (convertedData.values[3][1]).toFixed(2)) + 
+                "</div>";
             day4Cell.innerHTML = day4;
 
             // DAY5
             const day5Cell = row.insertCell();
-            const day5 = "<div title='" + convertedData.values[4] + "'>" + (convertedData.values[4][1]).toFixed(2) + "</div>";
+            const day5 = "<div title='" + convertedData.values[4] + "'>" + 
+                (tsid_forecast_location === true ? "<strong>" + (convertedData.values[4][1]).toFixed(2) + "</strong>" : (convertedData.values[4][1]).toFixed(2)) + 
+                "</div>";
             day5Cell.innerHTML = day5;
 
             // DAY6
             const day6Cell = row.insertCell();
-            const day6 = "<div title='" + convertedData.values[5] + "'>" + (convertedData.values[5][1]).toFixed(2) + "</div>";
+            const day6 = "<div title='" + convertedData.values[5] + "'>" + 
+                (tsid_forecast_location === true ? "<strong>" + (convertedData.values[5][1]).toFixed(2) + "</strong>" : (convertedData.values[5][1]).toFixed(2)) + 
+                "</div>";
             day6Cell.innerHTML = day6;
 
             // DAY7
