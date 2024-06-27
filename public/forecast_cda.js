@@ -515,7 +515,10 @@ function fetchAndUpdateData(location_id
 
             // OBSERVED 6AM
             const level6AmCell = row.insertCell();
-            level6AmCell.innerHTML = "<div title='" + latest6AMValue.date + "'>" + (parseFloat(latest6AMValue.value).toFixed(2)) + "</div>";
+            level6AmCell.innerHTML = "<div title='" + latest6AMValue.date + "'>" +
+            "<a href='../../chart/public/chart.html?cwms_ts_id=" + tsid + "' target='_blank'>" +
+            (parseFloat(latest6AMValue.value).toFixed(2)) + "</a>" +
+            "</div>";
 
             // DAY1
             const day1Cell = row.insertCell();
