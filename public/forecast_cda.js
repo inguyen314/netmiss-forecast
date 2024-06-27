@@ -487,7 +487,7 @@ function fetchAndUpdateData(location_id
                     (tsid_forecast_location === true ? "<strong>" + (convertedData.values[0][1]).toFixed(2) + "</strong>" : (convertedData.values[0][1]).toFixed(2)) + 
                     "</div>";
             } else {
-                day1 = "<div>" + "--" + "</div>";
+                day1 = "<div>" + "-" + "</div>";
             }
             day1Cell.innerHTML = day1;
 
@@ -499,7 +499,7 @@ function fetchAndUpdateData(location_id
                     (tsid_forecast_location === true ? "<strong>" + (convertedData.values[1][1]).toFixed(2) + "</strong>" : (convertedData.values[1][1]).toFixed(2)) + 
                     "</div>";
             } else {
-                day2 = "<div>" + "--" + "</div>";
+                day2 = "<div>" + "-" + "</div>";
             }
             day2Cell.innerHTML = day2;
 
@@ -511,7 +511,7 @@ function fetchAndUpdateData(location_id
                     (tsid_forecast_location === true ? "<strong>" + (convertedData.values[2][1]).toFixed(2) + "</strong>" : (convertedData.values[2][1]).toFixed(2)) + 
                     "</div>";
             } else {
-                day3 = "<div>" + "--" + "</div>";
+                day3 = "<div>" + "-" + "</div>";
             }
             day3Cell.innerHTML = day3;
 
@@ -523,7 +523,7 @@ function fetchAndUpdateData(location_id
                     (tsid_forecast_location === true ? "<strong>" + (convertedData.values[3][1]).toFixed(2) + "</strong>" : (convertedData.values[3][1]).toFixed(2)) + 
                     "</div>";
             } else {
-                day4 = "<div>" + "--" + "</div>";
+                day4 = "<div>" + "-" + "</div>";
             }
             day4Cell.innerHTML = day4;
 
@@ -535,7 +535,7 @@ function fetchAndUpdateData(location_id
                     (tsid_forecast_location === true ? "<strong>" + (convertedData.values[4][1]).toFixed(2) + "</strong>" : (convertedData.values[4][1]).toFixed(2)) + 
                     "</div>";
             } else {
-                day5 = "<div>" + "--" + "</div>";
+                day5 = "<div>" + "-" + "</div>";
             }
             day5Cell.innerHTML = day5;
 
@@ -547,7 +547,7 @@ function fetchAndUpdateData(location_id
                     (tsid_forecast_location === true ? "<strong>" + (convertedData.values[5][1]).toFixed(2) + "</strong>" : (convertedData.values[5][1]).toFixed(2)) + 
                     "</div>";
             } else {
-                day6 = "<div>" + "--" + "</div>";
+                day6 = "<div>" + "-" + "</div>";
             }
             day6Cell.innerHTML = day6;
 
@@ -559,7 +559,7 @@ function fetchAndUpdateData(location_id
                     (tsid_forecast_location === true ? "<strong>" + (convertedData.values[6][1]).toFixed(2) + "</strong>" : (convertedData.values[6][1]).toFixed(2)) + 
                     "</div>";
             } else {
-                day7 = "<div>" + "--" + "</div>";
+                day7 = "<div>" + "-" + "</div>";
             }
             day7Cell.innerHTML = day7;
         } else {
@@ -582,7 +582,7 @@ function fetchAndUpdateData(location_id
                     (tsid_forecast_location === true ? "<strong>" + (convertedData.values[0][1]).toFixed(2) + "</strong>" : (convertedData.values[0][1]).toFixed(2)) + 
                     "</div>";
             } else {
-                day1 = "<div>" + "--" + "</div>";
+                day1 = "<div>" + "-" + "</div>";
             }
             day1Cell.innerHTML = day1;
 
@@ -594,7 +594,7 @@ function fetchAndUpdateData(location_id
                     (tsid_forecast_location === true ? "<strong>" + (convertedData.values[1][1]).toFixed(2) + "</strong>" : (convertedData.values[1][1]).toFixed(2)) + 
                     "</div>";
             } else {
-                day2 = "<div>" + "--" + "</div>";
+                day2 = "<div>" + "-" + "</div>";
             }
             day2Cell.innerHTML = day2;
 
@@ -606,7 +606,7 @@ function fetchAndUpdateData(location_id
                     (tsid_forecast_location === true ? "<strong>" + (convertedData.values[2][1]).toFixed(2) + "</strong>" : (convertedData.values[2][1]).toFixed(2)) + 
                     "</div>";
             } else {
-                day3 = "<div>" + "--" + "</div>";
+                day3 = "<div>" + "-" + "</div>";
             }
             day3Cell.innerHTML = day3;
 
@@ -618,7 +618,7 @@ function fetchAndUpdateData(location_id
                     (tsid_forecast_location === true ? "<strong>" + (convertedData.values[3][1]).toFixed(2) + "</strong>" : (convertedData.values[3][1]).toFixed(2)) + 
                     "</div>";
             } else {
-                day4 = "<div>" + "--" + "</div>";
+                day4 = "<div>" + "-" + "</div>";
             }
             day4Cell.innerHTML = day4;
 
@@ -630,7 +630,7 @@ function fetchAndUpdateData(location_id
                     (tsid_forecast_location === true ? "<strong>" + (convertedData.values[4][1]).toFixed(2) + "</strong>" : (convertedData.values[4][1]).toFixed(2)) + 
                     "</div>";
             } else {
-                day5 = "<div>" + "--" + "</div>";
+                day5 = "<div>" + "-" + "</div>";
             }
             day5Cell.innerHTML = day5;
 
@@ -642,7 +642,7 @@ function fetchAndUpdateData(location_id
                     (tsid_forecast_location === true ? "<strong>" + (convertedData.values[5][1]).toFixed(2) + "</strong>" : (convertedData.values[5][1]).toFixed(2)) + 
                     "</div>";
             } else {
-                day6 = "<div>" + "--" + "</div>";
+                day6 = "<div>" + "-" + "</div>";
             }
             day6Cell.innerHTML = day6;
 
