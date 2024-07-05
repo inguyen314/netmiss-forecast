@@ -24,12 +24,12 @@ document.addEventListener('DOMContentLoaded', function () {
             // Parse the response as JSON
             return response.json();
         })
-        .then(data => {
-            // Log the fetched data
-            console.log('data: ', data);
+        .then(jsonData => {
+            // Log the fetched jsonData
+            console.log('jsonData: ', jsonData);
 
-            // Filter and sort the data
-            const filteredData = data.reduce((accumulator, currentValue) => {
+            // Filter and sort the jsonData
+            const jsonDataFiltered = jsonData.reduce((accumulator, currentValue) => {
                 // Extract the 'gages' array, defaulting to an empty array if not present
                 const gages = currentValue.gages || [];
             
@@ -50,10 +50,12 @@ document.addEventListener('DOMContentLoaded', function () {
             }, []);
 
             // Log the filtered and sorted data
-            console.log("filteredData = ", filteredData);
+            console.log("jsonDataFiltered = ", jsonDataFiltered);
 
             // Call the function to create and populate the table
-			createTable(filteredData);
+			createTable(jsonDataFiltered);
+
+            // loading indicator set to none
             loadingIndicator.style.display = 'none';
         })
         .catch(error => {
@@ -67,12 +69,12 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // Function to create table
-function createTable(filteredData) {
+function createTable(jsonDataFiltered) {
     // Create a table element
     const table = document.createElement('table');
     table.setAttribute('id', 'forecast'); // Set the id to "gage_data"
 
-    console.log("filteredData inside createTable = ", filteredData);
+    // console.log("jsonDataFiltered inside createTable Function = ", jsonDataFiltered);
 
     // Create the first header row with rowspan for the first column
     const headerRowTitle = document.createElement('tr');
@@ -130,8 +132,8 @@ function createTable(filteredData) {
     // Assuming timestamp is defined
     var timestamp = new Date().getTime(); // Replace this with your actual timestamp
     var date = new Date(timestamp);
-    console.log('timestamp: ', timestamp);
-    console.log('date: ', date);
+    // console.log('timestamp: ', timestamp);
+    // console.log('date: ', date);
 
     // Extract only the date (without time)
     var todaysDataOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
@@ -142,8 +144,8 @@ function createTable(filteredData) {
     dayMinus1.setDate(date.getDate() - 1);
     var nws_dayMinus1_date = ('0' + (dayMinus1.getMonth() + 1)).slice(-2) + '-' + ('0' + dayMinus1.getDate()).slice(-2) + '-' + dayMinus1.getFullYear();
     var nws_dayMinus1_date_title = ('0' + (dayMinus1.getMonth() + 1)).slice(-2) + '-' + ('0' + dayMinus1.getDate()).slice(-2);
-    console.log('nws_dayMinus1_date: ', nws_dayMinus1_date);
-    console.log('nws_dayMinus1_date_title: ', nws_dayMinus1_date_title);
+    // console.log('nws_dayMinus1_date: ', nws_dayMinus1_date);
+    // console.log('nws_dayMinus1_date_title: ', nws_dayMinus1_date_title);
 
     // Day 0
     var day0 = new Date(date);
@@ -151,65 +153,65 @@ function createTable(filteredData) {
     var current_hour = day0.getHours();
     var nws_day0_date = ('0' + (day0.getMonth() + 1)).slice(-2) + '-' + ('0' + day0.getDate()).slice(-2) + '-' + day0.getFullYear();
     var nws_day0_date_title = ('0' + (day0.getMonth() + 1)).slice(-2) + '-' + ('0' + day0.getDate()).slice(-2);
-    console.log('current_hour: ', current_hour);
-    console.log('nws_day0_date: ', nws_day0_date);
-    console.log('nws_day0_date_title: ', nws_day0_date_title);
+    // console.log('current_hour: ', current_hour);
+    // console.log('nws_day0_date: ', nws_day0_date);
+    // console.log('nws_day0_date_title: ', nws_day0_date_title);
 
     // Day 1
     var day1 = new Date(date);
     day1.setDate(date.getDate() + 1);
     var nws_day1_date = ('0' + (day1.getMonth() + 1)).slice(-2) + '-' + ('0' + day1.getDate()).slice(-2) + '-' + day1.getFullYear();
     var nws_day1_date_title = ('0' + (day1.getMonth() + 1)).slice(-2) + '-' + ('0' + day1.getDate()).slice(-2);
-    console.log('nws_day1_date: ', nws_day1_date);
-    console.log('nws_day1_date_title: ', nws_day1_date_title);
+    // console.log('nws_day1_date: ', nws_day1_date);
+    // console.log('nws_day1_date_title: ', nws_day1_date_title);
 
     // Day 2
     var day2 = new Date(date);
     day2.setDate(date.getDate() + 2);
     var nws_day2_date = ('0' + (day2.getMonth() + 1)).slice(-2) + '-' + ('0' + day2.getDate()).slice(-2) + '-' + day2.getFullYear();
     var nws_day2_date_title = ('0' + (day2.getMonth() + 1)).slice(-2) + '-' + ('0' + day2.getDate()).slice(-2);
-    console.log('nws_day2_date: ', nws_day2_date);
-    console.log('nws_day2_date_title: ', nws_day2_date_title);
+    // console.log('nws_day2_date: ', nws_day2_date);
+    // console.log('nws_day2_date_title: ', nws_day2_date_title);
 
     // Day 3
     var day3 = new Date(date);
     day3.setDate(date.getDate() + 3);
     var nws_day3_date = ('0' + (day3.getMonth() + 1)).slice(-2) + '-' + ('0' + day3.getDate()).slice(-2) + '-' + day3.getFullYear();
     var nws_day3_date_title = ('0' + (day3.getMonth() + 1)).slice(-2) + '-' + ('0' + day3.getDate()).slice(-2);
-    console.log('nws_day3_date: ', nws_day3_date);
-    console.log('nws_day3_date_title: ', nws_day3_date_title);
+    // console.log('nws_day3_date: ', nws_day3_date);
+    // console.log('nws_day3_date_title: ', nws_day3_date_title);
 
     // Day 4
     var day4 = new Date(date);
     day4.setDate(date.getDate() + 4);
     var nws_day4_date = ('0' + (day4.getMonth() + 1)).slice(-2) + '-' + ('0' + day4.getDate()).slice(-2) + '-' + day4.getFullYear();
     var nws_day4_date_title = ('0' + (day4.getMonth() + 1)).slice(-2) + '-' + ('0' + day4.getDate()).slice(-2);
-    console.log('nws_day4_date: ', nws_day4_date);
-    console.log('nws_day4_date_title: ', nws_day4_date_title);
+    // console.log('nws_day4_date: ', nws_day4_date);
+    // console.log('nws_day4_date_title: ', nws_day4_date_title);
 
     // Day 5
     var day5 = new Date(date);
     day5.setDate(date.getDate() + 5);
     var nws_day5_date = ('0' + (day5.getMonth() + 1)).slice(-2) + '-' + ('0' + day5.getDate()).slice(-2) + '-' + day5.getFullYear();
     var nws_day5_date_title = ('0' + (day5.getMonth() + 1)).slice(-2) + '-' + ('0' + day5.getDate()).slice(-2);
-    console.log('nws_day5_date: ', nws_day5_date);
-    console.log('nws_day5_date_title: ', nws_day5_date_title);
+    // console.log('nws_day5_date: ', nws_day5_date);
+    // console.log('nws_day5_date_title: ', nws_day5_date_title);
 
     // Day 6
     var day6 = new Date(date);
     day6.setDate(date.getDate() + 6);
     var nws_day6_date = ('0' + (day6.getMonth() + 1)).slice(-2) + '-' + ('0' + day6.getDate()).slice(-2) + '-' + day6.getFullYear();
     var nws_day6_date_title = ('0' + (day6.getMonth() + 1)).slice(-2) + '-' + ('0' + day6.getDate()).slice(-2);
-    console.log('nws_day6_date: ', nws_day6_date);
-    console.log('nws_day6_date_title: ', nws_day6_date_title);
+    // console.log('nws_day6_date: ', nws_day6_date);
+    // console.log('nws_day6_date_title: ', nws_day6_date_title);
 
     // Day 7
     var day7 = new Date(date);
     day7.setDate(date.getDate() + 7);
     var nws_day7_date = ('0' + (day7.getMonth() + 1)).slice(-2) + '-' + ('0' + day7.getDate()).slice(-2) + '-' + day7.getFullYear();
     var nws_day7_date_title = ('0' + (day7.getMonth() + 1)).slice(-2) + '-' + ('0' + day7.getDate()).slice(-2);
-    console.log('nws_day7_date: ', nws_day7_date);
-    console.log('nws_day7_date_title: ', nws_day7_date_title);
+    // console.log('nws_day7_date: ', nws_day7_date);
+    // console.log('nws_day7_date_title: ', nws_day7_date_title);
 
 
     // Create table headers for the desired columns
@@ -231,18 +233,24 @@ function createTable(filteredData) {
         tableContainer.appendChild(table);
     }
 
+    // get netmiss data here
     (async () => {
         try {
             const currentDateTime = new Date();
             const currentDateTimePlus7Days = plusHoursFromDate(currentDateTime, 168);
+
+            // Get St Louis netmiss to set the date
             const dateObjectFirstForecastDayByDayAndMonth = await fetchFirstNetmissDay("St Louis-Mississippi.Stage.Inst.~1Day.0.netmiss-fcst", currentDateTime, currentDateTimePlus7Days, cda);
-            console.log("dateObjectFirstForecastDayByDayAndMonth Date", dateObjectFirstForecastDayByDayAndMonth.date);
-            console.log("dateObjectFirstForecastDayByDayAndMonth Length", dateObjectFirstForecastDayByDayAndMonth.length);
+            console.log("dateObjectFirstForecastDayByDayAndMonth: ", dateObjectFirstForecastDayByDayAndMonth.date);
+            console.log("dateObjectFirstForecastDayByDayAndMonth: ", dateObjectFirstForecastDayByDayAndMonth.length);
 
             if (dateObjectFirstForecastDayByDayAndMonth.date > todaysDataOnly & dateObjectFirstForecastDayByDayAndMonth.length >= 7) {
                 console.log("dateObjectFirstForecastDayByDayAndMonth is after todaysDataOnly, output the data table");
+
+                // Display netmiss data here based on time
                 if (current_hour < 0 || current_hour >= 10) {  // current_hour in 24-hour format
-                    populateTableCells(filteredData, table);
+                    // Populate netmiss data here
+                    populateTableCells(jsonDataFiltered, table);
                     const message = document.createElement('div');
                     message.innerHTML = "<img src='https://www.wpc.ncep.noaa.gov/medr/97ewbg.gif'";
                     if (tableContainer) {
@@ -306,18 +314,18 @@ function fetchFirstNetmissDay(tsid, begin, end, cda) {
         throw new Error('tsid cannot be null or undefined');
     }
 
-    let url = null;
+    let urlFirstNetmissDay = null;
     if (cda === "internal") {
-        url = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/timeseries?name=${tsid}&begin=${begin.toISOString()}&end=${end.toISOString()}&office=MVS&timezone=CST6CDT`;
+        urlFirstNetmissDay = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/timeseries?name=${tsid}&begin=${begin.toISOString()}&end=${end.toISOString()}&office=MVS&timezone=CST6CDT`;
     } else if (cda === "public") {
-        url = `https://cwms-data.usace.army.mil/cwms-data/timeseries?name=${tsid}&begin=${begin.toISOString()}&end=${end.toISOString()}&office=MVS&timezone=CST6CDT`;
+        urlFirstNetmissDay = `https://cwms-data.usace.army.mil/cwms-data/timeseries?name=${tsid}&begin=${begin.toISOString()}&end=${end.toISOString()}&office=MVS&timezone=CST6CDT`;
     } else {
         throw new Error('Invalid value for cda');
     }
 
-    console.log("url = ", url);
+    console.log("urlFirstNetmissDay = ", urlFirstNetmissDay);
 
-    return fetch(url, {
+    return fetch(urlFirstNetmissDay, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json;version=2'
@@ -329,14 +337,14 @@ function fetchFirstNetmissDay(tsid, begin, end, cda) {
             }
             return response.json();
         })
-        .then(datax => {
-            console.log("datax", datax);
+        .then(FirstNetmissDayData => {
+            console.log("FirstNetmissDayData", FirstNetmissDayData);
 
             // Get the length of the values array
-            const arrayLength = datax.values.length;
+            const arrayLength = FirstNetmissDayData.values.length;
 
             // Extract the first entry from the values array
-            const firstEntry = datax.values[0];
+            const firstEntry = FirstNetmissDayData.values[0];
             if (!firstEntry) {
                 throw new Error('No data available');
             }
@@ -368,26 +376,20 @@ function fetchFirstNetmissDay(tsid, begin, end, cda) {
         });
 }
 
+// Populate netmiss data cells
+function populateTableCells(jsonDataFiltered, table) {
+    // console.log("jsonDataFiltered inside populateTableCells: ", jsonDataFiltered);
 
-// Function to get current data time
-function subtractHoursFromDate(date, hoursToSubtract) {
-    return new Date(date.getTime() - (hoursToSubtract * 60 * 60 * 1000));
-}
-
-// Function to get current data time
-function plusHoursFromDate(date, hoursToSubtract) {
-    return new Date(date.getTime() + (hoursToSubtract * 60 * 60 * 1000));
-}
-
-function populateTableCells(filteredData, table) {
-    console.log("filteredData @ populateTableCells", filteredData);
-    filteredData.forEach(location => {
+    jsonDataFiltered.forEach(location => {
         // Create a new row for each data object
         const row = table.insertRow();
         console.log("Calling fetchAndUpdateData");
+
+        // setup date time before calling function
         const currentDateTime = new Date();
         const currentDateTimePlus7Days = plusHoursFromDate(currentDateTime, 168);
         const currentDateMinus30Hours = subtractHoursFromDate(currentDateTime, 30);
+
         fetchAndUpdateData(location.location_id
                             ,location.tsid_netmiss
                             ,location.tsid_netmiss_observe
@@ -416,6 +418,10 @@ function fetchAndUpdateData(location_id
                             ,level_id_unit_id_flood
                             ,tsid_forecast_location
                         ) {
+
+    console.log("location_id = ",  location_id);
+    
+    // Get CDA netmiss forecast
     let url1 = null;
     if (cda === "internal") {
         url1 = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/timeseries?name=${tsid1}&begin=${begin.toISOString()}&end=${end1.toISOString()}&office=MVS&timezone=CST6CDT`;
@@ -426,6 +432,7 @@ function fetchAndUpdateData(location_id
     }
     console.log("url1 = ",  url1);
 
+    // Get CDA stage rev
     let url2 = null;
     if (cda === "internal") {
         url2 = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/timeseries?name=${tsid2}&begin=${end2.toISOString()}&end=${begin.toISOString()}&office=MVS&timezone=CST6CDT`;
@@ -436,6 +443,7 @@ function fetchAndUpdateData(location_id
     }
     console.log("url2 = ",  url2);
 
+    // Get CDA flood stage
     let url3 = null;
     if (cda === "public") {
         url3 = `https://water.usace.army.mil/cwms-data/levels/${level_id_flood}?office=MVS&effective-date=${level_id_effective_date_flood}&unit=${level_id_unit_id_flood}`;
@@ -444,9 +452,6 @@ function fetchAndUpdateData(location_id
     }
     console.log('url3: ', url3);
     
-
-    console.log("location_id = ",  location_id);
-
     fetchThreeUrls(url1, url2, url3)
         .then(({ data1, data2, data3 }) => {
         // Do something with the fetched data
@@ -658,6 +663,16 @@ function fetchAndUpdateData(location_id
     });
 }
 
+// Function to get current data time
+function subtractHoursFromDate(date, hoursToSubtract) {
+    return new Date(date.getTime() - (hoursToSubtract * 60 * 60 * 1000));
+}
+
+// Function to get current data time
+function plusHoursFromDate(date, hoursToSubtract) {
+    return new Date(date.getTime() + (hoursToSubtract * 60 * 60 * 1000));
+}
+
 // Function to check for duplicate date_time values
 function checkForDuplicates(data) {
     const dateTimes = data.map(entry => entry.date_time);
@@ -689,19 +704,19 @@ async function fetchThreeUrls(url1, url2, url3) {
         if (response1.ok) {
             data1 = await response1.json();
         } else {
-            console.error(`Fetch request to ${url1} failed with status ${response1.status}`);
+            console.log(`Fetch request to ${url1} failed with status ${response1.status}`);
         }
 
         if (response2.ok) {
             data2 = await response2.json();
         } else {
-            console.error(`Fetch request to ${url2} failed with status ${response2.status}`);
+            console.log(`Fetch request to ${url2} failed with status ${response2.status}`);
         }
 
         if (response3.ok) {
             data3 = await response3.json();
         } else {
-            console.error(`Fetch request to ${url3} failed with status ${response3.status}`);
+            console.log(`Fetch request to ${url3} failed with status ${response3.status}`);
         }
 
         return { data1, data2, data3 };

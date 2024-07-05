@@ -72,19 +72,13 @@
 						<div id="topPane" class="col-md backend-cp-collapsible">
 							<div class="box-usace">
 								<h2 class="box-header-striped">
-									<span class="titleLabel title">7-Day Operational River Forecast Cloud</span>
+									<span class="titleLabel title">7-Day Operational River Forecast</span>
 									<span class="rss"></span>
 								</h2>
 								<div class="box-content" style="background-color:white;margin:auto">
 									<div class="content">
-										<!-- Box Content Here -->
-										<!-- <span>Forecast Date: Tuesday, 04 June 2024</span>  -->
-                                        <!-- <span><h3><a href='forecast.php'>Switch to PHP</a></h3></span>  -->
                                         <span><h3><a href='forecast.html?cda=internal'>Switch to Cloud Internal</a></h3></span>
                                         <span><h3><a href='forecast.html?cda=public'>Switch to Cloud Public</a></h3></span>
-                                        <!-- <div class="alert">
-                                            <strong>June 04, 2024 - Version V1.0</strong> - This report was build using PHP, CWMS and JavaScript, no coldfusion schema was used<br>
-                                        </div> -->
                                         <div>
                                             Note - This operational forecast is intended for internal use. The official river forecasting agency of the 
                                             Federal Government is the NWS. The NWS forecast for these locations can be found by clicking the blue hyperlink 
@@ -112,10 +106,6 @@
                     <div id="loading_forecast" style="display: none;"><img src="../../images/loading4.gif" style='height: 50px; width: 50px;' alt="Loading..." /></div>
                     <div id="table_container_forecast"></div>
                     <script src="forecast_cda.js"></script>	
-                    <!-- <div>
-                        OR: Open River conditions and gates are free of the water surfce at the L&D. <br>
-                        Bold & Red:
-                    </div> -->
 
                     <div style="display: flex; justify-content: center; align-items: center; width: 100%; background-color: darkgray; margin-top: 50px">
                         <img src="https://mrcc.purdue.edu/files/cliwatch/GIS_plots/prcp_mpe/prcp_mpe_007_tot-0.png" alt="7-day Observed" style="width: 50%; padding-right: 10px;">
@@ -150,7 +140,6 @@
                             };
                             xhr.send("tableHTML=" + encodeURIComponent(tableHTML));
                         }
-
                     </script>
                     <br><br><br><br>
                     <!--APP ENDS-->
