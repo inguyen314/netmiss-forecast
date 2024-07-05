@@ -423,37 +423,40 @@ function fetchAndUpdateData(location_id
     
     // Get CDA netmiss forecast
     let url1 = null;
-    if (cda === "internal") {
-        url1 = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/timeseries?name=${tsid1}&begin=${begin.toISOString()}&end=${end1.toISOString()}&office=MVS&timezone=CST6CDT`;
-    } else if (cda === "public") {
-        url1 = `https://cwms-data.usace.army.mil/cwms-data/timeseries?name=${tsid1}&begin=${begin.toISOString()}&end=${end1.toISOString()}&office=MVS&timezone=CST6CDT`;
-    } else {
-        url1 = null;
+    if (tsid1 !== null) {
+        if (cda === "internal") {
+            url1 = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/timeseries?name=${tsid1}&begin=${begin.toISOString()}&end=${end1.toISOString()}&office=MVS&timezone=CST6CDT`;
+        } else if (cda === "public") {
+            url1 = `https://cwms-data.usace.army.mil/cwms-data/timeseries?name=${tsid1}&begin=${begin.toISOString()}&end=${end1.toISOString()}&office=MVS&timezone=CST6CDT`;
+        }
     }
-    console.log("url1 = ",  url1);
+    console.log("url1 = ", url1);
 
     // Get CDA stage rev
     let url2 = null;
-    if (cda === "internal") {
-        url2 = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/timeseries?name=${tsid2}&begin=${end2.toISOString()}&end=${begin.toISOString()}&office=MVS&timezone=CST6CDT`;
-    } else if (cda === "public") {
-        url2 = `https://cwms-data.usace.army.mil/cwms-data/timeseries?name=${tsid2}&begin=${end2.toISOString()}&end=${begin.toISOString()}&office=MVS&timezone=CST6CDT`;
-    } else {
-        url2 = null;
+    if (tsid2 !== null) {
+        if (cda === "internal") {
+            url2 = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/timeseries?name=${tsid2}&begin=${end2.toISOString()}&end=${begin.toISOString()}&office=MVS&timezone=CST6CDT`;
+        } else if (cda === "public") {
+            url2 = `https://cwms-data.usace.army.mil/cwms-data/timeseries?name=${tsid2}&begin=${end2.toISOString()}&end=${begin.toISOString()}&office=MVS&timezone=CST6CDT`;
+        }
     }
-    console.log("url2 = ",  url2);
+    console.log("url2 = ", url2);
 
     // Get CDA flood stage
     let url3 = null;
-    if (cda === "public") {
-        url3 = `https://water.usace.army.mil/cwms-data/levels/${level_id_flood}?office=MVS&effective-date=${level_id_effective_date_flood}&unit=${level_id_unit_id_flood}`;
-    } else if (cda === "internal") {
-        url3 = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/levels/${level_id_flood}?office=MVS&effective-date=${level_id_effective_date_flood}&unit=${level_id_unit_id_flood}`;
+    if (level_id_flood !== null) {
+        if (cda === "public") {
+            url3 = `https://water.usace.army.mil/cwms-data/levels/${level_id_flood}?office=MVS&effective-date=${level_id_effective_date_flood}&unit=${level_id_unit_id_flood}`;
+        } else if (cda === "internal") {
+            url3 = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/levels/${level_id_flood}?office=MVS&effective-date=${level_id_effective_date_flood}&unit=${level_id_unit_id_flood}`;
+        }
     }
-    console.log('url3: ', url3);
+    console.log('url3 = ', url3);
     
     fetchThreeUrls(url1, url2, url3)
         .then(({ data1, data2, data3 }) => {
+        console.log("location_id = ",  location_id);
         // Do something with the fetched data
         console.log("data1 = ", data1);
         console.log("data2 = ", data2);
@@ -691,9 +694,9 @@ async function fetchThreeUrls(url1, url2, url3) {
     };
 
     try {
-        const response1Promise = fetch(url1, fetchOptions);
-        const response2Promise = fetch(url2, fetchOptions);
-        const response3Promise = fetch(url3, fetchOptions);
+        const response1Promise = url1 ? fetch(url1, fetchOptions) : Promise.resolve(null);
+        const response2Promise = url2 ? fetch(url2, fetchOptions) : Promise.resolve(null);
+        const response3Promise = url3 ? fetch(url3, fetchOptions) : Promise.resolve(null);
 
         const [response1, response2, response3] = await Promise.all([response1Promise, response2Promise, response3Promise]);
 
@@ -701,21 +704,21 @@ async function fetchThreeUrls(url1, url2, url3) {
         let data2 = null;
         let data3 = null;
 
-        if (response1.ok) {
+        if (response1 && response1.ok) {
             data1 = await response1.json();
-        } else {
+        } else if (response1) {
             console.log(`Fetch request to ${url1} failed with status ${response1.status}`);
         }
 
-        if (response2.ok) {
+        if (response2 && response2.ok) {
             data2 = await response2.json();
-        } else {
+        } else if (response2) {
             console.log(`Fetch request to ${url2} failed with status ${response2.status}`);
         }
 
-        if (response3.ok) {
+        if (response3 && response3.ok) {
             data3 = await response3.json();
-        } else {
+        } else if (response3) {
             console.log(`Fetch request to ${url3} failed with status ${response3.status}`);
         }
 
