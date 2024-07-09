@@ -531,8 +531,8 @@ function fetchAndUpdateData(location_id
         // console.log("data4 = ", data4);
         // console.log("data5 = ", data5);
         // console.log("data6 = ", data6);
-        console.log("data7 = ", data7);
-        console.log("data8 = ", data8);
+        // console.log("data7 = ", data7);
+        // console.log("data8 = ", data8);
 
         // Process data1 - netmiss forecast data
         const convertedData = convertUTCtoCentralTime(data1);
@@ -540,7 +540,7 @@ function fetchAndUpdateData(location_id
 
         // Process data8 - upstream netmiss forecast data
         const convertedDataUpstream = convertUTCtoCentralTime(data8);
-        console.log("convertedDataUpstream = ", convertedDataUpstream);
+        // console.log("convertedDataUpstream = ", convertedDataUpstream);
 
         const isNetmissForecastArrayLengthGreaterThanSeven = checkValuesArrayLength(data1);
         // console.log("isNetmissForecastArrayLengthGreaterThanSeven:", isNetmissForecastArrayLengthGreaterThanSeven);
@@ -574,20 +574,17 @@ function fetchAndUpdateData(location_id
             if (location_id === "Mel Price Pool-Mississippi") {
                 // Compare downstream gage to determine "Open River" or Not
                 if (convertedData !== null && convertedDownstreamData !== null) {
-                    // Prepare gage zero to check for "Open River"
-                    // console.log("data6.elevation: ", data6.elevation);
-
                     // Calculate downstream value to determine for "Open River"
                     let downstreamMelPricePoolValueToCompare = parseFloat(data6.elevation) + 0.5 + convertedDownstreamData.values[0][1];
-                    console.log("downstreamMelPricePoolValueToCompare: ", downstreamMelPricePoolValueToCompare);
+                    // console.log("downstreamMelPricePoolValueToCompare: ", downstreamMelPricePoolValueToCompare);
 
                     // Get today netmiss forecast to compare and determine for "Open River"
                     let todayMelPricePoolNetmissForecast = convertedData.values[0][1];
-                    console.log("todayMelPricePoolNetmissForecast: ", todayMelPricePoolNetmissForecast);
+                    // console.log("todayMelPricePoolNetmissForecast: ", todayMelPricePoolNetmissForecast);
 
                     // Determine if today is "Open River"
                     if (downstreamMelPricePoolValueToCompare > todayMelPricePoolNetmissForecast) {
-                        day1 = "<div title='" + "(" + downstreamMelPricePoolValueToCompare.toFixed(2) + " >= " + todayMelPricePoolNetmissForecast.toFixed(2) + ") = Open River" + "'>" + (tsid_forecast_location === true ? "<strong>" + "Open River" : "-Error-") + "</div>";
+                        day1 = "<div title='" + "(" + parseFloat(data6.elevation).toFixed(2) + " + 0.5 + " + (convertedDownstreamData.values[0][1]).toFixed(2) + ") (" + downstreamMelPricePoolValueToCompare.toFixed(2) + " >= " + todayMelPricePoolNetmissForecast.toFixed(2) + ") = Open River" + "'>" + (tsid_forecast_location === true ? "<strong>" + "Open River" : "-Error-") + "</div>";
                     } else {
                         day1 = "<div title='" + convertedData.values[0] + "'>" + (tsid_forecast_location === true ? "<strong>" + (convertedData.values[0][1]).toFixed(2) : (convertedData.values[0][1]).toFixed(2)) + "</div>";
                     }
@@ -692,23 +689,40 @@ function fetchAndUpdateData(location_id
             const day1Cell = row.insertCell();
             let day1 = null;
             // Process netmiss interpolation for each gage here
-            if (location_id === "LD 24 Pool-Mississippi" || location_id === "LD 25 Pool-Mississippi") {
+            if (location_id === "LD 24 Pool-Mississippi") {
                 // Compare downstream gage to determine "Open River" or Not
                 if (convertedData !== null && convertedDownstreamData !== null) {
-                    // Prepare gage zero to check for "Open River"
-                    // console.log("data6.elevation: ", data6.elevation);
-
                     // Calculate downstream value to determine for "Open River"
-                    let downstreamLd24PoolValueToCompare = parseFloat(data6.elevation) + 0.5 + convertedDownstreamData.values[0][1];
-                    console.log("downstreamLd24PoolValueToCompare: ", downstreamLd24PoolValueToCompare);
+                    let downstreamValueToCompare = parseFloat(data6.elevation) + 0.5 + convertedDownstreamData.values[0][1];
+                    console.log("downstreamValueToCompare: ", downstreamValueToCompare);
 
                     // Get today netmiss forecast to compare and determine for "Open River"
-                    let todayLd24PoolNetmissForecast = convertedData.values[0][1];
-                    console.log("todayLd24PoolNetmissForecast: ", todayLd24PoolNetmissForecast);
+                    let todayNetmissForecast = convertedData.values[0][1];
+                    console.log("todayNetmissForecast: ", todayNetmissForecast);
 
                     // Determine if today is "Open River"
-                    if (downstreamLd24PoolValueToCompare > todayLd24PoolNetmissForecast) {
-                        day1 = "<div title='" + "(" + downstreamLd24PoolValueToCompare.toFixed(2) + " >= " + todayLd24PoolNetmissForecast.toFixed(2) + ") = Open River" + "'>" + (tsid_forecast_location === true ? "<strong>" + "Open River" : "-Error-") + "</div>";
+                    if (downstreamValueToCompare > todayNetmissForecast) {
+                        day1 = "<div title='" + "(" + parseFloat(data6.elevation).toFixed(2) + " + 0.5 + " + (convertedDownstreamData.values[0][1]).toFixed(2) + ") (" + downstreamValueToCompare.toFixed(2) + " >= " + todayNetmissForecast.toFixed(2) + ") = Open River" + "'>" + (tsid_forecast_location === true ? "<strong>" + "Open River" : "-Error-") + "</div>";
+                    } else {
+                        day1 = "<div title='" + convertedData.values[0] + "'>" + (tsid_forecast_location === true ? "<strong>" + (convertedData.values[0][1]).toFixed(2) : (convertedData.values[0][1]).toFixed(2)) + "</div>";
+                    }
+                } else {
+                    day1 = "<div>" + "--" + "</div>";
+                }
+            } else if (location_id === "LD 25 Pool-Mississippi") {
+                // Compare downstream gage to determine "Open River" or Not
+                if (convertedData !== null && convertedDownstreamData !== null) {
+                    // Calculate downstream value to determine for "Open River"
+                    let downstreamValueToCompare = parseFloat(data6.elevation) + 1.0 + convertedDownstreamData.values[0][1];
+                    // console.log("downstreamValueToCompare: ", downstreamValueToCompare);
+
+                    // Get today netmiss forecast to compare and determine for "Open River"
+                    let todayNetmissForecast = convertedData.values[0][1];
+                    // console.log("todayNetmissForecast: ", todayNetmissForecast);
+
+                    // Determine if today is "Open River"
+                    if (downstreamValueToCompare > todayNetmissForecast) {
+                        day1 = "<div title='" + "(" + parseFloat(data6.elevation).toFixed(2) + " + 1.0 + " + (convertedDownstreamData.values[0][1]).toFixed(2) + ") (" + downstreamValueToCompare.toFixed(2) + " >= " + todayNetmissForecast.toFixed(2) + ") = Open River" + "'>" + (tsid_forecast_location === true ? "<strong>" + "Open River" : "-Error-") + "</div>";
                     } else {
                         day1 = "<div title='" + convertedData.values[0] + "'>" + (tsid_forecast_location === true ? "<strong>" + (convertedData.values[0][1]).toFixed(2) : (convertedData.values[0][1]).toFixed(2)) + "</div>";
                     }
