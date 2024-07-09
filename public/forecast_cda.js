@@ -241,11 +241,11 @@ function createTable(jsonDataFiltered) {
 
             // Get St Louis netmiss to set the date
             const dateObjectFirstForecastDayByDayAndMonth = await fetchFirstNetmissDay("St Louis-Mississippi.Stage.Inst.~1Day.0.netmiss-fcst", currentDateTime, currentDateTimePlus7Days, cda);
-            console.log("dateObjectFirstForecastDayByDayAndMonth: ", dateObjectFirstForecastDayByDayAndMonth.date);
-            console.log("dateObjectFirstForecastDayByDayAndMonth: ", dateObjectFirstForecastDayByDayAndMonth.length);
+            // console.log("dateObjectFirstForecastDayByDayAndMonth: ", dateObjectFirstForecastDayByDayAndMonth.date);
+            // console.log("dateObjectFirstForecastDayByDayAndMonth: ", dateObjectFirstForecastDayByDayAndMonth.length);
 
             if (dateObjectFirstForecastDayByDayAndMonth.date > todaysDataOnly & dateObjectFirstForecastDayByDayAndMonth.length >= 7) {
-                console.log("dateObjectFirstForecastDayByDayAndMonth is after todaysDataOnly, output the data table");
+                console.log("dateObjectFirstForecastDayByDayAndMonth is after todaysDataOnly, output data table");
 
                 // Display netmiss data here based on time
                 if (current_hour < 0 || current_hour >= 10) {  // current_hour in 24-hour format
@@ -383,7 +383,7 @@ function populateTableCells(jsonDataFiltered, table) {
     jsonDataFiltered.forEach(location => {
         // Create a new row for each data object
         const row = table.insertRow();
-        console.log("Calling fetchAndUpdateData");
+        // console.log("Calling fetchAndUpdateData");
 
         // setup date time before calling function
         const currentDateTime = new Date();
@@ -401,14 +401,17 @@ function populateTableCells(jsonDataFiltered, table) {
                             ,location.level_id_effective_date_flood
                             ,location.level_id_unit_id_flood
                             ,location.tsid_forecast_location
+                            ,location.tsid_netmiss_upstream
+                            ,location.tsid_netmiss_downstream
+                            ,location.tsid_netmiss_downstream_flood
                         );
     });
 }
 
 // Function to fetch all data needed to run forecast
 function fetchAndUpdateData(location_id
-                            ,tsid1
-                            ,tsid2
+                            ,tsid_netmiss
+                            ,tsid_netmiss_observe
                             ,row
                             ,begin
                             ,end1
@@ -417,31 +420,34 @@ function fetchAndUpdateData(location_id
                             ,level_id_effective_date_flood
                             ,level_id_unit_id_flood
                             ,tsid_forecast_location
+                            ,tsid_netmiss_upstream
+                            ,tsid_netmiss_downstream
+                            ,tsid_netmiss_downstream_flood
                         ) {
 
-    console.log("location_id = ",  location_id);
+    console.log("location_id =",  location_id);
     
     // Get CDA netmiss forecast
     let url1 = null;
-    if (tsid1 !== null) {
+    if (tsid_netmiss !== null) {
         if (cda === "internal") {
-            url1 = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/timeseries?name=${tsid1}&begin=${begin.toISOString()}&end=${end1.toISOString()}&office=MVS&timezone=CST6CDT`;
+            url1 = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/timeseries?name=${tsid_netmiss}&begin=${begin.toISOString()}&end=${end1.toISOString()}&office=MVS&timezone=CST6CDT`;
         } else if (cda === "public") {
-            url1 = `https://cwms-data.usace.army.mil/cwms-data/timeseries?name=${tsid1}&begin=${begin.toISOString()}&end=${end1.toISOString()}&office=MVS&timezone=CST6CDT`;
+            url1 = `https://cwms-data.usace.army.mil/cwms-data/timeseries?name=${tsid_netmiss}&begin=${begin.toISOString()}&end=${end1.toISOString()}&office=MVS&timezone=CST6CDT`;
         }
     }
-    console.log("url1 = ", url1);
+    // console.log("url1 = ", url1);
 
     // Get CDA stage rev
     let url2 = null;
-    if (tsid2 !== null) {
+    if (tsid_netmiss_observe !== null) {
         if (cda === "internal") {
-            url2 = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/timeseries?name=${tsid2}&begin=${end2.toISOString()}&end=${begin.toISOString()}&office=MVS&timezone=CST6CDT`;
+            url2 = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/timeseries?name=${tsid_netmiss_observe}&begin=${end2.toISOString()}&end=${begin.toISOString()}&office=MVS&timezone=CST6CDT`;
         } else if (cda === "public") {
-            url2 = `https://cwms-data.usace.army.mil/cwms-data/timeseries?name=${tsid2}&begin=${end2.toISOString()}&end=${begin.toISOString()}&office=MVS&timezone=CST6CDT`;
+            url2 = `https://cwms-data.usace.army.mil/cwms-data/timeseries?name=${tsid_netmiss_observe}&begin=${end2.toISOString()}&end=${begin.toISOString()}&office=MVS&timezone=CST6CDT`;
         }
     }
-    console.log("url2 = ", url2);
+    // console.log("url2 = ", url2);
 
     // Get CDA flood stage
     let url3 = null;
@@ -452,29 +458,73 @@ function fetchAndUpdateData(location_id
             url3 = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/levels/${level_id_flood}?office=MVS&effective-date=${level_id_effective_date_flood}&unit=${level_id_unit_id_flood}`;
         }
     }
-    console.log('url3 = ', url3);
-    
-    fetchThreeUrls(url1, url2, url3)
-        .then(({ data1, data2, data3 }) => {
-        console.log("location_id = ",  location_id);
+    // console.log('url3 = ', url3);
+
+    // Get Netmiss Downstream
+    let url4 = null;
+    if (tsid_netmiss_downstream !== null) {
+        if (cda === "internal") {
+            url4 = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/timeseries?name=${tsid_netmiss_downstream}&begin=${begin.toISOString()}&end=${end1.toISOString()}&office=MVS&timezone=CST6CDT`;
+        } else if (cda === "public") {
+            url4 = `https://cwms-data.usace.army.mil/cwms-data/timeseries?name=${tsid_netmiss_downstream}&begin=${begin.toISOString()}&end=${end1.toISOString()}&office=MVS&timezone=CST6CDT`;
+        }
+    }
+    // console.log("url4 = ", url4);
+
+    // Get CDA downstream flood stage
+    let url5 = null;
+    if (tsid_netmiss_downstream_flood !== null) {
+        if (cda === "public") {
+            url5 = `https://water.usace.army.mil/cwms-data/levels/${tsid_netmiss_downstream_flood}?office=MVS&effective-date=${level_id_effective_date_flood}&unit=${level_id_unit_id_flood}`;
+        } else if (cda === "internal") {
+            url5 = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/levels/${tsid_netmiss_downstream_flood}?office=MVS&effective-date=${level_id_effective_date_flood}&unit=${level_id_unit_id_flood}`;
+        }
+    }
+    // console.log('url5 = ', url5);
+
+    // Get CDA downstream metadata
+    let url6 = null;
+    let netmissDownstreamLocationId = null;
+    if (tsid_netmiss_downstream !== null) {
+        netmissDownstreamLocationId = (tsid_netmiss_downstream.split('.'))[0];
+    }
+    if (netmissDownstreamLocationId !== null) {
+        if (cda === "public") {
+            url6 = `https://cwms-data.usace.army.mil/cwms-data/locations/${netmissDownstreamLocationId}?office=MVS`;
+        } else if (cda === "internal") {
+            url6 = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/locations/${netmissDownstreamLocationId}?office=MVS`;
+        }
+    }
+    // console.log('url6 = ', url6);
+
+    fetchAllUrls(url1, url2, url3, url4, url5, url6)
+        .then(({ data1, data2, data3, data4, data5, data6 }) => {
+        // console.log("location_id =",  location_id);
         // Do something with the fetched data
-        console.log("data1 = ", data1);
-        console.log("data2 = ", data2);
-        console.log("data3 = ", data3);
+        // console.log("data1 = ", data1);
+        // console.log("data2 = ", data2);
+        // console.log("data3 = ", data3);
+        // console.log("data4 = ", data4);
+        // console.log("data5 = ", data5);
+        // console.log("data6 = ", data6);
 
         // Process data1 - netmiss forecast data
         const convertedData = convertUTCtoCentralTime(data1);
-        console.log("convertedData = ", convertedData);
+        // console.log("convertedData = ", convertedData);
 
-        const isArrayLengthGreaterThanSeven = checkValuesArrayLength(data1);
-        console.log("isArrayLengthGreaterThanSeven:", isArrayLengthGreaterThanSeven);
+        const isNetmissForecastArrayLengthGreaterThanSeven = checkValuesArrayLength(data1);
+        // console.log("isNetmissForecastArrayLengthGreaterThanSeven:", isNetmissForecastArrayLengthGreaterThanSeven);
 
         // Process data2 - 6am level
         const result = getLatest6AMValue(data2);
         const latest6AMValue = result.latest6AMValue;
         const tsid = result.tsid;
 
-        if (isArrayLengthGreaterThanSeven === true) {
+        // Process Downstream Netmiss for Interpolation
+        const convertedDownstreamData = convertUTCtoCentralTime(data4);
+        // console.log("convertedDownstreamData = ", convertedDownstreamData);
+
+        if (isNetmissForecastArrayLengthGreaterThanSeven === true) {
             // LOCATION
             const locationIdCell = row.insertCell();
             locationIdCell.innerHTML = location_id;
@@ -490,12 +540,38 @@ function fetchAndUpdateData(location_id
             // DAY1
             const day1Cell = row.insertCell();
             let day1 = null;
-            if (convertedData !== null) {
-                day1 = "<div title='" + convertedData.values[0] + "'>" + 
-                    (tsid_forecast_location === true ? "<strong>" + (convertedData.values[0][1]).toFixed(2) + "</strong>" : (convertedData.values[0][1]).toFixed(2)) + 
-                    "</div>";
+            // Process netmiss interpolation for each gage here
+            if (location_id === "Mel Price Pool-Mississippi") {
+                // Compare downstream gage to determine "Open River" or Not
+                if (convertedData !== null && convertedDownstreamData !== null) {
+                    // Prepare gage zero to check for "Open River"
+                    // console.log("data6.elevation: ", data6.elevation);
+
+                    // Calculate downstream value to determine for "Open River"
+                    let downstreamMelPricePoolValueToCompare = parseFloat(data6.elevation) + 0.5 + convertedDownstreamData.values[0][1];
+                    console.log("downstreamMelPricePoolValueToCompare: ", downstreamMelPricePoolValueToCompare);
+
+                    // Get today netmiss forecast to compare and determine for "Open River"
+                    let todayMelPricePoolNetmissForecast = convertedData.values[0][1];
+                    console.log("todayMelPricePoolNetmissForecast: ", todayMelPricePoolNetmissForecast);
+
+                    // Determine if today is "Open River"
+                    if (downstreamMelPricePoolValueToCompare > todayMelPricePoolNetmissForecast) {
+                        day1 = "<div title='" + "(" + downstreamMelPricePoolValueToCompare.toFixed(2) + " >= " + todayMelPricePoolNetmissForecast.toFixed(2) + ") = Open River" + "'>" + (tsid_forecast_location === true ? "<strong>" + "Open River" : "-Error-") + "</div>";
+                    } else {
+                        day1 = "<div title='" + convertedData.values[0] + "'>" + (tsid_forecast_location === true ? "<strong>" + (convertedData.values[0][1]).toFixed(2) : (convertedData.values[0][1]).toFixed(2)) + "</div>";
+                    }
+                } else {
+                    day1 = "<div>" + "--" + "</div>";
+                }
             } else {
-                day1 = "<div>" + "-" + "</div>";
+                if (convertedData !== null) {
+                    day1 = "<div title='" + convertedData.values[0] + "'>" + 
+                        (tsid_forecast_location === true ? "<strong>" + (convertedData.values[0][1]).toFixed(2) + "</strong>" : (convertedData.values[0][1]).toFixed(2)) + 
+                        "</div>";
+                } else {
+                    day1 = "<div>" + "-" + "</div>";
+                }
             }
             day1Cell.innerHTML = day1;
 
@@ -585,12 +661,38 @@ function fetchAndUpdateData(location_id
             // DAY1
             const day1Cell = row.insertCell();
             let day1 = null;
-            if (convertedData !== null) {
-                day1 = "<div title='" + convertedData.values[0] + "'>" + 
-                    (tsid_forecast_location === true ? "<strong>" + (convertedData.values[0][1]).toFixed(2) + "</strong>" : (convertedData.values[0][1]).toFixed(2)) + 
-                    "</div>";
+            // Process netmiss interpolation for each gage here
+            if (location_id === "LD 24 Pool-Mississippi" || location_id === "LD 25 Pool-Mississippi") {
+                // Compare downstream gage to determine "Open River" or Not
+                if (convertedData !== null && convertedDownstreamData !== null) {
+                    // Prepare gage zero to check for "Open River"
+                    // console.log("data6.elevation: ", data6.elevation);
+
+                    // Calculate downstream value to determine for "Open River"
+                    let downstreamLd24PoolValueToCompare = parseFloat(data6.elevation) + 0.5 + convertedDownstreamData.values[0][1];
+                    console.log("downstreamLd24PoolValueToCompare: ", downstreamLd24PoolValueToCompare);
+
+                    // Get today netmiss forecast to compare and determine for "Open River"
+                    let todayLd24PoolNetmissForecast = convertedData.values[0][1];
+                    console.log("todayLd24PoolNetmissForecast: ", todayLd24PoolNetmissForecast);
+
+                    // Determine if today is "Open River"
+                    if (downstreamLd24PoolValueToCompare > todayLd24PoolNetmissForecast) {
+                        day1 = "<div title='" + "(" + downstreamLd24PoolValueToCompare.toFixed(2) + " >= " + todayLd24PoolNetmissForecast.toFixed(2) + ") = Open River" + "'>" + (tsid_forecast_location === true ? "<strong>" + "Open River" : "-Error-") + "</div>";
+                    } else {
+                        day1 = "<div title='" + convertedData.values[0] + "'>" + (tsid_forecast_location === true ? "<strong>" + (convertedData.values[0][1]).toFixed(2) : (convertedData.values[0][1]).toFixed(2)) + "</div>";
+                    }
+                } else {
+                    day1 = "<div>" + "--" + "</div>";
+                }
             } else {
-                day1 = "<div>" + "-" + "</div>";
+                if (convertedData !== null) {
+                    day1 = "<div title='" + convertedData.values[0] + "'>" + 
+                        (tsid_forecast_location === true ? "<strong>" + (convertedData.values[0][1]).toFixed(2) + "</strong>" : (convertedData.values[0][1]).toFixed(2)) + 
+                        "</div>";
+                } else {
+                    day1 = "<div>" + "-" + "</div>";
+                }
             }
             day1Cell.innerHTML = day1;
 
@@ -685,7 +787,7 @@ function checkForDuplicates(data) {
 }
 
 // Function to fetch two urls, netmiss and stagerev
-async function fetchThreeUrls(url1, url2, url3) {
+async function fetchAllUrls(url1, url2, url3, url4, url5, url6) {
     const fetchOptions = {
         method: 'GET',
         headers: {
@@ -697,12 +799,18 @@ async function fetchThreeUrls(url1, url2, url3) {
         const response1Promise = url1 ? fetch(url1, fetchOptions) : Promise.resolve(null);
         const response2Promise = url2 ? fetch(url2, fetchOptions) : Promise.resolve(null);
         const response3Promise = url3 ? fetch(url3, fetchOptions) : Promise.resolve(null);
+        const response4Promise = url4 ? fetch(url4, fetchOptions) : Promise.resolve(null);
+        const response5Promise = url5 ? fetch(url5, fetchOptions) : Promise.resolve(null);
+        const response6Promise = url6 ? fetch(url6, fetchOptions) : Promise.resolve(null);
 
-        const [response1, response2, response3] = await Promise.all([response1Promise, response2Promise, response3Promise]);
+        const [response1, response2, response3, response4, response5, response6] = await Promise.all([response1Promise, response2Promise, response3Promise, response4Promise, response5Promise, response6Promise]);
 
         let data1 = null;
         let data2 = null;
         let data3 = null;
+        let data4 = null;
+        let data5 = null;
+        let data6 = null;
 
         if (response1 && response1.ok) {
             data1 = await response1.json();
@@ -722,10 +830,28 @@ async function fetchThreeUrls(url1, url2, url3) {
             console.log(`Fetch request to ${url3} failed with status ${response3.status}`);
         }
 
-        return { data1, data2, data3 };
+        if (response4 && response4.ok) {
+            data4 = await response4.json();
+        } else if (response4) {
+            console.log(`Fetch request to ${url4} failed with status ${response4.status}`);
+        }
+
+        if (response5 && response5.ok) {
+            data5 = await response5.json();
+        } else if (response5) {
+            console.log(`Fetch request to ${url5} failed with status ${response5.status}`);
+        }
+
+        if (response6 && response6.ok) {
+            data6 = await response6.json();
+        } else if (response6) {
+            console.log(`Fetch request to ${url6} failed with status ${response6.status}`);
+        }
+
+        return { data1, data2, data3, data4, data5, data6 };
     } catch (error) {
         console.error('Error fetching the URLs:', error.message);
-        return { data1: null, data2: null, data3: null }; // return null data if any error occurs
+        return { data1: null, data2: null, data3: null, data4: null, data5: null, data6: null }; // return null data if any error occurs
     }
 }
 
@@ -777,13 +903,13 @@ function getLatest6AMValue(data) {
 function checkValuesArrayLength(data) {
     // Check if data is null or undefined
     if (!data) {
-        console.log('Data is null or undefined.');
+        // console.log('Data is null or undefined.');
         return false;
     }
 
     // Check if data.values is null or undefined
     if (!data.values) {
-        console.log('Data.values is null or undefined.');
+        // console.log('Data.values is null or undefined.');
         return false;
     }
 
@@ -791,10 +917,10 @@ function checkValuesArrayLength(data) {
     const expectedLength = 7;
 
     if (valuesArray.length === expectedLength) {
-        console.log(`The values array contains exactly ${expectedLength} items.`);
+        // console.log(`The values array contains exactly ${expectedLength} items.`);
         return true;
     } else {
-        console.log(`The values array does not contain ${expectedLength} items. It contains ${valuesArray.length} items.`);
+        // console.log(`The values array does not contain ${expectedLength} items. It contains ${valuesArray.length} items.`);
         return false;
     }
 }
