@@ -404,6 +404,7 @@ function populateTableCells(jsonDataFiltered, table) {
                             ,location.tsid_netmiss_upstream
                             ,location.tsid_netmiss_downstream
                             ,location.tsid_netmiss_downstream_flood
+                            ,location.tsid_netmiss_upstream_stage_rev
                         );
     });
 }
@@ -423,6 +424,7 @@ function fetchAndUpdateData(location_id
                             ,tsid_netmiss_upstream
                             ,tsid_netmiss_downstream
                             ,tsid_netmiss_downstream_flood
+                            ,tsid_netmiss_upstream_stage_rev
                         ) {
 
     console.log("location_id =",  location_id);
@@ -497,8 +499,30 @@ function fetchAndUpdateData(location_id
     }
     // console.log('url6 = ', url6);
 
-    fetchAllUrls(url1, url2, url3, url4, url5, url6)
-        .then(({ data1, data2, data3, data4, data5, data6 }) => {
+    // Get CDA upstream stage rev
+    let url7 = null;
+    if (tsid_netmiss_upstream_stage_rev !== null) {
+        if (cda === "internal") {
+            url7 = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/timeseries?name=${tsid_netmiss_upstream_stage_rev}&begin=${end2.toISOString()}&end=${begin.toISOString()}&office=MVS&timezone=CST6CDT`;
+        } else if (cda === "public") {
+            url7 = `https://cwms-data.usace.army.mil/cwms-data/timeseries?name=${tsid_netmiss_upstream_stage_rev}&begin=${end2.toISOString()}&end=${begin.toISOString()}&office=MVS&timezone=CST6CDT`;
+        }
+    }
+    console.log("url7 = ", url7);
+
+    // Get Netmiss Upstream
+    let url8 = null;
+    if (tsid_netmiss_upstream !== null) {
+        if (cda === "internal") {
+            url8 = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/timeseries?name=${tsid_netmiss_upstream}&begin=${begin.toISOString()}&end=${end1.toISOString()}&office=MVS&timezone=CST6CDT`;
+        } else if (cda === "public") {
+            url8 = `https://cwms-data.usace.army.mil/cwms-data/timeseries?name=${tsid_netmiss_upstream}&begin=${begin.toISOString()}&end=${end1.toISOString()}&office=MVS&timezone=CST6CDT`;
+        }
+    }
+    // console.log("url4 = ", url4);
+
+    fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8)
+        .then(({ data1, data2, data3, data4, data5, data6, data7, data8 }) => {
         // console.log("location_id =",  location_id);
         // Do something with the fetched data
         // console.log("data1 = ", data1);
@@ -507,10 +531,16 @@ function fetchAndUpdateData(location_id
         // console.log("data4 = ", data4);
         // console.log("data5 = ", data5);
         // console.log("data6 = ", data6);
+        console.log("data7 = ", data7);
+        console.log("data8 = ", data8);
 
         // Process data1 - netmiss forecast data
         const convertedData = convertUTCtoCentralTime(data1);
         // console.log("convertedData = ", convertedData);
+
+        // Process data8 - upstream netmiss forecast data
+        const convertedDataUpstream = convertUTCtoCentralTime(data8);
+        console.log("convertedDataUpstream = ", convertedDataUpstream);
 
         const isNetmissForecastArrayLengthGreaterThanSeven = checkValuesArrayLength(data1);
         // console.log("isNetmissForecastArrayLengthGreaterThanSeven:", isNetmissForecastArrayLengthGreaterThanSeven);
@@ -685,6 +715,20 @@ function fetchAndUpdateData(location_id
                 } else {
                     day1 = "<div>" + "--" + "</div>";
                 }
+            } else if (location_id === "LD 27 Pool-Mississippi") {
+                // Process data7 - stage rev 6am level
+                const result7 = getLatest6AMValue(data7);
+                const latest6AMValueUpstream = result7.latest6AMValue;
+                const tsid7 = result7.tsid;
+                console.log("latest6AMValue: ", latest6AMValue);
+
+                let total = null;
+                // console.log(latest6AMValue.value);
+                // console.log(convertedDataUpstream.values[0][1]);
+                // console.log(latest6AMValueUpstream.value);
+                
+                total = parseFloat(latest6AMValue.value) + parseFloat(convertedDataUpstream.values[0][1]) - parseFloat(latest6AMValueUpstream.value);
+                day1 = "<div title='" + (latest6AMValue.value).toFixed(2) + " + " + (convertedDataUpstream.values[0][1]).toFixed(2) + " - " + (latest6AMValueUpstream.value).toFixed(2) + " = " + total.toFixed(2) + "'>" + (tsid_forecast_location === true ? "<strong>" + total.toFixed(2) : total.toFixed(2)) + "</div>";
             } else {
                 if (convertedData !== null) {
                     day1 = "<div title='" + convertedData.values[0] + "'>" + 
@@ -786,8 +830,8 @@ function checkForDuplicates(data) {
     return dateTimes.length === uniqueDateTimes.size;
 }
 
-// Function to fetch two urls, netmiss and stagerev
-async function fetchAllUrls(url1, url2, url3, url4, url5, url6) {
+// Function to fetch all urls to find all forecasts
+async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8) {
     const fetchOptions = {
         method: 'GET',
         headers: {
@@ -802,8 +846,10 @@ async function fetchAllUrls(url1, url2, url3, url4, url5, url6) {
         const response4Promise = url4 ? fetch(url4, fetchOptions) : Promise.resolve(null);
         const response5Promise = url5 ? fetch(url5, fetchOptions) : Promise.resolve(null);
         const response6Promise = url6 ? fetch(url6, fetchOptions) : Promise.resolve(null);
+        const response7Promise = url7 ? fetch(url7, fetchOptions) : Promise.resolve(null);
+        const response8Promise = url8 ? fetch(url8, fetchOptions) : Promise.resolve(null);
 
-        const [response1, response2, response3, response4, response5, response6] = await Promise.all([response1Promise, response2Promise, response3Promise, response4Promise, response5Promise, response6Promise]);
+        const [response1, response2, response3, response4, response5, response6, response7, response8] = await Promise.all([response1Promise, response2Promise, response3Promise, response4Promise, response5Promise, response6Promise, response7Promise, response8Promise]);
 
         let data1 = null;
         let data2 = null;
@@ -811,6 +857,8 @@ async function fetchAllUrls(url1, url2, url3, url4, url5, url6) {
         let data4 = null;
         let data5 = null;
         let data6 = null;
+        let data7 = null;
+        let data8 = null;
 
         if (response1 && response1.ok) {
             data1 = await response1.json();
@@ -848,10 +896,22 @@ async function fetchAllUrls(url1, url2, url3, url4, url5, url6) {
             console.log(`Fetch request to ${url6} failed with status ${response6.status}`);
         }
 
-        return { data1, data2, data3, data4, data5, data6 };
+        if (response7 && response7.ok) {
+            data7 = await response7.json();
+        } else if (response7) {
+            console.log(`Fetch request to ${url7} failed with status ${response7.status}`);
+        }
+
+        if (response8 && response8.ok) {
+            data8 = await response8.json();
+        } else if (response8) {
+            console.log(`Fetch request to ${url8} failed with status ${response8.status}`);
+        }
+
+        return { data1, data2, data3, data4, data5, data6, data7, data8 };
     } catch (error) {
         console.error('Error fetching the URLs:', error.message);
-        return { data1: null, data2: null, data3: null, data4: null, data5: null, data6: null }; // return null data if any error occurs
+        return { data1: null, data2: null, data3: null, data4: null, data5: null, data6: null, data7: null, data8: null }; // return null data if any error occurs
     }
 }
 
