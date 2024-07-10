@@ -547,7 +547,7 @@ function fetchAndUpdateData(location_id
             url10 = `https://cwms-data.usace.army.mil/cwms-data/timeseries?name=${tsid_rvf_ff}&begin=${begin.toISOString()}&end=${end1.toISOString()}&office=MVS&timezone=CST6CDT`;
         }
     }
-    console.log("url10 = ", url10);
+    // console.log("url10 = ", url10);
 
     fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9, url10)
         .then(({ data1, data2, data3, data4, data5, data6, data7, data8, data9, data10 }) => {
@@ -562,7 +562,7 @@ function fetchAndUpdateData(location_id
         // console.log("data7 = ", data7);
         // console.log("data8 = ", data8);
         // console.log("data9 = ", data9);
-        console.log("data10 = ", data10);
+        // console.log("data10 = ", data10);
 
         // Process data1 - netmiss forecast data
         const convertedData = convertUTCtoCentralTime(data1);
@@ -584,7 +584,23 @@ function fetchAndUpdateData(location_id
         const convertedNetmissDownstreamData = convertUTCtoCentralTime(data4);
         // console.log("convertedNetmissDownstreamData = ", convertedNetmissDownstreamData);
 
-        if (isNetmissForecastArrayLengthGreaterThanSeven === true) {
+        // Process data10 - RVF-FF 7am levels
+        let result10 = null;
+        let latest7AMRvfValue = null;
+        let isRvfArrayLengthGreaterThanSeven = null;
+        if (data10 !== null) {
+            result10 = get7AMValuesForWeek(data10, nws_day1_date);
+            console.log("result10 = ", result10);
+            latest7AMRvfValue = result10.valuesAt7AM;
+            console.log("latest7AMRvfValue = ", latest7AMRvfValue);
+            console.log("latest7AMRvfValue[0] = ", latest7AMRvfValue[0]);
+            console.log("latest7AMRvfValue[0].value = ", latest7AMRvfValue[0].value);
+
+            isRvfArrayLengthGreaterThanSeven = latest7AMRvfValue.length >= 7;
+            console.log("isRvfArrayLengthGreaterThanSeven:", isRvfArrayLengthGreaterThanSeven);
+        }
+
+        if (isNetmissForecastArrayLengthGreaterThanSeven === true || isRvfArrayLengthGreaterThanSeven === true) {
             // LOCATION
             const locationIdCell = row.insertCell();
             locationIdCell.innerHTML = location_id;
@@ -626,6 +642,10 @@ function fetchAndUpdateData(location_id
                     day1 = "<div title='" + convertedData.values[0] + "'>" + 
                         (tsid_forecast_location === true ? "<strong>" + (convertedData.values[0][1]).toFixed(2) + "</strong>" : (convertedData.values[0][1]).toFixed(2)) + 
                         "</div>";
+                } else if (latest7AMRvfValue[0] !== null) {
+                    day1 = "<div title='" + latest7AMRvfValue[0] + "'>" + 
+                        (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[0].value).toFixed(2) + "</strong>" : (latest7AMRvfValue[0].value).toFixed(2)) + 
+                        "</div>";
                 } else {
                     day1 = "<div>" + "-" + "</div>";
                 }
@@ -639,6 +659,10 @@ function fetchAndUpdateData(location_id
                 day2 = "<div title='" + convertedData.values[1] + "'>" + 
                     (tsid_forecast_location === true ? "<strong>" + (convertedData.values[1][1]).toFixed(2) + "</strong>" : (convertedData.values[1][1]).toFixed(2)) + 
                     "</div>";
+            } else if (latest7AMRvfValue[1] !== null) {
+                day2 = "<div title='" + latest7AMRvfValue[1] + "'>" + 
+                    (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[1].value).toFixed(2) + "</strong>" : (latest7AMRvfValue[1].value).toFixed(2)) + 
+                    "</div>";
             } else {
                 day2 = "<div>" + "-" + "</div>";
             }
@@ -650,6 +674,10 @@ function fetchAndUpdateData(location_id
             if (convertedData !== null) {
                 day3 = "<div title='" + convertedData.values[2] + "'>" + 
                     (tsid_forecast_location === true ? "<strong>" + (convertedData.values[2][1]).toFixed(2) + "</strong>" : (convertedData.values[2][1]).toFixed(2)) + 
+                    "</div>";
+            } else if (latest7AMRvfValue[2] !== null) {
+                day3 = "<div title='" + latest7AMRvfValue[2] + "'>" + 
+                    (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[2].value).toFixed(2) + "</strong>" : (latest7AMRvfValue[2].value).toFixed(2)) + 
                     "</div>";
             } else {
                 day3 = "<div>" + "-" + "</div>";
@@ -663,6 +691,10 @@ function fetchAndUpdateData(location_id
                 day4 = "<div title='" + convertedData.values[3] + "'>" + 
                     (tsid_forecast_location === true ? "<strong>" + (convertedData.values[3][1]).toFixed(2) + "</strong>" : (convertedData.values[3][1]).toFixed(2)) + 
                     "</div>";
+            } else if (latest7AMRvfValue[3] !== null) {
+                day4 = "<div title='" + latest7AMRvfValue[3] + "'>" + 
+                    (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[3].value).toFixed(2) + "</strong>" : (latest7AMRvfValue[3].value).toFixed(2)) + 
+                    "</div>";
             } else {
                 day4 = "<div>" + "-" + "</div>";
             }
@@ -674,6 +706,10 @@ function fetchAndUpdateData(location_id
             if (convertedData !== null) {
                 day5 = "<div title='" + convertedData.values[4] + "'>" + 
                     (tsid_forecast_location === true ? "<strong>" + (convertedData.values[4][1]).toFixed(2) + "</strong>" : (convertedData.values[4][1]).toFixed(2)) + 
+                    "</div>";
+            } else if (latest7AMRvfValue[4] !== null) {
+                day5 = "<div title='" + latest7AMRvfValue[4] + "'>" + 
+                    (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[4].value).toFixed(2) + "</strong>" : (latest7AMRvfValue[4].value).toFixed(2)) + 
                     "</div>";
             } else {
                 day5 = "<div>" + "-" + "</div>";
@@ -687,6 +723,10 @@ function fetchAndUpdateData(location_id
                 day6 = "<div title='" + convertedData.values[5] + "'>" + 
                     (tsid_forecast_location === true ? "<strong>" + (convertedData.values[5][1]).toFixed(2) + "</strong>" : (convertedData.values[5][1]).toFixed(2)) + 
                     "</div>";
+            } else if (latest7AMRvfValue[5] !== null) {
+                day6 = "<div title='" + latest7AMRvfValue[5] + "'>" + 
+                    (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[5].value).toFixed(2) + "</strong>" : (latest7AMRvfValue[5].value).toFixed(2)) + 
+                    "</div>";
             } else {
                 day6 = "<div>" + "-" + "</div>";
             }
@@ -698,6 +738,10 @@ function fetchAndUpdateData(location_id
             if (convertedData !== null) {
                 day7 = "<div title='" + convertedData.values[6] + "'>" + 
                     (tsid_forecast_location === true ? "<strong>" + (convertedData.values[6][1]).toFixed(2) + "</strong>" : (convertedData.values[6][1]).toFixed(2)) + 
+                    "</div>";
+            } else if (latest7AMRvfValue[6] !== null) {
+                day7 = "<div title='" + latest7AMRvfValue[6] + "'>" + 
+                    (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[6].value).toFixed(2) + "</strong>" : (latest7AMRvfValue[6].value).toFixed(2)) + 
                     "</div>";
             } else {
                 day7 = "<div>" + "-" + "</div>";
@@ -786,16 +830,6 @@ function fetchAndUpdateData(location_id
                 
                 total = parseFloat(latest6AMValue.value) + parseFloat(convertedNetmissDownstreamData.values[0][1]) - parseFloat(latest6AMValueDownstream.value);
                 day1 = "<div title='" + (latest6AMValue.value).toFixed(2) + " + " + (convertedNetmissDownstreamData.values[0][1]).toFixed(2) + " - " + (latest6AMValueDownstream.value).toFixed(2) + " = " + total.toFixed(2) + "'>" + (tsid_forecast_location === true ? "<strong>" + total.toFixed(2) : total.toFixed(2)) + "</div>";
-            } else if (location_id === "Cairo-Ohio") {
-                console.log("nws_day1_date = ", nws_day1_date);
-                // Process data10 - RVF-FF 7am level
-                const result10 = get7AMValueForDate(data10, nws_day1_date);
-                const latest7AMRvfValue = result10.valueAt7AM;
-                const tsid10 = result10.tsid;
-
-                console.log("latest7AMRvfValue = ", latest7AMRvfValue);
-
-                day1 = "<div title='" + latest7AMRvfValue.date + " " + (latest7AMRvfValue.value).toFixed(2) + "'>" + (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue.value).toFixed(2) : (latest7AMRvfValue.value).toFixed(2)) + "</div>";
             } else {
                 if (convertedData !== null) {
                     day1 = "<div title='" + convertedData.values[0] + "'>" + 
@@ -1086,6 +1120,67 @@ function get7AMValueForDate(data, date) {
     // Return the 7 AM value found and tsid
     return {
         valueAt7AM,
+        tsid
+    };
+}
+
+// Function to get lastest 7am value for a week
+function get7AMValuesForWeek(data, date) {
+    // Extract the values array from the data
+    const values = data.values;
+
+    // Extract the tsid from the data
+    const tsid = data.name;
+
+    // Initialize an array to store the 7 AM values for the given week
+    const valuesAt7AM = [];
+
+    // Define the Central Time timezone
+    const centralTimeZone = 'America/Chicago';
+
+    // Parse the input date to create a Date object
+    const [month, day, year] = date.split('-');
+    let targetDate = new Date(`${year}-${month}-${day}T07:00:00`);
+
+    // Iterate through the next 7 days
+    for (let dayOffset = 0; dayOffset < 7; dayOffset++) {
+        // Adjust the target date by the day offset
+        const currentDate = new Date(targetDate);
+        currentDate.setDate(targetDate.getDate() + dayOffset);
+
+        // Convert the target date to Central Time
+        const targetCentralDate = new Date(currentDate.toLocaleString('en-US', { timeZone: centralTimeZone }));
+
+        // Initialize a variable to store the 7 AM value for the current date
+        let valueAt7AM = null;
+
+        // Iterate through the values array to find the 7 AM value for the current date
+        for (let i = 0; i < values.length; i++) {
+            const [timestamp, value, qualityCode] = values[i];
+
+            // Convert the timestamp to a Date object in UTC
+            const date = new Date(timestamp);
+
+            // Convert the UTC date to Central Time
+            const centralDate = new Date(date.toLocaleString('en-US', { timeZone: centralTimeZone }));
+
+            // Check if the date and time match the target 7 AM
+            if (centralDate.getFullYear() === targetCentralDate.getFullYear() &&
+                centralDate.getMonth() === targetCentralDate.getMonth() &&
+                centralDate.getDate() === targetCentralDate.getDate() &&
+                centralDate.getHours() === 7 && centralDate.getMinutes() === 0 && centralDate.getSeconds() === 0) {
+                valueAt7AM = { date: centralDate.toISOString(), value, qualityCode };
+                break;
+            }
+        }
+
+        // Store the 7 AM value for the current date
+        valuesAt7AM.push(valueAt7AM);
+    }
+
+    // Return the 7 AM values found and tsid
+    return {
+        valuesAt7AM,
         tsid
     };
 }
