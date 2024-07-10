@@ -419,6 +419,7 @@ function populateTableCells(jsonDataFiltered, table, nws_day1_date) {
                             ,location.river_mile_hard_coded
                             ,location.netmiss_river_mile_hard_coded_upstream
                             ,location.netmiss_river_mile_hard_coded_downstream
+                            ,location.tsid_rvf_ff_downstream
                         );
     });
 }
@@ -447,6 +448,7 @@ function fetchAndUpdateData(location_id
                             ,river_mile_hard_coded
                             ,netmiss_river_mile_hard_coded_upstream
                             ,netmiss_river_mile_hard_coded_downstream
+                            ,tsid_rvf_ff_downstream
                         ) {
 
     console.log("location_id =",  location_id);
@@ -587,8 +589,19 @@ function fetchAndUpdateData(location_id
     }
     // console.log("url12 = ", url12);
 
-    fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9, url10, url11, url12)
-        .then(({ data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12 }) => {
+    // Get Downstream RVF-FF Forecast 
+    let url13 = null;
+    if (tsid_rvf_ff_downstream !== null) {
+        if (cda === "internal") {
+            url13 = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/timeseries?name=${tsid_rvf_ff_downstream}&begin=${begin.toISOString()}&end=${end1.toISOString()}&office=MVS&timezone=CST6CDT`;
+        } else if (cda === "public") {
+            url13 = `https://cwms-data.usace.army.mil/cwms-data/timeseries?name=${tsid_rvf_ff_downstream}&begin=${begin.toISOString()}&end=${end1.toISOString()}&office=MVS&timezone=CST6CDT`;
+        }
+    }
+    // console.log("url13 = ", url13);
+
+    fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9, url10, url11, url12, url13)
+        .then(({ data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13 }) => {
         // console.log("location_id =",  location_id);
         // Do something with the fetched data
         // console.log("data1 = ", data1);
@@ -603,6 +616,7 @@ function fetchAndUpdateData(location_id
         // console.log("data10 = ", data10);
         // console.log("data11 = ", data11);
         // console.log("data12 = ", data12);
+        // console.log("data13 = ", data13);
 
         // Process data1 - netmiss forecast data
         const convertedData = convertUTCtoCentralTime(data1);
@@ -911,6 +925,191 @@ function fetchAndUpdateData(location_id
                 // console.log("total = ", total);
 
                 day1 = "<div title='" + formula + "'>" + total.toFixed(1) + "</div>";
+            } else if (location_id === "Herculaneum-Mississippi") {
+                // const formula = "P27+ ((((Q26-Q27)/Q28)*Q29)+Q30)";
+                const formula = "yesterday6AMValue + (((((todayUpstreamNetmiss - yesterday6AMValueUpstream)-(todayDownstreamNetmiss - yesterday6AMValueDownstream))/(riverMileUpstream - riverMileDownstream))*(riverMile - riverMileDownstream))+(todayDownstreamNetmiss - yesterday6AMValueDownstream))";
+                // Get all variables to do calculation
+                const yesterday6AMValue = ((getLatest6AMValue(data2)).latest6AMValue).value;
+                const yesterday6AMValueUpstream = ((getLatest6AMValue(data7)).latest6AMValue).value;
+                const yesterday6AMValueDownstream = ((getLatest6AMValue(data9)).latest6AMValue).value;
+                const todayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[0][1]);
+                const todayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[0][1]);
+                const riverMile = river_mile_hard_coded;
+                const riverMileUpstream = netmiss_river_mile_hard_coded_upstream;
+                const riverMileDownstream = netmiss_river_mile_hard_coded_downstream;
+
+                // console.log("yesterday6AMValue = ", yesterday6AMValue);
+                // console.log("yesterday6AMValueUpstream = ", yesterday6AMValueUpstream);
+                // console.log("yesterday6AMValueDownstream = ", yesterday6AMValueDownstream);
+                // console.log("todayUpstreamNetmiss = ", todayUpstreamNetmiss);
+                // console.log("todayDownstreamNetmiss = ", todayDownstreamNetmiss);
+                // console.log("riverMile = ", riverMile);
+                // console.log("riverMileUpstream = ", riverMileUpstream);
+                // console.log("riverMileDownstream = ", riverMileDownstream);
+
+                // console.log("Q26 = ", (todayUpstreamNetmiss - yesterday6AMValueUpstream));
+                // console.log("Q27 = ", (todayDownstreamNetmiss - yesterday6AMValueDownstream));
+                // console.log("Q28 = ", (riverMileUpstream - riverMileDownstream));
+                // console.log("Q29 = ", (riverMile - riverMileDownstream));
+                // console.log("Q30 = ", (todayDownstreamNetmiss - yesterday6AMValueDownstream));
+
+                let total = null;
+                total = yesterday6AMValue + (((((todayUpstreamNetmiss - yesterday6AMValueUpstream)-(todayDownstreamNetmiss - yesterday6AMValueDownstream))/(riverMileUpstream - riverMileDownstream))*(riverMile - riverMileDownstream))+(todayDownstreamNetmiss - yesterday6AMValueDownstream));
+                // console.log("total = ", total);
+
+                day1 = "<div title='" + formula + "'>" + total.toFixed(1) + "</div>";
+            } else if (location_id === "Nav TW-Kaskaskia") {
+                // const formula = "P27+ ((((Q26-Q27)/Q28)*Q29)+Q30)";
+                const formula = "yesterday6AMValue + (((((todayUpstreamNetmiss - yesterday6AMValueUpstream)-(todayDownstreamNetmiss - yesterday6AMValueDownstream))/(riverMileUpstream - riverMileDownstream))*(riverMile - riverMileDownstream))+(todayDownstreamNetmiss - yesterday6AMValueDownstream))";
+                // Get all variables to do calculation
+                const yesterday6AMValue = ((getLatest6AMValue(data2)).latest6AMValue).value;
+                const yesterday6AMValueUpstream = ((getLatest6AMValue(data7)).latest6AMValue).value;
+                const yesterday6AMValueDownstream = ((getLatest6AMValue(data9)).latest6AMValue).value;
+                const todayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[0][1]);
+                const todayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[0][1]);
+                // const riverMile = river_mile_hard_coded;
+                const riverMile = 117.5;
+                const riverMileUpstream = netmiss_river_mile_hard_coded_upstream;
+                const riverMileDownstream = netmiss_river_mile_hard_coded_downstream;
+
+                // console.log("yesterday6AMValue = ", yesterday6AMValue);
+                // console.log("yesterday6AMValueUpstream = ", yesterday6AMValueUpstream);
+                // console.log("yesterday6AMValueDownstream = ", yesterday6AMValueDownstream);
+                // console.log("todayUpstreamNetmiss = ", todayUpstreamNetmiss);
+                // console.log("todayDownstreamNetmiss = ", todayDownstreamNetmiss);
+                // console.log("riverMile = ", riverMile);
+                // console.log("riverMileUpstream = ", riverMileUpstream);
+                // console.log("riverMileDownstream = ", riverMileDownstream);
+
+                // console.log("Q26 = ", (todayUpstreamNetmiss - yesterday6AMValueUpstream));
+                // console.log("Q27 = ", (todayDownstreamNetmiss - yesterday6AMValueDownstream));
+                // console.log("Q28 = ", (riverMileUpstream - riverMileDownstream));
+                // console.log("Q29 = ", (riverMile - riverMileDownstream));
+                // console.log("Q30 = ", (todayDownstreamNetmiss - yesterday6AMValueDownstream));
+
+                let total = null;
+                total = yesterday6AMValue + (((((todayUpstreamNetmiss - yesterday6AMValueUpstream)-(todayDownstreamNetmiss - yesterday6AMValueDownstream))/(riverMileUpstream - riverMileDownstream))*(riverMile - riverMileDownstream))+(todayDownstreamNetmiss - yesterday6AMValueDownstream));
+                // console.log("total = ", total);
+
+                day1 = "<div title='" + formula + "'>" + total.toFixed(1) + "</div>";
+            } else if (location_id === "Red Rock Ldg-Mississippi") {
+                // const formula = "P27+ ((((Q26-Q27)/Q28)*Q29)+Q30)";
+                const formula = "yesterday6AMValue + (((((todayUpstreamNetmiss - yesterday6AMValueUpstream)-(todayDownstreamNetmiss - yesterday6AMValueDownstream))/(riverMileUpstream - riverMileDownstream))*(riverMile - riverMileDownstream))+(todayDownstreamNetmiss - yesterday6AMValueDownstream))";
+                // Get all variables to do calculation
+                const yesterday6AMValue = ((getLatest6AMValue(data2)).latest6AMValue).value;
+                const yesterday6AMValueUpstream = ((getLatest6AMValue(data7)).latest6AMValue).value;
+                const yesterday6AMValueDownstream = ((getLatest6AMValue(data9)).latest6AMValue).value;
+                const todayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[0][1]);
+                const todayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[0][1]);
+                const riverMile = river_mile_hard_coded;
+                const riverMileUpstream = netmiss_river_mile_hard_coded_upstream;
+                const riverMileDownstream = netmiss_river_mile_hard_coded_downstream;
+
+                // console.log("yesterday6AMValue = ", yesterday6AMValue);
+                // console.log("yesterday6AMValueUpstream = ", yesterday6AMValueUpstream);
+                // console.log("yesterday6AMValueDownstream = ", yesterday6AMValueDownstream);
+                // console.log("todayUpstreamNetmiss = ", todayUpstreamNetmiss);
+                // console.log("todayDownstreamNetmiss = ", todayDownstreamNetmiss);
+                // console.log("riverMile = ", riverMile);
+                // console.log("riverMileUpstream = ", riverMileUpstream);
+                // console.log("riverMileDownstream = ", riverMileDownstream);
+
+                // console.log("Q26 = ", (todayUpstreamNetmiss - yesterday6AMValueUpstream));
+                // console.log("Q27 = ", (todayDownstreamNetmiss - yesterday6AMValueDownstream));
+                // console.log("Q28 = ", (riverMileUpstream - riverMileDownstream));
+                // console.log("Q29 = ", (riverMile - riverMileDownstream));
+                // console.log("Q30 = ", (todayDownstreamNetmiss - yesterday6AMValueDownstream));
+
+                let total = null;
+                total = yesterday6AMValue + (((((todayUpstreamNetmiss - yesterday6AMValueUpstream)-(todayDownstreamNetmiss - yesterday6AMValueDownstream))/(riverMileUpstream - riverMileDownstream))*(riverMile - riverMileDownstream))+(todayDownstreamNetmiss - yesterday6AMValueDownstream));
+                // console.log("total = ", total);
+
+                day1 = "<div title='" + formula + "'>" + total.toFixed(1) + "</div>";
+            } else if (location_id === "Grand Tower-Mississippi") {
+                // const formula = "P27+ ((((Q26-Q27)/Q28)*Q29)+Q30)";
+                const formula = "yesterday6AMValue + (((((todayUpstreamNetmiss - yesterday6AMValueUpstream)-(todayDownstreamNetmiss - yesterday6AMValueDownstream))/(riverMileUpstream - riverMileDownstream))*(riverMile - riverMileDownstream))+(todayDownstreamNetmiss - yesterday6AMValueDownstream))";
+                // Get all variables to do calculation
+                const yesterday6AMValue = ((getLatest6AMValue(data2)).latest6AMValue).value;
+                const yesterday6AMValueUpstream = ((getLatest6AMValue(data7)).latest6AMValue).value;
+                const yesterday6AMValueDownstream = ((getLatest6AMValue(data9)).latest6AMValue).value;
+                const todayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[0][1]);
+                const todayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[0][1]);
+                const riverMile = river_mile_hard_coded;
+                const riverMileUpstream = netmiss_river_mile_hard_coded_upstream;
+                const riverMileDownstream = netmiss_river_mile_hard_coded_downstream;
+
+                // console.log("yesterday6AMValue = ", yesterday6AMValue);
+                // console.log("yesterday6AMValueUpstream = ", yesterday6AMValueUpstream);
+                // console.log("yesterday6AMValueDownstream = ", yesterday6AMValueDownstream);
+                // console.log("todayUpstreamNetmiss = ", todayUpstreamNetmiss);
+                // console.log("todayDownstreamNetmiss = ", todayDownstreamNetmiss);
+                // console.log("riverMile = ", riverMile);
+                // console.log("riverMileUpstream = ", riverMileUpstream);
+                // console.log("riverMileDownstream = ", riverMileDownstream);
+
+                // console.log("Q26 = ", (todayUpstreamNetmiss - yesterday6AMValueUpstream));
+                // console.log("Q27 = ", (todayDownstreamNetmiss - yesterday6AMValueDownstream));
+                // console.log("Q28 = ", (riverMileUpstream - riverMileDownstream));
+                // console.log("Q29 = ", (riverMile - riverMileDownstream));
+                // console.log("Q30 = ", (todayDownstreamNetmiss - yesterday6AMValueDownstream));
+
+                let total = null;
+                total = yesterday6AMValue + (((((todayUpstreamNetmiss - yesterday6AMValueUpstream)-(todayDownstreamNetmiss - yesterday6AMValueDownstream))/(riverMileUpstream - riverMileDownstream))*(riverMile - riverMileDownstream))+(todayDownstreamNetmiss - yesterday6AMValueDownstream));
+                // console.log("total = ", total);
+
+                day1 = "<div title='" + formula + "'>" + total.toFixed(1) + "</div>";
+            } else if (location_id === "Moccasin Springs-Mississippi") {
+                // const formula = "P27+ ((((Q26-Q27)/Q28)*Q29)+Q30)";
+                const formula = "yesterday6AMValue + (((((todayUpstreamNetmiss - yesterday6AMValueUpstream)-(todayDownstreamNetmiss - yesterday6AMValueDownstream))/(riverMileUpstream - riverMileDownstream))*(riverMile - riverMileDownstream))+(todayDownstreamNetmiss - yesterday6AMValueDownstream))";
+                // Get all variables to do calculation
+                const yesterday6AMValue = ((getLatest6AMValue(data2)).latest6AMValue).value;
+                const yesterday6AMValueUpstream = ((getLatest6AMValue(data7)).latest6AMValue).value;
+                const yesterday6AMValueDownstream = ((getLatest6AMValue(data9)).latest6AMValue).value;
+                const todayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[0][1]);
+                const todayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[0][1]);
+                const riverMile = river_mile_hard_coded;
+                const riverMileUpstream = netmiss_river_mile_hard_coded_upstream;
+                const riverMileDownstream = netmiss_river_mile_hard_coded_downstream;
+
+                // console.log("yesterday6AMValue = ", yesterday6AMValue);
+                // console.log("yesterday6AMValueUpstream = ", yesterday6AMValueUpstream);
+                // console.log("yesterday6AMValueDownstream = ", yesterday6AMValueDownstream);
+                // console.log("todayUpstreamNetmiss = ", todayUpstreamNetmiss);
+                // console.log("todayDownstreamNetmiss = ", todayDownstreamNetmiss);
+                // console.log("riverMile = ", riverMile);
+                // console.log("riverMileUpstream = ", riverMileUpstream);
+                // console.log("riverMileDownstream = ", riverMileDownstream);
+
+                // console.log("Q26 = ", (todayUpstreamNetmiss - yesterday6AMValueUpstream));
+                // console.log("Q27 = ", (todayDownstreamNetmiss - yesterday6AMValueDownstream));
+                // console.log("Q28 = ", (riverMileUpstream - riverMileDownstream));
+                // console.log("Q29 = ", (riverMile - riverMileDownstream));
+                // console.log("Q30 = ", (todayDownstreamNetmiss - yesterday6AMValueDownstream));
+
+                let total = null;
+                total = yesterday6AMValue + (((((todayUpstreamNetmiss - yesterday6AMValueUpstream)-(todayDownstreamNetmiss - yesterday6AMValueDownstream))/(riverMileUpstream - riverMileDownstream))*(riverMile - riverMileDownstream))+(todayDownstreamNetmiss - yesterday6AMValueDownstream));
+                // console.log("total = ", total);
+
+                day1 = "<div title='" + formula + "'>" + total.toFixed(1) + "</div>";
+            } else if (location_id === "Birds Point-Mississippi") {
+                const formula = "yesterday6AMValue + (latest7AMRvfDownstreamValue - yesterday6AMValueDownstream)";
+                const yesterday6AMValue = ((getLatest6AMValue(data2)).latest6AMValue).value;
+                // console.log("yesterday6AMValue = ", yesterday6AMValue);
+                const yesterday6AMValueDownstream = ((getLatest6AMValue(data9)).latest6AMValue).value;
+                // console.log("yesterday6AMValueDownstream = ", yesterday6AMValueDownstream);
+                // Process data10 - RVF-FF 7am levels
+                let result13 = null;
+                let latest7AMRvfDownstreamValue = null;
+                if (data13 !== null) {
+                    result13 = get7AMValuesForWeek(data13, nws_day1_date);
+                    // console.log("result13 = ", result13);
+                    latest7AMRvfDownstreamValue = result13.valuesAt7AM[0].value;
+                    // console.log("latest7AMRvfDownstreamValue = ", latest7AMRvfDownstreamValue);
+                }
+                let total = null;
+                total = yesterday6AMValue + (latest7AMRvfDownstreamValue - yesterday6AMValueDownstream);
+                // console.log("total = ", total);
+                day1 = "<div title='" + formula + "'>" + total.toFixed(1) + "</div>";
             } else {
                 if (convertedData !== null) {
                     day1 = "<div title='" + convertedData.values[0] + "'>" + 
@@ -1013,7 +1212,7 @@ function checkForDuplicates(data) {
 }
 
 // Function to fetch all urls to find all forecasts
-async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9, url10, url11, url12) {
+async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9, url10, url11, url12, url13) {
     const fetchOptions = {
         method: 'GET',
         headers: {
@@ -1022,110 +1221,65 @@ async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9
     };
 
     try {
-        const response1Promise = url1 ? fetch(url1, fetchOptions) : Promise.resolve(null);
-        const response2Promise = url2 ? fetch(url2, fetchOptions) : Promise.resolve(null);
-        const response3Promise = url3 ? fetch(url3, fetchOptions) : Promise.resolve(null);
-        const response4Promise = url4 ? fetch(url4, fetchOptions) : Promise.resolve(null);
-        const response5Promise = url5 ? fetch(url5, fetchOptions) : Promise.resolve(null);
-        const response6Promise = url6 ? fetch(url6, fetchOptions) : Promise.resolve(null);
-        const response7Promise = url7 ? fetch(url7, fetchOptions) : Promise.resolve(null);
-        const response8Promise = url8 ? fetch(url8, fetchOptions) : Promise.resolve(null);
-        const response9Promise = url9 ? fetch(url9, fetchOptions) : Promise.resolve(null);
-        const response10Promise = url10 ? fetch(url10, fetchOptions) : Promise.resolve(null);
-        const response11Promise = url11 ? fetch(url11, fetchOptions) : Promise.resolve(null);
-        const response12Promise = url12 ? fetch(url12, fetchOptions) : Promise.resolve(null);
+        const responsePromises = [
+            url1 ? fetch(url1, fetchOptions) : Promise.resolve(null),
+            url2 ? fetch(url2, fetchOptions) : Promise.resolve(null),
+            url3 ? fetch(url3, fetchOptions) : Promise.resolve(null),
+            url4 ? fetch(url4, fetchOptions) : Promise.resolve(null),
+            url5 ? fetch(url5, fetchOptions) : Promise.resolve(null),
+            url6 ? fetch(url6, fetchOptions) : Promise.resolve(null),
+            url7 ? fetch(url7, fetchOptions) : Promise.resolve(null),
+            url8 ? fetch(url8, fetchOptions) : Promise.resolve(null),
+            url9 ? fetch(url9, fetchOptions) : Promise.resolve(null),
+            url10 ? fetch(url10, fetchOptions) : Promise.resolve(null),
+            url11 ? fetch(url11, fetchOptions) : Promise.resolve(null),
+            url12 ? fetch(url12, fetchOptions) : Promise.resolve(null),
+            url13 ? fetch(url13, fetchOptions) : Promise.resolve(null)
+        ];
 
-        const [response1, response2, response3, response4, response5, response6, response7, response8, response9, response10, response11, response12] = await Promise.all([response1Promise, response2Promise, response3Promise, response4Promise, response5Promise, response6Promise, response7Promise, response8Promise, response9Promise, response10Promise, response11Promise, response12Promise]);
+        const responses = await Promise.all(responsePromises);
 
-        let data1 = null;
-        let data2 = null;
-        let data3 = null;
-        let data4 = null;
-        let data5 = null;
-        let data6 = null;
-        let data7 = null;
-        let data8 = null;
-        let data9 = null;
-        let data10 = null;
-        let data11 = null;
-        let data12 = null;
+        const data = await Promise.all(responses.map(async (response, index) => {
+            if (response && response.ok) {
+                return response.json();
+            } else if (response) {
+                console.log(`Fetch request to url${index + 1} failed with status ${response.status}`);
+            }
+            return null;
+        }));
 
-        if (response1 && response1.ok) {
-            data1 = await response1.json();
-        } else if (response1) {
-            console.log(`Fetch request to ${url1} failed with status ${response1.status}`);
-        }
-
-        if (response2 && response2.ok) {
-            data2 = await response2.json();
-        } else if (response2) {
-            console.log(`Fetch request to ${url2} failed with status ${response2.status}`);
-        }
-
-        if (response3 && response3.ok) {
-            data3 = await response3.json();
-        } else if (response3) {
-            console.log(`Fetch request to ${url3} failed with status ${response3.status}`);
-        }
-
-        if (response4 && response4.ok) {
-            data4 = await response4.json();
-        } else if (response4) {
-            console.log(`Fetch request to ${url4} failed with status ${response4.status}`);
-        }
-
-        if (response5 && response5.ok) {
-            data5 = await response5.json();
-        } else if (response5) {
-            console.log(`Fetch request to ${url5} failed with status ${response5.status}`);
-        }
-
-        if (response6 && response6.ok) {
-            data6 = await response6.json();
-        } else if (response6) {
-            console.log(`Fetch request to ${url6} failed with status ${response6.status}`);
-        }
-
-        if (response7 && response7.ok) {
-            data7 = await response7.json();
-        } else if (response7) {
-            console.log(`Fetch request to ${url7} failed with status ${response7.status}`);
-        }
-
-        if (response8 && response8.ok) {
-            data8 = await response8.json();
-        } else if (response8) {
-            console.log(`Fetch request to ${url8} failed with status ${response8.status}`);
-        }
-
-        if (response9 && response9.ok) {
-            data9 = await response9.json();
-        } else if (response9) {
-            console.log(`Fetch request to ${url9} failed with status ${response9.status}`);
-        }
-
-        if (response10 && response10.ok) {
-            data10 = await response10.json();
-        } else if (response10) {
-            console.log(`Fetch request to ${url10} failed with status ${response10.status}`);
-        }
-
-        if (response11 && response11.ok) {
-            data11 = await response11.json();
-        } else if (response11) {
-            console.log(`Fetch request to ${url11} failed with status ${response11.status}`);
-        }
-
-        if (response12 && response12.ok) {
-            data12 = await response12.json();
-        } else if (response12) {
-            console.log(`Fetch request to ${url12} failed with status ${response12.status}`);
-        }
-
-        return { data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12 };
+        return {
+            data1: data[0],
+            data2: data[1],
+            data3: data[2],
+            data4: data[3],
+            data5: data[4],
+            data6: data[5],
+            data7: data[6],
+            data8: data[7],
+            data9: data[8],
+            data10: data[9],
+            data11: data[10],
+            data12: data[11],
+            data13: data[12]
+        };
     } catch (error) {
         console.error('Error fetching the URLs:', error.message);
-        return { data1: null, data2: null, data3: null, data4: null, data5: null, data6: null, data7: null, data8: null, data9: null, data10: null, data11: null, data12: null }; // return null data if any error occurs
+        return {
+            data1: null,
+            data2: null,
+            data3: null,
+            data4: null,
+            data5: null,
+            data6: null,
+            data7: null,
+            data8: null,
+            data9: null,
+            data10: null,
+            data11: null,
+            data12: null,
+            data13: null
+        }; // return null data if any error occurs
     }
 }
 
