@@ -405,6 +405,7 @@ function populateTableCells(jsonDataFiltered, table) {
                             ,location.tsid_netmiss_downstream
                             ,location.tsid_netmiss_downstream_flood
                             ,location.tsid_netmiss_upstream_stage_rev
+                            ,location.tsid_netmiss_downstream_stage_rev
                         );
     });
 }
@@ -425,11 +426,12 @@ function fetchAndUpdateData(location_id
                             ,tsid_netmiss_downstream
                             ,tsid_netmiss_downstream_flood
                             ,tsid_netmiss_upstream_stage_rev
+                            ,tsid_netmiss_downstream_stage_rev
                         ) {
 
     console.log("location_id =",  location_id);
     
-    // Get CDA netmiss forecast
+    // Get Netmiss Forecast
     let url1 = null;
     if (tsid_netmiss !== null) {
         if (cda === "internal") {
@@ -440,7 +442,7 @@ function fetchAndUpdateData(location_id
     }
     // console.log("url1 = ", url1);
 
-    // Get CDA stage rev
+    // Get Stage-Rev
     let url2 = null;
     if (tsid_netmiss_observe !== null) {
         if (cda === "internal") {
@@ -451,7 +453,7 @@ function fetchAndUpdateData(location_id
     }
     // console.log("url2 = ", url2);
 
-    // Get CDA flood stage
+    // Get Flood Stage
     let url3 = null;
     if (level_id_flood !== null) {
         if (cda === "public") {
@@ -462,7 +464,7 @@ function fetchAndUpdateData(location_id
     }
     // console.log('url3 = ', url3);
 
-    // Get Netmiss Downstream
+    // Get Downstream Netmiss
     let url4 = null;
     if (tsid_netmiss_downstream !== null) {
         if (cda === "internal") {
@@ -473,7 +475,7 @@ function fetchAndUpdateData(location_id
     }
     // console.log("url4 = ", url4);
 
-    // Get CDA downstream flood stage
+    // Get Downstream Flood Stage
     let url5 = null;
     if (tsid_netmiss_downstream_flood !== null) {
         if (cda === "public") {
@@ -484,7 +486,7 @@ function fetchAndUpdateData(location_id
     }
     // console.log('url5 = ', url5);
 
-    // Get CDA downstream metadata
+    // Get Downstream Metadata
     let url6 = null;
     let netmissDownstreamLocationId = null;
     if (tsid_netmiss_downstream !== null) {
@@ -499,7 +501,7 @@ function fetchAndUpdateData(location_id
     }
     // console.log('url6 = ', url6);
 
-    // Get CDA upstream stage rev
+    // Get Upstream Stage-Rev
     let url7 = null;
     if (tsid_netmiss_upstream_stage_rev !== null) {
         if (cda === "internal") {
@@ -508,9 +510,9 @@ function fetchAndUpdateData(location_id
             url7 = `https://cwms-data.usace.army.mil/cwms-data/timeseries?name=${tsid_netmiss_upstream_stage_rev}&begin=${end2.toISOString()}&end=${begin.toISOString()}&office=MVS&timezone=CST6CDT`;
         }
     }
-    console.log("url7 = ", url7);
+    // console.log("url7 = ", url7);
 
-    // Get Netmiss Upstream
+    // Get Upstream Netmiss
     let url8 = null;
     if (tsid_netmiss_upstream !== null) {
         if (cda === "internal") {
@@ -519,10 +521,21 @@ function fetchAndUpdateData(location_id
             url8 = `https://cwms-data.usace.army.mil/cwms-data/timeseries?name=${tsid_netmiss_upstream}&begin=${begin.toISOString()}&end=${end1.toISOString()}&office=MVS&timezone=CST6CDT`;
         }
     }
-    // console.log("url4 = ", url4);
+    // console.log("url8 = ", url8);
 
-    fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8)
-        .then(({ data1, data2, data3, data4, data5, data6, data7, data8 }) => {
+    // Get Downstream Stage-Rev
+    let url9 = null;
+    if (tsid_netmiss_downstream_stage_rev !== null) {
+        if (cda === "internal") {
+            url9 = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/timeseries?name=${tsid_netmiss_downstream_stage_rev}&begin=${end2.toISOString()}&end=${begin.toISOString()}&office=MVS&timezone=CST6CDT`;
+        } else if (cda === "public") {
+            url9 = `https://cwms-data.usace.army.mil/cwms-data/timeseries?name=${tsid_netmiss_downstream_stage_rev}&begin=${end2.toISOString()}&end=${begin.toISOString()}&office=MVS&timezone=CST6CDT`;
+        }
+    }
+    console.log("url9 = ", url9);
+
+    fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9)
+        .then(({ data1, data2, data3, data4, data5, data6, data7, data8, data9 }) => {
         // console.log("location_id =",  location_id);
         // Do something with the fetched data
         // console.log("data1 = ", data1);
@@ -533,14 +546,15 @@ function fetchAndUpdateData(location_id
         // console.log("data6 = ", data6);
         // console.log("data7 = ", data7);
         // console.log("data8 = ", data8);
+        console.log("data9 = ", data9);
 
         // Process data1 - netmiss forecast data
         const convertedData = convertUTCtoCentralTime(data1);
         // console.log("convertedData = ", convertedData);
 
         // Process data8 - upstream netmiss forecast data
-        const convertedDataUpstream = convertUTCtoCentralTime(data8);
-        // console.log("convertedDataUpstream = ", convertedDataUpstream);
+        const convertedNetmissUpstreamData = convertUTCtoCentralTime(data8);
+        // console.log("convertedNetmissUpstreamData = ", convertedNetmissUpstreamData);
 
         const isNetmissForecastArrayLengthGreaterThanSeven = checkValuesArrayLength(data1);
         // console.log("isNetmissForecastArrayLengthGreaterThanSeven:", isNetmissForecastArrayLengthGreaterThanSeven);
@@ -551,8 +565,8 @@ function fetchAndUpdateData(location_id
         const tsid = result.tsid;
 
         // Process Downstream Netmiss for Interpolation
-        const convertedDownstreamData = convertUTCtoCentralTime(data4);
-        // console.log("convertedDownstreamData = ", convertedDownstreamData);
+        const convertedNetmissDownstreamData = convertUTCtoCentralTime(data4);
+        // console.log("convertedNetmissDownstreamData = ", convertedNetmissDownstreamData);
 
         if (isNetmissForecastArrayLengthGreaterThanSeven === true) {
             // LOCATION
@@ -573,9 +587,9 @@ function fetchAndUpdateData(location_id
             // Process netmiss interpolation for each gage here
             if (location_id === "Mel Price Pool-Mississippi") {
                 // Compare downstream gage to determine "Open River" or Not
-                if (convertedData !== null && convertedDownstreamData !== null) {
+                if (convertedData !== null && convertedNetmissDownstreamData !== null) {
                     // Calculate downstream value to determine for "Open River"
-                    let downstreamMelPricePoolValueToCompare = parseFloat(data6.elevation) + 0.5 + convertedDownstreamData.values[0][1];
+                    let downstreamMelPricePoolValueToCompare = parseFloat(data6.elevation) + 0.5 + convertedNetmissDownstreamData.values[0][1];
                     // console.log("downstreamMelPricePoolValueToCompare: ", downstreamMelPricePoolValueToCompare);
 
                     // Get today netmiss forecast to compare and determine for "Open River"
@@ -584,7 +598,7 @@ function fetchAndUpdateData(location_id
 
                     // Determine if today is "Open River"
                     if (downstreamMelPricePoolValueToCompare > todayMelPricePoolNetmissForecast) {
-                        day1 = "<div title='" + "(" + parseFloat(data6.elevation).toFixed(2) + " + 0.5 + " + (convertedDownstreamData.values[0][1]).toFixed(2) + ") (" + downstreamMelPricePoolValueToCompare.toFixed(2) + " >= " + todayMelPricePoolNetmissForecast.toFixed(2) + ") = Open River" + "'>" + (tsid_forecast_location === true ? "<strong>" + "Open River" : "-Error-") + "</div>";
+                        day1 = "<div title='" + "(" + parseFloat(data6.elevation).toFixed(2) + " + 0.5 + " + (convertedNetmissDownstreamData.values[0][1]).toFixed(2) + ") (" + downstreamMelPricePoolValueToCompare.toFixed(2) + " >= " + todayMelPricePoolNetmissForecast.toFixed(2) + ") = Open River" + "'>" + (tsid_forecast_location === true ? "<strong>" + "Open River" : "-Error-") + "</div>";
                     } else {
                         day1 = "<div title='" + convertedData.values[0] + "'>" + (tsid_forecast_location === true ? "<strong>" + (convertedData.values[0][1]).toFixed(2) : (convertedData.values[0][1]).toFixed(2)) + "</div>";
                     }
@@ -691,29 +705,9 @@ function fetchAndUpdateData(location_id
             // Process netmiss interpolation for each gage here
             if (location_id === "LD 24 Pool-Mississippi") {
                 // Compare downstream gage to determine "Open River" or Not
-                if (convertedData !== null && convertedDownstreamData !== null) {
+                if (convertedData !== null && convertedNetmissDownstreamData !== null) {
                     // Calculate downstream value to determine for "Open River"
-                    let downstreamValueToCompare = parseFloat(data6.elevation) + 0.5 + convertedDownstreamData.values[0][1];
-                    console.log("downstreamValueToCompare: ", downstreamValueToCompare);
-
-                    // Get today netmiss forecast to compare and determine for "Open River"
-                    let todayNetmissForecast = convertedData.values[0][1];
-                    console.log("todayNetmissForecast: ", todayNetmissForecast);
-
-                    // Determine if today is "Open River"
-                    if (downstreamValueToCompare > todayNetmissForecast) {
-                        day1 = "<div title='" + "(" + parseFloat(data6.elevation).toFixed(2) + " + 0.5 + " + (convertedDownstreamData.values[0][1]).toFixed(2) + ") (" + downstreamValueToCompare.toFixed(2) + " >= " + todayNetmissForecast.toFixed(2) + ") = Open River" + "'>" + (tsid_forecast_location === true ? "<strong>" + "Open River" : "-Error-") + "</div>";
-                    } else {
-                        day1 = "<div title='" + convertedData.values[0] + "'>" + (tsid_forecast_location === true ? "<strong>" + (convertedData.values[0][1]).toFixed(2) : (convertedData.values[0][1]).toFixed(2)) + "</div>";
-                    }
-                } else {
-                    day1 = "<div>" + "--" + "</div>";
-                }
-            } else if (location_id === "LD 25 Pool-Mississippi") {
-                // Compare downstream gage to determine "Open River" or Not
-                if (convertedData !== null && convertedDownstreamData !== null) {
-                    // Calculate downstream value to determine for "Open River"
-                    let downstreamValueToCompare = parseFloat(data6.elevation) + 1.0 + convertedDownstreamData.values[0][1];
+                    let downstreamValueToCompare = parseFloat(data6.elevation) + 0.5 + convertedNetmissDownstreamData.values[0][1];
                     // console.log("downstreamValueToCompare: ", downstreamValueToCompare);
 
                     // Get today netmiss forecast to compare and determine for "Open River"
@@ -722,7 +716,27 @@ function fetchAndUpdateData(location_id
 
                     // Determine if today is "Open River"
                     if (downstreamValueToCompare > todayNetmissForecast) {
-                        day1 = "<div title='" + "(" + parseFloat(data6.elevation).toFixed(2) + " + 1.0 + " + (convertedDownstreamData.values[0][1]).toFixed(2) + ") (" + downstreamValueToCompare.toFixed(2) + " >= " + todayNetmissForecast.toFixed(2) + ") = Open River" + "'>" + (tsid_forecast_location === true ? "<strong>" + "Open River" : "-Error-") + "</div>";
+                        day1 = "<div title='" + "(" + parseFloat(data6.elevation).toFixed(2) + " + 0.5 + " + (convertedNetmissDownstreamData.values[0][1]).toFixed(2) + ") (" + downstreamValueToCompare.toFixed(2) + " >= " + todayNetmissForecast.toFixed(2) + ") = Open River" + "'>" + (tsid_forecast_location === true ? "<strong>" + "Open River" : "-Error-") + "</div>";
+                    } else {
+                        day1 = "<div title='" + convertedData.values[0] + "'>" + (tsid_forecast_location === true ? "<strong>" + (convertedData.values[0][1]).toFixed(2) : (convertedData.values[0][1]).toFixed(2)) + "</div>";
+                    }
+                } else {
+                    day1 = "<div>" + "--" + "</div>";
+                }
+            } else if (location_id === "LD 25 Pool-Mississippi") {
+                // Compare downstream gage to determine "Open River" or Not
+                if (convertedData !== null && convertedNetmissDownstreamData !== null) {
+                    // Calculate downstream value to determine for "Open River"
+                    let downstreamValueToCompare = parseFloat(data6.elevation) + 1.0 + convertedNetmissDownstreamData.values[0][1];
+                    // console.log("downstreamValueToCompare: ", downstreamValueToCompare);
+
+                    // Get today netmiss forecast to compare and determine for "Open River"
+                    let todayNetmissForecast = convertedData.values[0][1];
+                    // console.log("todayNetmissForecast: ", todayNetmissForecast);
+
+                    // Determine if today is "Open River"
+                    if (downstreamValueToCompare > todayNetmissForecast) {
+                        day1 = "<div title='" + "(" + parseFloat(data6.elevation).toFixed(2) + " + 1.0 + " + (convertedNetmissDownstreamData.values[0][1]).toFixed(2) + ") (" + downstreamValueToCompare.toFixed(2) + " >= " + todayNetmissForecast.toFixed(2) + ") = Open River" + "'>" + (tsid_forecast_location === true ? "<strong>" + "Open River" : "-Error-") + "</div>";
                     } else {
                         day1 = "<div title='" + convertedData.values[0] + "'>" + (tsid_forecast_location === true ? "<strong>" + (convertedData.values[0][1]).toFixed(2) : (convertedData.values[0][1]).toFixed(2)) + "</div>";
                     }
@@ -734,15 +748,28 @@ function fetchAndUpdateData(location_id
                 const result7 = getLatest6AMValue(data7);
                 const latest6AMValueUpstream = result7.latest6AMValue;
                 const tsid7 = result7.tsid;
-                console.log("latest6AMValue: ", latest6AMValue);
+                // console.log("latest6AMValue: ", latest6AMValue);
 
                 let total = null;
-                // console.log(latest6AMValue.value);
-                // console.log(convertedDataUpstream.values[0][1]);
-                // console.log(latest6AMValueUpstream.value);
+                // console.log("latest6AMValue.value = ", latest6AMValue.value);
+                // console.log("convertedNetmissUpstreamData.values[0][1] = ", convertedNetmissUpstreamData.values[0][1]);
+                // console.log("latest6AMValueUpstream.value = ", latest6AMValueUpstream.value);
                 
-                total = parseFloat(latest6AMValue.value) + parseFloat(convertedDataUpstream.values[0][1]) - parseFloat(latest6AMValueUpstream.value);
-                day1 = "<div title='" + (latest6AMValue.value).toFixed(2) + " + " + (convertedDataUpstream.values[0][1]).toFixed(2) + " - " + (latest6AMValueUpstream.value).toFixed(2) + " = " + total.toFixed(2) + "'>" + (tsid_forecast_location === true ? "<strong>" + total.toFixed(2) : total.toFixed(2)) + "</div>";
+                total = parseFloat(latest6AMValue.value) + parseFloat(convertedNetmissUpstreamData.values[0][1]) - parseFloat(latest6AMValueUpstream.value);
+                day1 = "<div title='" + (latest6AMValue.value).toFixed(2) + " + " + (convertedNetmissUpstreamData.values[0][1]).toFixed(2) + " - " + (latest6AMValueUpstream.value).toFixed(2) + " = " + total.toFixed(2) + "'>" + (tsid_forecast_location === true ? "<strong>" + total.toFixed(2) : total.toFixed(2)) + "</div>";
+            } else if (location_id === "LD 27 TW-Mississippi") {
+                // Process data7 - stage rev 6am level
+                const result9 = getLatest6AMValue(data9);
+                const latest6AMValueDownstream = result9.latest6AMValue;
+                const tsid9 = result9.tsid;
+
+                let total = null;
+                // console.log("latest6AMValue.value = ", latest6AMValue.value);
+                // console.log("convertedNetmissDownstreamData.values[0][1] = ", convertedNetmissDownstreamData.values[0][1]);
+                // console.log("latest6AMValueDownstream.value = ", latest6AMValueDownstream.value);
+                
+                total = parseFloat(latest6AMValue.value) + parseFloat(convertedNetmissDownstreamData.values[0][1]) - parseFloat(latest6AMValueDownstream.value);
+                day1 = "<div title='" + (latest6AMValue.value).toFixed(2) + " + " + (convertedNetmissDownstreamData.values[0][1]).toFixed(2) + " - " + (latest6AMValueDownstream.value).toFixed(2) + " = " + total.toFixed(2) + "'>" + (tsid_forecast_location === true ? "<strong>" + total.toFixed(2) : total.toFixed(2)) + "</div>";
             } else {
                 if (convertedData !== null) {
                     day1 = "<div title='" + convertedData.values[0] + "'>" + 
@@ -845,7 +872,7 @@ function checkForDuplicates(data) {
 }
 
 // Function to fetch all urls to find all forecasts
-async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8) {
+async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9) {
     const fetchOptions = {
         method: 'GET',
         headers: {
@@ -862,8 +889,9 @@ async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8) {
         const response6Promise = url6 ? fetch(url6, fetchOptions) : Promise.resolve(null);
         const response7Promise = url7 ? fetch(url7, fetchOptions) : Promise.resolve(null);
         const response8Promise = url8 ? fetch(url8, fetchOptions) : Promise.resolve(null);
+        const response9Promise = url9 ? fetch(url9, fetchOptions) : Promise.resolve(null);
 
-        const [response1, response2, response3, response4, response5, response6, response7, response8] = await Promise.all([response1Promise, response2Promise, response3Promise, response4Promise, response5Promise, response6Promise, response7Promise, response8Promise]);
+        const [response1, response2, response3, response4, response5, response6, response7, response8, response9] = await Promise.all([response1Promise, response2Promise, response3Promise, response4Promise, response5Promise, response6Promise, response7Promise, response8Promise, response9Promise]);
 
         let data1 = null;
         let data2 = null;
@@ -873,6 +901,7 @@ async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8) {
         let data6 = null;
         let data7 = null;
         let data8 = null;
+        let data9 = null;
 
         if (response1 && response1.ok) {
             data1 = await response1.json();
@@ -922,10 +951,16 @@ async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8) {
             console.log(`Fetch request to ${url8} failed with status ${response8.status}`);
         }
 
-        return { data1, data2, data3, data4, data5, data6, data7, data8 };
+        if (response9 && response9.ok) {
+            data9 = await response9.json();
+        } else if (response9) {
+            console.log(`Fetch request to ${url9} failed with status ${response9.status}`);
+        }
+
+        return { data1, data2, data3, data4, data5, data6, data7, data8, data9 };
     } catch (error) {
         console.error('Error fetching the URLs:', error.message);
-        return { data1: null, data2: null, data3: null, data4: null, data5: null, data6: null, data7: null, data8: null }; // return null data if any error occurs
+        return { data1: null, data2: null, data3: null, data4: null, data5: null, data6: null, data7: null, data8: null, data9: null }; // return null data if any error occurs
     }
 }
 
