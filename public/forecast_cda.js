@@ -250,7 +250,7 @@ function createTable(jsonDataFiltered) {
                 // Display netmiss data here based on time
                 if (current_hour < 0 || current_hour >= 10) {  // current_hour in 24-hour format
                     // Populate netmiss data here
-                    populateTableCells(jsonDataFiltered, table);
+                    populateTableCells(jsonDataFiltered, table, nws_day1_date);
                     const message = document.createElement('div');
                     message.innerHTML = "<img src='https://www.wpc.ncep.noaa.gov/medr/97ewbg.gif'";
                     if (tableContainer) {
@@ -377,7 +377,7 @@ function fetchFirstNetmissDay(tsid, begin, end, cda) {
 }
 
 // Populate netmiss data cells
-function populateTableCells(jsonDataFiltered, table) {
+function populateTableCells(jsonDataFiltered, table, nws_day1_date) {
     // console.log("jsonDataFiltered inside populateTableCells: ", jsonDataFiltered);
 
     jsonDataFiltered.forEach(location => {
@@ -406,6 +406,8 @@ function populateTableCells(jsonDataFiltered, table) {
                             ,location.tsid_netmiss_downstream_flood
                             ,location.tsid_netmiss_upstream_stage_rev
                             ,location.tsid_netmiss_downstream_stage_rev
+                            ,location.tsid_rvf_ff
+                            ,nws_day1_date
                         );
     });
 }
@@ -427,6 +429,8 @@ function fetchAndUpdateData(location_id
                             ,tsid_netmiss_downstream_flood
                             ,tsid_netmiss_upstream_stage_rev
                             ,tsid_netmiss_downstream_stage_rev
+                            ,tsid_rvf_ff
+                            ,nws_day1_date
                         ) {
 
     console.log("location_id =",  location_id);
@@ -532,10 +536,21 @@ function fetchAndUpdateData(location_id
             url9 = `https://cwms-data.usace.army.mil/cwms-data/timeseries?name=${tsid_netmiss_downstream_stage_rev}&begin=${end2.toISOString()}&end=${begin.toISOString()}&office=MVS&timezone=CST6CDT`;
         }
     }
-    console.log("url9 = ", url9);
+    // console.log("url9 = ", url9);
 
-    fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9)
-        .then(({ data1, data2, data3, data4, data5, data6, data7, data8, data9 }) => {
+    // Get RVF-FF Forecast
+    let url10 = null;
+    if (tsid_rvf_ff !== null) {
+        if (cda === "internal") {
+            url10 = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/timeseries?name=${tsid_rvf_ff}&begin=${begin.toISOString()}&end=${end1.toISOString()}&office=MVS&timezone=CST6CDT`;
+        } else if (cda === "public") {
+            url10 = `https://cwms-data.usace.army.mil/cwms-data/timeseries?name=${tsid_rvf_ff}&begin=${begin.toISOString()}&end=${end1.toISOString()}&office=MVS&timezone=CST6CDT`;
+        }
+    }
+    console.log("url10 = ", url10);
+
+    fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9, url10)
+        .then(({ data1, data2, data3, data4, data5, data6, data7, data8, data9, data10 }) => {
         // console.log("location_id =",  location_id);
         // Do something with the fetched data
         // console.log("data1 = ", data1);
@@ -546,7 +561,8 @@ function fetchAndUpdateData(location_id
         // console.log("data6 = ", data6);
         // console.log("data7 = ", data7);
         // console.log("data8 = ", data8);
-        console.log("data9 = ", data9);
+        // console.log("data9 = ", data9);
+        console.log("data10 = ", data10);
 
         // Process data1 - netmiss forecast data
         const convertedData = convertUTCtoCentralTime(data1);
@@ -575,7 +591,7 @@ function fetchAndUpdateData(location_id
 
             // OBSERVED 6AM
             const level6AmCell = row.insertCell();
-            level6AmCell.innerHTML = "<div title='" + latest6AMValue.date + "'>" +
+            level6AmCell.innerHTML = "<div title='" + latest6AMValue.date + "'>" + 
             "<a href='../../chart/public/chart.html?cwms_ts_id=" + tsid + "' target='_blank'>" +
             (tsid_forecast_location === true ? "<strong>" + parseFloat(latest6AMValue.value).toFixed(2) + "</strong>" : parseFloat(latest6AMValue.value).toFixed(2)) + "</a>" +
             "</div>";
@@ -758,7 +774,7 @@ function fetchAndUpdateData(location_id
                 total = parseFloat(latest6AMValue.value) + parseFloat(convertedNetmissUpstreamData.values[0][1]) - parseFloat(latest6AMValueUpstream.value);
                 day1 = "<div title='" + (latest6AMValue.value).toFixed(2) + " + " + (convertedNetmissUpstreamData.values[0][1]).toFixed(2) + " - " + (latest6AMValueUpstream.value).toFixed(2) + " = " + total.toFixed(2) + "'>" + (tsid_forecast_location === true ? "<strong>" + total.toFixed(2) : total.toFixed(2)) + "</div>";
             } else if (location_id === "LD 27 TW-Mississippi") {
-                // Process data7 - stage rev 6am level
+                // Process data9 - stage rev 6am level
                 const result9 = getLatest6AMValue(data9);
                 const latest6AMValueDownstream = result9.latest6AMValue;
                 const tsid9 = result9.tsid;
@@ -770,6 +786,16 @@ function fetchAndUpdateData(location_id
                 
                 total = parseFloat(latest6AMValue.value) + parseFloat(convertedNetmissDownstreamData.values[0][1]) - parseFloat(latest6AMValueDownstream.value);
                 day1 = "<div title='" + (latest6AMValue.value).toFixed(2) + " + " + (convertedNetmissDownstreamData.values[0][1]).toFixed(2) + " - " + (latest6AMValueDownstream.value).toFixed(2) + " = " + total.toFixed(2) + "'>" + (tsid_forecast_location === true ? "<strong>" + total.toFixed(2) : total.toFixed(2)) + "</div>";
+            } else if (location_id === "Cairo-Ohio") {
+                console.log("nws_day1_date = ", nws_day1_date);
+                // Process data10 - RVF-FF 7am level
+                const result10 = get7AMValueForDate(data10, nws_day1_date);
+                const latest7AMRvfValue = result10.valueAt7AM;
+                const tsid10 = result10.tsid;
+
+                console.log("latest7AMRvfValue = ", latest7AMRvfValue);
+
+                day1 = "<div title='" + latest7AMRvfValue.date + " " + (latest7AMRvfValue.value).toFixed(2) + "'>" + (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue.value).toFixed(2) : (latest7AMRvfValue.value).toFixed(2)) + "</div>";
             } else {
                 if (convertedData !== null) {
                     day1 = "<div title='" + convertedData.values[0] + "'>" + 
@@ -872,7 +898,7 @@ function checkForDuplicates(data) {
 }
 
 // Function to fetch all urls to find all forecasts
-async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9) {
+async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9, url10) {
     const fetchOptions = {
         method: 'GET',
         headers: {
@@ -890,8 +916,9 @@ async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9
         const response7Promise = url7 ? fetch(url7, fetchOptions) : Promise.resolve(null);
         const response8Promise = url8 ? fetch(url8, fetchOptions) : Promise.resolve(null);
         const response9Promise = url9 ? fetch(url9, fetchOptions) : Promise.resolve(null);
+        const response10Promise = url10 ? fetch(url10, fetchOptions) : Promise.resolve(null);
 
-        const [response1, response2, response3, response4, response5, response6, response7, response8, response9] = await Promise.all([response1Promise, response2Promise, response3Promise, response4Promise, response5Promise, response6Promise, response7Promise, response8Promise, response9Promise]);
+        const [response1, response2, response3, response4, response5, response6, response7, response8, response9, response10] = await Promise.all([response1Promise, response2Promise, response3Promise, response4Promise, response5Promise, response6Promise, response7Promise, response8Promise, response9Promise, response10Promise]);
 
         let data1 = null;
         let data2 = null;
@@ -902,6 +929,7 @@ async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9
         let data7 = null;
         let data8 = null;
         let data9 = null;
+        let data10 = null;
 
         if (response1 && response1.ok) {
             data1 = await response1.json();
@@ -957,10 +985,16 @@ async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9
             console.log(`Fetch request to ${url9} failed with status ${response9.status}`);
         }
 
-        return { data1, data2, data3, data4, data5, data6, data7, data8, data9 };
+        if (response10 && response10.ok) {
+            data10 = await response10.json();
+        } else if (response10) {
+            console.log(`Fetch request to ${url10} failed with status ${response10.status}`);
+        }
+
+        return { data1, data2, data3, data4, data5, data6, data7, data8, data9, data10 };
     } catch (error) {
         console.error('Error fetching the URLs:', error.message);
-        return { data1: null, data2: null, data3: null, data4: null, data5: null, data6: null, data7: null, data8: null, data9: null }; // return null data if any error occurs
+        return { data1: null, data2: null, data3: null, data4: null, data5: null, data6: null, data7: null, data8: null, data9: null, data10: null }; // return null data if any error occurs
     }
 }
 
@@ -1004,6 +1038,54 @@ function getLatest6AMValue(data) {
     // Return the latest 6 AM value found and tsid
     return {
         latest6AMValue,
+        tsid
+    };
+}
+
+// Function to get lastest 7am value
+function get7AMValueForDate(data, date) {
+    // Extract the values array from the data
+    const values = data.values;
+
+    // Extract the tsid from the data
+    const tsid = data.name;
+
+    // Initialize a variable to store the 7 AM value for the given date
+    let valueAt7AM = null;
+
+    // Define the Central Time timezone
+    const centralTimeZone = 'America/Chicago';
+
+    // Parse the input date to create a Date object
+    const [month, day, year] = date.split('-');
+    const targetDate = new Date(`${year}-${month}-${day}T07:00:00`);
+
+    // Convert the target date to Central Time
+    const targetCentralDate = new Date(targetDate.toLocaleString('en-US', { timeZone: centralTimeZone }));
+
+    // Iterate through the values array
+    for (let i = 0; i < values.length; i++) {
+        const [timestamp, value, qualityCode] = values[i];
+
+        // Convert the timestamp to a Date object in UTC
+        const date = new Date(timestamp);
+
+        // Convert the UTC date to Central Time
+        const centralDate = new Date(date.toLocaleString('en-US', { timeZone: centralTimeZone }));
+
+        // Check if the date and time match the target 7 AM
+        if (centralDate.getFullYear() === targetCentralDate.getFullYear() &&
+            centralDate.getMonth() === targetCentralDate.getMonth() &&
+            centralDate.getDate() === targetCentralDate.getDate() &&
+            centralDate.getHours() === 7 && centralDate.getMinutes() === 0 && centralDate.getSeconds() === 0) {
+            valueAt7AM = { date: centralDate.toISOString(), value, qualityCode };
+            break;
+        }
+    }
+
+    // Return the 7 AM value found and tsid
+    return {
+        valueAt7AM,
         tsid
     };
 }
