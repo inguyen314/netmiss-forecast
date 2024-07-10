@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const jsonDataFiltered = jsonData.reduce((accumulator, currentValue) => {
                 // Extract the 'gages' array, defaulting to an empty array if not present
                 const gages = currentValue.gages || [];
-            
+
                 let filteredGages = null;
                 if (interpolate === "true") {
                     // Filter out gages where either tsid_forecast_location or tsid_interpolate_location is true
@@ -44,10 +44,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // Accumulate the filtered gages into the accumulator
                 accumulator.push(...filteredGages);
-            
+
                 // Return the accumulator for the next iteration
                 return accumulator;
             }, []);
+
+            // Sort the filtered data by netmiss_forecast_sort_order from low to high
+            jsonDataFiltered.sort((a, b) => a.netmiss_forecast_sort_order - b.netmiss_forecast_sort_order);
 
             // Log the filtered and sorted data
             console.log("jsonDataFiltered = ", jsonDataFiltered);
@@ -244,6 +247,9 @@ function createTable(jsonDataFiltered) {
             // console.log("dateObjectFirstForecastDayByDayAndMonth: ", dateObjectFirstForecastDayByDayAndMonth.date);
             // console.log("dateObjectFirstForecastDayByDayAndMonth: ", dateObjectFirstForecastDayByDayAndMonth.length);
 
+            // Testing 
+            // populateTableCells(jsonDataFiltered, table, nws_day1_date);
+
             if (dateObjectFirstForecastDayByDayAndMonth.date > todaysDataOnly & dateObjectFirstForecastDayByDayAndMonth.length >= 7) {
                 console.log("dateObjectFirstForecastDayByDayAndMonth is after todaysDataOnly, output data table");
 
@@ -408,6 +414,11 @@ function populateTableCells(jsonDataFiltered, table, nws_day1_date) {
                             ,location.tsid_netmiss_downstream_stage_rev
                             ,location.tsid_rvf_ff
                             ,nws_day1_date
+                            ,location.tsid_netmiss_forecasting_location_upstream
+                            ,location.tsid_netmiss_forecasting_location_downstream
+                            ,location.river_mile_hard_coded
+                            ,location.netmiss_river_mile_hard_coded_upstream
+                            ,location.netmiss_river_mile_hard_coded_downstream
                         );
     });
 }
@@ -431,6 +442,11 @@ function fetchAndUpdateData(location_id
                             ,tsid_netmiss_downstream_stage_rev
                             ,tsid_rvf_ff
                             ,nws_day1_date
+                            ,tsid_netmiss_forecasting_location_upstream
+                            ,tsid_netmiss_forecasting_location_downstream
+                            ,river_mile_hard_coded
+                            ,netmiss_river_mile_hard_coded_upstream
+                            ,netmiss_river_mile_hard_coded_downstream
                         ) {
 
     console.log("location_id =",  location_id);
@@ -549,8 +565,30 @@ function fetchAndUpdateData(location_id
     }
     // console.log("url10 = ", url10);
 
-    fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9, url10)
-        .then(({ data1, data2, data3, data4, data5, data6, data7, data8, data9, data10 }) => {
+    // Get Upstream Netmiss Forecasted Point
+    let url11 = null;
+    if (tsid_netmiss_forecasting_location_upstream !== null) {
+        if (cda === "internal") {
+            url11 = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/timeseries?name=${tsid_netmiss_forecasting_location_upstream}&begin=${begin.toISOString()}&end=${end1.toISOString()}&office=MVS&timezone=CST6CDT`;
+        } else if (cda === "public") {
+            url11 = `https://cwms-data.usace.army.mil/cwms-data/timeseries?name=${tsid_netmiss_forecasting_location_upstream}&begin=${begin.toISOString()}&end=${end1.toISOString()}&office=MVS&timezone=CST6CDT`;
+        }
+    }
+    // console.log("url11 = ", url11);
+
+    // Get Downstream Netmiss Forecasted Point
+    let url12 = null;
+    if (tsid_netmiss_forecasting_location_downstream !== null) {
+        if (cda === "internal") {
+            url12 = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/timeseries?name=${tsid_netmiss_forecasting_location_downstream}&begin=${begin.toISOString()}&end=${end1.toISOString()}&office=MVS&timezone=CST6CDT`;
+        } else if (cda === "public") {
+            url12 = `https://cwms-data.usace.army.mil/cwms-data/timeseries?name=${tsid_netmiss_forecasting_location_downstream}&begin=${begin.toISOString()}&end=${end1.toISOString()}&office=MVS&timezone=CST6CDT`;
+        }
+    }
+    // console.log("url12 = ", url12);
+
+    fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9, url10, url11, url12)
+        .then(({ data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12 }) => {
         // console.log("location_id =",  location_id);
         // Do something with the fetched data
         // console.log("data1 = ", data1);
@@ -563,6 +601,8 @@ function fetchAndUpdateData(location_id
         // console.log("data8 = ", data8);
         // console.log("data9 = ", data9);
         // console.log("data10 = ", data10);
+        // console.log("data11 = ", data11);
+        // console.log("data12 = ", data12);
 
         // Process data1 - netmiss forecast data
         const convertedData = convertUTCtoCentralTime(data1);
@@ -584,20 +624,28 @@ function fetchAndUpdateData(location_id
         const convertedNetmissDownstreamData = convertUTCtoCentralTime(data4);
         // console.log("convertedNetmissDownstreamData = ", convertedNetmissDownstreamData);
 
+        // Process data11 - upstream netmiss forecasting point data
+        const convertedNetmissForecastingPointUpstreamData = convertUTCtoCentralTime(data11);
+        // console.log("convertedNetmissForecastingPointUpstreamData = ", convertedNetmissForecastingPointUpstreamData);
+
+        // Process data12 - downstream netmiss forecasting point data
+        const convertedNetmissForecastingPointDownstreamData = convertUTCtoCentralTime(data12);
+        // console.log("convertedNetmissForecastingPointDownstreamData = ", convertedNetmissForecastingPointDownstreamData);
+
         // Process data10 - RVF-FF 7am levels
         let result10 = null;
         let latest7AMRvfValue = null;
         let isRvfArrayLengthGreaterThanSeven = null;
         if (data10 !== null) {
             result10 = get7AMValuesForWeek(data10, nws_day1_date);
-            console.log("result10 = ", result10);
+            // console.log("result10 = ", result10);
             latest7AMRvfValue = result10.valuesAt7AM;
-            console.log("latest7AMRvfValue = ", latest7AMRvfValue);
-            console.log("latest7AMRvfValue[0] = ", latest7AMRvfValue[0]);
-            console.log("latest7AMRvfValue[0].value = ", latest7AMRvfValue[0].value);
+            // console.log("latest7AMRvfValue = ", latest7AMRvfValue);
+            // console.log("latest7AMRvfValue[0] = ", latest7AMRvfValue[0]);
+            // console.log("latest7AMRvfValue[0].value = ", latest7AMRvfValue[0].value);
 
             isRvfArrayLengthGreaterThanSeven = latest7AMRvfValue.length >= 7;
-            console.log("isRvfArrayLengthGreaterThanSeven:", isRvfArrayLengthGreaterThanSeven);
+            // console.log("isRvfArrayLengthGreaterThanSeven:", isRvfArrayLengthGreaterThanSeven);
         }
 
         if (isNetmissForecastArrayLengthGreaterThanSeven === true || isRvfArrayLengthGreaterThanSeven === true) {
@@ -632,7 +680,7 @@ function fetchAndUpdateData(location_id
                     if (downstreamMelPricePoolValueToCompare > todayMelPricePoolNetmissForecast) {
                         day1 = "<div title='" + "(" + parseFloat(data6.elevation).toFixed(2) + " + 0.5 + " + (convertedNetmissDownstreamData.values[0][1]).toFixed(2) + ") (" + downstreamMelPricePoolValueToCompare.toFixed(2) + " >= " + todayMelPricePoolNetmissForecast.toFixed(2) + ") = Open River" + "'>" + (tsid_forecast_location === true ? "<strong>" + "Open River" : "-Error-") + "</div>";
                     } else {
-                        day1 = "<div title='" + convertedData.values[0] + "'>" + (tsid_forecast_location === true ? "<strong>" + (convertedData.values[0][1]).toFixed(2) : (convertedData.values[0][1]).toFixed(2)) + "</div>";
+                        day1 = "<div title='" + convertedData.values[0] + "'>" + (tsid_forecast_location === true ? "<strong>" + (convertedData.values[0][1]).toFixed(1) : (convertedData.values[0][1]).toFixed(1)) + "</div>";
                     }
                 } else {
                     day1 = "<div>" + "--" + "</div>";
@@ -640,11 +688,11 @@ function fetchAndUpdateData(location_id
             } else {
                 if (convertedData !== null) {
                     day1 = "<div title='" + convertedData.values[0] + "'>" + 
-                        (tsid_forecast_location === true ? "<strong>" + (convertedData.values[0][1]).toFixed(2) + "</strong>" : (convertedData.values[0][1]).toFixed(2)) + 
+                        (tsid_forecast_location === true ? "<strong>" + (convertedData.values[0][1]).toFixed(1) + "</strong>" : (convertedData.values[0][1]).toFixed(1)) + 
                         "</div>";
                 } else if (latest7AMRvfValue[0] !== null) {
                     day1 = "<div title='" + latest7AMRvfValue[0] + "'>" + 
-                        (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[0].value).toFixed(2) + "</strong>" : (latest7AMRvfValue[0].value).toFixed(2)) + 
+                        (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[0].value).toFixed(1) + "</strong>" : (latest7AMRvfValue[0].value).toFixed(1)) + 
                         "</div>";
                 } else {
                     day1 = "<div>" + "-" + "</div>";
@@ -657,11 +705,11 @@ function fetchAndUpdateData(location_id
             let day2 = null;
             if (convertedData !== null) {
                 day2 = "<div title='" + convertedData.values[1] + "'>" + 
-                    (tsid_forecast_location === true ? "<strong>" + (convertedData.values[1][1]).toFixed(2) + "</strong>" : (convertedData.values[1][1]).toFixed(2)) + 
+                    (tsid_forecast_location === true ? "<strong>" + (convertedData.values[1][1]).toFixed(1) + "</strong>" : (convertedData.values[1][1]).toFixed(1)) + 
                     "</div>";
             } else if (latest7AMRvfValue[1] !== null) {
                 day2 = "<div title='" + latest7AMRvfValue[1] + "'>" + 
-                    (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[1].value).toFixed(2) + "</strong>" : (latest7AMRvfValue[1].value).toFixed(2)) + 
+                    (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[1].value).toFixed(1) + "</strong>" : (latest7AMRvfValue[1].value).toFixed(1)) + 
                     "</div>";
             } else {
                 day2 = "<div>" + "-" + "</div>";
@@ -673,11 +721,11 @@ function fetchAndUpdateData(location_id
             let day3 = null;
             if (convertedData !== null) {
                 day3 = "<div title='" + convertedData.values[2] + "'>" + 
-                    (tsid_forecast_location === true ? "<strong>" + (convertedData.values[2][1]).toFixed(2) + "</strong>" : (convertedData.values[2][1]).toFixed(2)) + 
+                    (tsid_forecast_location === true ? "<strong>" + (convertedData.values[2][1]).toFixed(1) + "</strong>" : (convertedData.values[2][1]).toFixed(1)) + 
                     "</div>";
             } else if (latest7AMRvfValue[2] !== null) {
                 day3 = "<div title='" + latest7AMRvfValue[2] + "'>" + 
-                    (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[2].value).toFixed(2) + "</strong>" : (latest7AMRvfValue[2].value).toFixed(2)) + 
+                    (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[2].value).toFixed(1) + "</strong>" : (latest7AMRvfValue[2].value).toFixed(1)) + 
                     "</div>";
             } else {
                 day3 = "<div>" + "-" + "</div>";
@@ -689,11 +737,11 @@ function fetchAndUpdateData(location_id
             let day4 = null;
             if (convertedData !== null) {
                 day4 = "<div title='" + convertedData.values[3] + "'>" + 
-                    (tsid_forecast_location === true ? "<strong>" + (convertedData.values[3][1]).toFixed(2) + "</strong>" : (convertedData.values[3][1]).toFixed(2)) + 
+                    (tsid_forecast_location === true ? "<strong>" + (convertedData.values[3][1]).toFixed(1) + "</strong>" : (convertedData.values[3][1]).toFixed(1)) + 
                     "</div>";
             } else if (latest7AMRvfValue[3] !== null) {
                 day4 = "<div title='" + latest7AMRvfValue[3] + "'>" + 
-                    (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[3].value).toFixed(2) + "</strong>" : (latest7AMRvfValue[3].value).toFixed(2)) + 
+                    (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[3].value).toFixed(1) + "</strong>" : (latest7AMRvfValue[3].value).toFixed(1)) + 
                     "</div>";
             } else {
                 day4 = "<div>" + "-" + "</div>";
@@ -705,11 +753,11 @@ function fetchAndUpdateData(location_id
             let day5 = null;
             if (convertedData !== null) {
                 day5 = "<div title='" + convertedData.values[4] + "'>" + 
-                    (tsid_forecast_location === true ? "<strong>" + (convertedData.values[4][1]).toFixed(2) + "</strong>" : (convertedData.values[4][1]).toFixed(2)) + 
+                    (tsid_forecast_location === true ? "<strong>" + (convertedData.values[4][1]).toFixed(1) + "</strong>" : (convertedData.values[4][1]).toFixed(1)) + 
                     "</div>";
             } else if (latest7AMRvfValue[4] !== null) {
                 day5 = "<div title='" + latest7AMRvfValue[4] + "'>" + 
-                    (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[4].value).toFixed(2) + "</strong>" : (latest7AMRvfValue[4].value).toFixed(2)) + 
+                    (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[4].value).toFixed(1) + "</strong>" : (latest7AMRvfValue[4].value).toFixed(1)) + 
                     "</div>";
             } else {
                 day5 = "<div>" + "-" + "</div>";
@@ -721,11 +769,11 @@ function fetchAndUpdateData(location_id
             let day6 = null;
             if (convertedData !== null) {
                 day6 = "<div title='" + convertedData.values[5] + "'>" + 
-                    (tsid_forecast_location === true ? "<strong>" + (convertedData.values[5][1]).toFixed(2) + "</strong>" : (convertedData.values[5][1]).toFixed(2)) + 
+                    (tsid_forecast_location === true ? "<strong>" + (convertedData.values[5][1]).toFixed(1) + "</strong>" : (convertedData.values[5][1]).toFixed(1)) + 
                     "</div>";
             } else if (latest7AMRvfValue[5] !== null) {
                 day6 = "<div title='" + latest7AMRvfValue[5] + "'>" + 
-                    (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[5].value).toFixed(2) + "</strong>" : (latest7AMRvfValue[5].value).toFixed(2)) + 
+                    (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[5].value).toFixed(1) + "</strong>" : (latest7AMRvfValue[5].value).toFixed(1)) + 
                     "</div>";
             } else {
                 day6 = "<div>" + "-" + "</div>";
@@ -735,13 +783,13 @@ function fetchAndUpdateData(location_id
             // DAY7
             const day7Cell = row.insertCell();
             let day7 = null;
-            if (convertedData !== null) {
+            if (convertedData !== null && convertedData.values[6] !== null) {
                 day7 = "<div title='" + convertedData.values[6] + "'>" + 
-                    (tsid_forecast_location === true ? "<strong>" + (convertedData.values[6][1]).toFixed(2) + "</strong>" : (convertedData.values[6][1]).toFixed(2)) + 
+                    (tsid_forecast_location === true ? "<strong>" + (convertedData.values[6][1]).toFixed(1) + "</strong>" : (convertedData.values[6][1]).toFixed(1)) + 
                     "</div>";
             } else if (latest7AMRvfValue[6] !== null) {
                 day7 = "<div title='" + latest7AMRvfValue[6] + "'>" + 
-                    (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[6].value).toFixed(2) + "</strong>" : (latest7AMRvfValue[6].value).toFixed(2)) + 
+                    (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[6].value).toFixed(1) + "</strong>" : (latest7AMRvfValue[6].value).toFixed(1)) + 
                     "</div>";
             } else {
                 day7 = "<div>" + "-" + "</div>";
@@ -778,7 +826,7 @@ function fetchAndUpdateData(location_id
                     if (downstreamValueToCompare > todayNetmissForecast) {
                         day1 = "<div title='" + "(" + parseFloat(data6.elevation).toFixed(2) + " + 0.5 + " + (convertedNetmissDownstreamData.values[0][1]).toFixed(2) + ") (" + downstreamValueToCompare.toFixed(2) + " >= " + todayNetmissForecast.toFixed(2) + ") = Open River" + "'>" + (tsid_forecast_location === true ? "<strong>" + "Open River" : "-Error-") + "</div>";
                     } else {
-                        day1 = "<div title='" + convertedData.values[0] + "'>" + (tsid_forecast_location === true ? "<strong>" + (convertedData.values[0][1]).toFixed(2) : (convertedData.values[0][1]).toFixed(2)) + "</div>";
+                        day1 = "<div title='" + convertedData.values[0] + "'>" + (tsid_forecast_location === true ? "<strong>" + (convertedData.values[0][1]).toFixed(1) : (convertedData.values[0][1]).toFixed(1)) + "</div>";
                     }
                 } else {
                     day1 = "<div>" + "--" + "</div>";
@@ -798,7 +846,7 @@ function fetchAndUpdateData(location_id
                     if (downstreamValueToCompare > todayNetmissForecast) {
                         day1 = "<div title='" + "(" + parseFloat(data6.elevation).toFixed(2) + " + 1.0 + " + (convertedNetmissDownstreamData.values[0][1]).toFixed(2) + ") (" + downstreamValueToCompare.toFixed(2) + " >= " + todayNetmissForecast.toFixed(2) + ") = Open River" + "'>" + (tsid_forecast_location === true ? "<strong>" + "Open River" : "-Error-") + "</div>";
                     } else {
-                        day1 = "<div title='" + convertedData.values[0] + "'>" + (tsid_forecast_location === true ? "<strong>" + (convertedData.values[0][1]).toFixed(2) : (convertedData.values[0][1]).toFixed(2)) + "</div>";
+                        day1 = "<div title='" + convertedData.values[0] + "'>" + (tsid_forecast_location === true ? "<strong>" + (convertedData.values[0][1]).toFixed(1) : (convertedData.values[0][1]).toFixed(1)) + "</div>";
                     }
                 } else {
                     day1 = "<div>" + "--" + "</div>";
@@ -816,7 +864,7 @@ function fetchAndUpdateData(location_id
                 // console.log("latest6AMValueUpstream.value = ", latest6AMValueUpstream.value);
                 
                 total = parseFloat(latest6AMValue.value) + parseFloat(convertedNetmissUpstreamData.values[0][1]) - parseFloat(latest6AMValueUpstream.value);
-                day1 = "<div title='" + (latest6AMValue.value).toFixed(2) + " + " + (convertedNetmissUpstreamData.values[0][1]).toFixed(2) + " - " + (latest6AMValueUpstream.value).toFixed(2) + " = " + total.toFixed(2) + "'>" + (tsid_forecast_location === true ? "<strong>" + total.toFixed(2) : total.toFixed(2)) + "</div>";
+                day1 = "<div title='" + (latest6AMValue.value).toFixed(2) + " + " + (convertedNetmissUpstreamData.values[0][1]).toFixed(2) + " - " + (latest6AMValueUpstream.value).toFixed(2) + " = " + total.toFixed(2) + "'>" + (tsid_forecast_location === true ? "<strong>" + total.toFixed(1) : total.toFixed(1)) + "</div>";
             } else if (location_id === "LD 27 TW-Mississippi") {
                 // Process data9 - stage rev 6am level
                 const result9 = getLatest6AMValue(data9);
@@ -829,7 +877,40 @@ function fetchAndUpdateData(location_id
                 // console.log("latest6AMValueDownstream.value = ", latest6AMValueDownstream.value);
                 
                 total = parseFloat(latest6AMValue.value) + parseFloat(convertedNetmissDownstreamData.values[0][1]) - parseFloat(latest6AMValueDownstream.value);
-                day1 = "<div title='" + (latest6AMValue.value).toFixed(2) + " + " + (convertedNetmissDownstreamData.values[0][1]).toFixed(2) + " - " + (latest6AMValueDownstream.value).toFixed(2) + " = " + total.toFixed(2) + "'>" + (tsid_forecast_location === true ? "<strong>" + total.toFixed(2) : total.toFixed(2)) + "</div>";
+                day1 = "<div title='" + (latest6AMValue.value).toFixed(2) + " + " + (convertedNetmissDownstreamData.values[0][1]).toFixed(2) + " - " + (latest6AMValueDownstream.value).toFixed(2) + " = " + total.toFixed(2) + "'>" + (tsid_forecast_location === true ? "<strong>" + total.toFixed(1) : total.toFixed(1)) + "</div>";
+            } else if (location_id === "Engineers Depot-Mississippi") {
+                // const formula = "P27+ ((((Q26-Q27)/Q28)*Q29)+Q30)";
+                const formula = "yesterday6AMValue + (((((todayUpstreamNetmiss - yesterday6AMValueUpstream)-(todayDownstreamNetmiss - yesterday6AMValueDownstream))/(riverMileUpstream - riverMileDownstream))*(riverMile - riverMileDownstream))+(todayDownstreamNetmiss - yesterday6AMValueDownstream))";
+                // Get all variables to do calculation
+                const yesterday6AMValue = ((getLatest6AMValue(data2)).latest6AMValue).value;
+                const yesterday6AMValueUpstream = ((getLatest6AMValue(data7)).latest6AMValue).value;
+                const yesterday6AMValueDownstream = ((getLatest6AMValue(data9)).latest6AMValue).value;
+                const todayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[0][1]);
+                const todayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[0][1]);
+                const riverMile = river_mile_hard_coded;
+                const riverMileUpstream = netmiss_river_mile_hard_coded_upstream;
+                const riverMileDownstream = netmiss_river_mile_hard_coded_downstream;
+
+                // console.log("yesterday6AMValue = ", yesterday6AMValue);
+                // console.log("yesterday6AMValueUpstream = ", yesterday6AMValueUpstream);
+                // console.log("yesterday6AMValueDownstream = ", yesterday6AMValueDownstream);
+                // console.log("todayUpstreamNetmiss = ", todayUpstreamNetmiss);
+                // console.log("todayDownstreamNetmiss = ", todayDownstreamNetmiss);
+                // console.log("riverMile = ", riverMile);
+                // console.log("riverMileUpstream = ", riverMileUpstream);
+                // console.log("riverMileDownstream = ", riverMileDownstream);
+
+                // console.log("Q26 = ", (todayUpstreamNetmiss - yesterday6AMValueUpstream));
+                // console.log("Q27 = ", (todayDownstreamNetmiss - yesterday6AMValueDownstream));
+                // console.log("Q28 = ", (riverMileUpstream - riverMileDownstream));
+                // console.log("Q29 = ", (riverMile - riverMileDownstream));
+                // console.log("Q30 = ", (todayDownstreamNetmiss - yesterday6AMValueDownstream));
+
+                let total = null;
+                total = yesterday6AMValue + (((((todayUpstreamNetmiss - yesterday6AMValueUpstream)-(todayDownstreamNetmiss - yesterday6AMValueDownstream))/(riverMileUpstream - riverMileDownstream))*(riverMile - riverMileDownstream))+(todayDownstreamNetmiss - yesterday6AMValueDownstream));
+                // console.log("total = ", total);
+
+                day1 = "<div title='" + formula + "'>" + total.toFixed(1) + "</div>";
             } else {
                 if (convertedData !== null) {
                     day1 = "<div title='" + convertedData.values[0] + "'>" + 
@@ -846,7 +927,7 @@ function fetchAndUpdateData(location_id
             let day2 = null;
             if (convertedData !== null) {
                 day2 = "<div title='" + convertedData.values[1] + "'>" + 
-                    (tsid_forecast_location === true ? "<strong>" + (convertedData.values[1][1]).toFixed(2) + "</strong>" : (convertedData.values[1][1]).toFixed(2)) + 
+                    (tsid_forecast_location === true ? "<strong>" + (convertedData.values[1][1]).toFixed(1) + "</strong>" : (convertedData.values[1][1]).toFixed(1)) + 
                     "</div>";
             } else {
                 day2 = "<div>" + "-" + "</div>";
@@ -858,7 +939,7 @@ function fetchAndUpdateData(location_id
             let day3 = null;
             if (convertedData !== null) {
                 day3 = "<div title='" + convertedData.values[2] + "'>" + 
-                    (tsid_forecast_location === true ? "<strong>" + (convertedData.values[2][1]).toFixed(2) + "</strong>" : (convertedData.values[2][1]).toFixed(2)) + 
+                    (tsid_forecast_location === true ? "<strong>" + (convertedData.values[2][1]).toFixed(1) + "</strong>" : (convertedData.values[2][1]).toFixed(1)) + 
                     "</div>";
             } else {
                 day3 = "<div>" + "-" + "</div>";
@@ -870,7 +951,7 @@ function fetchAndUpdateData(location_id
             let day4 = null;
             if (convertedData !== null) {
                 day4 = "<div title='" + convertedData.values[3] + "'>" + 
-                    (tsid_forecast_location === true ? "<strong>" + (convertedData.values[3][1]).toFixed(2) + "</strong>" : (convertedData.values[3][1]).toFixed(2)) + 
+                    (tsid_forecast_location === true ? "<strong>" + (convertedData.values[3][1]).toFixed(1) + "</strong>" : (convertedData.values[3][1]).toFixed(1)) + 
                     "</div>";
             } else {
                 day4 = "<div>" + "-" + "</div>";
@@ -880,9 +961,9 @@ function fetchAndUpdateData(location_id
             // DAY5
             const day5Cell = row.insertCell();
             let day5 = null;
-            if (convertedData !== null) {
+            if (convertedData && convertedData.values && convertedData.values[4] !== null && convertedData.values[4] !== undefined) {
                 day5 = "<div title='" + convertedData.values[4] + "'>" + 
-                    (tsid_forecast_location === true ? "<strong>" + (convertedData.values[4][1]).toFixed(2) + "</strong>" : (convertedData.values[4][1]).toFixed(2)) + 
+                    (tsid_forecast_location ? "<strong>" + (convertedData.values[4][1]).toFixed(1) + "</strong>" : (convertedData.values[4][1]).toFixed(1)) + 
                     "</div>";
             } else {
                 day5 = "<div>" + "-" + "</div>";
@@ -892,9 +973,9 @@ function fetchAndUpdateData(location_id
             // DAY6
             const day6Cell = row.insertCell();
             let day6 = null;
-            if (convertedData !== null) {
+            if (convertedData && convertedData.values && convertedData.values[5] !== null && convertedData.values[5] !== undefined) {
                 day6 = "<div title='" + convertedData.values[5] + "'>" + 
-                    (tsid_forecast_location === true ? "<strong>" + (convertedData.values[5][1]).toFixed(2) + "</strong>" : (convertedData.values[5][1]).toFixed(2)) + 
+                    (tsid_forecast_location ? "<strong>" + (convertedData.values[5][1]).toFixed(1) + "</strong>" : (convertedData.values[5][1]).toFixed(1)) + 
                     "</div>";
             } else {
                 day6 = "<div>" + "-" + "</div>";
@@ -932,7 +1013,7 @@ function checkForDuplicates(data) {
 }
 
 // Function to fetch all urls to find all forecasts
-async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9, url10) {
+async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9, url10, url11, url12) {
     const fetchOptions = {
         method: 'GET',
         headers: {
@@ -951,8 +1032,10 @@ async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9
         const response8Promise = url8 ? fetch(url8, fetchOptions) : Promise.resolve(null);
         const response9Promise = url9 ? fetch(url9, fetchOptions) : Promise.resolve(null);
         const response10Promise = url10 ? fetch(url10, fetchOptions) : Promise.resolve(null);
+        const response11Promise = url11 ? fetch(url11, fetchOptions) : Promise.resolve(null);
+        const response12Promise = url12 ? fetch(url12, fetchOptions) : Promise.resolve(null);
 
-        const [response1, response2, response3, response4, response5, response6, response7, response8, response9, response10] = await Promise.all([response1Promise, response2Promise, response3Promise, response4Promise, response5Promise, response6Promise, response7Promise, response8Promise, response9Promise, response10Promise]);
+        const [response1, response2, response3, response4, response5, response6, response7, response8, response9, response10, response11, response12] = await Promise.all([response1Promise, response2Promise, response3Promise, response4Promise, response5Promise, response6Promise, response7Promise, response8Promise, response9Promise, response10Promise, response11Promise, response12Promise]);
 
         let data1 = null;
         let data2 = null;
@@ -964,6 +1047,8 @@ async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9
         let data8 = null;
         let data9 = null;
         let data10 = null;
+        let data11 = null;
+        let data12 = null;
 
         if (response1 && response1.ok) {
             data1 = await response1.json();
@@ -1025,10 +1110,22 @@ async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9
             console.log(`Fetch request to ${url10} failed with status ${response10.status}`);
         }
 
-        return { data1, data2, data3, data4, data5, data6, data7, data8, data9, data10 };
+        if (response11 && response11.ok) {
+            data11 = await response11.json();
+        } else if (response11) {
+            console.log(`Fetch request to ${url11} failed with status ${response11.status}`);
+        }
+
+        if (response12 && response12.ok) {
+            data12 = await response12.json();
+        } else if (response12) {
+            console.log(`Fetch request to ${url12} failed with status ${response12.status}`);
+        }
+
+        return { data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12 };
     } catch (error) {
         console.error('Error fetching the URLs:', error.message);
-        return { data1: null, data2: null, data3: null, data4: null, data5: null, data6: null, data7: null, data8: null, data9: null, data10: null }; // return null data if any error occurs
+        return { data1: null, data2: null, data3: null, data4: null, data5: null, data6: null, data7: null, data8: null, data9: null, data10: null, data11: null, data12: null }; // return null data if any error occurs
     }
 }
 
