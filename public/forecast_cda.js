@@ -420,6 +420,7 @@ function populateTableCells(jsonDataFiltered, table, nws_day1_date) {
                             ,location.netmiss_river_mile_hard_coded_upstream
                             ,location.netmiss_river_mile_hard_coded_downstream
                             ,location.tsid_rvf_ff_downstream
+                            ,location.tsid_rvf_ff_dependance
                         );
     });
 }
@@ -449,6 +450,7 @@ function fetchAndUpdateData(location_id
                             ,netmiss_river_mile_hard_coded_upstream
                             ,netmiss_river_mile_hard_coded_downstream
                             ,tsid_rvf_ff_downstream
+                            ,tsid_rvf_ff_dependance
                         ) {
 
     console.log("location_id =",  location_id);
@@ -600,8 +602,19 @@ function fetchAndUpdateData(location_id
     }
     // console.log("url13 = ", url13);
 
-    fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9, url10, url11, url12, url13)
-        .then(({ data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13 }) => {
+    // Get RVF-FF Dependance Forecast for Birds Points 
+    let url14 = null;
+    if (tsid_rvf_ff_dependance !== null) {
+        if (cda === "internal") {
+            url14 = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/timeseries?name=${tsid_rvf_ff_dependance}&begin=${begin.toISOString()}&end=${end1.toISOString()}&office=MVS&timezone=CST6CDT`;
+        } else if (cda === "public") {
+            url14 = `https://cwms-data.usace.army.mil/cwms-data/timeseries?name=${tsid_rvf_ff_dependance}&begin=${begin.toISOString()}&end=${end1.toISOString()}&office=MVS&timezone=CST6CDT`;
+        }
+    }
+    // console.log("url14 = ", url14);
+
+    fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9, url10, url11, url12, url13, url14)
+        .then(({ data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14 }) => {
         // console.log("location_id =",  location_id);
         // Do something with the fetched data
         // console.log("data1 = ", data1);
@@ -617,6 +630,7 @@ function fetchAndUpdateData(location_id
         // console.log("data11 = ", data11);
         // console.log("data12 = ", data12);
         // console.log("data13 = ", data13);
+        // console.log("data14 = ", data14);
 
         // Process data1 - netmiss forecast data
         const convertedData = convertUTCtoCentralTime(data1);
@@ -634,7 +648,7 @@ function fetchAndUpdateData(location_id
         const latest6AMValue = result.latest6AMValue;
         const tsid = result.tsid;
 
-        // Process Downstream Netmiss for Interpolation
+        // Process data4 Downstream Netmiss for Interpolation
         const convertedNetmissDownstreamData = convertUTCtoCentralTime(data4);
         // console.log("convertedNetmissDownstreamData = ", convertedNetmissDownstreamData);
 
@@ -652,17 +666,57 @@ function fetchAndUpdateData(location_id
         let isRvfArrayLengthGreaterThanSeven = null;
         if (data10 !== null) {
             result10 = get7AMValuesForWeek(data10, nws_day1_date);
-            // console.log("result10 = ", result10);
             latest7AMRvfValue = result10.valuesAt7AM;
+            isRvfArrayLengthGreaterThanSeven = latest7AMRvfValue.length >= 7;
+
+            // console.log("result10 = ", result10);
             // console.log("latest7AMRvfValue = ", latest7AMRvfValue);
             // console.log("latest7AMRvfValue[0] = ", latest7AMRvfValue[0]);
             // console.log("latest7AMRvfValue[0].value = ", latest7AMRvfValue[0].value);
-
-            isRvfArrayLengthGreaterThanSeven = latest7AMRvfValue.length >= 7;
             // console.log("isRvfArrayLengthGreaterThanSeven:", isRvfArrayLengthGreaterThanSeven);
         }
 
-        if (isNetmissForecastArrayLengthGreaterThanSeven === true || isRvfArrayLengthGreaterThanSeven === true) {
+        // Process data14 - Birds Point-Mississippi forecast based on Cairo-Ohio into an array for 7 days
+        // console.log("location_id =",  location_id);
+        let result14 = null;
+        let latest7AMRvfDependanceValue = null;
+        let isRvfDependanceArrayLengthGreaterThanSeven = null;
+        let yesterday6AMValueDownstream = null;
+        let BirdsPointForecastValue = [];
+        if (data14 !== null && data9 !== null) {
+            result14 = get7AMValuesForWeek(data14, nws_day1_date);
+            latest7AMRvfDependanceValue = result14.valuesAt7AM;
+            isRvfDependanceArrayLengthGreaterThanSeven = latest7AMRvfDependanceValue.length >= 7;
+
+            // console.log("result14 = ", result14);
+            // console.log("latest7AMRvfDependanceValue = ", latest7AMRvfDependanceValue);
+ 
+            const yesterday6AMValue = ((getLatest6AMValue(data2)).latest6AMValue).value;
+            // console.log("yesterday6AMValue = ", yesterday6AMValue);
+
+            yesterday6AMValueDownstream = ((getLatest6AMValue(data9)).latest6AMValue).value;
+            // console.log("yesterday6AMValueDownstream = ", yesterday6AMValueDownstream);
+
+            // Calculate the initial value
+            let initialValue = yesterday6AMValue + (latest7AMRvfDependanceValue[0].value - yesterday6AMValueDownstream);
+            BirdsPointForecastValue.push({ "value": initialValue });
+            // console.log("initialValue = ", initialValue);
+
+            // Calculate subsequent values
+            for (let i = 1; i < latest7AMRvfDependanceValue.length; i++) {
+                let previousValue = BirdsPointForecastValue[BirdsPointForecastValue.length - 1].value;
+                let newValue = previousValue + (latest7AMRvfDependanceValue[i].value - latest7AMRvfDependanceValue[i - 1].value);
+                BirdsPointForecastValue.push({ "value": newValue });
+            }
+            // console.log("BirdsPointForecastValue = ", BirdsPointForecastValue);
+            isRvfDependanceArrayLengthGreaterThanSeven = BirdsPointForecastValue.length >= 7;
+            // console.log("isRvfDependanceArrayLengthGreaterThanSeven:", isRvfDependanceArrayLengthGreaterThanSeven);
+        }
+
+        
+
+        // Starting Processing All Gages
+        if (isNetmissForecastArrayLengthGreaterThanSeven === true || isRvfArrayLengthGreaterThanSeven === true || isRvfDependanceArrayLengthGreaterThanSeven === true) {
             // LOCATION
             const locationIdCell = row.insertCell();
             locationIdCell.innerHTML = location_id;
@@ -704,7 +758,11 @@ function fetchAndUpdateData(location_id
                     day1 = "<div title='" + convertedData.values[0] + "'>" + 
                         (tsid_forecast_location === true ? "<strong>" + (convertedData.values[0][1]).toFixed(1) + "</strong>" : (convertedData.values[0][1]).toFixed(1)) + 
                         "</div>";
-                } else if (latest7AMRvfValue[0] !== null) {
+                } else if (BirdsPointForecastValue !== null && location_id === "Birds Point-Mississippi") {
+                    day1 = "<div title='" + BirdsPointForecastValue[0] + "'>" + 
+                        (tsid_forecast_location === true ? "<strong>" + (BirdsPointForecastValue[0].value).toFixed(1) + "</strong>" : (BirdsPointForecastValue[0].value).toFixed(1)) + 
+                        "</div>";
+                } else if (latest7AMRvfValue[0] !== null && latest7AMRvfValue[0] !== undefined) {
                     day1 = "<div title='" + latest7AMRvfValue[0] + "'>" + 
                         (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[0].value).toFixed(1) + "</strong>" : (latest7AMRvfValue[0].value).toFixed(1)) + 
                         "</div>";
@@ -720,6 +778,10 @@ function fetchAndUpdateData(location_id
             if (convertedData !== null) {
                 day2 = "<div title='" + convertedData.values[1] + "'>" + 
                     (tsid_forecast_location === true ? "<strong>" + (convertedData.values[1][1]).toFixed(1) + "</strong>" : (convertedData.values[1][1]).toFixed(1)) + 
+                    "</div>";
+            } else if (BirdsPointForecastValue !== null && location_id === "Birds Point-Mississippi") {
+                day2 = "<div title='" + BirdsPointForecastValue[1] + "'>" + 
+                    (tsid_forecast_location === true ? "<strong>" + (BirdsPointForecastValue[1].value).toFixed(1) + "</strong>" : (BirdsPointForecastValue[1].value).toFixed(1)) + 
                     "</div>";
             } else if (latest7AMRvfValue[1] !== null) {
                 day2 = "<div title='" + latest7AMRvfValue[1] + "'>" + 
@@ -737,6 +799,10 @@ function fetchAndUpdateData(location_id
                 day3 = "<div title='" + convertedData.values[2] + "'>" + 
                     (tsid_forecast_location === true ? "<strong>" + (convertedData.values[2][1]).toFixed(1) + "</strong>" : (convertedData.values[2][1]).toFixed(1)) + 
                     "</div>";
+            } else if (BirdsPointForecastValue !== null && location_id === "Birds Point-Mississippi") {
+                day3 = "<div title='" + BirdsPointForecastValue[2] + "'>" + 
+                    (tsid_forecast_location === true ? "<strong>" + (BirdsPointForecastValue[2].value).toFixed(1) + "</strong>" : (BirdsPointForecastValue[2].value).toFixed(1)) + 
+                    "</div>";
             } else if (latest7AMRvfValue[2] !== null) {
                 day3 = "<div title='" + latest7AMRvfValue[2] + "'>" + 
                     (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[2].value).toFixed(1) + "</strong>" : (latest7AMRvfValue[2].value).toFixed(1)) + 
@@ -752,6 +818,10 @@ function fetchAndUpdateData(location_id
             if (convertedData !== null) {
                 day4 = "<div title='" + convertedData.values[3] + "'>" + 
                     (tsid_forecast_location === true ? "<strong>" + (convertedData.values[3][1]).toFixed(1) + "</strong>" : (convertedData.values[3][1]).toFixed(1)) + 
+                    "</div>";
+            } else if (BirdsPointForecastValue !== null && location_id === "Birds Point-Mississippi") {
+                day4 = "<div title='" + BirdsPointForecastValue[3] + "'>" + 
+                    (tsid_forecast_location === true ? "<strong>" + (BirdsPointForecastValue[3].value).toFixed(1) + "</strong>" : (BirdsPointForecastValue[3].value).toFixed(1)) + 
                     "</div>";
             } else if (latest7AMRvfValue[3] !== null) {
                 day4 = "<div title='" + latest7AMRvfValue[3] + "'>" + 
@@ -769,6 +839,10 @@ function fetchAndUpdateData(location_id
                 day5 = "<div title='" + convertedData.values[4] + "'>" + 
                     (tsid_forecast_location === true ? "<strong>" + (convertedData.values[4][1]).toFixed(1) + "</strong>" : (convertedData.values[4][1]).toFixed(1)) + 
                     "</div>";
+            } else if (BirdsPointForecastValue !== null && location_id === "Birds Point-Mississippi") {
+                day5 = "<div title='" + BirdsPointForecastValue[4] + "'>" + 
+                    (tsid_forecast_location === true ? "<strong>" + (BirdsPointForecastValue[4].value).toFixed(1) + "</strong>" : (BirdsPointForecastValue[4].value).toFixed(1)) + 
+                    "</div>";
             } else if (latest7AMRvfValue[4] !== null) {
                 day5 = "<div title='" + latest7AMRvfValue[4] + "'>" + 
                     (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[4].value).toFixed(1) + "</strong>" : (latest7AMRvfValue[4].value).toFixed(1)) + 
@@ -785,6 +859,10 @@ function fetchAndUpdateData(location_id
                 day6 = "<div title='" + convertedData.values[5] + "'>" + 
                     (tsid_forecast_location === true ? "<strong>" + (convertedData.values[5][1]).toFixed(1) + "</strong>" : (convertedData.values[5][1]).toFixed(1)) + 
                     "</div>";
+            } else if (BirdsPointForecastValue !== null && location_id === "Birds Point-Mississippi") {
+                day6 = "<div title='" + BirdsPointForecastValue[5] + "'>" + 
+                    (tsid_forecast_location === true ? "<strong>" + (BirdsPointForecastValue[5].value).toFixed(1) + "</strong>" : (BirdsPointForecastValue[5].value).toFixed(1)) + 
+                    "</div>";
             } else if (latest7AMRvfValue[5] !== null) {
                 day6 = "<div title='" + latest7AMRvfValue[5] + "'>" + 
                     (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[5].value).toFixed(1) + "</strong>" : (latest7AMRvfValue[5].value).toFixed(1)) + 
@@ -800,6 +878,10 @@ function fetchAndUpdateData(location_id
             if (convertedData !== null && convertedData.values[6] !== null) {
                 day7 = "<div title='" + convertedData.values[6] + "'>" + 
                     (tsid_forecast_location === true ? "<strong>" + (convertedData.values[6][1]).toFixed(1) + "</strong>" : (convertedData.values[6][1]).toFixed(1)) + 
+                    "</div>";
+            } else if (BirdsPointForecastValue !== null && location_id === "Birds Point-Mississippi") {
+                day7 = "<div title='" + BirdsPointForecastValue[6] + "'>" + 
+                    (tsid_forecast_location === true ? "<strong>" + (BirdsPointForecastValue[6].value).toFixed(1) + "</strong>" : (BirdsPointForecastValue[6].value).toFixed(1)) + 
                     "</div>";
             } else if (latest7AMRvfValue[6] !== null) {
                 day7 = "<div title='" + latest7AMRvfValue[6] + "'>" + 
@@ -1091,26 +1173,28 @@ function fetchAndUpdateData(location_id
                 // console.log("total = ", total);
 
                 day1 = "<div title='" + formula + "'>" + total.toFixed(1) + "</div>";
-            } else if (location_id === "Birds Point-Mississippi") {
-                const formula = "yesterday6AMValue + (latest7AMRvfDownstreamValue - yesterday6AMValueDownstream)";
-                const yesterday6AMValue = ((getLatest6AMValue(data2)).latest6AMValue).value;
-                // console.log("yesterday6AMValue = ", yesterday6AMValue);
-                const yesterday6AMValueDownstream = ((getLatest6AMValue(data9)).latest6AMValue).value;
-                // console.log("yesterday6AMValueDownstream = ", yesterday6AMValueDownstream);
-                // Process data10 - RVF-FF 7am levels
-                let result13 = null;
-                let latest7AMRvfDownstreamValue = null;
-                if (data13 !== null) {
-                    result13 = get7AMValuesForWeek(data13, nws_day1_date);
-                    // console.log("result13 = ", result13);
-                    latest7AMRvfDownstreamValue = result13.valuesAt7AM[0].value;
-                    // console.log("latest7AMRvfDownstreamValue = ", latest7AMRvfDownstreamValue);
-                }
-                let total = null;
-                total = yesterday6AMValue + (latest7AMRvfDownstreamValue - yesterday6AMValueDownstream);
-                // console.log("total = ", total);
-                day1 = "<div title='" + formula + "'>" + total.toFixed(1) + "</div>";
-            } else {
+            } 
+            // else if (location_id === "Birds Point-Mississippi") {
+            //     const formula = "yesterday6AMValue + (latest7AMRvfDownstreamValue - yesterday6AMValueDownstream)";
+            //     const yesterday6AMValue = ((getLatest6AMValue(data2)).latest6AMValue).value;
+            //     // console.log("yesterday6AMValue = ", yesterday6AMValue);
+            //     const yesterday6AMValueDownstream = ((getLatest6AMValue(data9)).latest6AMValue).value;
+            //     // console.log("yesterday6AMValueDownstream = ", yesterday6AMValueDownstream);
+            //     // Process data10 - RVF-FF 7am levels
+            //     let result13 = null;
+            //     let latest7AMRvfDownstreamValue = null;
+            //     if (data13 !== null) {
+            //         result13 = get7AMValuesForWeek(data13, nws_day1_date);
+            //         // console.log("result13 = ", result13);
+            //         latest7AMRvfDownstreamValue = result13.valuesAt7AM[0].value;
+            //         // console.log("latest7AMRvfDownstreamValue = ", latest7AMRvfDownstreamValue);
+            //     }
+            //     let total = null;
+            //     total = yesterday6AMValue + (latest7AMRvfDownstreamValue - yesterday6AMValueDownstream);
+            //     // console.log("total = ", total);
+            //     day1 = "<div title='" + formula + "'>" + total.toFixed(1) + "</div>";
+            // } 
+            else {
                 if (convertedData !== null) {
                     day1 = "<div title='" + convertedData.values[0] + "'>" + 
                         (tsid_forecast_location === true ? "<strong>" + (convertedData.values[0][1]).toFixed(2) + "</strong>" : (convertedData.values[0][1]).toFixed(2)) + 
@@ -1212,7 +1296,7 @@ function checkForDuplicates(data) {
 }
 
 // Function to fetch all urls to find all forecasts
-async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9, url10, url11, url12, url13) {
+async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9, url10, url11, url12, url13, url14) {
     const fetchOptions = {
         method: 'GET',
         headers: {
@@ -1234,7 +1318,8 @@ async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9
             url10 ? fetch(url10, fetchOptions) : Promise.resolve(null),
             url11 ? fetch(url11, fetchOptions) : Promise.resolve(null),
             url12 ? fetch(url12, fetchOptions) : Promise.resolve(null),
-            url13 ? fetch(url13, fetchOptions) : Promise.resolve(null)
+            url13 ? fetch(url13, fetchOptions) : Promise.resolve(null),
+            url14 ? fetch(url14, fetchOptions) : Promise.resolve(null)
         ];
 
         const responses = await Promise.all(responsePromises);
@@ -1261,7 +1346,8 @@ async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9
             data10: data[9],
             data11: data[10],
             data12: data[11],
-            data13: data[12]
+            data13: data[12],
+            data14: data[13]
         };
     } catch (error) {
         console.error('Error fetching the URLs:', error.message);
@@ -1278,7 +1364,8 @@ async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9
             data10: null,
             data11: null,
             data12: null,
-            data13: null
+            data13: null,
+            data14: null
         }; // return null data if any error occurs
     }
 }
