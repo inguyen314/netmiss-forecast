@@ -1,7 +1,6 @@
-let ForecastValues = {
-    birdsPointForecast: {}
-};
-
+let ForecastValues = { birdsPointForecast: {}
+                    };
+                    
 document.addEventListener('DOMContentLoaded', function () {
     // Display the loading_alarm_mvs indicator
     const loadingIndicator = document.getElementById('loading_forecast');
@@ -144,7 +143,7 @@ function createTable(jsonDataFiltered) {
 
     // Extract only the date (without time)
     var todaysDataOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-    // console.log('todaysDataOnly: ', todaysDataOnly);
+    console.log('todaysDataOnly: ', todaysDataOnly);
 
     // Day -1
     var dayMinus1 = new Date(date);
@@ -252,7 +251,7 @@ function createTable(jsonDataFiltered) {
             // console.log("dateObjectFirstForecastDayByDayAndMonth: ", dateObjectFirstForecastDayByDayAndMonth.length);
 
             // Testing 
-            // populateTableCells(jsonDataFiltered, table, nws_day1_date);
+            populateTableCells(jsonDataFiltered, table, nws_day1_date);
 
             if (dateObjectFirstForecastDayByDayAndMonth.date > todaysDataOnly & dateObjectFirstForecastDayByDayAndMonth.length >= 7) {
                 console.log("dateObjectFirstForecastDayByDayAndMonth is after todaysDataOnly, output data table");
@@ -333,7 +332,7 @@ function fetchFirstNetmissDay(tsid, begin, end, cda) {
         throw new Error('Invalid value for cda');
     }
 
-    // console.log("urlFirstNetmissDay = ", urlFirstNetmissDay);
+    console.log("urlFirstNetmissDay = ", urlFirstNetmissDay);
 
     return fetch(urlFirstNetmissDay, {
             method: 'GET',
@@ -348,7 +347,7 @@ function fetchFirstNetmissDay(tsid, begin, end, cda) {
             return response.json();
         })
         .then(FirstNetmissDayData => {
-            // console.log("FirstNetmissDayData", FirstNetmissDayData);
+            console.log("FirstNetmissDayData", FirstNetmissDayData);
 
             // Get the length of the values array
             const arrayLength = FirstNetmissDayData.values.length;
@@ -388,9 +387,8 @@ function fetchFirstNetmissDay(tsid, begin, end, cda) {
 
 // Populate netmiss data cells
 function populateTableCells(jsonDataFiltered, table, nws_day1_date) {
-    // console.log("jsonDataFiltered inside populateTableCells: ", jsonDataFiltered);
 
-    jsonDataFiltered.forEach(location => {
+    jsonDataFiltered.forEach((location, index) => {
         // Create a new row for each data object
         const row = table.insertRow();
         // console.log("Calling fetchAndUpdateData");
@@ -686,7 +684,8 @@ function fetchAndUpdateData(location_id
         let latest7AMRvfDependanceValue = null;
         let isRvfDependanceArrayLengthGreaterThanSeven = null;
         let yesterday6AMValueDownstream = null;
-        let BirdsPointForecastValue = [];
+        // let BirdsPointForecastValue = [];
+        ForecastValues.birdsPointForecast[location_id] = []
         if (data14 !== null && data9 !== null) {
             result14 = get7AMValuesForWeek(data14, nws_day1_date);
             latest7AMRvfDependanceValue = result14.valuesAt7AM;
@@ -703,21 +702,22 @@ function fetchAndUpdateData(location_id
 
             // Calculate the initial value
             let initialValue = yesterday6AMValue + (latest7AMRvfDependanceValue[0].value - yesterday6AMValueDownstream);
-            BirdsPointForecastValue.push({ "value": initialValue });
+            ForecastValues.birdsPointForecast[location_id].push({ "value": initialValue });
             // console.log("initialValue = ", initialValue);
 
             // Calculate subsequent values
             for (let i = 1; i < latest7AMRvfDependanceValue.length; i++) {
-                let previousValue = BirdsPointForecastValue[BirdsPointForecastValue.length - 1].value;
+                let previousValue = ForecastValues.birdsPointForecast[location_id][ForecastValues.birdsPointForecast[location_id].length - 1].value;
                 let newValue = previousValue + (latest7AMRvfDependanceValue[i].value - latest7AMRvfDependanceValue[i - 1].value);
-                BirdsPointForecastValue.push({ "value": newValue });
+                ForecastValues.birdsPointForecast[location_id].push({ "value": newValue });
             }
             // console.log("BirdsPointForecastValue = ", BirdsPointForecastValue);
-            isRvfDependanceArrayLengthGreaterThanSeven = BirdsPointForecastValue.length >= 7;
+            isRvfDependanceArrayLengthGreaterThanSeven = ForecastValues.birdsPointForecast[location_id].length >= 7;
             // console.log("isRvfDependanceArrayLengthGreaterThanSeven:", isRvfDependanceArrayLengthGreaterThanSeven);
         }
+        // console.log("BirdsPointForecastValue = ", ForecastValues?.birdsPointForecast);
 
-        
+        let BirdsPointForecastValue =  ForecastValues?.birdsPointForecast["Birds Point-Mississippi"]
 
         // Starting Processing All Gages
         if (isNetmissForecastArrayLengthGreaterThanSeven === true || isRvfArrayLengthGreaterThanSeven === true || isRvfDependanceArrayLengthGreaterThanSeven === true) {
@@ -1183,6 +1183,7 @@ function fetchAndUpdateData(location_id
                 const yesterday6AMValueUpstream = ((getLatest6AMValue(data7)).latest6AMValue).value;
                 const yesterday6AMValueDownstream = ((getLatest6AMValue(data9)).latest6AMValue).value;
   
+
                 console.log("yesterday6AMValue = ", yesterday6AMValue);
                 console.log("yesterday6AMValueUpstream = ", yesterday6AMValueUpstream);
                 console.log("yesterday6AMValueDownstream = ", yesterday6AMValueDownstream);
