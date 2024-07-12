@@ -746,10 +746,6 @@ function fetchAndUpdateData(location_id
         }
         let BirdsPointForecastValue2 =  ForecastValues?.birdsPointForecast["Birds Point-Mississippi"];
 
-        // Process data14 - netmiss flow data
-        const convertedNetmissFlowData = convertUTCtoCentralTime(data15);
-        console.log("convertedNetmissFlowData = ", convertedNetmissFlowData);
-
         // Starting Processing All Gages
         if (isNetmissForecastArrayLengthGreaterThanSeven === true || isRvfArrayLengthGreaterThanSeven === true || isRvfDependanceArrayLengthGreaterThanSeven === true) {
             // LOCATION
@@ -1222,6 +1218,19 @@ function fetchAndUpdateData(location_id
                 // console.log("BirdsPointForecastValue2 @ Grays Pt-Mississippi = ", location_id, BirdsPointForecastValue2);
 
                 day1 = "<div>" + "-test" + "</div>";
+            } else if (location_id === "LD 22 TW-Mississippi") {
+                // Process data14 - netmiss flow data
+                const convertedNetmissFlowData = convertUTCtoCentralTime(data15);
+                // console.log("convertedNetmissFlowData = ", convertedNetmissFlowData);
+                console.log("convertedNetmissFlowData @ LD 22 TW-Mississippi = ", convertedNetmissFlowData);
+
+                const yesterday6AMNetmissFlowValue = convertedNetmissFlowData.values[0][1];
+                const today6AMNetmissFlowValue = convertedNetmissFlowData.values[1][1];
+
+                console.log("yesterday6AMNetmissFlowValue = ", yesterday6AMNetmissFlowValue);
+                console.log("today6AMNetmissFlowValue = ", today6AMNetmissFlowValue);
+
+                day1 = "<div>" + "-test-" + "</div>";
             } else {
                 if (convertedData !== null) {
                     day1 = "<div title='" + convertedData.values[0] + "'>" + 
@@ -1401,7 +1410,7 @@ async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9
     }
 }
 
-// Function to get lastest 6am value
+// Function to get lastest 6am value for stage-rev
 function getLatest6AMValue(data) {
     // Extract the values array from the data
     const values = data.values;
