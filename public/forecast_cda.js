@@ -251,8 +251,8 @@ function createTable(jsonDataFiltered) {
             // console.log("dateObjectFirstForecastDayByDayAndMonth: ", dateObjectFirstForecastDayByDayAndMonth.date);
             // console.log("dateObjectFirstForecastDayByDayAndMonth: ", dateObjectFirstForecastDayByDayAndMonth.length);
 
-            // Testing 
-            // populateTableCells(jsonDataFiltered, table, nws_day1_date);
+            // Testing - Forced to output a table
+            populateTableCells(jsonDataFiltered, table, nws_day1_date);
 
             if (dateObjectFirstForecastDayByDayAndMonth.date > todaysDataOnly & dateObjectFirstForecastDayByDayAndMonth.length >= 7) {
                 console.log("dateObjectFirstForecastDayByDayAndMonth is after todaysDataOnly, output data table");
@@ -426,6 +426,7 @@ function populateTableCells(jsonDataFiltered, table, nws_day1_date) {
                             ,location.tsid_rvf_ff_downstream
                             ,location.tsid_rvf_ff_dependance
                             ,location.tsid_netmiss_flow
+                            ,location.tsid_rating_id_coe
                         );
     });
 }
@@ -457,6 +458,7 @@ function fetchAndUpdateData(location_id
                             ,tsid_rvf_ff_downstream
                             ,tsid_rvf_ff_dependance
                             ,tsid_netmiss_flow
+                            ,tsid_rating_id_coe
                         ) {
 
     // console.log("location_id =",  location_id);
@@ -630,8 +632,19 @@ function fetchAndUpdateData(location_id
     }
     // console.log("url15 = ", url15);
 
-    fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9, url10, url11, url12, url13, url14, url15)
-        .then(({ data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15 }) => {
+    // Get Rating Table COE 
+    let url16 = null;
+    if (tsid_rating_id_coe !== null) {
+        if (cda === "internal") {
+            url16 = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/ratings/${tsid_rating_id_coe}?office=MVS`;
+        } else if (cda === "public") {
+            url16 = `https://cwms-data.usace.army.mil/cwms-data/${tsid_rating_id_coe}?office=MVS`;
+        }
+    }
+    // console.log("url16 = ", url16);
+
+    fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9, url10, url11, url12, url13, url14, url15, url16)
+        .then(({ data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16 }) => {
         // console.log("location_id =",  location_id);
         // Do something with the fetched data
         // console.log("data1 = ", data1);
@@ -649,6 +662,7 @@ function fetchAndUpdateData(location_id
         // console.log("data13 = ", data13);
         // console.log("data14 = ", data14);
         // console.log("data15 = ", data15);
+        // console.log("data16 = ", data16);
 
         // Process data1 - netmiss forecast data
         const convertedData = convertUTCtoCentralTime(data1);
@@ -1220,17 +1234,30 @@ function fetchAndUpdateData(location_id
                 day1 = "<div>" + "-test" + "</div>";
             } else if (location_id === "LD 22 TW-Mississippi") {
                 // Process data14 - netmiss flow data
-                const convertedNetmissFlowData = convertUTCtoCentralTime(data15);
-                // console.log("convertedNetmissFlowData = ", convertedNetmissFlowData);
-                console.log("convertedNetmissFlowData @ LD 22 TW-Mississippi = ", convertedNetmissFlowData);
+                const yesterday6AMStageRevValue = latest6AMValue.value;
+                const convertedNetmissFlowValuesToCst = convertUTCtoCentralTime(data15);
+                const yesterday6AMNetmissFlowValue = (convertedNetmissFlowValuesToCst.values[0][1]).toFixed(1);
+                const today6AMNetmissFlowValue = (convertedNetmissFlowValuesToCst.values[1][1]).toFixed(1);
+                // Process data16- get rating table coe
+                const ratingTableCoe = data16["simple-rating"][0]["rating-points"].point;
+                const todayCorresponding6AMStageValue = findIndByDep(today6AMNetmissFlowValue, ratingTableCoe);
+                const yesterdayCorresponding6AMStageValue = findIndByDep(yesterday6AMNetmissFlowValue, ratingTableCoe);
 
-                const yesterday6AMNetmissFlowValue = convertedNetmissFlowData.values[0][1];
-                const today6AMNetmissFlowValue = convertedNetmissFlowData.values[1][1];
+                const totalFormula = "yesterday6AMStageRevValue - yesterdayCorresponding6AMStageValue + todayCorresponding6AMStageValue";
+                const total = yesterday6AMStageRevValue - yesterdayCorresponding6AMStageValue + todayCorresponding6AMStageValue;
 
+                console.log("location_id = ", location_id);
+                console.log("yesterday6AMStageRevValue = ", yesterday6AMStageRevValue);
+                console.log("convertedNetmissFlowValuesToCst @ LD 22 TW-Mississippi = ", convertedNetmissFlowValuesToCst);
                 console.log("yesterday6AMNetmissFlowValue = ", yesterday6AMNetmissFlowValue);
                 console.log("today6AMNetmissFlowValue = ", today6AMNetmissFlowValue);
+                console.log("ratingTableCoe = ", ratingTableCoe);
+                console.log("todayCorresponding6AMStageValue:", todayCorresponding6AMStageValue);
+                console.log("yesterdayCorresponding6AMStageValue:", yesterdayCorresponding6AMStageValue);
+                console.log("total = ", total);
 
-                day1 = "<div>" + "-test-" + "</div>";
+                
+                day1 = "<div title='" + totalFormula + "'>" + total.toFixed(1) + "</div>";
             } else {
                 if (convertedData !== null) {
                     day1 = "<div title='" + convertedData.values[0] + "'>" + 
@@ -1333,7 +1360,7 @@ function checkForDuplicates(data) {
 }
 
 // Function to fetch all urls to find all forecasts
-async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9, url10, url11, url12, url13, url14, url15) {
+async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9, url10, url11, url12, url13, url14, url15, url16) {
     const fetchOptions = {
         method: 'GET',
         headers: {
@@ -1357,7 +1384,8 @@ async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9
             url12 ? fetch(url12, fetchOptions) : Promise.resolve(null),
             url13 ? fetch(url13, fetchOptions) : Promise.resolve(null),
             url14 ? fetch(url14, fetchOptions) : Promise.resolve(null),
-            url15 ? fetch(url15, fetchOptions) : Promise.resolve(null)
+            url15 ? fetch(url15, fetchOptions) : Promise.resolve(null),
+            url16 ? fetch(url16, fetchOptions) : Promise.resolve(null)
         ];
 
         const responses = await Promise.all(responsePromises);
@@ -1386,7 +1414,8 @@ async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9
             data12: data[11],
             data13: data[12],
             data14: data[13],
-            data15: data[14]
+            data15: data[14],
+            data16: data[15]
         };
     } catch (error) {
         console.error('Error fetching the URLs:', error.message);
@@ -1405,7 +1434,8 @@ async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9
             data12: null,
             data13: null,
             data14: null,
-            data15: null
+            data15: null,
+            data16: null
         }; // return null data if any error occurs
     }
 }
@@ -1646,4 +1676,53 @@ function convertUTCtoCentralTime(data) {
     });
 
     return convertedData;
+}
+
+// Function to find rating, stage based on flow
+function findIndByDep(depValue, table) {
+    // Convert depValue to number if it's not already
+    depValue = Number(depValue);
+
+    // Convert table entries to numbers
+    const numericTable = table.map(entry => ({
+        ind: Number(entry.ind),
+        dep: Number(entry.dep)
+    }));
+
+    // Find the closest entries in the table
+    let lowerEntry = null;
+    let upperEntry = null;
+
+    for (let i = 0; i < numericTable.length; i++) {
+        if (numericTable[i].dep <= depValue) {
+            lowerEntry = numericTable[i];
+        }
+        if (numericTable[i].dep >= depValue && upperEntry === null) {
+            upperEntry = numericTable[i];
+        }
+    }
+
+    // If depValue is out of bounds
+    if (!lowerEntry || !upperEntry) {
+        return null;
+    }
+
+    // Handle exact match case
+    if (lowerEntry.dep === depValue) {
+        return lowerEntry.ind;
+    }
+
+    // Perform linear interpolation
+    const depDiff = upperEntry.dep - lowerEntry.dep;
+    
+    // Check for division by zero scenario
+    if (depDiff === 0) {
+        return null; // or handle as needed
+    }
+    
+    const indDiff = upperEntry.ind - lowerEntry.ind;
+    const ratio = (depValue - lowerEntry.dep) / depDiff;
+    const interpolatedInd = lowerEntry.ind + indDiff * ratio;
+
+    return interpolatedInd;
 }
