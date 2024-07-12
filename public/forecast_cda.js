@@ -880,7 +880,6 @@ function processAllData(data) {
                 console.log("yesterday6AMValue = ", yesterday6AMValue);
                 console.log("yesterday6AMValueUpstream = ", yesterday6AMValueUpstream);
                 console.log("yesterday6AMValueDownstream = ", yesterday6AMValueDownstream);
-                console.log("BirdsPointForecastValue @ Grays Pt-Mississippi = ", location_id, BirdsPointForecastValue);
                 console.log("ForecastValues @ Grays Pt-Mississippi = ", ForecastValues, ForecastValues["Birds Point-Mississippi"]);
 
                 day1 = "<div>" + "-test" + "</div>";

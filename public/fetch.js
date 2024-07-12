@@ -367,10 +367,6 @@ async function fetchData(location_id
                 BirdsPointForecastValue.push({ "value": initialValue });
                 // console.log("initialValue = ", initialValue);
 
-                let initialValue2 = yesterday6AMValue + (latest7AMRvfDependanceValue[0].value - yesterday6AMValueDownstream);
-                ForecastValues[location_id].push({ "value": initialValue2 });
-                // console.log("initialValue2 = ", initialValue2);
-
                 // Calculate subsequent values
                 for (let i = 1; i < latest7AMRvfDependanceValue.length; i++) {
                     let previousValue = BirdsPointForecastValue[BirdsPointForecastValue.length - 1].value;
@@ -379,21 +375,11 @@ async function fetchData(location_id
                 }
                 // console.log("BirdsPointForecastValue = ", BirdsPointForecastValue);
 
-                // Calculate subsequent values
-                for (let i = 1; i < latest7AMRvfDependanceValue.length; i++) {
-                    let previousValue = ForecastValues[location_id][ForecastValues[location_id].length - 1].value;
-                    let newValue = previousValue + (latest7AMRvfDependanceValue[i].value - latest7AMRvfDependanceValue[i - 1].value);
-                    ForecastValues[location_id].push({ "value": newValue });
-                }
-                console.log("actually set birdspoint data")
-                // console.log("ForecastValues[location_id] = ", ForecastValues[location_id]);
-
                 isRvfDependanceArrayLengthGreaterThanSeven = BirdsPointForecastValue.length >= 7;
                 // console.log("isRvfDependanceArrayLengthGreaterThanSeven:", isRvfDependanceArrayLengthGreaterThanSeven);
             }
-            let BirdsPointForecastValue2 = ForecastValues["Birds Point-Mississippi"];
 
-            return { 
+            return {
                 location_id,
                 convertedData,
                 row,
@@ -429,7 +415,6 @@ async function fetchData(location_id
                 data15,
                 data16
             }
-
         })
         .catch(error => {
             console.error('Error fetching data:', error);
