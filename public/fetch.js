@@ -93,6 +93,7 @@ async function fetchData(location_id
     , tsid_netmiss_flow
     , tsid_rating_id_coe
     , tsid_rating_id_coe_upstream
+    , tsid_netmiss_special_gage_1
 ) {
     // console.log("location_id =",  location_id);
 
@@ -287,8 +288,19 @@ async function fetchData(location_id
     }
     // console.log("url17 = ", url17);
 
-    return fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9, url10, url11, url12, url13, url14, url15, url16, url17)
-        .then(({ data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17 }) => {
+    // Get Netmiss Special Gage 1 Forecast 
+    let url18 = null;
+    if (tsid_netmiss_special_gage_1 !== null) {
+        if (cda === "internal") {
+            url18 = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/timeseries?name=${tsid_netmiss_special_gage_1}&begin=${end2.toISOString()}&end=${end1.toISOString()}&office=MVS&timezone=CST6CDT`;
+        } else if (cda === "public") {
+            url18 = `https://cwms-data.usace.army.mil/cwms-data/timeseries?name=${tsid_netmiss_special_gage_1}&begin=${end2.toISOString()}&end=${end1.toISOString()}&office=MVS&timezone=CST6CDT`;
+        }
+    }
+    // console.log("url18 = ", url18);
+
+    return fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9, url10, url11, url12, url13, url14, url15, url16, url17, url18)
+        .then(({ data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17, data18 }) => {
             // console.log("location_id =",  location_id);
             // Do something with the fetched data
             // console.log("data1 = ", data1);
@@ -308,6 +320,7 @@ async function fetchData(location_id
             // console.log("data15 = ", data15);
             // console.log("data16 = ", data16);
             // console.log("data17 = ", data17);
+            // console.log("data18 = ", data18);
 
             // Process data1 - netmiss forecast data
             const convertedData = convertUTCtoCentralTime(data1);
@@ -440,7 +453,8 @@ async function fetchData(location_id
                 data14,
                 data15,
                 data16,
-                data17
+                data17,
+                data18
             }
 
         })
@@ -449,7 +463,7 @@ async function fetchData(location_id
         });
 }
 
-async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9, url10, url11, url12, url13, url14, url15, url16, url17) {
+async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9, url10, url11, url12, url13, url14, url15, url16, url17, url18) {
     const fetchOptions = {
         method: 'GET',
         headers: {
@@ -475,7 +489,8 @@ async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9
             url14 ? fetch(url14, fetchOptions) : Promise.resolve(null),
             url15 ? fetch(url15, fetchOptions) : Promise.resolve(null),
             url16 ? fetch(url16, fetchOptions) : Promise.resolve(null),
-            url17 ? fetch(url17, fetchOptions) : Promise.resolve(null)
+            url17 ? fetch(url17, fetchOptions) : Promise.resolve(null),
+            url18 ? fetch(url18, fetchOptions) : Promise.resolve(null)
         ];
 
         const responses = await Promise.all(responsePromises);
@@ -506,7 +521,8 @@ async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9
             data14: data[13],
             data15: data[14],
             data16: data[15],
-            data17: data[16]
+            data17: data[16],
+            data18: data[17]
         };
     } catch (error) {
         console.error('Error fetching the URLs:', error.message);
@@ -527,7 +543,8 @@ async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9
             data14: null,
             data15: null,
             data16: null,
-            data17: null
+            data17: null,
+            data18: null
         }; // return null data if any error occurs
     }
 }
