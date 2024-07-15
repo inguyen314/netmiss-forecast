@@ -302,3 +302,52 @@ function findIndByDep(depValue, table) {
 
     return interpolatedInd;
 }
+
+// Function to find rating, flow based on stage
+function findDepByInd(indValue, table) {
+    // Convert indValue to number if it's not already
+    indValue = Number(indValue);
+
+    // Convert table entries to numbers
+    const numericTable = table.map(entry => ({
+        ind: Number(entry.ind),
+        dep: Number(entry.dep)
+    }));
+
+    // Find the closest entries in the table
+    let lowerEntry = null;
+    let upperEntry = null;
+
+    for (let i = 0; i < numericTable.length; i++) {
+        if (numericTable[i].ind <= indValue) {
+            lowerEntry = numericTable[i];
+        }
+        if (numericTable[i].ind >= indValue && upperEntry === null) {
+            upperEntry = numericTable[i];
+        }
+    }
+
+    // If indValue is out of bounds
+    if (!lowerEntry || !upperEntry) {
+        return null;
+    }
+
+    // Handle exact match case
+    if (lowerEntry.ind === indValue) {
+        return lowerEntry.dep;
+    }
+
+    // Perform linear interpolation
+    const indDiff = upperEntry.ind - lowerEntry.ind;
+
+    // Check for division by zero scenario
+    if (indDiff === 0) {
+        return null; // or handle as needed
+    }
+
+    const depDiff = upperEntry.dep - lowerEntry.dep;
+    const ratio = (indValue - lowerEntry.ind) / indDiff;
+    const interpolatedDep = lowerEntry.dep + depDiff * ratio;
+
+    return interpolatedDep;
+}

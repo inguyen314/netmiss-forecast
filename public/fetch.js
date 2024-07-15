@@ -92,6 +92,7 @@ async function fetchData(location_id
     , tsid_rvf_ff_dependance
     , tsid_netmiss_flow
     , tsid_rating_id_coe
+    , tsid_rating_id_coe_upstream
 ) {
     // console.log("location_id =",  location_id);
 
@@ -275,8 +276,19 @@ async function fetchData(location_id
     }
     // console.log("url16 = ", url16);
 
-    return fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9, url10, url11, url12, url13, url14, url15, url16)
-        .then(({ data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16 }) => {
+    // Get Rating Table Downstream COE 
+    let url17 = null;
+    if (tsid_rating_id_coe_upstream !== null) {
+        if (cda === "internal") {
+            url17 = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/ratings/${tsid_rating_id_coe_upstream}?office=MVS`;
+        } else if (cda === "public") {
+            url17 = `https://cwms-data.usace.army.mil/cwms-data/${tsid_rating_id_coe_upstream}?office=MVS`;
+        }
+    }
+    // console.log("url17 = ", url17);
+
+    return fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9, url10, url11, url12, url13, url14, url15, url16, url17)
+        .then(({ data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17 }) => {
             // console.log("location_id =",  location_id);
             // Do something with the fetched data
             // console.log("data1 = ", data1);
@@ -295,6 +307,7 @@ async function fetchData(location_id
             // console.log("data14 = ", data14);
             // console.log("data15 = ", data15);
             // console.log("data16 = ", data16);
+            // console.log("data17 = ", data17);
 
             // Process data1 - netmiss forecast data
             const convertedData = convertUTCtoCentralTime(data1);
@@ -426,7 +439,8 @@ async function fetchData(location_id
                 data13,
                 data14,
                 data15,
-                data16
+                data16,
+                data17
             }
 
         })
@@ -435,7 +449,7 @@ async function fetchData(location_id
         });
 }
 
-async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9, url10, url11, url12, url13, url14, url15, url16) {
+async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9, url10, url11, url12, url13, url14, url15, url16, url17) {
     const fetchOptions = {
         method: 'GET',
         headers: {
@@ -460,7 +474,8 @@ async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9
             url13 ? fetch(url13, fetchOptions) : Promise.resolve(null),
             url14 ? fetch(url14, fetchOptions) : Promise.resolve(null),
             url15 ? fetch(url15, fetchOptions) : Promise.resolve(null),
-            url16 ? fetch(url16, fetchOptions) : Promise.resolve(null)
+            url16 ? fetch(url16, fetchOptions) : Promise.resolve(null),
+            url17 ? fetch(url17, fetchOptions) : Promise.resolve(null)
         ];
 
         const responses = await Promise.all(responsePromises);
@@ -490,7 +505,8 @@ async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9
             data13: data[12],
             data14: data[13],
             data15: data[14],
-            data16: data[15]
+            data16: data[15],
+            data17: data[16]
         };
     } catch (error) {
         console.error('Error fetching the URLs:', error.message);
@@ -510,7 +526,8 @@ async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9
             data13: null,
             data14: null,
             data15: null,
-            data16: null
+            data16: null,
+            data17: null
         }; // return null data if any error occurs
     }
 }
