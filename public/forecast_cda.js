@@ -251,7 +251,7 @@ function createTable(jsonDataFiltered) {
             // console.log("dateObjectFirstForecastDayByDayAndMonth: ", dateObjectFirstForecastDayByDayAndMonth.length);
 
             // Testing - Forced to output a table
-            populateTableCells(jsonDataFiltered, table, nws_day1_date);
+            // populateTableCells(jsonDataFiltered, table, nws_day1_date);
 
             if (dateObjectFirstForecastDayByDayAndMonth.date > todaysDataOnly & dateObjectFirstForecastDayByDayAndMonth.length >= 7) {
                 console.log("dateObjectFirstForecastDayByDayAndMonth is after todaysDataOnly, output data table");
@@ -360,6 +360,8 @@ async function populateTableCells(jsonDataFiltered, table, nws_day1_date) {
             , location.tsid_rating_id_coe
             , location.tsid_rating_id_coe_upstream
             , location.tsid_netmiss_special_gage_1
+            , location.tsid_rating_id_coe_downstream
+            , location.tsid_netmiss_special_gage_2
         ))
     });
     Promise.all(promises).then((d) => {
@@ -387,7 +389,7 @@ function processAllData(data) {
         netmiss_river_mile_hard_coded_downstream,
         isNetmissForecastArrayLengthGreaterThanSeven,
         isRvfArrayLengthGreaterThanSeven,
-        isRvfDependanceArrayLengthGreaterThanSeven,
+        isCairoRvfForecastValuesGreaterThanSeven,
         BirdsPointForecastValue,
         latest7AMRvfValue,
         data1,
@@ -407,7 +409,9 @@ function processAllData(data) {
         data15,
         data16,
         data17,
-        data18
+        data18,
+        data19,
+        data20
     }) => {
         // Ensure row exists and is a valid DOM element
         if (!row || !(row instanceof HTMLElement)) {
@@ -418,16 +422,16 @@ function processAllData(data) {
         // console.log("data: ", data);
 
         // Starting Processing All Gages
-        if (isNetmissForecastArrayLengthGreaterThanSeven === true || isRvfArrayLengthGreaterThanSeven === true || isRvfDependanceArrayLengthGreaterThanSeven === true) {
+        if (isNetmissForecastArrayLengthGreaterThanSeven === true || isRvfArrayLengthGreaterThanSeven === true || isCairoRvfForecastValuesGreaterThanSeven === true) {
             // LOCATION
             const locationIdCell = row.insertCell();
             locationIdCell.innerHTML = location_id;
 
             // OBSERVED 6AM
             const level6AmCell = row.insertCell();
-            level6AmCell.innerHTML = "<div title='" + latest6AMValue.date + "'>" +
+            level6AmCell.innerHTML = "<div title='" + latest6AMValue.date + " " + latest6AMValue.value + "'>" +
                 "<a href='../../chart/public/chart.html?cwms_ts_id=" + tsid + "' target='_blank'>" +
-                (tsid_forecast_location === true ? "<strong>" + parseFloat(latest6AMValue.value).toFixed(2) + "</strong>" : parseFloat(latest6AMValue.value).toFixed(2)) + "</a>" +
+                (tsid_forecast_location === true ? "<strong>" + (Math.round((latest6AMValue.value) * 100) / 100).toFixed(2) + "</strong>" : (Math.round((latest6AMValue.value) * 100) / 100).toFixed(2)) + "</a>" +
                 "</div>";
 
 
@@ -458,15 +462,17 @@ function processAllData(data) {
             } else {
                 if (convertedData !== null) {
                     day1 = "<div title='" + convertedData.values[0] + "'>" +
-                        (tsid_forecast_location === true ? "<strong>" + (convertedData.values[0][1]).toFixed(1) + "</strong>" : (convertedData.values[0][1]).toFixed(1)) +
+                        (tsid_forecast_location === true ? "<strong>" + (convertedData.values[0][1]).toFixed(1) + "</strong>" : (Math.round((convertedData.values[0][1]) * 10) / 10).toFixed(1)) +
                         "</div>";
                 } else if (BirdsPointForecastValue !== null && location_id === "Birds Point-Mississippi") {
-                    day1 = "<div title='" + BirdsPointForecastValue[0] + "'>" +
-                        (tsid_forecast_location === true ? "<strong>" + (BirdsPointForecastValue[0].value).toFixed(1) + "</strong>" : (BirdsPointForecastValue[0].value).toFixed(1)) +
-                        "</div>";
+                    let roundedValue = Math.round(BirdsPointForecastValue[0].value * 100) / 100; // Round to one decimal place
+                    let roundedValueOnePlace = Math.round(roundedValue * 10) / 10;
+                    day1 = "<div title='" + BirdsPointForecastValue[0].value + "'>" +
+                    (tsid_forecast_location === true ? "<strong>" + roundedValueOnePlace.toFixed(1) + "</strong>" : roundedValueOnePlace.toFixed(1)) +
+                    "</div>";
                 } else if (latest7AMRvfValue[0] !== null && latest7AMRvfValue[0] !== undefined) {
                     day1 = "<div title='" + latest7AMRvfValue[0] + "'>" +
-                        (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[0].value).toFixed(1) + "</strong>" : (latest7AMRvfValue[0].value).toFixed(1)) +
+                        (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[0].value).toFixed(1) + "</strong>" : (Math.round((latest7AMRvfValue[0].value) * 10) / 10).toFixed(1)) +
                         "</div>";
                 } else {
                     day1 = "<div>" + "-" + "</div>";
@@ -482,9 +488,11 @@ function processAllData(data) {
                     (tsid_forecast_location === true ? "<strong>" + (convertedData.values[1][1]).toFixed(1) + "</strong>" : (convertedData.values[1][1]).toFixed(1)) +
                     "</div>";
             } else if (BirdsPointForecastValue !== null && location_id === "Birds Point-Mississippi") {
-                day2 = "<div title='" + BirdsPointForecastValue[1] + "'>" +
-                    (tsid_forecast_location === true ? "<strong>" + (BirdsPointForecastValue[1].value).toFixed(1) + "</strong>" : (BirdsPointForecastValue[1].value).toFixed(1)) +
-                    "</div>";
+                let roundedValue = Math.round(BirdsPointForecastValue[1].value * 100) / 100; // Round to one decimal place
+                let roundedValueOnePlace = Math.round(roundedValue * 10) / 10;
+                day2 = "<div title='" + BirdsPointForecastValue[0].value + "'>" +
+                (tsid_forecast_location === true ? "<strong>" + roundedValueOnePlace.toFixed(1) + "</strong>" : roundedValueOnePlace.toFixed(1)) +
+                "</div>";
             } else if (latest7AMRvfValue[1] !== null) {
                 day2 = "<div title='" + latest7AMRvfValue[1] + "'>" +
                     (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[1].value).toFixed(1) + "</strong>" : (latest7AMRvfValue[1].value).toFixed(1)) +
@@ -502,9 +510,11 @@ function processAllData(data) {
                     (tsid_forecast_location === true ? "<strong>" + (convertedData.values[2][1]).toFixed(1) + "</strong>" : (convertedData.values[2][1]).toFixed(1)) +
                     "</div>";
             } else if (BirdsPointForecastValue !== null && location_id === "Birds Point-Mississippi") {
-                day3 = "<div title='" + BirdsPointForecastValue[2] + "'>" +
-                    (tsid_forecast_location === true ? "<strong>" + (BirdsPointForecastValue[2].value).toFixed(1) + "</strong>" : (BirdsPointForecastValue[2].value).toFixed(1)) +
-                    "</div>";
+                let roundedValue = Math.round(BirdsPointForecastValue[2].value * 100) / 100; // Round to one decimal place
+                let roundedValueOnePlace = Math.round(roundedValue * 10) / 10;
+                day3 = "<div title='" + BirdsPointForecastValue[0].value + "'>" +
+                (tsid_forecast_location === true ? "<strong>" + roundedValueOnePlace.toFixed(1) + "</strong>" : roundedValueOnePlace.toFixed(1)) +
+                "</div>";
             } else if (latest7AMRvfValue[2] !== null) {
                 day3 = "<div title='" + latest7AMRvfValue[2] + "'>" +
                     (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[2].value).toFixed(1) + "</strong>" : (latest7AMRvfValue[2].value).toFixed(1)) +
@@ -522,9 +532,11 @@ function processAllData(data) {
                     (tsid_forecast_location === true ? "<strong>" + (convertedData.values[3][1]).toFixed(1) + "</strong>" : (convertedData.values[3][1]).toFixed(1)) +
                     "</div>";
             } else if (BirdsPointForecastValue !== null && location_id === "Birds Point-Mississippi") {
-                day4 = "<div title='" + BirdsPointForecastValue[3] + "'>" +
-                    (tsid_forecast_location === true ? "<strong>" + (BirdsPointForecastValue[3].value).toFixed(1) + "</strong>" : (BirdsPointForecastValue[3].value).toFixed(1)) +
-                    "</div>";
+                let roundedValue = Math.round(BirdsPointForecastValue[3].value * 100) / 100; // Round to one decimal place
+                let roundedValueOnePlace = Math.round(roundedValue * 10) / 10;
+                day4 = "<div title='" + BirdsPointForecastValue[0].value + "'>" +
+                (tsid_forecast_location === true ? "<strong>" + roundedValueOnePlace.toFixed(1) + "</strong>" : roundedValueOnePlace.toFixed(1)) +
+                "</div>";
             } else if (latest7AMRvfValue[3] !== null) {
                 day4 = "<div title='" + latest7AMRvfValue[3] + "'>" +
                     (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[3].value).toFixed(1) + "</strong>" : (latest7AMRvfValue[3].value).toFixed(1)) +
@@ -542,9 +554,11 @@ function processAllData(data) {
                     (tsid_forecast_location === true ? "<strong>" + (convertedData.values[4][1]).toFixed(1) + "</strong>" : (convertedData.values[4][1]).toFixed(1)) +
                     "</div>";
             } else if (BirdsPointForecastValue !== null && location_id === "Birds Point-Mississippi") {
-                day5 = "<div title='" + BirdsPointForecastValue[4] + "'>" +
-                    (tsid_forecast_location === true ? "<strong>" + (BirdsPointForecastValue[4].value).toFixed(1) + "</strong>" : (BirdsPointForecastValue[4].value).toFixed(1)) +
-                    "</div>";
+                let roundedValue = Math.round(BirdsPointForecastValue[4].value * 100) / 100; // Round to one decimal place
+                let roundedValueOnePlace = Math.round(roundedValue * 10) / 10;
+                day5 = "<div title='" + BirdsPointForecastValue[0].value + "'>" +
+                (tsid_forecast_location === true ? "<strong>" + roundedValueOnePlace.toFixed(1) + "</strong>" : roundedValueOnePlace.toFixed(1)) +
+                "</div>";
             } else if (latest7AMRvfValue[4] !== null) {
                 day5 = "<div title='" + latest7AMRvfValue[4] + "'>" +
                     (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[4].value).toFixed(1) + "</strong>" : (latest7AMRvfValue[4].value).toFixed(1)) +
@@ -562,9 +576,11 @@ function processAllData(data) {
                     (tsid_forecast_location === true ? "<strong>" + (convertedData.values[5][1]).toFixed(1) + "</strong>" : (convertedData.values[5][1]).toFixed(1)) +
                     "</div>";
             } else if (BirdsPointForecastValue !== null && location_id === "Birds Point-Mississippi") {
-                day6 = "<div title='" + BirdsPointForecastValue[5] + "'>" +
-                    (tsid_forecast_location === true ? "<strong>" + (BirdsPointForecastValue[5].value).toFixed(1) + "</strong>" : (BirdsPointForecastValue[5].value).toFixed(1)) +
-                    "</div>";
+                let roundedValue = Math.round(BirdsPointForecastValue[5].value * 100) / 100; // Round to one decimal place
+                let roundedValueOnePlace = Math.round(roundedValue * 10) / 10;
+                day6 = "<div title='" + BirdsPointForecastValue[0].value + "'>" +
+                (tsid_forecast_location === true ? "<strong>" + roundedValueOnePlace.toFixed(1) + "</strong>" : roundedValueOnePlace.toFixed(1)) +
+                "</div>";
             } else if (latest7AMRvfValue[5] !== null) {
                 day6 = "<div title='" + latest7AMRvfValue[5] + "'>" +
                     (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[5].value).toFixed(1) + "</strong>" : (latest7AMRvfValue[5].value).toFixed(1)) +
@@ -582,9 +598,11 @@ function processAllData(data) {
                     (tsid_forecast_location === true ? "<strong>" + (convertedData.values[6][1]).toFixed(1) + "</strong>" : (convertedData.values[6][1]).toFixed(1)) +
                     "</div>";
             } else if (BirdsPointForecastValue !== null && location_id === "Birds Point-Mississippi") {
-                day7 = "<div title='" + BirdsPointForecastValue[6] + "'>" +
-                    (tsid_forecast_location === true ? "<strong>" + (BirdsPointForecastValue[6].value).toFixed(1) + "</strong>" : (BirdsPointForecastValue[6].value).toFixed(1)) +
-                    "</div>";
+                let roundedValue = Math.round(BirdsPointForecastValue[6].value * 100) / 100; // Round to one decimal place
+                let roundedValueOnePlace = Math.round(roundedValue * 10) / 10;
+                day7 = "<div title='" + BirdsPointForecastValue[0].value + "'>" +
+                (tsid_forecast_location === true ? "<strong>" + roundedValueOnePlace.toFixed(1) + "</strong>" : roundedValueOnePlace.toFixed(1)) +
+                "</div>";
             } else if (latest7AMRvfValue[6] !== null) {
                 day7 = "<div title='" + latest7AMRvfValue[6] + "'>" +
                     (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[6].value).toFixed(1) + "</strong>" : (latest7AMRvfValue[6].value).toFixed(1)) +
@@ -600,9 +618,9 @@ function processAllData(data) {
 
             // OBSERVED 6AM
             const level6AmCell = row.insertCell();
-            level6AmCell.innerHTML = "<div title='" + latest6AMValue.date + "'>" +
+            level6AmCell.innerHTML = "<div title='" + latest6AMValue.date + " " + latest6AMValue.value + "'>" +
                 "<a href='../../chart/public/chart.html?cwms_ts_id=" + tsid + "' target='_blank'>" +
-                (tsid_forecast_location === true ? "<strong>" + parseFloat(latest6AMValue.value).toFixed(2) + "</strong>" : parseFloat(latest6AMValue.value).toFixed(2)) + "</a>" +
+                (tsid_forecast_location === true ? "<strong>" + (Math.round((latest6AMValue.value) * 100) / 100).toFixed(2) + "</strong>" : (Math.round((latest6AMValue.value) * 100) / 100).toFixed(2)) + "</a>" +
                 "</div>";
 
             // DAY1
@@ -1072,6 +1090,7 @@ function processAllData(data) {
                     total = "--";
                 }
                 
+                // TODO: Does not match exactly
                 // console.log("location_id = ", location_id);
                 // console.log("yesterdayUpstream6AMStageRevValue = ", yesterdayUpstream6AMStageRevValue);
                 // console.log("yesterday6AMStageRevValue = ", yesterday6AMStageRevValue);
@@ -1091,7 +1110,7 @@ function processAllData(data) {
                 // console.log("todayCorrespondingUpstreamFlowValueToStageRev:", todayCorrespondingUpstreamFlowValueToStageRev);
                 // console.log("total:", total);
 
-                day1 = "<div title='" + "--" + "'>" + total.toFixed(1) + "</div>";
+                day1 = "<div title='" + total + "'>" + total.toFixed(1) + "</div>";
             } else if (location_id === "Louisiana-Mississippi") {
                 const convertedNetmissFlowValuesToCst = convertUTCtoCentralTime(data15);
                 const yesterday6AMNetmissFlowValue = (convertedNetmissFlowValuesToCst.values[0][1]).toFixed(1);
@@ -1126,21 +1145,21 @@ function processAllData(data) {
                 const todayCorrespondingNetmissWithSpecialNetmissFlowValue = findIndByDep(sumTodayNetmissFlowPlusSpecialNetmissFlowValue, ratingTableCoe);
 
                 // console.log("convertedNetmissFlowValuesToCst = ", convertedNetmissFlowValuesToCst);
-                console.log("yesterday6AMNetmissFlowValue = ", yesterday6AMNetmissFlowValue);
-                console.log("today6AMNetmissFlowValue = ", today6AMNetmissFlowValue);
-                console.log("yesterdayUpstream6AMStageRevValue = ", yesterdayUpstream6AMStageRevValue);
-                console.log("convertedSpecialNetmissFlowValuesToCst = ", convertedSpecialNetmissFlowValuesToCst);
-                console.log("yesterdaySpecial6AMNetmissFlowValue = ", yesterdaySpecial6AMNetmissFlowValue);
-                console.log("todaySpecial6AMNetmissFlowValue = ", todaySpecial6AMNetmissFlowValue);
-                console.log("sumTodayNetmissFlowPlusSpecialNetmissFlowValueDividedOneThousand = ", sumTodayNetmissFlowPlusSpecialNetmissFlowValueDividedOneThousand);
-                console.log("isTodayOpenRiver = ", isTodayOpenRiver);
-                console.log("isTodayRegulatedPool = ", isTodayRegulatedPool);
-                console.log("ratingTableCoeUpstream = ", ratingTableCoeUpstream);
-                console.log("todayCorrespondingYesterdayUpstreamFlowValue = ", todayCorrespondingYesterdayUpstreamFlowValue);
-                console.log("sumYesterdayNetmissFlowPlusSpecialNetmissFlowValueDividedOneThousand = ", sumYesterdayNetmissFlowPlusSpecialNetmissFlowValueDividedOneThousand);
-                console.log("isYesterdayOpenRiver = ", isYesterdayOpenRiver);
-                console.log("isYesterdayRegulatedPool = ", isYesterdayRegulatedPool);
-                console.log("todayCorrespondingNetmissWithSpecialNetmissFlowValue = ", todayCorrespondingNetmissWithSpecialNetmissFlowValue);
+                // console.log("yesterday6AMNetmissFlowValue = ", yesterday6AMNetmissFlowValue);
+                // console.log("today6AMNetmissFlowValue = ", today6AMNetmissFlowValue);
+                // console.log("yesterdayUpstream6AMStageRevValue = ", yesterdayUpstream6AMStageRevValue);
+                // console.log("convertedSpecialNetmissFlowValuesToCst = ", convertedSpecialNetmissFlowValuesToCst);
+                // console.log("yesterdaySpecial6AMNetmissFlowValue = ", yesterdaySpecial6AMNetmissFlowValue);
+                // console.log("todaySpecial6AMNetmissFlowValue = ", todaySpecial6AMNetmissFlowValue);
+                // console.log("sumTodayNetmissFlowPlusSpecialNetmissFlowValueDividedOneThousand = ", sumTodayNetmissFlowPlusSpecialNetmissFlowValueDividedOneThousand);
+                // console.log("isTodayOpenRiver = ", isTodayOpenRiver);
+                // console.log("isTodayRegulatedPool = ", isTodayRegulatedPool);
+                // console.log("ratingTableCoeUpstream = ", ratingTableCoeUpstream);
+                // console.log("todayCorrespondingYesterdayUpstreamFlowValue = ", todayCorrespondingYesterdayUpstreamFlowValue);
+                // console.log("sumYesterdayNetmissFlowPlusSpecialNetmissFlowValueDividedOneThousand = ", sumYesterdayNetmissFlowPlusSpecialNetmissFlowValueDividedOneThousand);
+                // console.log("isYesterdayOpenRiver = ", isYesterdayOpenRiver);
+                // console.log("isYesterdayRegulatedPool = ", isYesterdayRegulatedPool);
+                // console.log("todayCorrespondingNetmissWithSpecialNetmissFlowValue = ", todayCorrespondingNetmissWithSpecialNetmissFlowValue);
 
                 // Open River or Regulated Pool Calculations
                 let total = null;
@@ -1153,6 +1172,67 @@ function processAllData(data) {
                 }
 
                 day1 = "<div title='" + "--" + "'>" + total.toFixed(1) + "</div>";
+            } else if (location_id === "Grafton-Mississippi") {
+                // Get today and yesterday values
+                const yesterday6AMStageRevValue = latest6AMValue.value;
+                const yesterdayUpstream6AMStageRevValue = ((getLatest6AMValue(data7)).latest6AMValue).value;
+                const yesterdayDownstream6AMStageRevValue = ((getLatest6AMValue(data9)).latest6AMValue).value;
+                const todayUpstreamNetmissValue = parseFloat(convertedNetmissForecastingPointUpstreamData.values[0][1]);
+                const todayDownstreamNetmissStageValue = data12.values[0][1];
+                const convertedSpecialNetmissFlowValuesToCst = convertUTCtoCentralTime(data18);
+                const yesterdaySpecialNetmissFlowValue = (convertedSpecialNetmissFlowValuesToCst.values[0][1]);
+                const todaySpecialNetmissFlowValue = (convertedSpecialNetmissFlowValuesToCst.values[1][1]);
+                const todayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[0][1]); 
+
+                const convertedSpecialNetmissGage2FlowValuesToCst = convertUTCtoCentralTime(data20);
+                const yesterdaySpecialGage2NetmissFlowValue = convertedSpecialNetmissGage2FlowValuesToCst.values[0][1];
+                const todaySpecialGage2NetmissFlowValue = convertedSpecialNetmissGage2FlowValuesToCst.values[1][1];
+                // Get rating tables
+                const ratingTableCoe = data16["simple-rating"]["rating-points"].point;
+                const ratingTableCoeUpstream = data17["simple-rating"][0]["rating-points"].point;
+                const ratingTableCoeDownstream = data19["simple-rating"]["rating-points"].point;
+                // Lookup todayCorrespondingUpstreamFlowValue to Louisiana-Mississippi Rating COE Table 
+                const todayCorrespondingUpstreamNetmissFlowValue = findDepByInd(todayUpstreamNetmiss, ratingTableCoeUpstream);
+                const todayCorrespondingDownstreamNetmissFlowValue = findDepByInd(todayDownstreamNetmissStageValue, ratingTableCoeDownstream);
+
+                const sumTodayHermannFlowPlusLd25TwFlow = parseFloat(todaySpecialGage2NetmissFlowValue) + parseFloat(todayCorrespondingUpstreamNetmissFlowValue);
+                const sumTodayHermannFlowPlusLd25TwFlowDivideOneThousand = sumTodayHermannFlowPlusLd25TwFlow/1000;
+
+                const isForecastBasedUponLd25MPTw = sumTodayHermannFlowPlusLd25TwFlowDivideOneThousand > 300;
+
+                // console.log("data11: ", data11);
+                console.log("data20: ", data20);
+                console.log("yesterdayUpstream6AMStageRevValue: ", yesterdayUpstream6AMStageRevValue);
+                console.log("yesterday6AMStageRevValue: ", yesterday6AMStageRevValue);
+                console.log("yesterdayDownstream6AMStageRevValue: ", yesterdayDownstream6AMStageRevValue);
+                console.log("todayUpstreamNetmissValue: ", todayUpstreamNetmissValue);
+                console.log("todayDownstreamNetmissStageValue: ", todayDownstreamNetmissStageValue);
+                // console.log("convertedSpecialNetmissFlowValuesToCst: ", convertedSpecialNetmissFlowValuesToCst);
+                console.log("yesterdaySpecialNetmissFlowValue: ", yesterdaySpecialNetmissFlowValue);
+                console.log("todaySpecialNetmissFlowValue: ", todaySpecialNetmissFlowValue);
+                console.log("todayUpstreamNetmiss: ", todayUpstreamNetmiss);
+
+                console.log("convertedSpecialNetmissGage2FlowValuesToCst: ", convertedSpecialNetmissGage2FlowValuesToCst);
+                console.log("yesterdaySpecialGage2NetmissFlowValue: ", yesterdaySpecialGage2NetmissFlowValue);
+                console.log("todaySpecialGage2NetmissFlowValue: ", todaySpecialGage2NetmissFlowValue);
+                // console.log("ratingTableCoe: ", ratingTableCoe);
+                // console.log("ratingTableCoeUpstream: ", ratingTableCoeUpstream);
+                // console.log("ratingTableCoeDownstream: ", ratingTableCoeDownstream);
+                console.log("todayCorrespondingUpstreamNetmissFlowValue: ", todayCorrespondingUpstreamNetmissFlowValue);
+                console.log("todayCorrespondingDownstreamNetmissFlowValue: ", todayCorrespondingDownstreamNetmissFlowValue);
+                console.log("sumTodayHermannFlowPlusLd25TwFlow: ", sumTodayHermannFlowPlusLd25TwFlow);
+                console.log("sumTodayHermannFlowPlusLd25TwFlowDivideOneThousand: ", sumTodayHermannFlowPlusLd25TwFlowDivideOneThousand);
+                console.log("isForecastBasedUponLd25MPTw: ", isForecastBasedUponLd25MPTw);
+
+                // Open River or Regulated Pool Calculations
+                let total = null;
+                if (isForecastBasedUponLd25MPTw) {
+                    total = yesterday6AMStageRevValue + (((todayUpstreamNetmiss - yesterdayUpstream6AMStageRevValue) + (todayDownstreamNetmissStageValue - yesterdayDownstream6AMStageRevValue))/2);
+                } else {
+                    total = "--";
+                }
+                
+                day1 = "<div title='" + "--" + "'>" + (Math.round(total*100)/100).toFixed(1) + "</div>";
             } else {
                 if (convertedData !== null) {
                     day1 = "<div title='" + convertedData.values[0] + "'>" +

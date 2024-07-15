@@ -66,34 +66,36 @@ async function fetchFirstNetmissDay(tsid, begin, end, cda) {
 }
 
 async function fetchData(location_id
-    , tsid_netmiss
-    , tsid_netmiss_observe
+    , tsid_netmiss // url01
+    , tsid_netmiss_observe // url02
     , row
     , begin
     , end1
     , end2
-    , level_id_flood
+    , level_id_flood // url03
     , level_id_effective_date_flood
     , level_id_unit_id_flood
     , tsid_forecast_location
     , tsid_netmiss_upstream
-    , tsid_netmiss_downstream
-    , tsid_netmiss_downstream_flood
-    , tsid_netmiss_upstream_stage_rev
-    , tsid_netmiss_downstream_stage_rev
-    , tsid_rvf_ff
-    , nws_day1_date
-    , tsid_netmiss_forecasting_location_upstream
-    , tsid_netmiss_forecasting_location_downstream
-    , river_mile_hard_coded
-    , netmiss_river_mile_hard_coded_upstream
-    , netmiss_river_mile_hard_coded_downstream
-    , tsid_rvf_ff_downstream
-    , tsid_rvf_ff_dependance
-    , tsid_netmiss_flow
-    , tsid_rating_id_coe
-    , tsid_rating_id_coe_upstream
-    , tsid_netmiss_special_gage_1
+    , tsid_netmiss_downstream // url04 and url06
+    , tsid_netmiss_downstream_flood // url05
+    , tsid_netmiss_upstream_stage_rev // url07
+    , tsid_netmiss_downstream_stage_rev // url09
+    , tsid_rvf_ff // url10
+    , nws_day1_date 
+    , tsid_netmiss_forecasting_location_upstream // url11
+    , tsid_netmiss_forecasting_location_downstream // url12
+    , river_mile_hard_coded 
+    , netmiss_river_mile_hard_coded_upstream 
+    , netmiss_river_mile_hard_coded_downstream 
+    , tsid_rvf_ff_downstream // url13
+    , tsid_rvf_ff_dependance // url14
+    , tsid_netmiss_flow // url15
+    , tsid_rating_id_coe // url16
+    , tsid_rating_id_coe_upstream // url17
+    , tsid_netmiss_special_gage_1 // url18
+    , tsid_rating_id_coe_downstream // url19
+    , tsid_netmiss_special_gage_2 // url20
 ) {
     // console.log("location_id =",  location_id);
 
@@ -277,7 +279,7 @@ async function fetchData(location_id
     }
     // console.log("url16 = ", url16);
 
-    // Get Rating Table Downstream COE 
+    // Get Rating Table Upstreamstream COE 
     let url17 = null;
     if (tsid_rating_id_coe_upstream !== null) {
         if (cda === "internal") {
@@ -299,8 +301,30 @@ async function fetchData(location_id
     }
     // console.log("url18 = ", url18);
 
-    return fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9, url10, url11, url12, url13, url14, url15, url16, url17, url18)
-        .then(({ data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17, data18 }) => {
+    // Get Rating Table Downstream COE 
+    let url19 = null;
+    if (tsid_rating_id_coe_downstream !== null) {
+        if (cda === "internal") {
+            url19 = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/ratings/${tsid_rating_id_coe_downstream}?office=MVS`;
+        } else if (cda === "public") {
+            url19 = `https://cwms-data.usace.army.mil/cwms-data/${tsid_rating_id_coe_downstream}?office=MVS`;
+        }
+    }
+    // console.log("url19 = ", url19);
+
+     // Get Netmiss Special Gage 2 Forecast 
+     let url20 = null;
+     if (tsid_netmiss_special_gage_2 !== null) {
+         if (cda === "internal") {
+            url20 = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/timeseries?name=${tsid_netmiss_special_gage_2}&begin=${end2.toISOString()}&end=${end1.toISOString()}&office=MVS&timezone=CST6CDT`;
+         } else if (cda === "public") {
+            url20 = `https://cwms-data.usace.army.mil/cwms-data/timeseries?name=${tsid_netmiss_special_gage_2}&begin=${end2.toISOString()}&end=${end1.toISOString()}&office=MVS&timezone=CST6CDT`;
+         }
+     }
+     // console.log("url20 = ", url20);
+
+    return fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9, url10, url11, url12, url13, url14, url15, url16, url17, url18, url19, url20)
+        .then(({ data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17, data18, data19, data20 }) => {
             // console.log("location_id =",  location_id);
             // Do something with the fetched data
             // console.log("data1 = ", data1);
@@ -321,6 +345,8 @@ async function fetchData(location_id
             // console.log("data16 = ", data16);
             // console.log("data17 = ", data17);
             // console.log("data18 = ", data18);
+            // console.log("data19 = ", data19);
+            // console.log("data20 = ", data20);
 
             // Process data1 - netmiss forecast data
             const convertedData = convertUTCtoCentralTime(data1);
@@ -367,55 +393,50 @@ async function fetchData(location_id
             }
 
             // Process data14 - Birds Point-Mississippi forecast based on Cairo-Ohio into an array for 7 days
-            // console.log("location_id =",  location_id);
             let result14 = null;
-            let latest7AMRvfDependanceValue = null;
-            let isRvfDependanceArrayLengthGreaterThanSeven = null;
-            let yesterday6AMValueDownstream = null;
+            let cairoRvfForecastValues = null;
+            let isCairoRvfForecastValuesGreaterThanSeven = null;
+            let yesterdayDownstream6AMStageRevValue = null;
             let BirdsPointForecastValue = [];
             ForecastValues[location_id] = [];
             if (data14 !== null && data9 !== null) {
+                // get birds point rvf forecast values for processing and check number length
                 result14 = get7AMValuesForWeek(data14, nws_day1_date);
-                latest7AMRvfDependanceValue = result14.valuesAt7AM;
-                isRvfDependanceArrayLengthGreaterThanSeven = latest7AMRvfDependanceValue.length >= 7;
-
-                // console.log("result14 = ", result14);
-                // console.log("latest7AMRvfDependanceValue = ", latest7AMRvfDependanceValue);
-
-                const yesterday6AMValue = ((getLatest6AMValue(data2)).latest6AMValue).value;
-                // console.log("yesterday6AMValue = ", yesterday6AMValue);
-
-                yesterday6AMValueDownstream = ((getLatest6AMValue(data9)).latest6AMValue).value;
-                // console.log("yesterday6AMValueDownstream = ", yesterday6AMValueDownstream);
+                cairoRvfForecastValues = result14.valuesAt7AM;
+                isCairoRvfForecastValuesGreaterThanSeven = cairoRvfForecastValues.length >= 7;
+                // console.log("cairoRvfForecastValues = ", cairoRvfForecastValues);
+                // console.log("isCairoRvfForecastValuesGreaterThanSeven = ", isCairoRvfForecastValuesGreaterThanSeven);
+                // get today and yesterday values for processing
+                const yesterday6AMStageRevValue = ((getLatest6AMValue(data2)).latest6AMValue).value;
+                // console.log("yesterday6AMStageRevValue = ", yesterday6AMStageRevValue);
+                yesterdayDownstream6AMStageRevValue = ((getLatest6AMValue(data9)).latest6AMValue).value;
+                // console.log("yesterdayDownstream6AMStageRevValue = ", yesterdayDownstream6AMStageRevValue);
 
                 // Calculate the initial value
-                let initialValue = yesterday6AMValue + (latest7AMRvfDependanceValue[0].value - yesterday6AMValueDownstream);
+                let initialValue = yesterday6AMStageRevValue + (cairoRvfForecastValues[0].value - yesterdayDownstream6AMStageRevValue);
                 BirdsPointForecastValue.push({ "value": initialValue });
                 // console.log("initialValue = ", initialValue);
 
-                let initialValue2 = yesterday6AMValue + (latest7AMRvfDependanceValue[0].value - yesterday6AMValueDownstream);
-                ForecastValues[location_id].push({ "value": initialValue2 });
-                // console.log("initialValue2 = ", initialValue2);
+                // Calculate the initial value for birds point location
+                let initialValueLocationId = yesterday6AMStageRevValue + (cairoRvfForecastValues[0].value - yesterdayDownstream6AMStageRevValue);
+                ForecastValues[location_id].push({ "value": initialValueLocationId });
+                // console.log("initialValueLocationId = ", initialValueLocationId);
 
                 // Calculate subsequent values
-                for (let i = 1; i < latest7AMRvfDependanceValue.length; i++) {
+                for (let i = 1; i < cairoRvfForecastValues.length; i++) {
                     let previousValue = BirdsPointForecastValue[BirdsPointForecastValue.length - 1].value;
-                    let newValue = previousValue + (latest7AMRvfDependanceValue[i].value - latest7AMRvfDependanceValue[i - 1].value);
+                    let newValue = previousValue + (cairoRvfForecastValues[i].value - cairoRvfForecastValues[i - 1].value);
                     BirdsPointForecastValue.push({ "value": newValue });
                 }
                 // console.log("BirdsPointForecastValue = ", BirdsPointForecastValue);
 
                 // Calculate subsequent values
-                for (let i = 1; i < latest7AMRvfDependanceValue.length; i++) {
+                for (let i = 1; i < cairoRvfForecastValues.length; i++) {
                     let previousValue = ForecastValues[location_id][ForecastValues[location_id].length - 1].value;
-                    let newValue = previousValue + (latest7AMRvfDependanceValue[i].value - latest7AMRvfDependanceValue[i - 1].value);
+                    let newValue = previousValue + (cairoRvfForecastValues[i].value - cairoRvfForecastValues[i - 1].value);
                     ForecastValues[location_id].push({ "value": newValue });
                 }
-                console.log("actually set birdspoint data")
                 // console.log("ForecastValues[location_id] = ", ForecastValues[location_id]);
-
-                isRvfDependanceArrayLengthGreaterThanSeven = BirdsPointForecastValue.length >= 7;
-                // console.log("isRvfDependanceArrayLengthGreaterThanSeven:", isRvfDependanceArrayLengthGreaterThanSeven);
             }
 
             return { 
@@ -434,7 +455,7 @@ async function fetchData(location_id
                 netmiss_river_mile_hard_coded_downstream,
                 isNetmissForecastArrayLengthGreaterThanSeven,
                 isRvfArrayLengthGreaterThanSeven,
-                isRvfDependanceArrayLengthGreaterThanSeven,
+                isCairoRvfForecastValuesGreaterThanSeven,
                 BirdsPointForecastValue,
                 latest7AMRvfValue,
                 data1,
@@ -454,7 +475,9 @@ async function fetchData(location_id
                 data15,
                 data16,
                 data17,
-                data18
+                data18,
+                data19,
+                data20
             }
 
         })
@@ -463,7 +486,7 @@ async function fetchData(location_id
         });
 }
 
-async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9, url10, url11, url12, url13, url14, url15, url16, url17, url18) {
+async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9, url10, url11, url12, url13, url14, url15, url16, url17, url18, url19, url20) {
     const fetchOptions = {
         method: 'GET',
         headers: {
@@ -490,7 +513,9 @@ async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9
             url15 ? fetch(url15, fetchOptions) : Promise.resolve(null),
             url16 ? fetch(url16, fetchOptions) : Promise.resolve(null),
             url17 ? fetch(url17, fetchOptions) : Promise.resolve(null),
-            url18 ? fetch(url18, fetchOptions) : Promise.resolve(null)
+            url18 ? fetch(url18, fetchOptions) : Promise.resolve(null),
+            url19 ? fetch(url19, fetchOptions) : Promise.resolve(null),
+            url20 ? fetch(url20, fetchOptions) : Promise.resolve(null)
         ];
 
         const responses = await Promise.all(responsePromises);
@@ -522,7 +547,9 @@ async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9
             data15: data[14],
             data16: data[15],
             data17: data[16],
-            data18: data[17]
+            data18: data[17],
+            data19: data[18],
+            data20: data[19]
         };
     } catch (error) {
         console.error('Error fetching the URLs:', error.message);
@@ -544,7 +571,9 @@ async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9
             data15: null,
             data16: null,
             data17: null,
-            data18: null
+            data18: null,
+            data19: null,
+            data20: null
         }; // return null data if any error occurs
     }
 }
