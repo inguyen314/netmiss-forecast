@@ -1200,31 +1200,34 @@ function processAllData(data) {
 
                 const isForecastBasedUponLd25MPTw = sumTodayHermannFlowPlusLd25TwFlowDivideOneThousand > 300;
 
+                // TODO: Day1 is different between excel and email, check again.
+                // TODO: Only account for isForecastBasedUponLd25MPTw
+                // TODO: Have to bubble up Grafton Gage link Birds Point to Illinois River can use to interpolate
+
                 // console.log("data11: ", data11);
-                console.log("data20: ", data20);
-                console.log("yesterdayUpstream6AMStageRevValue: ", yesterdayUpstream6AMStageRevValue);
-                console.log("yesterday6AMStageRevValue: ", yesterday6AMStageRevValue);
-                console.log("yesterdayDownstream6AMStageRevValue: ", yesterdayDownstream6AMStageRevValue);
-                console.log("todayUpstreamNetmissValue: ", todayUpstreamNetmissValue);
-                console.log("todayDownstreamNetmissStageValue: ", todayDownstreamNetmissStageValue);
-                // console.log("convertedSpecialNetmissFlowValuesToCst: ", convertedSpecialNetmissFlowValuesToCst);
-                console.log("yesterdaySpecialNetmissFlowValue: ", yesterdaySpecialNetmissFlowValue);
-                console.log("todaySpecialNetmissFlowValue: ", todaySpecialNetmissFlowValue);
-                console.log("todayUpstreamNetmiss: ", todayUpstreamNetmiss);
+                // console.log("data20: ", data20);
+                // console.log("yesterdayUpstream6AMStageRevValue: ", yesterdayUpstream6AMStageRevValue);
+                // console.log("yesterday6AMStageRevValue: ", yesterday6AMStageRevValue);
+                // console.log("yesterdayDownstream6AMStageRevValue: ", yesterdayDownstream6AMStageRevValue);
+                // console.log("todayUpstreamNetmissValue: ", todayUpstreamNetmissValue);
+                // console.log("todayDownstreamNetmissStageValue: ", todayDownstreamNetmissStageValue);
+                // // console.log("convertedSpecialNetmissFlowValuesToCst: ", convertedSpecialNetmissFlowValuesToCst);
+                // console.log("yesterdaySpecialNetmissFlowValue: ", yesterdaySpecialNetmissFlowValue);
+                // console.log("todaySpecialNetmissFlowValue: ", todaySpecialNetmissFlowValue);
+                // console.log("todayUpstreamNetmiss: ", todayUpstreamNetmiss);
+                // console.log("convertedSpecialNetmissGage2FlowValuesToCst: ", convertedSpecialNetmissGage2FlowValuesToCst);
+                // console.log("yesterdaySpecialGage2NetmissFlowValue: ", yesterdaySpecialGage2NetmissFlowValue);
+                // console.log("todaySpecialGage2NetmissFlowValue: ", todaySpecialGage2NetmissFlowValue);
+                // // console.log("ratingTableCoe: ", ratingTableCoe);
+                // // console.log("ratingTableCoeUpstream: ", ratingTableCoeUpstream);
+                // // console.log("ratingTableCoeDownstream: ", ratingTableCoeDownstream);
+                // console.log("todayCorrespondingUpstreamNetmissFlowValue: ", todayCorrespondingUpstreamNetmissFlowValue);
+                // console.log("todayCorrespondingDownstreamNetmissFlowValue: ", todayCorrespondingDownstreamNetmissFlowValue);
+                // console.log("sumTodayHermannFlowPlusLd25TwFlow: ", sumTodayHermannFlowPlusLd25TwFlow);
+                // console.log("sumTodayHermannFlowPlusLd25TwFlowDivideOneThousand: ", sumTodayHermannFlowPlusLd25TwFlowDivideOneThousand);
+                // console.log("isForecastBasedUponLd25MPTw: ", isForecastBasedUponLd25MPTw);
 
-                console.log("convertedSpecialNetmissGage2FlowValuesToCst: ", convertedSpecialNetmissGage2FlowValuesToCst);
-                console.log("yesterdaySpecialGage2NetmissFlowValue: ", yesterdaySpecialGage2NetmissFlowValue);
-                console.log("todaySpecialGage2NetmissFlowValue: ", todaySpecialGage2NetmissFlowValue);
-                // console.log("ratingTableCoe: ", ratingTableCoe);
-                // console.log("ratingTableCoeUpstream: ", ratingTableCoeUpstream);
-                // console.log("ratingTableCoeDownstream: ", ratingTableCoeDownstream);
-                console.log("todayCorrespondingUpstreamNetmissFlowValue: ", todayCorrespondingUpstreamNetmissFlowValue);
-                console.log("todayCorrespondingDownstreamNetmissFlowValue: ", todayCorrespondingDownstreamNetmissFlowValue);
-                console.log("sumTodayHermannFlowPlusLd25TwFlow: ", sumTodayHermannFlowPlusLd25TwFlow);
-                console.log("sumTodayHermannFlowPlusLd25TwFlowDivideOneThousand: ", sumTodayHermannFlowPlusLd25TwFlowDivideOneThousand);
-                console.log("isForecastBasedUponLd25MPTw: ", isForecastBasedUponLd25MPTw);
-
-                // Open River or Regulated Pool Calculations
+                // Open River or Regulated Pool Calculations or Ld25 MelPrice
                 let total = null;
                 if (isForecastBasedUponLd25MPTw) {
                     total = yesterday6AMStageRevValue + (((todayUpstreamNetmiss - yesterdayUpstream6AMStageRevValue) + (todayDownstreamNetmissStageValue - yesterdayDownstream6AMStageRevValue))/2);
@@ -1233,6 +1236,47 @@ function processAllData(data) {
                 }
                 
                 day1 = "<div title='" + "--" + "'>" + (Math.round(total*100)/100).toFixed(1) + "</div>";
+            } else if (location_id === "Hardin-Illinois") { 
+                console.log("location_id: ", location_id);
+                // get upstream 
+
+                // get current gage
+                const yesterdayCurrentGage6AMStageRevValue = latest6AMValue.value;
+                console.log("yesterdayCurrentGage6AMStageRevValue: ", yesterdayCurrentGage6AMStageRevValue);
+                const yesterdayCurrentGage6AMStageRevValuePlusGageZero = parseFloat(yesterdayCurrentGage6AMStageRevValue) + 400;
+                console.log("yesterdayCurrentGage6AMStageRevValuePlusGageZero: ", yesterdayCurrentGage6AMStageRevValuePlusGageZero);
+                // get downstream
+                const yesterdayDownstream6AMStageRevValue = ((getLatest6AMValue(data9)).latest6AMValue).value;
+                console.log("yesterdayDownstream6AMStageRevValue: ", yesterdayDownstream6AMStageRevValue);
+                const yesterdayDownstream6AMStageRevValuePlusGageZero = parseFloat(yesterdayDownstream6AMStageRevValue) + 403.79;
+                console.log("yesterdayDownstream6AMStageRevValuePlusGageZero: ", yesterdayDownstream6AMStageRevValuePlusGageZero);
+                // get special gage rating
+                const convertedSpecialNetmissGage1FlowValuesToCst = convertUTCtoCentralTime(data18);
+                const yesterdaySpecialGage1NetmissFlowValue = convertedSpecialNetmissGage1FlowValuesToCst.values[0][1];
+                console.log("yesterdaySpecialGage1NetmissFlowValue: ", yesterdaySpecialGage1NetmissFlowValue);
+
+                // get backwater rating Hardin
+                const stage = yesterdayDownstream6AMStageRevValuePlusGageZero;
+                const flowRate = yesterdaySpecialGage1NetmissFlowValue;
+                
+                // Call the function and log the result
+                let deltaYesterday6AMStageRev = null;
+
+                readJSON(stage, flowRate).then(value => {
+                    if (value !== null) {
+                        console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage}: ${value}`);
+                        deltaYesterday6AMStageRev = yesterdayCurrentGage6AMStageRevValuePlusGageZero - value;
+
+                        // Now you can use deltaYesterday6AMStageRev here or pass it to another function
+                        useDelta(deltaYesterday6AMStageRev);
+                    } else {
+                        console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
+                    }
+                });
+                // Function to use deltaYesterday6AMStageRev outside readJSON
+                function useDelta(delta) {
+                    console.log("Delta outside readJSON: ", delta);
+                }
             } else {
                 if (convertedData !== null) {
                     day1 = "<div title='" + convertedData.values[0] + "'>" +

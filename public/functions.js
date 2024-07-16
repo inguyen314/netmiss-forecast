@@ -351,3 +351,72 @@ function findDepByInd(indValue, table) {
 
     return interpolatedDep;
 }
+
+// Function to fetch and read JSON data with parameters
+async function readJSON(stage, flowRate) {
+    try {
+        // Fetch the JSON file
+        const response = await fetch('json/backwaterRatingHardin.json');
+        
+        // Check if the fetch was successful
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        // Parse the JSON data
+        const data = await response.json();
+
+        // Interpolation function
+        function interpolate(x, x0, y0, x1, y1) {
+            return y0 + (y1 - y0) * (x - x0) / (x1 - x0);
+        }
+
+        // Convert stage and flowRate to numbers
+        stage = parseFloat(stage);
+        flowRate = parseFloat(flowRate);
+
+        // Get flow rate keys and sort them
+        const flowRates = Object.keys(data).map(Number).sort((a, b) => a - b);
+        
+        // Find surrounding flow rate values
+        let flowRateLow = null, flowRateHigh = null;
+        for (let i = 0; i < flowRates.length - 1; i++) {
+            if (flowRate >= flowRates[i] && flowRate <= flowRates[i + 1]) {
+                flowRateLow = flowRates[i];
+                flowRateHigh = flowRates[i + 1];
+                break;
+            }
+        }
+
+        // If exact flowRate match is found
+        if (flowRateLow === flowRateHigh) {
+            return data[flowRateLow][stage];
+        }
+
+        // Get stage keys and sort them
+        const stages = Object.keys(data[flowRates[0]]).map(Number).sort((a, b) => a - b);
+
+        // Find surrounding stage values
+        let stageLow = null, stageHigh = null;
+        for (let i = 0; i < stages.length - 1; i++) {
+            if (stage >= stages[i] && stage <= stages[i + 1]) {
+                stageLow = stages[i];
+                stageHigh = stages[i + 1];
+                break;
+            }
+        }
+
+        // Interpolate for the given flowRate and stage
+        if (flowRateLow !== null && flowRateHigh !== null && stageLow !== null && stageHigh !== null) {
+            const y0 = interpolate(stage, stageLow, parseFloat(data[flowRateLow][stageLow]), stageHigh, parseFloat(data[flowRateLow][stageHigh]));
+            const y1 = interpolate(stage, stageLow, parseFloat(data[flowRateHigh][stageLow]), stageHigh, parseFloat(data[flowRateHigh][stageHigh]));
+            return interpolate(flowRate, flowRateLow, y0, flowRateHigh, y1);
+        }
+
+        // No data found for the given stage and flowRate
+        return null;
+    } catch (error) {
+        console.error('Error fetching or parsing JSON:', error);
+        return null;
+    }
+}
