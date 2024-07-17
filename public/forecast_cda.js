@@ -1,6 +1,9 @@
 let ForecastValues = {
 };
 
+let GraftonForecast = {
+};
+
 const loadingIndicator = document.getElementById('loading_forecast');
 const tableContainer = document.getElementById('table_container_forecast');
 
@@ -411,7 +414,8 @@ function processAllData(data) {
         data17,
         data18,
         data19,
-        data20
+        data20,
+        totalGraftonForecastDay1
     }) => {
         // Ensure row exists and is a valid DOM element
         if (!row || !(row instanceof HTMLElement)) {
@@ -420,6 +424,11 @@ function processAllData(data) {
         }
 
         // console.log("data: ", data);
+        // console.log("BirdsPointForecastValue: ", BirdsPointForecastValue);
+        // console.log("BirdsPointForecastValue for Birds Point-Mississippi: ", BirdsPointForecastValue["Birds Point-Mississippi"]);
+
+        // console.log("totalGraftonForecastDay1: ", totalGraftonForecastDay1);
+        // console.log("totalGraftonForecastDay1 for Grafton: ", totalGraftonForecastDay1["Grafton-Mississippi"]);
 
         // Starting Processing All Gages
         if (isNetmissForecastArrayLengthGreaterThanSeven === true || isRvfArrayLengthGreaterThanSeven === true || isCairoRvfForecastValuesGreaterThanSeven === true) {
@@ -913,6 +922,7 @@ function processAllData(data) {
                 // console.log("riverMile = ", riverMile);
                 // console.log("riverMileUpstream = ", riverMileUpstream);
                 // console.log("riverMileDownstream = ", riverMileDownstream);
+                // console.log("ForecastValues at Birds Point-Mississippi: ", ForecastValues["Birds Point-Mississippi"][0].value);
 
                 let total = null;
                 total = yesterday6AMStageRevValue + (((((todayUpstreamNetmiss - yesterdayUpstream6AMStageRevValue) - (todayDownstreamNetmiss - yesterdayDownstream6AMStageRevValue)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstream6AMStageRevValue));
@@ -1174,31 +1184,31 @@ function processAllData(data) {
                 day1 = "<div title='" + "--" + "'>" + total.toFixed(1) + "</div>";
             } else if (location_id === "Grafton-Mississippi") {
                 // Get today and yesterday values
-                const yesterday6AMStageRevValue = latest6AMValue.value;
-                const yesterdayUpstream6AMStageRevValue = ((getLatest6AMValue(data7)).latest6AMValue).value;
-                const yesterdayDownstream6AMStageRevValue = ((getLatest6AMValue(data9)).latest6AMValue).value;
-                const todayUpstreamNetmissValue = parseFloat(convertedNetmissForecastingPointUpstreamData.values[0][1]);
-                const todayDownstreamNetmissStageValue = data12.values[0][1];
-                const convertedSpecialNetmissFlowValuesToCst = convertUTCtoCentralTime(data18);
-                const yesterdaySpecialNetmissFlowValue = (convertedSpecialNetmissFlowValuesToCst.values[0][1]);
-                const todaySpecialNetmissFlowValue = (convertedSpecialNetmissFlowValuesToCst.values[1][1]);
-                const todayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[0][1]); 
+                // const yesterday6AMStageRevValue = latest6AMValue.value;
+                // const yesterdayUpstream6AMStageRevValue = ((getLatest6AMValue(data7)).latest6AMValue).value;
+                // const yesterdayDownstream6AMStageRevValue = ((getLatest6AMValue(data9)).latest6AMValue).value;
+                // const todayUpstreamNetmissValue = parseFloat(convertedNetmissForecastingPointUpstreamData.values[0][1]);
+                // const todayDownstreamNetmissStageValue = data12.values[0][1];
+                // const convertedSpecialNetmissFlowValuesToCst = convertUTCtoCentralTime(data18);
+                // const yesterdaySpecialNetmissFlowValue = (convertedSpecialNetmissFlowValuesToCst.values[0][1]);
+                // const todaySpecialNetmissFlowValue = (convertedSpecialNetmissFlowValuesToCst.values[1][1]);
+                // const todayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[0][1]); 
 
-                const convertedSpecialNetmissGage2FlowValuesToCst = convertUTCtoCentralTime(data20);
-                const yesterdaySpecialGage2NetmissFlowValue = convertedSpecialNetmissGage2FlowValuesToCst.values[0][1];
-                const todaySpecialGage2NetmissFlowValue = convertedSpecialNetmissGage2FlowValuesToCst.values[1][1];
-                // Get rating tables
-                const ratingTableCoe = data16["simple-rating"]["rating-points"].point;
-                const ratingTableCoeUpstream = data17["simple-rating"][0]["rating-points"].point;
-                const ratingTableCoeDownstream = data19["simple-rating"]["rating-points"].point;
-                // Lookup todayCorrespondingUpstreamFlowValue to Louisiana-Mississippi Rating COE Table 
-                const todayCorrespondingUpstreamNetmissFlowValue = findDepByInd(todayUpstreamNetmiss, ratingTableCoeUpstream);
-                const todayCorrespondingDownstreamNetmissFlowValue = findDepByInd(todayDownstreamNetmissStageValue, ratingTableCoeDownstream);
+                // const convertedSpecialNetmissGage2FlowValuesToCst = convertUTCtoCentralTime(data20);
+                // const yesterdaySpecialGage2NetmissFlowValue = convertedSpecialNetmissGage2FlowValuesToCst.values[0][1];
+                // const todaySpecialGage2NetmissFlowValue = convertedSpecialNetmissGage2FlowValuesToCst.values[1][1];
+                // // Get rating tables
+                // const ratingTableCoe = data16["simple-rating"]["rating-points"].point;
+                // const ratingTableCoeUpstream = data17["simple-rating"][0]["rating-points"].point;
+                // const ratingTableCoeDownstream = data19["simple-rating"]["rating-points"].point;
+                // // Lookup todayCorrespondingUpstreamFlowValue to Louisiana-Mississippi Rating COE Table 
+                // const todayCorrespondingUpstreamNetmissFlowValue = findDepByInd(todayUpstreamNetmiss, ratingTableCoeUpstream);
+                // const todayCorrespondingDownstreamNetmissFlowValue = findDepByInd(todayDownstreamNetmissStageValue, ratingTableCoeDownstream);
 
-                const sumTodayHermannFlowPlusLd25TwFlow = parseFloat(todaySpecialGage2NetmissFlowValue) + parseFloat(todayCorrespondingUpstreamNetmissFlowValue);
-                const sumTodayHermannFlowPlusLd25TwFlowDivideOneThousand = sumTodayHermannFlowPlusLd25TwFlow/1000;
+                // const sumTodayHermannFlowPlusLd25TwFlow = parseFloat(todaySpecialGage2NetmissFlowValue) + parseFloat(todayCorrespondingUpstreamNetmissFlowValue);
+                // const sumTodayHermannFlowPlusLd25TwFlowDivideOneThousand = sumTodayHermannFlowPlusLd25TwFlow/1000;
 
-                const isForecastBasedUponLd25MPTw = sumTodayHermannFlowPlusLd25TwFlowDivideOneThousand > 300;
+                // const isForecastBasedUponLd25MPTw = sumTodayHermannFlowPlusLd25TwFlowDivideOneThousand > 300;
 
                 // TODO: Day1 is different between excel and email, check again.
                 // TODO: Only account for isForecastBasedUponLd25MPTw
@@ -1228,32 +1238,32 @@ function processAllData(data) {
                 // console.log("isForecastBasedUponLd25MPTw: ", isForecastBasedUponLd25MPTw);
 
                 // Open River or Regulated Pool Calculations or Ld25 MelPrice
-                let total = null;
-                if (isForecastBasedUponLd25MPTw) {
-                    total = yesterday6AMStageRevValue + (((todayUpstreamNetmiss - yesterdayUpstream6AMStageRevValue) + (todayDownstreamNetmissStageValue - yesterdayDownstream6AMStageRevValue))/2);
-                } else {
-                    total = "--";
-                }
+                // let total = null;
+                // if (isForecastBasedUponLd25MPTw) {
+                //     total = yesterday6AMStageRevValue + (((todayUpstreamNetmiss - yesterdayUpstream6AMStageRevValue) + (todayDownstreamNetmissStageValue - yesterdayDownstream6AMStageRevValue))/2);
+                // } else {
+                //     total = "--";
+                // }
                 
-                day1 = "<div title='" + "--" + "'>" + (Math.round(total*100)/100).toFixed(1) + "</div>";
+                day1 = "<div title='" + "--" + "'>" + (Math.round(GraftonForecast["Grafton-Mississippi"][0].value*100)/100).toFixed(1) + "</div>";
             } else if (location_id === "Hardin-Illinois") { 
-                console.log("location_id: ", location_id);
+                // console.log("location_id: ", location_id);
                 // get upstream 
 
                 // get current gage
                 const yesterdayCurrentGage6AMStageRevValue = latest6AMValue.value;
-                console.log("yesterdayCurrentGage6AMStageRevValue: ", yesterdayCurrentGage6AMStageRevValue);
+                // console.log("yesterdayCurrentGage6AMStageRevValue: ", yesterdayCurrentGage6AMStageRevValue);
                 const yesterdayCurrentGage6AMStageRevValuePlusGageZero = parseFloat(yesterdayCurrentGage6AMStageRevValue) + 400;
-                console.log("yesterdayCurrentGage6AMStageRevValuePlusGageZero: ", yesterdayCurrentGage6AMStageRevValuePlusGageZero);
+                // console.log("yesterdayCurrentGage6AMStageRevValuePlusGageZero: ", yesterdayCurrentGage6AMStageRevValuePlusGageZero);
                 // get downstream
                 const yesterdayDownstream6AMStageRevValue = ((getLatest6AMValue(data9)).latest6AMValue).value;
-                console.log("yesterdayDownstream6AMStageRevValue: ", yesterdayDownstream6AMStageRevValue);
+                // console.log("yesterdayDownstream6AMStageRevValue: ", yesterdayDownstream6AMStageRevValue);
                 const yesterdayDownstream6AMStageRevValuePlusGageZero = parseFloat(yesterdayDownstream6AMStageRevValue) + 403.79;
-                console.log("yesterdayDownstream6AMStageRevValuePlusGageZero: ", yesterdayDownstream6AMStageRevValuePlusGageZero);
+                // console.log("yesterdayDownstream6AMStageRevValuePlusGageZero: ", yesterdayDownstream6AMStageRevValuePlusGageZero);
                 // get special gage rating
                 const convertedSpecialNetmissGage1FlowValuesToCst = convertUTCtoCentralTime(data18);
                 const yesterdaySpecialGage1NetmissFlowValue = convertedSpecialNetmissGage1FlowValuesToCst.values[0][1];
-                console.log("yesterdaySpecialGage1NetmissFlowValue: ", yesterdaySpecialGage1NetmissFlowValue);
+                // console.log("yesterdaySpecialGage1NetmissFlowValue: ", yesterdaySpecialGage1NetmissFlowValue);
 
                 // get backwater rating Hardin
                 const stage = yesterdayDownstream6AMStageRevValuePlusGageZero;
@@ -1264,19 +1274,22 @@ function processAllData(data) {
 
                 readJSON(stage, flowRate).then(value => {
                     if (value !== null) {
-                        console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage}: ${value}`);
+                        // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage}: ${value}`);
                         deltaYesterday6AMStageRev = yesterdayCurrentGage6AMStageRevValuePlusGageZero - value;
 
                         // Now you can use deltaYesterday6AMStageRev here or pass it to another function
                         useDelta(deltaYesterday6AMStageRev);
                     } else {
-                        console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
+                        // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
                     }
                 });
                 // Function to use deltaYesterday6AMStageRev outside readJSON
                 function useDelta(delta) {
-                    console.log("Delta outside readJSON: ", delta);
+                    // console.log("Delta outside readJSON: ", delta);
                 }
+                // console.log("totalGraftonForecastDay1 @ Hardin-Illinois: ", totalGraftonForecastDay1);
+                // console.log("totalGraftonForecastDay1 @ Hardin-Illinois: ", totalGraftonForecastDay1["Grafton-Mississippi"][0].value);
+                console.log("grafton data at hardin: ", GraftonForecast["Grafton-Mississippi"]);
             } else {
                 if (convertedData !== null) {
                     day1 = "<div title='" + convertedData.values[0] + "'>" +

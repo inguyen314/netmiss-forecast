@@ -376,7 +376,7 @@ async function fetchData(location_id
             const convertedNetmissForecastingPointDownstreamData = convertUTCtoCentralTime(data12);
             // console.log("convertedNetmissForecastingPointDownstreamData = ", convertedNetmissForecastingPointDownstreamData);
 
-            // Process data10 - RVF-FF 7am levels
+            // Process data10 - Cairo-Ohio RVF-FF 7am levels
             let result10 = null;
             let latest7AMRvfValue = null;
             let isRvfArrayLengthGreaterThanSeven = null;
@@ -394,11 +394,14 @@ async function fetchData(location_id
 
             // Process data14 - Birds Point-Mississippi forecast based on Cairo-Ohio into an array for 7 days
             let result14 = null;
+            let yesterday6AMStageRevValue = null;
             let cairoRvfForecastValues = null;
             let isCairoRvfForecastValuesGreaterThanSeven = null;
             let yesterdayDownstream6AMStageRevValue = null;
             let BirdsPointForecastValue = [];
             ForecastValues[location_id] = [];
+            let initialValue = null;
+            let initialValueLocationId = null;
             if (data14 !== null && data9 !== null) {
                 // get birds point rvf forecast values for processing and check number length
                 result14 = get7AMValuesForWeek(data14, nws_day1_date);
@@ -407,18 +410,18 @@ async function fetchData(location_id
                 // console.log("cairoRvfForecastValues = ", cairoRvfForecastValues);
                 // console.log("isCairoRvfForecastValuesGreaterThanSeven = ", isCairoRvfForecastValuesGreaterThanSeven);
                 // get today and yesterday values for processing
-                const yesterday6AMStageRevValue = ((getLatest6AMValue(data2)).latest6AMValue).value;
+                yesterday6AMStageRevValue = ((getLatest6AMValue(data2)).latest6AMValue).value;
                 // console.log("yesterday6AMStageRevValue = ", yesterday6AMStageRevValue);
                 yesterdayDownstream6AMStageRevValue = ((getLatest6AMValue(data9)).latest6AMValue).value;
                 // console.log("yesterdayDownstream6AMStageRevValue = ", yesterdayDownstream6AMStageRevValue);
 
                 // Calculate the initial value
-                let initialValue = yesterday6AMStageRevValue + (cairoRvfForecastValues[0].value - yesterdayDownstream6AMStageRevValue);
+                initialValue = yesterday6AMStageRevValue + (cairoRvfForecastValues[0].value - yesterdayDownstream6AMStageRevValue);
                 BirdsPointForecastValue.push({ "value": initialValue });
                 // console.log("initialValue = ", initialValue);
 
                 // Calculate the initial value for birds point location
-                let initialValueLocationId = yesterday6AMStageRevValue + (cairoRvfForecastValues[0].value - yesterdayDownstream6AMStageRevValue);
+                initialValueLocationId = yesterday6AMStageRevValue + (cairoRvfForecastValues[0].value - yesterdayDownstream6AMStageRevValue);
                 ForecastValues[location_id].push({ "value": initialValueLocationId });
                 // console.log("initialValueLocationId = ", initialValueLocationId);
 
@@ -438,6 +441,112 @@ async function fetchData(location_id
                 }
                 // console.log("ForecastValues[location_id] = ", ForecastValues[location_id]);
             }
+
+            // Process Grafton-Mississippi Day 1 so Illinois River can use it to interpolate
+            // TODO: Make this like Birds Points but this is by day and make sure data available here before Hardin-Illinois. Based on the loop, Hardin goes first.
+            let totalGraftonForecastDay1 = [];
+            GraftonForecast[location_id] = [];
+
+            // today
+            let todayGraftonUpstreamNetmissValue = null;
+            if (data11 !== null && location_id === "Grafton-Mississippi") {
+                todayGraftonUpstreamNetmissValue = parseFloat(convertedNetmissForecastingPointUpstreamData.values[0][1]);
+                console.log("todayGraftonUpstreamNetmissValue: ", todayGraftonUpstreamNetmissValue);
+                // totalGraftonForecastDay1.push({"value": todayGraftonUpstreamNetmissValue});
+                // GraftonForecast[location_id].push({"value": todayGraftonUpstreamNetmissValue});
+            }
+            let todayGraftonDownstreamNetmissStageValue = null;
+            if (data12 !== null && location_id === "Grafton-Mississippi") {
+                todayGraftonDownstreamNetmissStageValue = data12.values[0][1];
+                console.log("todayGraftonDownstreamNetmissStageValue: ", todayGraftonDownstreamNetmissStageValue);
+            }
+            
+            // yesterday
+            let yesterdayGrafton6AMStageRevValue = null;
+            if (data2 !== null && location_id === "Grafton-Mississippi") {
+                yesterdayGrafton6AMStageRevValue = latest6AMValue.value;
+                console.log("yesterdayGrafton6AMStageRevValue: ", yesterdayGrafton6AMStageRevValue);
+            }
+            let yesterdayGraftonUpstream6AMStageRevValue = null;
+            if (data7 !== null && location_id === "Grafton-Mississippi") {
+                yesterdayGraftonUpstream6AMStageRevValue = ((getLatest6AMValue(data7)).latest6AMValue).value;
+                console.log("yesterdayGraftonUpstream6AMStageRevValue: ", yesterdayGraftonUpstream6AMStageRevValue);
+            }
+            let yesterdayGraftonDownstream6AMStageRevValue = null;
+            if (data9 !== null && location_id === "Grafton-Mississippi") {
+                yesterdayGraftonDownstream6AMStageRevValue = ((getLatest6AMValue(data9)).latest6AMValue).value;
+                console.log("yesterdayGraftonDownstream6AMStageRevValue: ", yesterdayGraftonDownstream6AMStageRevValue);
+            }
+            
+            // special gages
+            let yesterdayGraftonSpecialGage2NetmissFlowValue = null;
+            let todayGraftonSpecialGage2NetmissFlowValue = null;
+            if (data18 !== null && location_id === "Grafton-Mississippi") {
+                const convertedGraftonSpecialNetmissGage2FlowValuesToCst = convertUTCtoCentralTime(data20);
+                yesterdayGraftonSpecialGage2NetmissFlowValue = convertedGraftonSpecialNetmissGage2FlowValuesToCst.values[0][1];
+                todayGraftonSpecialGage2NetmissFlowValue = convertedGraftonSpecialNetmissGage2FlowValuesToCst.values[1][1];
+                console.log("yesterdayGraftonSpecialGage2NetmissFlowValue: ", yesterdayGraftonSpecialGage2NetmissFlowValue);
+                console.log("todayGraftonSpecialGage2NetmissFlowValue: ", todayGraftonSpecialGage2NetmissFlowValue);
+            }
+
+            // special gages
+            if (data20 !== null && location_id === "Grafton-Mississippi") {
+                const convertedGraftonSpecialNetmissFlowValuesToCst = convertUTCtoCentralTime(data18);
+                const yesterdayGraftonSpecialNetmissFlowValue = (convertedGraftonSpecialNetmissFlowValuesToCst.values[0][1]);
+                const todayGraftonSpecialNetmissFlowValue = (convertedGraftonSpecialNetmissFlowValuesToCst.values[1][1]);
+                console.log("yesterdayGraftonSpecialNetmissFlowValue: ", yesterdayGraftonSpecialNetmissFlowValue);
+                console.log("todayGraftonSpecialNetmissFlowValue: ", todayGraftonSpecialNetmissFlowValue);
+            }
+
+            // Get rating tables
+            let ratingGraftonTableCoe = null; 
+            let ratingGraftonTableCoeUpstream = null; 
+            let ratingGraftonTableCoeDownstream = null; 
+            let todayGraftonCorrespondingUpstreamNetmissFlowValue = null; 
+            let todayGraftonCorrespondingDownstreamNetmissFlowValue = null; 
+            let sumGraftonTodayHermannFlowPlusLd25TwFlow = null;
+            let sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand = null;
+            if (data16 !== null && data17 !== null && data19 !== null && location_id === "Grafton-Mississippi") {
+                const ratingGraftonTableCoe = data16["simple-rating"]["rating-points"].point;
+                const ratingGraftonTableCoeUpstream = data17["simple-rating"][0]["rating-points"].point;
+                const ratingGraftonTableCoeDownstream = data19["simple-rating"]["rating-points"].point;
+                console.log("ratingGraftonTableCoe: ", ratingGraftonTableCoe);
+                console.log("ratingGraftonTableCoeUpstream: ", ratingGraftonTableCoeUpstream);
+                console.log("ratingGraftonTableCoeDownstream: ", ratingGraftonTableCoeDownstream);
+
+                // Lookup todayCorrespondingUpstreamFlowValue to Louisiana-Mississippi Rating COE Table
+                todayGraftonCorrespondingUpstreamNetmissFlowValue = findDepByInd(todayGraftonUpstreamNetmissValue, ratingGraftonTableCoeUpstream);
+                todayGraftonCorrespondingDownstreamNetmissFlowValue = findDepByInd(todayGraftonDownstreamNetmissStageValue, ratingGraftonTableCoeDownstream);
+                console.log("todayGraftonCorrespondingUpstreamNetmissFlowValue: ", todayGraftonCorrespondingUpstreamNetmissFlowValue);
+                console.log("todayGraftonCorrespondingDownstreamNetmissFlowValue: ", todayGraftonCorrespondingDownstreamNetmissFlowValue);
+
+                // sum
+                sumGraftonTodayHermannFlowPlusLd25TwFlow = parseFloat(todayGraftonSpecialGage2NetmissFlowValue) + parseFloat(todayGraftonCorrespondingUpstreamNetmissFlowValue);
+                sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand = sumGraftonTodayHermannFlowPlusLd25TwFlow/1000;
+                console.log("sumGraftonTodayHermannFlowPlusLd25TwFlow: ", sumGraftonTodayHermannFlowPlusLd25TwFlow);
+                console.log("sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand: ", sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand);
+            }
+
+            let totalGrafton = null;
+            if (location_id === "Grafton-Mississippi") {
+                const isGraftonForecastBasedUponLd25MPTw = sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand > 300;
+                console.log("isGraftonForecastBasedUponLd25MPTw: ", isGraftonForecastBasedUponLd25MPTw);
+
+                // Open River or Regulated Pool Calculations or Ld25 MelPrice
+                let totalGrafton = null;
+                if (isGraftonForecastBasedUponLd25MPTw) {
+                    totalGrafton = yesterdayGrafton6AMStageRevValue + (((todayGraftonUpstreamNetmissValue - yesterdayGraftonUpstream6AMStageRevValue) + (todayGraftonDownstreamNetmissStageValue - yesterdayGraftonDownstream6AMStageRevValue))/2);
+                } else {
+                    totalGrafton = "--";
+                }
+                console.log("totalGrafton: ", totalGrafton);
+                // push
+                totalGraftonForecastDay1.push({"value": totalGrafton});
+                GraftonForecast[location_id].push({"value": totalGrafton});
+            }
+
+            
+
 
             return { 
                 location_id,
@@ -477,7 +586,8 @@ async function fetchData(location_id
                 data17,
                 data18,
                 data19,
-                data20
+                data20,
+                totalGraftonForecastDay1
             }
 
         })

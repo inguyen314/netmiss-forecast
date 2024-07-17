@@ -18,11 +18,19 @@ function checkForDuplicates(data) {
 
 // Function to get lastest 6am value for stage-rev
 function getLatest6AMValue(data) {
+    // Check if data or data.values is null or undefined
+    if (!data || !Array.isArray(data.values)) {
+        return {
+            latest6AMValue: null,
+            tsid: null
+        };
+    }
+
     // Extract the values array from the data
     const values = data.values;
 
     // Extract the tsid from the data
-    const tsid = data.name;
+    const tsid = data.name || null;
 
     // Initialize a variable to store the latest 6 AM value
     let latest6AMValue = null;
@@ -35,10 +43,27 @@ function getLatest6AMValue(data) {
 
     // Iterate through the values array
     for (let i = 0; i < values.length; i++) {
-        const [timestamp, value, qualityCode] = values[i];
+        const entry = values[i];
+
+        // Check if the entry is null or undefined or doesn't have enough elements
+        if (!entry || entry.length < 3) {
+            continue;
+        }
+
+        const [timestamp, value, qualityCode] = entry;
+
+        // Check if the timestamp is valid
+        if (!timestamp) {
+            continue;
+        }
 
         // Convert the timestamp to a Date object in UTC
         const date = new Date(timestamp);
+
+        // Check if the date is valid
+        if (isNaN(date.getTime())) {
+            continue;
+        }
 
         // Convert the UTC date to Central Time
         const centralDate = new Date(date.toLocaleString('en-US', { timeZone: centralTimeZone }));
