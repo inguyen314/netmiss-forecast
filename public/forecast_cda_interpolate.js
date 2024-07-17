@@ -4,8 +4,8 @@ let ForecastValues = {
 let GraftonForecast = {
 };
 
-const loadingIndicator = document.getElementById('loading_forecast');
-const tableContainer = document.getElementById('table_container_forecast');
+const loadingIndicator = document.getElementById('loading_forecast_interpolate');
+const tableContainer = document.getElementById('table_container_forecast_interpolate');
 
 document.addEventListener('DOMContentLoaded', function () {
     // Display the loading_alarm_mvs indicator
@@ -1212,6 +1212,7 @@ function processAllData(data) {
 
                 // TODO: Day1 is different between excel and email, check again.
                 // TODO: Only account for isForecastBasedUponLd25MPTw
+                // TODO: Have to bubble up Grafton Gage link Birds Point to Illinois River can use to interpolate
 
                 // console.log("data11: ", data11);
                 // console.log("data20: ", data20);
@@ -1246,39 +1247,34 @@ function processAllData(data) {
                 
                 day1 = "<div title='" + "--" + "'>" + (Math.round(GraftonForecast["Grafton-Mississippi"][0].value*100)/100).toFixed(1) + "</div>";
             } else if (location_id === "Hardin-Illinois") { 
-                console.log("location_id: ", location_id);
-                // YESYERDAY
+                // console.log("location_id: ", location_id);
+                // get upstream 
+
+                // get current gage
                 const yesterdayCurrentGage6AMStageRevValue = latest6AMValue.value;
-                console.log("yesterdayCurrentGage6AMStageRevValue: ", yesterdayCurrentGage6AMStageRevValue);
+                // console.log("yesterdayCurrentGage6AMStageRevValue: ", yesterdayCurrentGage6AMStageRevValue);
                 const yesterdayCurrentGage6AMStageRevValuePlusGageZero = parseFloat(yesterdayCurrentGage6AMStageRevValue) + 400;
-                console.log("yesterdayCurrentGage6AMStageRevValuePlusGageZero: ", yesterdayCurrentGage6AMStageRevValuePlusGageZero);
+                // console.log("yesterdayCurrentGage6AMStageRevValuePlusGageZero: ", yesterdayCurrentGage6AMStageRevValuePlusGageZero);
+                // get downstream
                 const yesterdayDownstream6AMStageRevValue = ((getLatest6AMValue(data9)).latest6AMValue).value;
-                console.log("yesterdayDownstream6AMStageRevValue: ", yesterdayDownstream6AMStageRevValue);
+                // console.log("yesterdayDownstream6AMStageRevValue: ", yesterdayDownstream6AMStageRevValue);
                 const yesterdayDownstream6AMStageRevValuePlusGageZero = parseFloat(yesterdayDownstream6AMStageRevValue) + 403.79;
-                console.log("yesterdayDownstream6AMStageRevValuePlusGageZero: ", yesterdayDownstream6AMStageRevValuePlusGageZero);
-
-                // SPECIAL RATING
+                // console.log("yesterdayDownstream6AMStageRevValuePlusGageZero: ", yesterdayDownstream6AMStageRevValuePlusGageZero);
+                // get special gage rating
                 const convertedSpecialNetmissGage1FlowValuesToCst = convertUTCtoCentralTime(data18);
-                const todaySpecialGage1NetmissFlowValue = convertedSpecialNetmissGage1FlowValuesToCst.values[1][1];
-                console.log("todaySpecialGage1NetmissFlowValue: ", todaySpecialGage1NetmissFlowValue);
                 const yesterdaySpecialGage1NetmissFlowValue = convertedSpecialNetmissGage1FlowValuesToCst.values[0][1];
-                console.log("yesterdaySpecialGage1NetmissFlowValue: ", yesterdaySpecialGage1NetmissFlowValue);
+                // console.log("yesterdaySpecialGage1NetmissFlowValue: ", yesterdaySpecialGage1NetmissFlowValue);
 
-                const convertedSpecialNetmissGage2FlowValuesToCst = convertUTCtoCentralTime(data20);
-                const todaySpecialGage2NetmissFlowValue = convertedSpecialNetmissGage2FlowValuesToCst.values[1][1];
-                console.log("todaySpecialGage2NetmissFlowValue: ", todaySpecialGage2NetmissFlowValue);
-                const yesterdaySpecialGage2NetmissFlowValue = convertedSpecialNetmissGage2FlowValuesToCst.values[0][1];
-                console.log("yesterdaySpecialGage2NetmissFlowValue: ", yesterdaySpecialGage2NetmissFlowValue);
-
-                // BACKWATER RATING HARDIN
+                // get backwater rating Hardin
                 const stage = yesterdayDownstream6AMStageRevValuePlusGageZero;
                 const flowRate = yesterdaySpecialGage1NetmissFlowValue;
                 
                 // Call the function and log the result
                 let deltaYesterday6AMStageRev = null;
+
                 readJSON(stage, flowRate).then(value => {
                     if (value !== null) {
-                        console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage}: ${value}`);
+                        // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage}: ${value}`);
                         deltaYesterday6AMStageRev = yesterdayCurrentGage6AMStageRevValuePlusGageZero - value;
 
                         // Now you can use deltaYesterday6AMStageRev here or pass it to another function
@@ -1287,43 +1283,13 @@ function processAllData(data) {
                         // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
                     }
                 });
-
                 // Function to use deltaYesterday6AMStageRev outside readJSON
                 function useDelta(delta) {
-                    console.log("Delta outside readJSON: ", delta);
+                    // console.log("Delta outside readJSON: ", delta);
                 }
-                // TODAY 
-                const todayDownstreamNetmissValuePlusGageZero = parseFloat(GraftonForecast["Grafton-Mississippi"][0].value) + 403.79;
-                // const todayDownstreamNetmissValuePlusGageZero = 23.125 + 403.79; // testing
-                console.log("todayDownstreamNetmissValuePlusGageZero: ", todayDownstreamNetmissValuePlusGageZero);
-
-                let sumTodayNetmissValue = null;
-                let total = null;
-                let day1 = null;
-                readJSON(todayDownstreamNetmissValuePlusGageZero, todaySpecialGage1NetmissFlowValue).then(value => {
-                    if (value !== null) {
-                        console.log(`Interpolated reading for flow rate ${todaySpecialGage1NetmissFlowValue} and stage ${todayDownstreamNetmissValuePlusGageZero}: ${value}`);
-                        sumTodayNetmissValue = deltaYesterday6AMStageRev + value;
-                        console.log("sumTodayNetmissValue in readJSON: ", sumTodayNetmissValue);
-
-                        // Now you can use sumTodayNetmissValue here or pass it to another function
-                        useSum(sumTodayNetmissValue);
-                    } else {
-                        // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
-                    }
-                });
-                console.log("sumTodayNetmissValue: ", sumTodayNetmissValue);
-
-                // Function to use deltaYesterday6AMStageRev outside readJSON
-                function useSum(sum) {
-                    total = parseFloat(sum) - 400;
-                    console.log("total in useSum: ", total);
-                }
-
-                console.log("total: ", total);
-
+                // console.log("totalGraftonForecastDay1 @ Hardin-Illinois: ", totalGraftonForecastDay1);
+                // console.log("totalGraftonForecastDay1 @ Hardin-Illinois: ", totalGraftonForecastDay1["Grafton-Mississippi"][0].value);
                 console.log("grafton data at hardin: ", GraftonForecast["Grafton-Mississippi"]);
-                day1 = "<div title='" + "--" + "'>" + total + "</div>";
             } else {
                 if (convertedData !== null) {
                     day1 = "<div title='" + convertedData.values[0] + "'>" +

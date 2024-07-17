@@ -16,7 +16,7 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Operation Forecast</title>
+        <title>Forecast Interpolate</title>
         <meta name="Description" content="U.S. Army Corps of Engineers St. Louis District Home Page" />
         <link rel="stylesheet" href="../../css/body.css" />
         <link rel="stylesheet" href="stylesheets/style.css" />
@@ -32,45 +32,6 @@
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <!-- Include the Moment.js adapter for Chart.js -->
         <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@1.0.0"></script>
-
-        <style>
-            /* Button Styles */
-            #sendEmailBtn {
-            background-color: darkblue; /* blue */
-            border: none;
-            color: white;
-            padding: 15px 32px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            margin-top: 20px;
-            transition-duration: 0.4s;
-            cursor: pointer;
-            border-radius: 8px;
-            }
-
-            #sendEmailBtn:hover {
-            background-color: darkblue; /* Darker Green */
-            }
-
-            #interpolateGagesButton {
-            background-color: darkblue; /* blue */
-            border: none;
-            color: white;
-            padding: 15px 32px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            margin-top: 20px;
-            transition-duration: 0.4s;
-            cursor: pointer;
-            border-radius: 8px;
-            }
-        </style>
     </head>
     <body>
         <div id="page-container">
@@ -86,19 +47,18 @@
 						<div id="topPane" class="col-md backend-cp-collapsible">
 							<div class="box-usace">
 								<h2 class="box-header-striped">
-									<span class="titleLabel title">7-Day Operational River Forecast</span>
+									<span class="titleLabel title">Forecast Interpolate</span>
 									<span class="rss"></span>
 								</h2>
 								<div class="box-content" style="background-color:white;margin:auto">
 									<div class="content">
-                                        <!-- <span><h3><a href='forecast.html?cda=internal'>Switch to Cloud Internal</a></h3></span>
-                                        <span><h3><a href='forecast.html?cda=public'>Switch to Cloud Public</a></h3></span> -->
                                         <div>
                                             Note - This operational forecast is intended for internal use. The official river forecasting agency of the 
                                             Federal Government is the NWS. The NWS forecast for these locations can be found by clicking the blue hyperlink 
                                             associated with each gage location. If there are any questions, please call the water control office at 1-(800)432-1208 
                                             or (314)331-8342.
                                         </div>
+                                        <!--  -->
 									</div>
 								</div>
 							</div>
@@ -119,54 +79,10 @@
                         }
                     </script>
                     <div id="loading_forecast" style="display: none;"><img src="../../images/loading4.gif" style='height: 50px; width: 50px;' alt="Loading..." /></div>
-                    <div id="table_container_forecast"></div>
+                    <div id="table_container_forecast_interpolate"></div>
                     <script type="text/javascript" src="functions.js"></script>
                     <script type="text/javascript" src="fetch.js"></script>
-                    <script src="forecast_cda.js"></script>	
-
-                    <div style="display: flex; justify-content: center; align-items: center; width: 100%; background-color: darkgray; margin-top: 50px">
-                        <img src="https://mrcc.purdue.edu/files/cliwatch/GIS_plots/prcp_mpe/prcp_mpe_007_tot-0.png" alt="7-day Observed" style="width: 50%; padding-right: 10px;">
-                        <img src="https://www.wpc.ncep.noaa.gov/qpf/p168i.gif?1512662281" alt="7-day QPF" style="width: 50%; padding-left: 10px; border: 1px solid black;">
-                    </div>
-
-                    <button id="sendEmailBtn">Send Internal River Forecast Email</button>
-                    <br>
-                    <button id="interpolateGagesButton">Interpolate Gages</button>
-                    <script>
-                        // JavaScript to add click event listener to the button
-                        document.getElementById("interpolateGagesButton").addEventListener("click", function() {
-                            // Open the desired URL in a new tab
-                            window.open("forecast_interpolate.html", "_blank");
-                        });
-                      </script>
-                    <script>
-                        document.getElementById("sendEmailBtn").addEventListener("click", function() {
-                            sendEmail();
-                        });
-
-                        function sendEmail() {
-                            // Get table HTML
-                            const tableHTML = document.getElementById("table_container_forecast").innerHTML;
-                            // Send table HTML to PHP script using AJAX
-                            const xhr = new XMLHttpRequest();
-                            xhr.open("POST", "send_email.php", true);
-                            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                            xhr.onreadystatechange = function() {
-                                if (xhr.readyState === 4) {
-                                    if (xhr.status === 200) {
-                                        // AJAX request completed successfully
-                                        console.log(xhr.responseText); // Log response from PHP script
-                                        // Display popup alert
-                                        alert('Email sent successfully');
-                                    } else {
-                                        // AJAX request failed
-                                        console.error('Error:', xhr.statusText);
-                                    }
-                                }
-                            };
-                            xhr.send("tableHTML=" + encodeURIComponent(tableHTML));
-                        }
-                    </script>
+                    <script src="forecast_cda_interpolate.js"></script>	
                     <br><br><br><br>
                     <!--APP ENDS-->
                     <div class="page-content">
@@ -183,8 +99,6 @@
                                 <div class="box-content" style="background-color:white;margin:auto">
                                     <div class="content">
                                         <!-- Box Content Here -->
-                                        <p>Please note that after midnight, no data will be available. You will see the message: <strong>"Daily forecasts are updated around noon."</strong>
-                                        <br>To load the data, please run the NetMiss forecast after this time.</p>
                                     </div>
                                 </div>
                             </div>
