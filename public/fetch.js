@@ -443,7 +443,7 @@ async function fetchData(location_id
                 // console.log("ForecastValues[location_id] = ", ForecastValues[location_id]);
             }
 
-            // PROCESS Grafton-Mississippi Day 1 - so Illinois River can use it to interpolate
+            // PROCESS Grafton-Mississippi Day 1 - Illinois River uses this gage to interpolate
             let totalGraftonForecastDay1 = [];
             GraftonForecast[location_id] = [];
 
@@ -536,7 +536,6 @@ async function fetchData(location_id
                 // console.log("isGraftonForecastBasedUponLd25MPTw: ", isGraftonForecastBasedUponLd25MPTw);
 
                 // Open River or Regulated Pool Calculations or Ld25 MelPrice
-                let totalGrafton = null;
                 if (isGraftonForecastBasedUponLd25MPTw) {
                     totalGrafton = yesterdayGraftonStageRevValue + (((todayGraftonUpstreamNetmissValue - yesterdayGraftonUpstreamStageRevValue) + (todayGraftonDownstreamNetmissStageValue - yesterdayGraftonDownstreamStageRevValue))/2);
                 } else {
