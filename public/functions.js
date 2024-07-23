@@ -478,13 +478,13 @@ async function readJSONTable(stage, flowRate, Table) {
         stage = parseFloat(stage);
         flowRate = parseFloat(flowRate);
 
-        console.log("Stage:", stage);
-        console.log("FlowRate:", flowRate);
+        // console.log("Stage:", stage);
+        // console.log("FlowRate:", flowRate);
 
         // Get flow rate keys and sort them
         const flowRates = Object.keys(data).map(Number).sort((a, b) => a - b);
         
-        console.log("FlowRates:", flowRates);
+        // console.log("FlowRates:", flowRates);
 
         // Find surrounding flow rate values
         let flowRateLow = null, flowRateHigh = null;
@@ -496,8 +496,8 @@ async function readJSONTable(stage, flowRate, Table) {
             }
         }
 
-        console.log("FlowRateLow:", flowRateLow);
-        console.log("FlowRateHigh:", flowRateHigh);
+        // console.log("FlowRateLow:", flowRateLow);
+        // console.log("FlowRateHigh:", flowRateHigh);
 
         // If exact flowRate match is found
         if (flowRateLow === flowRateHigh) {
@@ -507,7 +507,7 @@ async function readJSONTable(stage, flowRate, Table) {
         // Get stage keys and sort them
         const stages = Object.keys(data[flowRates[0]]).map(Number).sort((a, b) => a - b);
 
-        console.log("Stages:", stages);
+        // console.log("Stages:", stages);
 
         // Find surrounding stage values
         let stageLow = null, stageHigh = null;
@@ -519,8 +519,8 @@ async function readJSONTable(stage, flowRate, Table) {
             }
         }
 
-        console.log("StageLow:", stageLow);
-        console.log("StageHigh:", stageHigh);
+        // console.log("StageLow:", stageLow);
+        // console.log("StageHigh:", stageHigh);
 
         // Interpolate for the given flowRate and stage
         if (flowRateLow !== null && flowRateHigh !== null && stageLow !== null && stageHigh !== null) {
@@ -528,7 +528,7 @@ async function readJSONTable(stage, flowRate, Table) {
             const y1 = interpolate(stage, stageLow, parseFloat(data[flowRateHigh][stageLow]), stageHigh, parseFloat(data[flowRateHigh][stageHigh]));
             const result = interpolate(flowRate, flowRateLow, y0, flowRateHigh, y1);
             
-            console.log("Interpolated Result:", result);
+            // console.log("Interpolated Result:", result);
             
             return result;
         }

@@ -451,29 +451,29 @@ async function fetchData(location_id
             let todayGraftonUpstreamNetmissValue = null;
             if (data11 !== null && location_id === "Grafton-Mississippi") {
                 todayGraftonUpstreamNetmissValue = parseFloat(convertedNetmissForecastingPointUpstreamData.values[0][1]);
-                // console.log("todayGraftonUpstreamNetmissValue: ", todayGraftonUpstreamNetmissValue);
+                console.log("todayGraftonUpstreamNetmissValue: ", todayGraftonUpstreamNetmissValue);
             }
             let todayGraftonDownstreamNetmissStageValue = null;
             if (data12 !== null && location_id === "Grafton-Mississippi") {
                 todayGraftonDownstreamNetmissStageValue = data12.values[0][1];
-                // console.log("todayGraftonDownstreamNetmissStageValue: ", todayGraftonDownstreamNetmissStageValue);
+                console.log("todayGraftonDownstreamNetmissStageValue: ", todayGraftonDownstreamNetmissStageValue);
             }
             
             // yesterday
             let yesterdayGraftonStageRevValue = null;
             if (data2 !== null && location_id === "Grafton-Mississippi") {
                 yesterdayGraftonStageRevValue = latest6AMValue.value;
-                // console.log("yesterdayGraftonStageRevValue: ", yesterdayGraftonStageRevValue);
+                console.log("yesterdayGraftonStageRevValue: ", yesterdayGraftonStageRevValue);
             }
             let yesterdayGraftonUpstreamStageRevValue = null;
             if (data7 !== null && location_id === "Grafton-Mississippi") {
                 yesterdayGraftonUpstreamStageRevValue = ((getLatest6AMValue(data7)).latest6AMValue).value;
-                // console.log("yesterdayGraftonUpstreamStageRevValue: ", yesterdayGraftonUpstreamStageRevValue);
+                console.log("yesterdayGraftonUpstreamStageRevValue: ", yesterdayGraftonUpstreamStageRevValue);
             }
             let yesterdayGraftonDownstreamStageRevValue = null;
             if (data9 !== null && location_id === "Grafton-Mississippi") {
                 yesterdayGraftonDownstreamStageRevValue = ((getLatest6AMValue(data9)).latest6AMValue).value;
-                // console.log("yesterdayGraftonDownstreamStageRevValue: ", yesterdayGraftonDownstreamStageRevValue);
+                console.log("yesterdayGraftonDownstreamStageRevValue: ", yesterdayGraftonDownstreamStageRevValue);
             }
             
             // special gage 1
@@ -483,9 +483,9 @@ async function fetchData(location_id
                 const convertedGraftonSpecialNetmissFlowValuesToCst = convertUTCtoCentralTime(data18);
                 yesterdayGraftonSpecialNetmissFlowValue = (convertedGraftonSpecialNetmissFlowValuesToCst.values[0][1]);
                 todayGraftonSpecialNetmissFlowValue = (convertedGraftonSpecialNetmissFlowValuesToCst.values[1][1]);
-                // console.log("convertedGraftonSpecialNetmissFlowValuesToCst: ", convertedGraftonSpecialNetmissFlowValuesToCst);
-                // console.log("yesterdayGraftonSpecialNetmissFlowValue: ", yesterdayGraftonSpecialNetmissFlowValue);
-                // console.log("todayGraftonSpecialNetmissFlowValue: ", todayGraftonSpecialNetmissFlowValue);
+                console.log("convertedGraftonSpecialNetmissFlowValuesToCst: ", convertedGraftonSpecialNetmissFlowValuesToCst);
+                console.log("yesterdayGraftonSpecialNetmissFlowValue: ", yesterdayGraftonSpecialNetmissFlowValue);
+                console.log("todayGraftonSpecialNetmissFlowValue: ", todayGraftonSpecialNetmissFlowValue);
             }
 
             // Special gage 2
@@ -495,9 +495,9 @@ async function fetchData(location_id
                 const convertedGraftonSpecialNetmissGage2FlowValuesToCst = convertUTCtoCentralTime(data20);
                 yesterdayGraftonSpecialGage2NetmissFlowValue = convertedGraftonSpecialNetmissGage2FlowValuesToCst.values[0][1];
                 todayGraftonSpecialGage2NetmissFlowValue = convertedGraftonSpecialNetmissGage2FlowValuesToCst.values[1][1];
-                // console.log("convertedGraftonSpecialNetmissGage2FlowValuesToCst: ", convertedGraftonSpecialNetmissGage2FlowValuesToCst);
-                // console.log("yesterdayGraftonSpecialGage2NetmissFlowValue: ", yesterdayGraftonSpecialGage2NetmissFlowValue);
-                // console.log("todayGraftonSpecialGage2NetmissFlowValue: ", todayGraftonSpecialGage2NetmissFlowValue);
+                console.log("convertedGraftonSpecialNetmissGage2FlowValuesToCst: ", convertedGraftonSpecialNetmissGage2FlowValuesToCst);
+                console.log("yesterdayGraftonSpecialGage2NetmissFlowValue: ", yesterdayGraftonSpecialGage2NetmissFlowValue);
+                console.log("todayGraftonSpecialGage2NetmissFlowValue: ", todayGraftonSpecialGage2NetmissFlowValue);
             }
 
             // Get rating tables
@@ -513,27 +513,27 @@ async function fetchData(location_id
                 ratingGraftonTableCoeUpstream = data17["simple-rating"][0]["rating-points"].point; // LD 25 TW-Mississippi // [0] because active[0] and inactive[1]
                 ratingGraftonTableCoeDownstream = data19["simple-rating"]["rating-points"].point; // Mel Price TW-Mississippi
 
-                // console.log("ratingGraftonTableCoe: ", ratingGraftonTableCoe); console.log("data16: ", data16);
-                // console.log("ratingGraftonTableCoeUpstream: ", ratingGraftonTableCoeUpstream); console.log("data17: ", data17);
-                // console.log("ratingGraftonTableCoeDownstream: ", ratingGraftonTableCoeDownstream); console.log("data19: ", data19);
+                console.log("ratingGraftonTableCoe: ", ratingGraftonTableCoe); console.log("data16: ", data16);
+                console.log("ratingGraftonTableCoeUpstream: ", ratingGraftonTableCoeUpstream); console.log("data17: ", data17);
+                console.log("ratingGraftonTableCoeDownstream: ", ratingGraftonTableCoeDownstream); console.log("data19: ", data19);
 
                 // Lookup todayCorrespondingUpstreamFlowValue to Louisiana-Mississippi Rating COE Table
                 todayGraftonCorrespondingUpstreamNetmissFlowValue = findDepByInd(todayGraftonUpstreamNetmissValue, ratingGraftonTableCoeUpstream);
                 todayGraftonCorrespondingDownstreamNetmissFlowValue = findDepByInd(todayGraftonDownstreamNetmissStageValue, ratingGraftonTableCoeDownstream);
-                // console.log("todayGraftonCorrespondingUpstreamNetmissFlowValue: ", todayGraftonCorrespondingUpstreamNetmissFlowValue);
-                // console.log("todayGraftonCorrespondingDownstreamNetmissFlowValue: ", todayGraftonCorrespondingDownstreamNetmissFlowValue);
+                console.log("todayGraftonCorrespondingUpstreamNetmissFlowValue: ", todayGraftonCorrespondingUpstreamNetmissFlowValue);
+                console.log("todayGraftonCorrespondingDownstreamNetmissFlowValue: ", todayGraftonCorrespondingDownstreamNetmissFlowValue);
 
                 // sum
                 sumGraftonTodayHermannFlowPlusLd25TwFlow = parseFloat(todayGraftonSpecialGage2NetmissFlowValue) + parseFloat(todayGraftonCorrespondingUpstreamNetmissFlowValue);
                 sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand = sumGraftonTodayHermannFlowPlusLd25TwFlow/1000;
-                // console.log("sumGraftonTodayHermannFlowPlusLd25TwFlow: ", sumGraftonTodayHermannFlowPlusLd25TwFlow);
-                // console.log("sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand: ", sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand);
+                console.log("sumGraftonTodayHermannFlowPlusLd25TwFlow: ", sumGraftonTodayHermannFlowPlusLd25TwFlow);
+                console.log("sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand: ", sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand);
             }
 
             let totalGrafton = null;
             if (location_id === "Grafton-Mississippi") {
-                const isGraftonForecastBasedUponLd25MPTw = sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand > 300;
-                // console.log("isGraftonForecastBasedUponLd25MPTw: ", isGraftonForecastBasedUponLd25MPTw);
+                const isGraftonForecastBasedUponLd25MPTw = parseFloat(sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand) > 300;
+                console.log("isGraftonForecastBasedUponLd25MPTw: ", isGraftonForecastBasedUponLd25MPTw);
 
                 // Open River or Regulated Pool Calculations or Ld25 MelPrice
                 if (isGraftonForecastBasedUponLd25MPTw) {
@@ -541,7 +541,7 @@ async function fetchData(location_id
                 } else {
                     totalGrafton = "--";
                 }
-                // console.log("totalGrafton: ", totalGrafton);
+                console.log("totalGrafton: ", totalGrafton);
 
                 // push data to GraftonForecast
                 totalGraftonForecastDay1.push({"value": totalGrafton});

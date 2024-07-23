@@ -375,8 +375,8 @@ async function populateTableCells(jsonDataFiltered, table, nws_day1_date) {
     loadingIndicator.style.display = 'none';
 }
 
-function processAllData(data) {
-    data.forEach(({
+async function processAllData(data) {
+    data.forEach(async ({
         row,
         location_id,
         convertedData,
@@ -1297,6 +1297,7 @@ function processAllData(data) {
                 
                 // Call the function and log the result
                 let deltaYesterdayStageRev = null;
+                // TODO: make this await
                 readJSONTable(stage, flowRate, jsonFileName).then(value => {
                     if (value !== null) {
                         // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
@@ -1311,23 +1312,26 @@ function processAllData(data) {
                 const todayDownstreamNetmissValuePlusGageZero = parseFloat(GraftonForecast["Grafton-Mississippi"][0].value) + 403.79;
                 // console.log("todayDownstreamNetmissValuePlusGageZero: ", todayDownstreamNetmissValuePlusGageZero);
 
-                let total = null;
-                let stage2 = todayDownstreamNetmissValuePlusGageZero;
+                let total2 = null;
+                let stage2 = todayDownstreamNetmissValuePlusGageZero; // if test, use value of 425.0
+                // TODO: change back to variable 
+                // TODO: RUSSELL: can you replicati this with CWMS. PERRYMAN 
                 let flowRate2 = todaySpecialGage1NetmissFlowValue;
-                readJSONTable(stage2, flowRate2, jsonFileName).then(value => {
-                    if (value !== null) {
-                        // console.log(`Interpolated reading for flow rate ${flowRate2} and stage ${stage2} at table ${jsonFileName}: ${value}`);
-                        total = deltaYesterdayStageRev + value - 400;
-                        // console.log("total in readJSON: ", total);
+                // console.log(stage2, flowRate2, jsonFileName)
+                let value2 = await readJSONTable(stage2, flowRate2, jsonFileName)
+                    // console.log(value2)
+                    if (value2 !== null) {
+                        // console.log(`Interpolated reading for flow rate ${flowRate2} and stage ${stage2} at table ${jsonFileName}: ${value2}`);
+                        total2 = deltaYesterdayStageRev + value2 - 400;
+                        // console.log("total in readJSON: ", total2);
                     } else {
                         // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
                     }
-                });
-                // console.log("total: ", total);
+                // console.log("total2: ", total2);
                 // console.log("grafton data at hardin: ", GraftonForecast["Grafton-Mississippi"]);
 
-                if (total) {
-                    day1 = "<div title='" + "--" + "'>" + total + "</div>";
+                if (total2) {
+                    day1 = "<div title='" + "--" + "'>" + total2 + "</div>";
                 } else {
                     day1 = "<div title='" + "working but total is null due to async issue. variables working between two readJSONTable" + "'>" + "total is null" + "</div>";
                 }
