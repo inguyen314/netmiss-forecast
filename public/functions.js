@@ -651,7 +651,7 @@ async function readJSONTable2(stage, flowRate, Table) {
             const result = (y0 !== null && y1 !== null) ?
                 interpolate(flowRate, flowRateLow, y0, flowRateHigh, y1) :
                 null;
-            console.log("Final Interpolated Result:", result);
+            // console.log("Final Interpolated Result:", result);
 
             return result;
         }
