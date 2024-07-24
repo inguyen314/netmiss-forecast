@@ -365,6 +365,8 @@ async function populateTableCells(jsonDataFiltered, table, nws_day1_date) {
             , location.tsid_netmiss_special_gage_1
             , location.tsid_rating_id_coe_downstream
             , location.tsid_netmiss_special_gage_2
+            , location.tsid_rating_id_special_1
+            , location.tsid_netmiss_downstream_stage_rev_2
         ))
     });
     Promise.all(promises).then((d) => {
@@ -415,6 +417,8 @@ async function processAllData(data) {
         data18,
         data19,
         data20,
+        data21,
+        data22,
         totalGraftonForecastDay1
     }) => {
         // Ensure row exists and is a valid DOM element
@@ -1264,7 +1268,7 @@ async function processAllData(data) {
                 // Grafton data process is in fetch.js
                 // TODO: value does not match between excel and email
 
-                day1 = "<div title='" + "Mel Price TW-Mississippi 6AM reading from excel is incorrect, therefore making Grafton Day1 forecast off" + "'>" + (Math.round(GraftonForecast["Grafton-Mississippi"][0].value*100)/100).toFixed(1) + "</div>";
+                day1 = "<div title='" + "Rating LD 25 TW is off between database and excel" + "'>" + (Math.round(GraftonForecast["Grafton-Mississippi"][0].value*100)/100).toFixed(1) + "</div>";
             } else if (location_id === "Hardin-Illinois") { 
                 // console.log("location_id: ", location_id);
                 // YESYERDAY

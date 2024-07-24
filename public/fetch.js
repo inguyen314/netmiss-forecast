@@ -82,12 +82,12 @@ async function fetchData(location_id
     , tsid_netmiss_upstream_stage_rev // url07
     , tsid_netmiss_downstream_stage_rev // url09
     , tsid_rvf_ff // url10
-    , nws_day1_date 
+    , nws_day1_date
     , tsid_netmiss_forecasting_location_upstream // url11
     , tsid_netmiss_forecasting_location_downstream // url12
-    , river_mile_hard_coded 
-    , netmiss_river_mile_hard_coded_upstream 
-    , netmiss_river_mile_hard_coded_downstream 
+    , river_mile_hard_coded
+    , netmiss_river_mile_hard_coded_upstream
+    , netmiss_river_mile_hard_coded_downstream
     , tsid_rvf_ff_downstream // url13
     , tsid_rvf_ff_dependance // url14
     , tsid_netmiss_flow // url15
@@ -96,6 +96,8 @@ async function fetchData(location_id
     , tsid_netmiss_special_gage_1 // url18
     , tsid_rating_id_coe_downstream // url19
     , tsid_netmiss_special_gage_2 // url20
+    , tsid_rating_id_special_1 // url21
+    , tsid_netmiss_downstream_stage_rev_2 // url22
 ) {
     // console.log("location_id =",  location_id);
 
@@ -312,19 +314,41 @@ async function fetchData(location_id
     }
     // console.log("url19 = ", url19);
 
-     // Get Netmiss Special Gage 2 Forecast 
-     let url20 = null;
-     if (tsid_netmiss_special_gage_2 !== null) {
-         if (cda === "internal") {
+    // Get Netmiss Special Gage 2 Forecast 
+    let url20 = null;
+    if (tsid_netmiss_special_gage_2 !== null) {
+        if (cda === "internal") {
             url20 = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/timeseries?name=${tsid_netmiss_special_gage_2}&begin=${end2.toISOString()}&end=${end1.toISOString()}&office=MVS&timezone=CST6CDT`;
-         } else if (cda === "public") {
+        } else if (cda === "public") {
             url20 = `https://cwms-data.usace.army.mil/cwms-data/timeseries?name=${tsid_netmiss_special_gage_2}&begin=${end2.toISOString()}&end=${end1.toISOString()}&office=MVS&timezone=CST6CDT`;
-         }
-     }
-     // console.log("url20 = ", url20);
+        }
+    }
+    // console.log("url20 = ", url20);
 
-    return fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9, url10, url11, url12, url13, url14, url15, url16, url17, url18, url19, url20)
-        .then(({ data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17, data18, data19, data20 }) => {
+    // Get Rating Special 1 
+    let url21 = null;
+    if (tsid_rating_id_special_1 !== null) {
+        if (cda === "internal") {
+            url21 = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/ratings/${tsid_rating_id_special_1}?office=MVS`;
+        } else if (cda === "public") {
+            url21 = `https://cwms-data.usace.army.mil/cwms-data/${tsid_rating_id_special_1}?office=MVS`;
+        }
+    }
+    // console.log("url21 = ", url21);
+
+    // Get Upstream Stage-Rev
+    let url22 = null;
+    if (tsid_netmiss_downstream_stage_rev_2 !== null) {
+        if (cda === "internal") {
+            url22 = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/timeseries?name=${tsid_netmiss_downstream_stage_rev_2}&begin=${end2.toISOString()}&end=${begin.toISOString()}&office=MVS&timezone=CST6CDT`;
+        } else if (cda === "public") {
+            url22 = `https://cwms-data.usace.army.mil/cwms-data/timeseries?name=${tsid_netmiss_downstream_stage_rev_2}&begin=${end2.toISOString()}&end=${begin.toISOString()}&office=MVS&timezone=CST6CDT`;
+        }
+    }
+    // console.log("url22 = ", url22);
+
+    return fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9, url10, url11, url12, url13, url14, url15, url16, url17, url18, url19, url20, url21, url22)
+        .then(({ data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17, data18, data19, data20, data21, data22 }) => {
             // console.log("location_id =",  location_id);
             // Do something with the fetched data
             // console.log("data1 = ", data1);
@@ -347,6 +371,8 @@ async function fetchData(location_id
             // console.log("data18 = ", data18);
             // console.log("data19 = ", data19);
             // console.log("data20 = ", data20);
+            // console.log("data21 = ", data21);
+            // console.log("data22 = ", data22);
 
             // PROCESS data1 - netmiss forecast data
             const convertedData = convertUTCtoCentralTime(data1);
@@ -449,16 +475,20 @@ async function fetchData(location_id
 
             // today
             let todayGraftonUpstreamNetmissValue = null;
+            let todayGraftonUpstreamNetmissValuePlus001 = null;
             if (data11 !== null && location_id === "Grafton-Mississippi") {
                 todayGraftonUpstreamNetmissValue = parseFloat(convertedNetmissForecastingPointUpstreamData.values[0][1]);
                 console.log("todayGraftonUpstreamNetmissValue: ", todayGraftonUpstreamNetmissValue);
+
+                todayGraftonUpstreamNetmissValuePlus001 = todayGraftonUpstreamNetmissValue + 0.001;
+                console.log("todayGraftonUpstreamNetmissValuePlus001: ", todayGraftonUpstreamNetmissValuePlus001);
             }
             let todayGraftonDownstreamNetmissStageValue = null;
             if (data12 !== null && location_id === "Grafton-Mississippi") {
                 todayGraftonDownstreamNetmissStageValue = data12.values[0][1];
                 console.log("todayGraftonDownstreamNetmissStageValue: ", todayGraftonDownstreamNetmissStageValue);
             }
-            
+
             // yesterday
             let yesterdayGraftonStageRevValue = null;
             if (data2 !== null && location_id === "Grafton-Mississippi") {
@@ -466,16 +496,23 @@ async function fetchData(location_id
                 console.log("yesterdayGraftonStageRevValue: ", yesterdayGraftonStageRevValue);
             }
             let yesterdayGraftonUpstreamStageRevValue = null;
+            let yesterdayGraftonUpstreamStageRevValuePlus0001 = null;
             if (data7 !== null && location_id === "Grafton-Mississippi") {
                 yesterdayGraftonUpstreamStageRevValue = ((getLatest6AMValue(data7)).latest6AMValue).value;
                 console.log("yesterdayGraftonUpstreamStageRevValue: ", yesterdayGraftonUpstreamStageRevValue);
+
+                yesterdayGraftonUpstreamStageRevValuePlus0001 = yesterdayGraftonUpstreamStageRevValue + 0.001;
+                console.log("yesterdayGraftonUpstreamStageRevValuePlus0001: ", yesterdayGraftonUpstreamStageRevValuePlus0001);
             }
             let yesterdayGraftonDownstreamStageRevValue = null;
-            if (data9 !== null && location_id === "Grafton-Mississippi") {
+            if (data9 !== null && data22 !== null && location_id === "Grafton-Mississippi") {
                 yesterdayGraftonDownstreamStageRevValue = ((getLatest6AMValue(data9)).latest6AMValue).value;
                 console.log("yesterdayGraftonDownstreamStageRevValue: ", yesterdayGraftonDownstreamStageRevValue);
+
+                yesterdayGraftonDownstreamStageRevValue2 = ((getLatest6AMValue(data22)).latest6AMValue).value;
+                console.log("yesterdayGraftonDownstreamStageRevValue2: ", yesterdayGraftonDownstreamStageRevValue2);
             }
-            
+
             // special gage 1
             let yesterdayGraftonSpecialNetmissFlowValue = null;
             let todayGraftonSpecialNetmissFlowValue = null;
@@ -501,11 +538,11 @@ async function fetchData(location_id
             }
 
             // Get rating tables
-            let ratingGraftonTableCoe = null; 
-            let ratingGraftonTableCoeUpstream = null; 
-            let ratingGraftonTableCoeDownstream = null; 
-            let todayGraftonCorrespondingUpstreamNetmissFlowValue = null; 
-            let todayGraftonCorrespondingDownstreamNetmissFlowValue = null; 
+            let ratingGraftonTableCoe = null;
+            let ratingGraftonTableCoeUpstream = null;
+            let ratingGraftonTableCoeDownstream = null;
+            let todayGraftonCorrespondingUpstreamNetmissFlowValue = null;
+            let todayGraftonCorrespondingDownstreamNetmissFlowValue = null;
             let sumGraftonTodayHermannFlowPlusLd25TwFlow = null;
             let sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand = null;
             if (data16 !== null && data17 !== null && data19 !== null && location_id === "Grafton-Mississippi") {
@@ -518,37 +555,112 @@ async function fetchData(location_id
                 console.log("ratingGraftonTableCoeDownstream: ", ratingGraftonTableCoeDownstream); console.log("data19: ", data19);
 
                 // Lookup todayCorrespondingUpstreamFlowValue to Louisiana-Mississippi Rating COE Table
-                todayGraftonCorrespondingUpstreamNetmissFlowValue = findDepByInd(todayGraftonUpstreamNetmissValue, ratingGraftonTableCoeUpstream);
+                todayGraftonCorrespondingUpstreamNetmissFlowValue = findDepByInd(todayGraftonUpstreamNetmissValuePlus001, ratingGraftonTableCoeUpstream);
                 todayGraftonCorrespondingDownstreamNetmissFlowValue = findDepByInd(todayGraftonDownstreamNetmissStageValue, ratingGraftonTableCoeDownstream);
-                console.log("todayGraftonCorrespondingUpstreamNetmissFlowValue: ", todayGraftonCorrespondingUpstreamNetmissFlowValue);
+                console.log("todayGraftonCorrespondingUpstreamNetmissFlowValue: (database rating is off from excel) ", todayGraftonCorrespondingUpstreamNetmissFlowValue);
                 console.log("todayGraftonCorrespondingDownstreamNetmissFlowValue: ", todayGraftonCorrespondingDownstreamNetmissFlowValue);
 
                 // sum
-                sumGraftonTodayHermannFlowPlusLd25TwFlow = parseFloat(todayGraftonSpecialGage2NetmissFlowValue) + parseFloat(todayGraftonCorrespondingUpstreamNetmissFlowValue);
-                sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand = sumGraftonTodayHermannFlowPlusLd25TwFlow/1000;
-                console.log("sumGraftonTodayHermannFlowPlusLd25TwFlow: ", sumGraftonTodayHermannFlowPlusLd25TwFlow);
+                sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand = (parseFloat(todayGraftonSpecialGage2NetmissFlowValue) + parseFloat(todayGraftonCorrespondingUpstreamNetmissFlowValue)) / 1000;
                 console.log("sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand: ", sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand);
             }
 
             let totalGrafton = null;
             if (location_id === "Grafton-Mississippi") {
                 const isGraftonForecastBasedUponLd25MPTw = parseFloat(sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand) > 300;
-                console.log("isGraftonForecastBasedUponLd25MPTw: ", isGraftonForecastBasedUponLd25MPTw);
+                console.log("isGraftonForecastBasedUponLd25MPTw: (True if > 300) ", isGraftonForecastBasedUponLd25MPTw);
+
+                const isGraftonForecastBasedUponOpenRiver = parseFloat(sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand) <= 300;
+                console.log("isGraftonForecastBasedUponOpenRiver: (True if <= 300) ", isGraftonForecastBasedUponOpenRiver);
 
                 // Open River or Regulated Pool Calculations or Ld25 MelPrice
                 if (isGraftonForecastBasedUponLd25MPTw) {
-                    totalGrafton = yesterdayGraftonStageRevValue + (((todayGraftonUpstreamNetmissValue - yesterdayGraftonUpstreamStageRevValue) + (todayGraftonDownstreamNetmissStageValue - yesterdayGraftonDownstreamStageRevValue))/2);
-                } else {
-                    totalGrafton = "--";
-                }
-                console.log("totalGrafton: ", totalGrafton);
+                    totalGrafton = yesterdayGraftonStageRevValue + (((todayGraftonUpstreamNetmissValue - yesterdayGraftonUpstreamStageRevValue) + (todayGraftonDownstreamNetmissStageValue - yesterdayGraftonDownstreamStageRevValue)) / 2);
 
-                // push data to GraftonForecast
-                totalGraftonForecastDay1.push({"value": totalGrafton});
-                GraftonForecast[location_id].push({"value": totalGrafton});
+                    // push data to GraftonForecast
+                    totalGraftonForecastDay1.push({ "value": totalGrafton });
+                    GraftonForecast[location_id].push({ "value": totalGrafton });
+                } else if (isGraftonForecastBasedUponOpenRiver) {
+                    const yesterdayGraftonCorrespondingUpstreamNetmissFlowValue = findDepByInd(yesterdayGraftonUpstreamStageRevValuePlus0001, ratingGraftonTableCoeUpstream);
+                    console.log("yesterdayGraftonCorrespondingUpstreamNetmissFlowValue: ", yesterdayGraftonCorrespondingUpstreamNetmissFlowValue);
+
+                    const valueCompareOpenRiver = ((yesterdayGraftonCorrespondingUpstreamNetmissFlowValue + yesterdayGraftonSpecialGage2NetmissFlowValue) / 1000);
+                    console.log("valueCompareOpenRiver: ", valueCompareOpenRiver);
+
+                    const isOpenRiverUseStageFlowRating = valueCompareOpenRiver > 300;
+                    console.log("isOpenRiverUseStageFlowRating : ", isOpenRiverUseStageFlowRating);
+
+                    const isOpenRiverUseBackWater = valueCompareOpenRiver <= 300;
+                    console.log("isOpenRiverUseBackWater : ", isOpenRiverUseBackWater);
+
+                    if (isOpenRiverUseStageFlowRating) {
+                        const ratingTableSpecial1 = data21["simple-rating"][0]["rating-points"].point;
+                        console.log("ratingTableSpecial1: ", ratingTableSpecial1);
+
+                        const flowToSend = (yesterdayGraftonCorrespondingUpstreamNetmissFlowValue + yesterdayGraftonSpecialGage2NetmissFlowValue);
+                        console.log("flowToSend: ", flowToSend);
+
+                        const t = findIndByDep(flowToSend, ratingTableSpecial1);
+                        console.log("t: ", t);
+
+                        const deltaYesterdayStage = yesterdayGraftonStageRevValue - t;
+                        console.log("deltaYesterdayStage: ", deltaYesterdayStage);
+
+                        const todayGraftonUpstreamNetmissValuePlus001 = todayGraftonUpstreamNetmissValue + 0.001;
+                        console.log("todayGraftonUpstreamNetmissValuePlus001: ", todayGraftonUpstreamNetmissValuePlus001);
+
+                        const todayFlowSum = todayGraftonCorrespondingUpstreamNetmissFlowValue + todayGraftonSpecialGage2NetmissFlowValue;
+                        console.log("todayFlowSum: ", todayFlowSum);
+
+                        const x = todayGraftonDownstreamNetmissStageValue + 395.48 + 0.5;
+                        console.log("x: ", x);
+                    } else if (isOpenRiverUseBackWater)  {
+                        const ratingTableSpecial1 = data21["simple-rating"][0]["rating-points"].point;
+                        console.log("ratingTableSpecial1: ", ratingTableSpecial1);
+
+                        const flowToSend = (yesterdayGraftonCorrespondingUpstreamNetmissFlowValue + yesterdayGraftonSpecialGage2NetmissFlowValue);
+                        console.log("flowToSend: ", flowToSend);
+
+                        const t = findIndByDep(flowToSend, ratingTableSpecial1);
+                        console.log("t: ", t);
+
+                        const deltaYesterdayStage = yesterdayGraftonStageRevValue - t;
+                        console.log("deltaYesterdayStage: ", deltaYesterdayStage);
+
+                        const todayFlowSum = todayGraftonCorrespondingUpstreamNetmissFlowValue + todayGraftonSpecialGage2NetmissFlowValue;
+                        console.log("todayFlowSum: ", todayFlowSum);
+
+                        const x = todayGraftonDownstreamNetmissStageValue + 395.48 + 0.5;
+                        console.log("x: ", x);
+
+                        let jsonFileName = "ratingGrafton.json"; //"ratingGrafton.json";
+                        const stage = yesterdayGraftonDownstreamStageRevValue2; // yesterdayGraftonDownstreamStageRevValue2
+                        const flowRate = valueCompareOpenRiver; // valueCompareOpenRiver
+
+                        // Call the function and log the result
+                        console.log(stage, flowRate, jsonFileName);
+
+                        readJSONTable2(stage, flowRate, jsonFileName).then(value => {
+                            if (value !== null) {
+                                console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
+
+                                totalGrafton = value + deltaYesterdayStage;
+                                console.log("totalGrafton: ", totalGrafton);
+
+                                // push data to GraftonForecast
+                                totalGraftonForecastDay1.push({ "value": totalGrafton });
+                                GraftonForecast[location_id].push({ "value": totalGrafton });
+                            } else {
+                                console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
+                            }
+                        });
+                    }
+                } else {
+                    totalGrafton = "No Data";
+                }
             }
 
-            return { 
+            return {
                 location_id,
                 convertedData,
                 row,
@@ -587,6 +699,8 @@ async function fetchData(location_id
                 data18,
                 data19,
                 data20,
+                data21,
+                data22,
                 totalGraftonForecastDay1
             }
 
@@ -596,7 +710,7 @@ async function fetchData(location_id
         });
 }
 
-async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9, url10, url11, url12, url13, url14, url15, url16, url17, url18, url19, url20) {
+async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9, url10, url11, url12, url13, url14, url15, url16, url17, url18, url19, url20, url21, url22) {
     const fetchOptions = {
         method: 'GET',
         headers: {
@@ -625,7 +739,9 @@ async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9
             url17 ? fetch(url17, fetchOptions) : Promise.resolve(null),
             url18 ? fetch(url18, fetchOptions) : Promise.resolve(null),
             url19 ? fetch(url19, fetchOptions) : Promise.resolve(null),
-            url20 ? fetch(url20, fetchOptions) : Promise.resolve(null)
+            url20 ? fetch(url20, fetchOptions) : Promise.resolve(null),
+            url21 ? fetch(url21, fetchOptions) : Promise.resolve(null),
+            url22 ? fetch(url22, fetchOptions) : Promise.resolve(null)
         ];
 
         const responses = await Promise.all(responsePromises);
@@ -659,7 +775,9 @@ async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9
             data17: data[16],
             data18: data[17],
             data19: data[18],
-            data20: data[19]
+            data20: data[19],
+            data21: data[20],
+            data22: data[21]
         };
     } catch (error) {
         console.error('Error fetching the URLs:', error.message);
@@ -683,7 +801,9 @@ async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9
             data17: null,
             data18: null,
             data19: null,
-            data20: null
+            data20: null,
+            data21: null,
+            data22: null
         }; // return null data if any error occurs
     }
 }

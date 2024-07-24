@@ -391,7 +391,7 @@ async function readJSON(stage, flowRate) {
     try {
         // Fetch the JSON file
         const response = await fetch('json/backwaterRatingHardin.json');
-        
+
         // Check if the fetch was successful
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -411,7 +411,7 @@ async function readJSON(stage, flowRate) {
 
         // Get flow rate keys and sort them
         const flowRates = Object.keys(data).map(Number).sort((a, b) => a - b);
-        
+
         // Find surrounding flow rate values
         let flowRateLow = null, flowRateHigh = null;
         for (let i = 0; i < flowRates.length - 1; i++) {
@@ -540,3 +540,127 @@ async function readJSONTable(stage, flowRate, Table) {
         return null;
     }
 }
+
+// Function to fetch and read JSON data with parameters
+async function readJSONTable2(stage, flowRate, Table) {
+    try {
+        // Fetch the JSON file
+        const response = await fetch('json/' + Table);
+
+        // console.log("Table:", Table);
+
+        // Check if the fetch was successful
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        // Parse the JSON data
+        const data = await response.json();
+
+        // Interpolation function
+        function interpolate(x, x0, y0, x1, y1) {
+            return y0 + (y1 - y0) * (x - x0) / (x1 - x0);
+        }
+
+        // Convert stage and flowRate to numbers
+        stage = parseFloat(stage);
+        flowRate = parseFloat(flowRate);
+
+        // console.log("Stage:", stage);
+        // console.log("FlowRate:", flowRate);
+
+        // Get flow rate keys and sort them
+        const flowRates = Object.keys(data).map(Number).sort((a, b) => a - b);
+
+        // console.log("FlowRates:", flowRates);
+
+        // Find surrounding flow rate values
+        let flowRateLow = null, flowRateHigh = null;
+        for (let i = 0; i < flowRates.length - 1; i++) {
+            if (flowRate >= flowRates[i] && flowRate <= flowRates[i + 1]) {
+                flowRateLow = flowRates[i];
+                flowRateHigh = flowRates[i + 1];
+                break;
+            }
+        }
+
+        // console.log("FlowRateLow:", flowRateLow);
+        // console.log("FlowRateHigh:", flowRateHigh);
+
+        // If exact flowRate match is found
+        if (flowRateLow === flowRateHigh) {
+            const exactMatch = data[flowRateLow] && data[flowRateLow][stage];
+            console.log("Exact Match Value:", exactMatch);
+            return exactMatch !== undefined ? parseFloat(exactMatch) : null;
+        }
+
+        // Get stage keys and sort them
+        const stages = Object.keys(data[flowRates[0]]).map(Number).sort((a, b) => a - b);
+
+        // console.log("Stages:", stages);
+
+        // Find surrounding stage values
+        let stageLow = null, stageHigh = null;
+        for (let i = 0; i < stages.length - 1; i++) {
+            if (stage >= stages[i] && stage <= stages[i + 1]) {
+                stageLow = (stages[i].toFixed(1));
+                stageHigh = stages[i + 1];
+                break;
+            }
+        }
+
+        // console.log("StageLow:", stageLow);
+        // console.log("StageHigh:", stageHigh);
+
+        // Log data values for interpolation
+        // console.log("Data for FlowRateLow:", data[flowRateLow]);
+        // console.log("Data for FlowRateHigh:", data[flowRateHigh]);
+
+        let lowValue = data[flowRateLow] && data[flowRateLow][stageLow];
+        let highValue = data[flowRateLow] && data[flowRateLow][stageHigh];
+        let parsedLowValue = lowValue !== undefined ? parseFloat(lowValue) : null;
+        let parsedHighValue = highValue !== undefined ? parseFloat(highValue) : null;
+
+        // console.log("Value at Data[FlowRateLow][StageLow]:", lowValue);
+        // console.log("Value at Data[FlowRateLow][StageHigh]:", highValue);
+        // console.log("Parsed Value at Data[FlowRateLow][StageLow]:", parsedLowValue);
+        // console.log("Parsed Value at Data[FlowRateLow][StageHigh]:", parsedHighValue);
+
+        lowValue = data[flowRateHigh] && data[flowRateHigh][stageLow];
+        highValue = data[flowRateHigh] && data[flowRateHigh][stageHigh];
+        parsedLowValue = lowValue !== undefined ? parseFloat(lowValue) : null;
+        parsedHighValue = highValue !== undefined ? parseFloat(highValue) : null;
+
+        // console.log("Value at Data[FlowRateHigh][StageLow]:", lowValue);
+        // console.log("Value at Data[FlowRateHigh][StageHigh]:", highValue);
+        // console.log("Parsed Value at Data[FlowRateHigh][StageLow]:", parsedLowValue);
+        // console.log("Parsed Value at Data[FlowRateHigh][StageHigh]:", parsedHighValue);
+
+        // Interpolate for the given flowRate and stage
+        if (flowRateLow !== null && flowRateHigh !== null && stageLow !== null && stageHigh !== null) {
+            const y0 = (parsedLowValue !== null && parsedHighValue !== null) ?
+                interpolate(stage, stageLow, parsedLowValue, stageHigh, parsedHighValue) :
+                null;
+            // console.log("Interpolated Y0:", y0);
+
+            const y1 = (parsedLowValue !== null && parsedHighValue !== null) ?
+                interpolate(stage, stageLow, parsedLowValue, stageHigh, parsedHighValue) :
+                null;
+            // console.log("Interpolated Y1:", y1);
+
+            const result = (y0 !== null && y1 !== null) ?
+                interpolate(flowRate, flowRateLow, y0, flowRateHigh, y1) :
+                null;
+            console.log("Final Interpolated Result:", result);
+
+            return result;
+        }
+
+        // No data found for the given stage and flowRate
+        return null;
+    } catch (error) {
+        console.error('Error fetching or parsing JSON:', error);
+        return null;
+    }
+}
+
