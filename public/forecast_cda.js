@@ -1411,28 +1411,55 @@ async function processAllData(data) {
                 }
             } else if (location_id === "Florence-Illinois") {
                 // YESYERDAY
+                // console.log("location_id: ", location_id);
+                const yesterdayStageRevValue = latest6AMValue.value;
+                // console.log("yesterdayStageRevValue: ", yesterdayStageRevValue);
+
+                const yesterdayDownstreamStageRevValue = ((getLatest6AMValue(data9)).latest6AMValue).value;
+                // console.log("yesterdayDownstreamStageRevValue: ", yesterdayDownstreamStageRevValue);
+
+                const yesterdayUpstreamStageRevValue = ((getLatest6AMValue(data7)).latest6AMValue).value;
+                // console.log("yesterdayUpstreamStageRevValue: ", yesterdayUpstreamStageRevValue);
+
+                // TODO: needs to get valleyCityDay1 and hardinDay1 date here. they are calculated in the upper elseif
+                valleyCityDay1 = 9.9;
+                // console.log("valleyCityDay1: ", valleyCityDay1);
+
+                hardinDay1 = 25.2;
+                // console.log("hardinDay1: ", hardinDay1);
+
+                let total = null;
+                total = yesterdayStageRevValue + (((valleyCityDay1-yesterdayUpstreamStageRevValue)-(hardinDay1-yesterdayDownstreamStageRevValue))/(61.3-21.5)*(56-21.5)+(hardinDay1-yesterdayDownstreamStageRevValue));
+                // console.log("total: ", total);
+
+                day1 = "<div title='" + "--" + "'>" + total.toFixed(1) + "</div>";
+            } else if (location_id === "Meredosia-Illinois") {
+                // YESYERDAY
                 console.log("location_id: ", location_id);
                 const yesterdayStageRevValue = latest6AMValue.value;
                 console.log("yesterdayStageRevValue: ", yesterdayStageRevValue);
 
+                const yesterdayStageRevValuePlusGageZero = parseFloat(yesterdayStageRevValue) + 418.00;
+                console.log("yesterdayStageRevValuePlusGageZero: ", yesterdayStageRevValuePlusGageZero);
+
                 const yesterdayDownstreamStageRevValue = ((getLatest6AMValue(data9)).latest6AMValue).value;
                 console.log("yesterdayDownstreamStageRevValue: ", yesterdayDownstreamStageRevValue);
 
-                const yesterdayUpstreamStageRevValue = ((getLatest6AMValue(data7)).latest6AMValue).value;
-                console.log("yesterdayUpstreamStageRevValue: ", yesterdayUpstreamStageRevValue);
+                const yesterdayDownstreamStageRevValuePlusGageZero = parseFloat(yesterdayDownstreamStageRevValue) + 403.79;
+                console.log("yesterdayDownstreamStageRevValuePlusGageZero: ", yesterdayDownstreamStageRevValuePlusGageZero);
 
-                // TODO: needs to get valleyCityDay1 and hardinDay1 date here. they are calculated in the upper elseif
-                valleyCityDay1 = 9.9;
-                console.log("valleyCityDay1: ", valleyCityDay1);
-
-                hardinDay1 = 25.2;
-                console.log("hardinDay1: ", hardinDay1);
+                const convertedNetmissFlowValuesToCst = convertUTCtoCentralTime(data15);
+                const yesterdayNetmissFlowValue = (convertedNetmissFlowValuesToCst.values[0][1]);
+                console.log("yesterdayNetmissFlowValue: ", yesterdayNetmissFlowValue);
+                const todayNetmissFlowValue = (convertedNetmissFlowValuesToCst.values[1][1]);
+                console.log("todayNetmissFlowValue: ", todayNetmissFlowValue);
 
                 let total = null;
-                total = yesterdayStageRevValue + (((valleyCityDay1-yesterdayUpstreamStageRevValue)-(hardinDay1-yesterdayDownstreamStageRevValue))/(61.3-21.5)*(56-21.5)+(hardinDay1-yesterdayDownstreamStageRevValue));
-                console.log("total: ", total);
-
-                day1 = "<div title='" + "--" + "'>" + total.toFixed(1) + "</div>";
+                if (total) {
+                    day1 = "<div title='" + "--" + "'>" + total.toFixed(1) + "</div>";
+                } else {
+                    day1 = "<div title='" + "--" + "'>" + "--" + "</div>";
+                }
             } else {
                 if (convertedData !== null) {
                     day1 = "<div title='" + convertedData.values[0] + "'>" +
