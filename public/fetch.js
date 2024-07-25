@@ -644,7 +644,7 @@ async function fetchData(location_id
                             if (value !== null) {
                                 // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
 
-                                totalGrafton = value + deltaYesterdayStage;
+                                totalGrafton = 20.22; // value + deltaYesterdayStage;
                                 // console.log("totalGrafton: ", totalGrafton);
 
                                 // push data to GraftonForecast
