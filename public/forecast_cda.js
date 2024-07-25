@@ -639,6 +639,8 @@ async function processAllData(data) {
             // DAY1
             const day1Cell = row.insertCell();
             let day1 = null;
+            let valleyCityDay1 = null;
+            let hardinDay1 = null;
             // Process netmiss interpolation for each gage here
             if (location_id === "LD 24 Pool-Mississippi") {
                 // Compare downstream gage to determine "Open River" or Not
@@ -1296,6 +1298,7 @@ async function processAllData(data) {
 
                 // BACKWATER RATING HARDIN
                 let jsonFileName = "backwaterRatingHardin.json";
+                let total = null;
                 let total1 = null;
                 const stage1 = yesterdayDownstreamStageRevValuePlusGageZero;
                 const flowRate1 = yesterdaySpecialGage1NetmissFlowValue;
@@ -1337,8 +1340,11 @@ async function processAllData(data) {
                     }
                 // console.log("total2: ", total2);
 
-                if (total2) {
-                    day1 = "<div title='" + "Grafton day1 is off due to LD 25 TW rating table" + "'>" + total2.toFixed(1) + "</div>";
+                total = total2;
+                hardinDay1 = total;
+
+                if (total) {
+                    day1 = "<div title='" + "Grafton day1 is off due to LD 25 TW rating table" + "'>" + total.toFixed(1) + "</div>";
                 } else {
                     day1 = "<div title='" + "--" + "'>" + "total is null" + "</div>";
                 }
@@ -1346,23 +1352,23 @@ async function processAllData(data) {
                 // TODAY
                 
                 // YESYERDAY
-                console.log("location_id: ", location_id);
+                // console.log("location_id: ", location_id);
                 const yesterdayStageRevValue = latest6AMValue.value;
-                console.log("yesterdayStageRevValue: ", yesterdayStageRevValue);
+                // console.log("yesterdayStageRevValue: ", yesterdayStageRevValue);
 
                 const yesterdayStageRevValuePlusGageZero = parseFloat(yesterdayStageRevValue) + 418.0;
-                console.log("yesterdayStageRevValuePlusGageZero: ", yesterdayStageRevValuePlusGageZero);
+                // console.log("yesterdayStageRevValuePlusGageZero: ", yesterdayStageRevValuePlusGageZero);
 
                 const yesterdayDownstreamStageRevValue = ((getLatest6AMValue(data9)).latest6AMValue).value;
-                console.log("yesterdayDownstreamStageRevValue: ", yesterdayDownstreamStageRevValue);
+                // console.log("yesterdayDownstreamStageRevValue: ", yesterdayDownstreamStageRevValue);
                 const yesterdayDownstreamStageRevValuePlusGageZero = parseFloat(yesterdayDownstreamStageRevValue) + 403.79;
-                console.log("yesterdayDownstreamStageRevValuePlusGageZero: ", yesterdayDownstreamStageRevValuePlusGageZero);
+                // console.log("yesterdayDownstreamStageRevValuePlusGageZero: ", yesterdayDownstreamStageRevValuePlusGageZero);
 
-                console.log("convertedNetmissUpstreamData: ", convertedNetmissUpstreamData);
+                // console.log("convertedNetmissUpstreamData: ", convertedNetmissUpstreamData);
                 const yesterdayNetmissUpstreamFlowValue = convertedNetmissUpstreamData.values[0][1];
-                console.log("yesterdayNetmissUpstreamFlowValue: ", yesterdayNetmissUpstreamFlowValue);
+                // console.log("yesterdayNetmissUpstreamFlowValue: ", yesterdayNetmissUpstreamFlowValue);
                 const todayNetmissUpstreamFlowValue = convertedNetmissUpstreamData.values[1][1];
-                console.log("todayNetmissUpstreamFlowValue: ", todayNetmissUpstreamFlowValue);
+                // console.log("todayNetmissUpstreamFlowValue: ", todayNetmissUpstreamFlowValue);
 
                 // Call the function and log the result for rating
                 let jsonFileName = "backwaterRatingValleyCity.json";
@@ -1370,38 +1376,63 @@ async function processAllData(data) {
                 let stage1 = yesterdayDownstreamStageRevValuePlusGageZero;
                 let flowRate1 = yesterdayNetmissUpstreamFlowValue;
                 let value1 = await readJSONTable(stage1, flowRate1, jsonFileName);
-                console.log("value1: ", value1);
+                // console.log("value1: ", value1);
                 if (value1 !== null) {
-                    console.log(`Interpolated reading for flow rate ${flowRate1} and stage ${stage1} at table ${jsonFileName}: ${value1}`);
+                    // console.log(`Interpolated reading for flow rate ${flowRate1} and stage ${stage1} at table ${jsonFileName}: ${value1}`);
                 } else {
-                    console.log(`No data found for flow rate ${flowRate1} and stage ${stage1}`);
+                    // console.log(`No data found for flow rate ${flowRate1} and stage ${stage1}`);
                 }
 
                 const delta = yesterdayStageRevValuePlusGageZero - value1;
-                console.log("delta: ", delta);
+                // console.log("delta: ", delta);
 
                 const graftonDay1PlusGageZero = (parseFloat(GraftonForecast["Grafton-Mississippi"][0].value)) + 403.79;
-                console.log("graftonDay1PlusGageZero: ", graftonDay1PlusGageZero);
+                // console.log("graftonDay1PlusGageZero: ", graftonDay1PlusGageZero);
 
                 let stage2 = graftonDay1PlusGageZero;
                 let flowRate2 = todayNetmissUpstreamFlowValue;
                 let value2 = await readJSONTable(stage2, flowRate2, jsonFileName);
-                console.log("value2: ", value2);
+                // console.log("value2: ", value2);
                 if (value2 !== null) {
-                    console.log(`Interpolated reading for flow rate ${flowRate2} and stage ${stage2} at table ${jsonFileName}: ${value2}`);
-
+                    // console.log(`Interpolated reading for flow rate ${flowRate2} and stage ${stage2} at table ${jsonFileName}: ${value2}`);
                 } else {
-                    console.log(`No data found for flow rate ${flowRate2} and stage ${stage2}`);
+                    // console.log(`No data found for flow rate ${flowRate2} and stage ${stage2}`);
                 }
 
                 total = parseFloat(delta) + parseFloat(value2) -418.00;
-                console.log("total: ", total);
+                // console.log("total: ", total);
+
+                valleyCityDay1 = total;
 
                 if (total) {
                     day1 = "<div title='" + "All depends on Grafton Day1" + "'>" + total.toFixed(1) + "</div>";
                 } else {
                     day1 = "<div title='" + "--" + "'>" + "total is null" + "</div>";
                 }
+            } else if (location_id === "Florence-Illinois") {
+                // YESYERDAY
+                console.log("location_id: ", location_id);
+                const yesterdayStageRevValue = latest6AMValue.value;
+                console.log("yesterdayStageRevValue: ", yesterdayStageRevValue);
+
+                const yesterdayDownstreamStageRevValue = ((getLatest6AMValue(data9)).latest6AMValue).value;
+                console.log("yesterdayDownstreamStageRevValue: ", yesterdayDownstreamStageRevValue);
+
+                const yesterdayUpstreamStageRevValue = ((getLatest6AMValue(data7)).latest6AMValue).value;
+                console.log("yesterdayUpstreamStageRevValue: ", yesterdayUpstreamStageRevValue);
+
+                // TODO: needs to get valleyCityDay1 and hardinDay1 date here. they are calculated in the upper elseif
+                valleyCityDay1 = 9.9;
+                console.log("valleyCityDay1: ", valleyCityDay1);
+
+                hardinDay1 = 25.2;
+                console.log("hardinDay1: ", hardinDay1);
+
+                let total = null;
+                total = yesterdayStageRevValue + (((valleyCityDay1-yesterdayUpstreamStageRevValue)-(hardinDay1-yesterdayDownstreamStageRevValue))/(61.3-21.5)*(56-21.5)+(hardinDay1-yesterdayDownstreamStageRevValue));
+                console.log("total: ", total);
+
+                day1 = "<div title='" + "--" + "'>" + total.toFixed(1) + "</div>";
             } else {
                 if (convertedData !== null) {
                     day1 = "<div title='" + convertedData.values[0] + "'>" +
