@@ -575,12 +575,17 @@ async function fetchData(location_id
 
                 // Open River or Regulated Pool Calculations or Ld25 MelPrice
                 if (isGraftonForecastBasedUponLd25MPTw) {
+                    console.log("isGraftonForecastBasedUponLd25MPTw ======================================================");
+
                     totalGrafton = yesterdayGraftonStageRevValue + (((todayGraftonUpstreamNetmissValue - yesterdayGraftonUpstreamStageRevValue) + (todayGraftonDownstreamNetmissStageValue - yesterdayGraftonDownstreamStageRevValue)) / 2);
+                    console.log("totalGrafton: ", totalGrafton);
 
                     // push data to GraftonForecast
                     totalGraftonForecastDay1.push({ "value": totalGrafton });
                     GraftonForecast[location_id].push({ "value": totalGrafton });
                 } else if (isGraftonForecastBasedUponOpenRiver) {
+                    console.log("isGraftonForecastBasedUponOpenRiver ======================================================");
+
                     const yesterdayGraftonCorrespondingUpstreamNetmissFlowValue = findDepByInd(yesterdayGraftonUpstreamStageRevValuePlus0001, ratingGraftonTableCoeUpstream);
                     console.log("yesterdayGraftonCorrespondingUpstreamNetmissFlowValue: ", yesterdayGraftonCorrespondingUpstreamNetmissFlowValue);
 
@@ -595,6 +600,8 @@ async function fetchData(location_id
 
                     let deltaYesterdayStage = null;
                     if (isOpenRiverUseStageFlowRating) {
+                        console.log("isOpenRiverUseStageFlowRating ======================================================");
+
                         const ratingTableSpecial1 = data21["simple-rating"][0]["rating-points"].point;
                         // console.log("ratingTableSpecial1: ", ratingTableSpecial1);
 
@@ -604,7 +611,7 @@ async function fetchData(location_id
                         const t = findIndByDep(flowToSend, ratingTableSpecial1);
                         // console.log("t: ", t);
 
-                        // deltaYesterdayStage = yesterdayGraftonStageRevValue - t;
+                        deltaYesterdayStage = yesterdayGraftonStageRevValue - t;
                         // console.log("deltaYesterdayStage: ", deltaYesterdayStage);
 
                         const todayGraftonUpstreamNetmissValuePlus001 = todayGraftonUpstreamNetmissValue + 0.001;
@@ -615,17 +622,17 @@ async function fetchData(location_id
 
                         const x = todayGraftonDownstreamNetmissStageValue + 395.48 + 0.5;
                         // console.log("x: ", x);
-                    } else if (isOpenRiverUseBackWater)  {
+                    } else if (isOpenRiverUseBackWater) {
+                        console.log("isOpenRiverUseBackWater ======================================================");
                         const ratingTableSpecial1 = data21["simple-rating"][0]["rating-points"].point;
                         console.log("ratingTableSpecial1: ", ratingTableSpecial1);
 
-                        let jsonFileName = "ratingGrafton2.json"; //"ratingGrafton.json";
-                        const stage = yesterdayGraftonDownstreamStageRevValue2; // yesterdayGraftonDownstreamStageRevValue2
-                        const flowRate = valueCompareOpenRiver; // valueCompareOpenRiver
+                        let jsonFileName = "ratingGrafton.json"; //"ratingGrafton.json";
 
                         // Call the function and log the result
+                        const stage = yesterdayGraftonDownstreamStageRevValue2; // yesterdayGraftonDownstreamStageRevValue2
+                        const flowRate = valueCompareOpenRiver; // valueCompareOpenRiver
                         console.log("stage, flowRate, jsonFileName: ", stage, flowRate, jsonFileName);
-
                         readJSONTable2(stage, flowRate, jsonFileName).then(value => {
                             if (value !== null) {
                                 console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
@@ -638,12 +645,10 @@ async function fetchData(location_id
                             }
                         });
 
+                        // Call the function and log the result
                         const stage2 = todayGraftonDownstreamNetmissStageValue + 395.48 + 0.5; // yesterdayGraftonDownstreamStageRevValue2
                         const flowRate2 = sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand; // valueCompareOpenRiver
-
-                        // Call the function and log the result
                         console.log("stage2, flowRate2, jsonFileName: ", stage2, flowRate2, jsonFileName);
-
                         readJSONTable2(stage2, flowRate2, jsonFileName).then(value => {
                             if (value !== null) {
                                 console.log(`Interpolated reading for flow rate ${flowRate2} and stage ${stage2} at table ${jsonFileName}: ${value}`);
@@ -661,16 +666,6 @@ async function fetchData(location_id
 
 
                     }
-                    // ===================================================================================
-                    // TESTING
-                    // totalGrafton = 20.0; // TESTING HERE: value + deltaYesterdayStage; // 20.0
-                    // console.log("totalGrafton: ", totalGrafton);
-
-                    // // push data to GraftonForecast
-                    // totalGraftonForecastDay1.push({ "value": totalGrafton });
-                    // GraftonForecast[location_id].push({ "value": totalGrafton });
-                    // ===================================================================================
-                    
                 } else {
                     totalGrafton = "No Data";
                 }
