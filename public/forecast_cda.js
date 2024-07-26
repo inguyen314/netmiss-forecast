@@ -147,7 +147,7 @@ function createTable(jsonDataFiltered) {
 
     // Extract only the date (without time)
     var todaysDataOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-    // console.log('todaysDataOnly: ', todaysDataOnly);
+    console.log('todaysDataOnly: ', todaysDataOnly);
 
     // Day -1
     var dayMinus1 = new Date(date);
@@ -250,8 +250,9 @@ function createTable(jsonDataFiltered) {
 
             // Get St Louis netmiss to set the date
             const dateObjectFirstForecastDayByDayAndMonth = await fetchFirstNetmissDay("St Louis-Mississippi.Stage.Inst.~1Day.0.netmiss-fcst", currentDateTime, currentDateTimePlus7Days, cda);
-            // console.log("dateObjectFirstForecastDayByDayAndMonth: ", dateObjectFirstForecastDayByDayAndMonth.date);
-            // console.log("dateObjectFirstForecastDayByDayAndMonth: ", dateObjectFirstForecastDayByDayAndMonth.length);
+            console.log("dateObjectFirstForecastDayByDayAndMonth: ", dateObjectFirstForecastDayByDayAndMonth);
+            console.log("dateObjectFirstForecastDayByDayAndMonth.date: ", dateObjectFirstForecastDayByDayAndMonth.date);
+            console.log("dateObjectFirstForecastDayByDayAndMonth.length: ", dateObjectFirstForecastDayByDayAndMonth.length);
 
             // Testing - Forced to output a table
             // populateTableCells(jsonDataFiltered, table, nws_day1_date);
@@ -1422,10 +1423,10 @@ async function processAllData(data) {
                 // console.log("yesterdayUpstreamStageRevValue: ", yesterdayUpstreamStageRevValue);
 
                 // TODO: needs to get valleyCityDay1 and hardinDay1 date here. they are calculated in the upper elseif
-                valleyCityDay1 = 9.9;
+                valleyCityDay1 = valleyCityDay1;
                 // console.log("valleyCityDay1: ", valleyCityDay1);
 
-                hardinDay1 = 25.2;
+                hardinDay1 = hardinDay1;
                 // console.log("hardinDay1: ", hardinDay1);
 
                 let total = null;
@@ -1435,24 +1436,24 @@ async function processAllData(data) {
                 day1 = "<div title='" + "--" + "'>" + total.toFixed(1) + "</div>";
             } else if (location_id === "Meredosia-Illinois") {
                 // YESYERDAY
-                console.log("location_id: ", location_id);
+                // console.log("location_id: ", location_id);
                 const yesterdayStageRevValue = latest6AMValue.value;
-                console.log("yesterdayStageRevValue: ", yesterdayStageRevValue);
+                // console.log("yesterdayStageRevValue: ", yesterdayStageRevValue);
 
                 const yesterdayStageRevValuePlusGageZero = parseFloat(yesterdayStageRevValue) + 418.00;
-                console.log("yesterdayStageRevValuePlusGageZero: ", yesterdayStageRevValuePlusGageZero);
+                // console.log("yesterdayStageRevValuePlusGageZero: ", yesterdayStageRevValuePlusGageZero);
 
                 const yesterdayDownstreamStageRevValue = ((getLatest6AMValue(data9)).latest6AMValue).value;
-                console.log("yesterdayDownstreamStageRevValue: ", yesterdayDownstreamStageRevValue);
+                // console.log("yesterdayDownstreamStageRevValue: ", yesterdayDownstreamStageRevValue);
 
                 const yesterdayDownstreamStageRevValuePlusGageZero = parseFloat(yesterdayDownstreamStageRevValue) + 403.79;
-                console.log("yesterdayDownstreamStageRevValuePlusGageZero: ", yesterdayDownstreamStageRevValuePlusGageZero);
+                // console.log("yesterdayDownstreamStageRevValuePlusGageZero: ", yesterdayDownstreamStageRevValuePlusGageZero);
 
                 const convertedNetmissFlowValuesToCst = convertUTCtoCentralTime(data15);
                 const yesterdayNetmissFlowValue = (convertedNetmissFlowValuesToCst.values[0][1]);
-                console.log("yesterdayNetmissFlowValue: ", yesterdayNetmissFlowValue);
+                // console.log("yesterdayNetmissFlowValue: ", yesterdayNetmissFlowValue);
                 const todayNetmissFlowValue = (convertedNetmissFlowValuesToCst.values[1][1]);
-                console.log("todayNetmissFlowValue: ", todayNetmissFlowValue);
+                // console.log("todayNetmissFlowValue: ", todayNetmissFlowValue);
 
                 let total = null;
                 if (total) {
