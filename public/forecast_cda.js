@@ -482,8 +482,8 @@ async function processAllData(data) {
                     let roundedValue = Math.round(BirdsPointForecastValue[0].value * 100) / 100; // Round to one decimal place
                     let roundedValueOnePlace = Math.round(roundedValue * 10) / 10;
                     day1 = "<div title='" + BirdsPointForecastValue[0].value + "'>" +
-                    (tsid_forecast_location === true ? "<strong>" + roundedValueOnePlace.toFixed(1) + "</strong>" : roundedValueOnePlace.toFixed(1)) +
-                    "</div>";
+                        (tsid_forecast_location === true ? "<strong>" + roundedValueOnePlace.toFixed(1) + "</strong>" : roundedValueOnePlace.toFixed(1)) +
+                        "</div>";
                 } else if (latest7AMRvfValue[0] !== null && latest7AMRvfValue[0] !== undefined) {
                     day1 = "<div title='" + latest7AMRvfValue[0] + "'>" +
                         (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[0].value).toFixed(1) + "</strong>" : (Math.round((latest7AMRvfValue[0].value) * 10) / 10).toFixed(1)) +
@@ -505,8 +505,8 @@ async function processAllData(data) {
                 let roundedValue = Math.round(BirdsPointForecastValue[1].value * 100) / 100; // Round to one decimal place
                 let roundedValueOnePlace = Math.round(roundedValue * 10) / 10;
                 day2 = "<div title='" + BirdsPointForecastValue[0].value + "'>" +
-                (tsid_forecast_location === true ? "<strong>" + roundedValueOnePlace.toFixed(1) + "</strong>" : roundedValueOnePlace.toFixed(1)) +
-                "</div>";
+                    (tsid_forecast_location === true ? "<strong>" + roundedValueOnePlace.toFixed(1) + "</strong>" : roundedValueOnePlace.toFixed(1)) +
+                    "</div>";
             } else if (latest7AMRvfValue[1] !== null) {
                 day2 = "<div title='" + latest7AMRvfValue[1] + "'>" +
                     (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[1].value).toFixed(1) + "</strong>" : (latest7AMRvfValue[1].value).toFixed(1)) +
@@ -527,8 +527,8 @@ async function processAllData(data) {
                 let roundedValue = Math.round(BirdsPointForecastValue[2].value * 100) / 100; // Round to one decimal place
                 let roundedValueOnePlace = Math.round(roundedValue * 10) / 10;
                 day3 = "<div title='" + BirdsPointForecastValue[0].value + "'>" +
-                (tsid_forecast_location === true ? "<strong>" + roundedValueOnePlace.toFixed(1) + "</strong>" : roundedValueOnePlace.toFixed(1)) +
-                "</div>";
+                    (tsid_forecast_location === true ? "<strong>" + roundedValueOnePlace.toFixed(1) + "</strong>" : roundedValueOnePlace.toFixed(1)) +
+                    "</div>";
             } else if (latest7AMRvfValue[2] !== null) {
                 day3 = "<div title='" + latest7AMRvfValue[2] + "'>" +
                     (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[2].value).toFixed(1) + "</strong>" : (latest7AMRvfValue[2].value).toFixed(1)) +
@@ -549,8 +549,8 @@ async function processAllData(data) {
                 let roundedValue = Math.round(BirdsPointForecastValue[3].value * 100) / 100; // Round to one decimal place
                 let roundedValueOnePlace = Math.round(roundedValue * 10) / 10;
                 day4 = "<div title='" + BirdsPointForecastValue[0].value + "'>" +
-                (tsid_forecast_location === true ? "<strong>" + roundedValueOnePlace.toFixed(1) + "</strong>" : roundedValueOnePlace.toFixed(1)) +
-                "</div>";
+                    (tsid_forecast_location === true ? "<strong>" + roundedValueOnePlace.toFixed(1) + "</strong>" : roundedValueOnePlace.toFixed(1)) +
+                    "</div>";
             } else if (latest7AMRvfValue[3] !== null) {
                 day4 = "<div title='" + latest7AMRvfValue[3] + "'>" +
                     (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[3].value).toFixed(1) + "</strong>" : (latest7AMRvfValue[3].value).toFixed(1)) +
@@ -571,8 +571,8 @@ async function processAllData(data) {
                 let roundedValue = Math.round(BirdsPointForecastValue[4].value * 100) / 100; // Round to one decimal place
                 let roundedValueOnePlace = Math.round(roundedValue * 10) / 10;
                 day5 = "<div title='" + BirdsPointForecastValue[0].value + "'>" +
-                (tsid_forecast_location === true ? "<strong>" + roundedValueOnePlace.toFixed(1) + "</strong>" : roundedValueOnePlace.toFixed(1)) +
-                "</div>";
+                    (tsid_forecast_location === true ? "<strong>" + roundedValueOnePlace.toFixed(1) + "</strong>" : roundedValueOnePlace.toFixed(1)) +
+                    "</div>";
             } else if (latest7AMRvfValue[4] !== null) {
                 day5 = "<div title='" + latest7AMRvfValue[4] + "'>" +
                     (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[4].value).toFixed(1) + "</strong>" : (latest7AMRvfValue[4].value).toFixed(1)) +
@@ -593,8 +593,8 @@ async function processAllData(data) {
                 let roundedValue = Math.round(BirdsPointForecastValue[5].value * 100) / 100; // Round to one decimal place
                 let roundedValueOnePlace = Math.round(roundedValue * 10) / 10;
                 day6 = "<div title='" + BirdsPointForecastValue[0].value + "'>" +
-                (tsid_forecast_location === true ? "<strong>" + roundedValueOnePlace.toFixed(1) + "</strong>" : roundedValueOnePlace.toFixed(1)) +
-                "</div>";
+                    (tsid_forecast_location === true ? "<strong>" + roundedValueOnePlace.toFixed(1) + "</strong>" : roundedValueOnePlace.toFixed(1)) +
+                    "</div>";
             } else if (latest7AMRvfValue[5] !== null) {
                 day6 = "<div title='" + latest7AMRvfValue[5] + "'>" +
                     (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[5].value).toFixed(1) + "</strong>" : (latest7AMRvfValue[5].value).toFixed(1)) +
@@ -615,8 +615,8 @@ async function processAllData(data) {
                 let roundedValue = Math.round(BirdsPointForecastValue[6].value * 100) / 100; // Round to one decimal place
                 let roundedValueOnePlace = Math.round(roundedValue * 10) / 10;
                 day7 = "<div title='" + BirdsPointForecastValue[0].value + "'>" +
-                (tsid_forecast_location === true ? "<strong>" + roundedValueOnePlace.toFixed(1) + "</strong>" : roundedValueOnePlace.toFixed(1)) +
-                "</div>";
+                    (tsid_forecast_location === true ? "<strong>" + roundedValueOnePlace.toFixed(1) + "</strong>" : roundedValueOnePlace.toFixed(1)) +
+                    "</div>";
             } else if (latest7AMRvfValue[6] !== null) {
                 day7 = "<div title='" + latest7AMRvfValue[6] + "'>" +
                     (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[6].value).toFixed(1) + "</strong>" : (latest7AMRvfValue[6].value).toFixed(1)) +
@@ -1119,7 +1119,7 @@ async function processAllData(data) {
                 } else {
                     total = "--";
                 }
-                
+
                 // console.log("location_id = ", location_id);
 
                 // console.log("yesterdayUpstreamStageRevValue = ", yesterdayUpstreamStageRevValue);
@@ -1174,11 +1174,11 @@ async function processAllData(data) {
                 const todaySpecialGage2NetmissFlowValue = (convertedSpecialGage2NetmissFlowValuesToCst.values[1][1]);
 
                 // Get the sum
-                const sumYesterdayNetmissFlowPlusSpecialNetmissFlowValue = (parseFloat(yesterdayNetmissFlowValue ) + parseFloat(yesterdaySpecialGage1NetmissFlowValue));
-                const sumYesterdayNetmissFlowPlusOneThousandDividedOneThousand = ((parseFloat(yesterdayNetmissFlowValue) + 1000))/1000;
+                const sumYesterdayNetmissFlowPlusSpecialNetmissFlowValue = (parseFloat(yesterdayNetmissFlowValue) + parseFloat(yesterdaySpecialGage1NetmissFlowValue));
+                const sumYesterdayNetmissFlowPlusOneThousandDividedOneThousand = ((parseFloat(yesterdayNetmissFlowValue) + 1000)) / 1000;
 
                 const sumTodayNetmissFlowPlusSpecialNetmissFlowValue = (parseFloat(todayNetmissFlowValue) + parseFloat(todaySpecialGage1NetmissFlowValue));
-                const sumTodayNetmissFlowPlusOneThousandDividedOneThousand = ((parseFloat(todayNetmissFlowValue) + 1000))/1000;
+                const sumTodayNetmissFlowPlusOneThousandDividedOneThousand = ((parseFloat(todayNetmissFlowValue) + 1000)) / 1000;
 
                 // Determine if yesterday upstream is open river or regulated pool
                 const isTodayOpenRiver = sumTodayNetmissFlowPlusOneThousandDividedOneThousand > 150.0;
@@ -1198,8 +1198,22 @@ async function processAllData(data) {
                 const isYesterdayOpenRiver = sumYesterdayNetmissFlowPlusOneThousandDividedOneThousand > 150.0;
                 const isYesterdayRegulatedPool = sumYesterdayNetmissFlowPlusOneThousandDividedOneThousand <= 150.0;
 
+                let yesterdayCorrespondingNetmissWithSpecialNetmissFlowValue = null;
+                let tDelta = null;
+                if (isYesterdayOpenRiver) {
+                    // Lookup yesterdayCorrespondingUpstreamFlowValue to Louisiana-Mississippi Rating COE Table 
+                    yesterdayCorrespondingNetmissWithSpecialNetmissFlowValue = findIndByDep(sumYesterdayNetmissFlowPlusSpecialNetmissFlowValue, ratingTableCoe);
+                    tDelta = 0 + (yesterdayStageRevValue - yesterdayCorrespondingNetmissWithSpecialNetmissFlowValue);
+                } else {
+                    // Lookup yesterdayCorrespondingUpstreamFlowValue to Louisiana-Mississippi Rating COE Table 
+                    yesterdayCorrespondingNetmissWithSpecialNetmissFlowValue = findIndByDep(sumYesterdayNetmissFlowPlusSpecialNetmissFlowValue, ratingTableCoe);
+                    tDelta = yesterdayStageRevValue - yesterdayCorrespondingNetmissWithSpecialNetmissFlowValue;
+                }
+
                 // Lookup todayCorrespondingUpstreamFlowValue to Louisiana-Mississippi Rating COE Table 
-                const todayCorrespondingNetmissWithSpecialNetmissFlowValue = findIndByDep(sumYesterdayNetmissFlowPlusSpecialNetmissFlowValue, ratingTableCoe);
+                const todayCorrespondingNetmissWithSpecialNetmissFlowValue = findIndByDep(sumTodayNetmissFlowPlusSpecialNetmissFlowValue, ratingTableCoe);
+
+                const all = todayCorrespondingNetmissWithSpecialNetmissFlowValue + tDelta;
 
                 // console.log("location_id: ", location_id);
 
@@ -1225,7 +1239,7 @@ async function processAllData(data) {
 
                 // console.log("sumTodayNetmissFlowPlusSpecialNetmissFlowValue = ", sumTodayNetmissFlowPlusSpecialNetmissFlowValue);
                 // console.log("sumTodayNetmissFlowPlusOneThousandDividedOneThousand = ", sumTodayNetmissFlowPlusOneThousandDividedOneThousand);
-                
+
                 // console.log("isTodayOpenRiver = ", isTodayOpenRiver);
                 // console.log("isTodayRegulatedPool = ", isTodayRegulatedPool);
 
@@ -1234,45 +1248,51 @@ async function processAllData(data) {
 
                 // console.log("yesterdayCorrespondingUpstreamFlowValue = ", yesterdayCorrespondingUpstreamFlowValue);
                 // console.log("yesterdayCorrespondingSumNetmissFlowPlusSpecialNetmissFlowValue = ", yesterdayCorrespondingSumNetmissFlowPlusSpecialNetmissFlowValue);
-             
+
                 // console.log("isYesterdayOpenRiver = ", isYesterdayOpenRiver);
                 // console.log("isYesterdayRegulatedPool = ", isYesterdayRegulatedPool);
 
+                // console.log("yesterdayCorrespondingNetmissWithSpecialNetmissFlowValue = ", yesterdayCorrespondingNetmissWithSpecialNetmissFlowValue);
+
+                // console.log("tDelta = ", tDelta);
+
                 // console.log("todayCorrespondingNetmissWithSpecialNetmissFlowValue = ", todayCorrespondingNetmissWithSpecialNetmissFlowValue);
 
-                // Call the function and log the result for rating
-                let jsonFileName = "ratingLouisiana.json";
-                let stage = yesterdayDownstreamStageRevValue;
-                let flowRate = (yesterdayNetmissFlowValue/1000);
-                readJSON(stage, flowRate, jsonFileName).then(value => {
-                    if (value !== null) {
-                        // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage}: ${value}`);
+                // console.log("all = ", all);
 
-                    } else {
-                        // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
-                    }
-                });
+                // Call the function and log the result for rating
+                // let jsonFileName = "ratingLouisiana.json";
+                // let stage = yesterdayDownstreamStageRevValue;
+                // let flowRate = sumTodayNetmissFlowPlusSpecialNetmissFlowValue/1000;
+                // console.log("stage, flowRate, jsonFileName: ", stage, flowRate, jsonFileName);
+                // let value = await readJSONTable(stage, flowRate, jsonFileName);
+                // console.log("value: ", value);
+                // if (value !== null) {
+                //     console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
+                // } else {
+                //     console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
+                // }
 
                 // Open River or Regulated Pool Calculations
                 let total = null;
                 if (isTodayOpenRiver) {
                     // console.log("isTodayOpenRiver: ", isTodayOpenRiver);
-                    total = todayCorrespondingNetmissWithSpecialNetmissFlowValue;
+                    total = all;
                     // console.log("total: ", total);
                 } else if (isTodayRegulatedPool) {
                     // console.log("isTodayRegulatedPool: ", isTodayRegulatedPool);
-                    total = "RP";
+                    total = "--";
                 } else {
                     total = "--";
                 }
 
-                day1 = "<div title='" + "--" + "'>" + total.toFixed(1) + "</div>";
+                day1 = "<div title='" + "isTodayOpenRiver = " + isTodayOpenRiver + ", " + "--" + "'>" + total.toFixed(1) + "</div>";
             } else if (location_id === "Grafton-Mississippi") {
                 // Grafton data process is in fetch.js
                 // TODO: value does not match between excel and email
 
-                day1 = "<div title='" + "Rating LD 25 TW is off between database and excel" + "'>" + (Math.round(GraftonForecast["Grafton-Mississippi"][0].value*100)/100).toFixed(1) + "</div>";
-            } else if (location_id === "Hardin-Illinois") { 
+                day1 = "<div title='" + "Rating LD 25 TW is off between database and excel" + "'>" + (Math.round(GraftonForecast["Grafton-Mississippi"][0].value * 100) / 100).toFixed(1) + "</div>";
+            } else if (location_id === "Hardin-Illinois") {
                 // console.log("location_id: ", location_id);
                 // YESYERDAY
                 const yesterdayCurrentGageStageRevValue = latest6AMValue.value;
@@ -1306,17 +1326,17 @@ async function processAllData(data) {
                 // console.log(stage1, flowRate1, jsonFileName);
                 let deltaYesterdayStageRev = null;
                 let value1 = await readJSONTable(stage1, flowRate1, jsonFileName);
-                    // console.log("value1: ", value1);
-                    if (value1 !== null) {
-                        // console.log(`Interpolated reading for flow rate ${flowRate1} and stage ${stage1} at table ${jsonFileName}: ${value1}`);
+                // console.log("value1: ", value1);
+                if (value1 !== null) {
+                    // console.log(`Interpolated reading for flow rate ${flowRate1} and stage ${stage1} at table ${jsonFileName}: ${value1}`);
 
-                        deltaYesterdayStageRev = yesterdayCurrentGageStageRevValuePlusGageZero - value1;
-                        // console.log("deltaYesterdayStageRev: ", deltaYesterdayStageRev);
+                    deltaYesterdayStageRev = yesterdayCurrentGageStageRevValuePlusGageZero - value1;
+                    // console.log("deltaYesterdayStageRev: ", deltaYesterdayStageRev);
 
-                        // console.log("total in readJSON: ", total1);
-                    } else {
-                        // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
-                    }
+                    // console.log("total in readJSON: ", total1);
+                } else {
+                    // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
+                }
                 // console.log("total1: ", total1);
 
                 const graftonDay1 = GraftonForecast["Grafton-Mississippi"][0].value;
@@ -1332,13 +1352,13 @@ async function processAllData(data) {
                 // console.log(stage2, flowRate2, jsonFileName);
                 let value2 = await readJSONTable(stage2, flowRate2, jsonFileName)
                 // console.log("value2: ", value2);
-                    if (value2 !== null) {
-                        // console.log(`Interpolated reading for flow rate ${flowRate2} and stage ${stage2} at table ${jsonFileName}: ${value2}`);
-                        total2 = deltaYesterdayStageRev + value2 - 400;
-                        // console.log("total2 in readJSON: ", total2, deltaYesterdayStageRev, value2, "400");
-                    } else {
-                        // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
-                    }
+                if (value2 !== null) {
+                    // console.log(`Interpolated reading for flow rate ${flowRate2} and stage ${stage2} at table ${jsonFileName}: ${value2}`);
+                    total2 = deltaYesterdayStageRev + value2 - 400;
+                    // console.log("total2 in readJSON: ", total2, deltaYesterdayStageRev, value2, "400");
+                } else {
+                    // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
+                }
                 // console.log("total2: ", total2);
 
                 total = total2;
@@ -1351,7 +1371,7 @@ async function processAllData(data) {
                 }
             } else if (location_id === "Valley City-Illinois") {
                 // TODAY
-                
+
                 // YESYERDAY
                 // console.log("location_id: ", location_id);
                 const yesterdayStageRevValue = latest6AMValue.value;
@@ -1400,7 +1420,7 @@ async function processAllData(data) {
                     // console.log(`No data found for flow rate ${flowRate2} and stage ${stage2}`);
                 }
 
-                total = parseFloat(delta) + parseFloat(value2) -418.00;
+                total = parseFloat(delta) + parseFloat(value2) - 418.00;
                 // console.log("total: ", total);
 
                 valleyCityDay1 = total;
@@ -1430,7 +1450,7 @@ async function processAllData(data) {
                 // console.log("hardinDay1: ", hardinDay1);
 
                 let total = null;
-                total = yesterdayStageRevValue + (((valleyCityDay1-yesterdayUpstreamStageRevValue)-(hardinDay1-yesterdayDownstreamStageRevValue))/(61.3-21.5)*(56-21.5)+(hardinDay1-yesterdayDownstreamStageRevValue));
+                total = yesterdayStageRevValue + (((valleyCityDay1 - yesterdayUpstreamStageRevValue) - (hardinDay1 - yesterdayDownstreamStageRevValue)) / (61.3 - 21.5) * (56 - 21.5) + (hardinDay1 - yesterdayDownstreamStageRevValue));
                 // console.log("total: ", total);
 
                 day1 = "<div title='" + "--" + "'>" + total.toFixed(1) + "</div>";
