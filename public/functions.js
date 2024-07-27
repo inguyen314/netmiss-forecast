@@ -541,9 +541,10 @@ async function readJSONTable(stage, flowRate, Table) {
     }
 }
 
+// Function to fetch and read JSON data with parameters
 async function readJSONTable2(stage, flowRate, Table) {
     try {
-        console.log(`Fetching JSON file from: json/${Table}`);
+        // console.log(`Fetching JSON file from: json/${Table}`);
 
         // Fetch the JSON file
         const response = await fetch('json/' + Table);
@@ -639,7 +640,7 @@ async function readJSONTable2(stage, flowRate, Table) {
         // console.log(`Interpolated values: y0 = ${y0}, y1 = ${y1}`);
 
         const result = interpolate(stage, stageLow, y0, stageHigh, y1);
-        console.log("Interpolated Result:", result);
+        // console.log("Interpolated Result:", result);
 
         return result;
     } catch (error) {
@@ -647,4 +648,3 @@ async function readJSONTable2(stage, flowRate, Table) {
         return null;
     }
 }
-
