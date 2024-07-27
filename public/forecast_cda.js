@@ -640,8 +640,6 @@ async function processAllData(data) {
             // DAY1
             const day1Cell = row.insertCell();
             let day1 = null;
-            let valleyCityDay1 = null;
-            let hardinDay1 = null;
             // Process netmiss interpolation for each gage here
             if (location_id === "LD 24 Pool-Mississippi") {
                 // Compare downstream gage to determine "Open River" or Not
@@ -1430,52 +1428,68 @@ async function processAllData(data) {
                 } else {
                     day1 = "<div title='" + "--" + "'>" + "total is null" + "</div>";
                 }
-            } else if (location_id === "Florence-Illinois") {
-                // YESYERDAY
-                // console.log("location_id: ", location_id);
-                const yesterdayStageRevValue = latest6AMValue.value;
-                // console.log("yesterdayStageRevValue: ", yesterdayStageRevValue);
-
-                const yesterdayDownstreamStageRevValue = ((getLatest6AMValue(data9)).latest6AMValue).value;
-                // console.log("yesterdayDownstreamStageRevValue: ", yesterdayDownstreamStageRevValue);
-
-                const yesterdayUpstreamStageRevValue = ((getLatest6AMValue(data7)).latest6AMValue).value;
-                // console.log("yesterdayUpstreamStageRevValue: ", yesterdayUpstreamStageRevValue);
-
-                // TODO: needs to get valleyCityDay1 and hardinDay1 date here. they are calculated in the upper elseif
-                valleyCityDay1 = valleyCityDay1;
-                // console.log("valleyCityDay1: ", valleyCityDay1);
-
-                hardinDay1 = hardinDay1;
-                // console.log("hardinDay1: ", hardinDay1);
-
-                let total = null;
-                total = yesterdayStageRevValue + (((valleyCityDay1 - yesterdayUpstreamStageRevValue) - (hardinDay1 - yesterdayDownstreamStageRevValue)) / (61.3 - 21.5) * (56 - 21.5) + (hardinDay1 - yesterdayDownstreamStageRevValue));
-                // console.log("total: ", total);
-
-                day1 = "<div title='" + "--" + "'>" + total.toFixed(1) + "</div>";
+           
             } else if (location_id === "Meredosia-Illinois") {
                 // YESYERDAY
-                // console.log("location_id: ", location_id);
+                console.log("location_id: ", location_id);
                 const yesterdayStageRevValue = latest6AMValue.value;
-                // console.log("yesterdayStageRevValue: ", yesterdayStageRevValue);
+                console.log("yesterdayStageRevValue: ", yesterdayStageRevValue);
 
                 const yesterdayStageRevValuePlusGageZero = parseFloat(yesterdayStageRevValue) + 418.00;
-                // console.log("yesterdayStageRevValuePlusGageZero: ", yesterdayStageRevValuePlusGageZero);
+                console.log("yesterdayStageRevValuePlusGageZero: ", yesterdayStageRevValuePlusGageZero);
 
                 const yesterdayDownstreamStageRevValue = ((getLatest6AMValue(data9)).latest6AMValue).value;
-                // console.log("yesterdayDownstreamStageRevValue: ", yesterdayDownstreamStageRevValue);
+                console.log("yesterdayDownstreamStageRevValue: ", yesterdayDownstreamStageRevValue);
 
                 const yesterdayDownstreamStageRevValuePlusGageZero = parseFloat(yesterdayDownstreamStageRevValue) + 403.79;
-                // console.log("yesterdayDownstreamStageRevValuePlusGageZero: ", yesterdayDownstreamStageRevValuePlusGageZero);
+                console.log("yesterdayDownstreamStageRevValuePlusGageZero: ", yesterdayDownstreamStageRevValuePlusGageZero);
 
                 const convertedNetmissFlowValuesToCst = convertUTCtoCentralTime(data15);
                 const yesterdayNetmissFlowValue = (convertedNetmissFlowValuesToCst.values[0][1]);
-                // console.log("yesterdayNetmissFlowValue: ", yesterdayNetmissFlowValue);
+                console.log("yesterdayNetmissFlowValue: ", yesterdayNetmissFlowValue);
                 const todayNetmissFlowValue = (convertedNetmissFlowValuesToCst.values[1][1]);
-                // console.log("todayNetmissFlowValue: ", todayNetmissFlowValue);
+                console.log("todayNetmissFlowValue: ", todayNetmissFlowValue);
 
+                // BACKWATER RATING HARDIN
+                let jsonFileName = "backwaterRatingMeredosia.json";
                 let total = null;
+                const stage1 = yesterdayDownstreamStageRevValuePlusGageZero;
+                const flowRate1 = yesterdayNetmissFlowValue;
+                console.log(stage1, flowRate1, jsonFileName);
+                let deltaYesterdayStageRev = null;
+                let value1 = await readJSONTable(stage1, flowRate1, jsonFileName);
+                console.log("value1: ", value1);
+                if (value1 !== null) {
+                    console.log(`Interpolated reading for flow rate ${flowRate1} and stage ${stage1} at table ${jsonFileName}: ${value1}`);
+                    deltaYesterdayStageRev = yesterdayStageRevValuePlusGageZero - value1;
+                    console.log("deltaYesterdayStageRev: ", deltaYesterdayStageRev);
+                } else {
+                    console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
+                }
+
+                const graftonDay1 = GraftonForecast["Grafton-Mississippi"][0].value;
+                console.log("graftonDay1: ", graftonDay1);
+
+                const graftonDay1PlusGageZero = graftonDay1 + 403.79;
+                console.log("graftonDay1PlusGageZero: ", graftonDay1PlusGageZero);
+
+                const stage2 = graftonDay1PlusGageZero;
+                const flowRate2 = todayNetmissFlowValue;
+                console.log(stage2, flowRate2, jsonFileName);
+                let deltaTodayStageRev = null;
+                let value2 = await readJSONTable(stage2, flowRate2, jsonFileName);
+                console.log("value2: ", value2);
+                if (value2 !== null) {
+                    console.log(`Interpolated reading for flow rate ${flowRate2} and stage ${stage2} at table ${jsonFileName}: ${value2}`);
+                    deltaTodayStageRev = value2 - 418.0;
+                    console.log("deltaTodayStageRev: ", deltaTodayStageRev);
+                } else {
+                    console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
+                }
+
+                total = deltaTodayStageRev + deltaYesterdayStageRev;
+                console.log("total: ", total);
+
                 if (total) {
                     day1 = "<div title='" + "--" + "'>" + total.toFixed(1) + "</div>";
                 } else {
