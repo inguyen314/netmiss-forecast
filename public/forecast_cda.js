@@ -1431,70 +1431,71 @@ async function processAllData(data) {
            
             } else if (location_id === "Meredosia-Illinois") {
                 // YESYERDAY
-                console.log("location_id: ", location_id);
+                // console.log("location_id: ", location_id);
                 const yesterdayStageRevValue = latest6AMValue.value;
-                console.log("yesterdayStageRevValue: ", yesterdayStageRevValue);
+                // console.log("yesterdayStageRevValue: ", yesterdayStageRevValue);
 
                 const yesterdayStageRevValuePlusGageZero = parseFloat(yesterdayStageRevValue) + 418.00;
-                console.log("yesterdayStageRevValuePlusGageZero: ", yesterdayStageRevValuePlusGageZero);
+                // console.log("yesterdayStageRevValuePlusGageZero: ", yesterdayStageRevValuePlusGageZero);
 
                 const yesterdayDownstreamStageRevValue = ((getLatest6AMValue(data9)).latest6AMValue).value;
-                console.log("yesterdayDownstreamStageRevValue: ", yesterdayDownstreamStageRevValue);
+                // console.log("yesterdayDownstreamStageRevValue: ", yesterdayDownstreamStageRevValue);
 
                 const yesterdayDownstreamStageRevValuePlusGageZero = parseFloat(yesterdayDownstreamStageRevValue) + 403.79;
-                console.log("yesterdayDownstreamStageRevValuePlusGageZero: ", yesterdayDownstreamStageRevValuePlusGageZero);
+                // console.log("yesterdayDownstreamStageRevValuePlusGageZero: ", yesterdayDownstreamStageRevValuePlusGageZero);
 
                 const convertedNetmissFlowValuesToCst = convertUTCtoCentralTime(data15);
                 const yesterdayNetmissFlowValue = (convertedNetmissFlowValuesToCst.values[0][1]);
-                console.log("yesterdayNetmissFlowValue: ", yesterdayNetmissFlowValue);
+                // console.log("yesterdayNetmissFlowValue: ", yesterdayNetmissFlowValue);
                 const todayNetmissFlowValue = (convertedNetmissFlowValuesToCst.values[1][1]);
-                console.log("todayNetmissFlowValue: ", todayNetmissFlowValue);
+                // console.log("todayNetmissFlowValue: ", todayNetmissFlowValue);
 
                 // BACKWATER RATING HARDIN
                 let jsonFileName = "backwaterRatingMeredosia.json";
                 let total = null;
                 const stage1 = yesterdayDownstreamStageRevValuePlusGageZero;
                 const flowRate1 = yesterdayNetmissFlowValue;
-                console.log(stage1, flowRate1, jsonFileName);
+                // console.log(stage1, flowRate1, jsonFileName);
                 let deltaYesterdayStageRev = null;
                 let value1 = await readJSONTable(stage1, flowRate1, jsonFileName);
-                console.log("value1: ", value1);
+                // console.log("value1: ", value1);
                 if (value1 !== null) {
-                    console.log(`Interpolated reading for flow rate ${flowRate1} and stage ${stage1} at table ${jsonFileName}: ${value1}`);
+                    // console.log(`Interpolated reading for flow rate ${flowRate1} and stage ${stage1} at table ${jsonFileName}: ${value1}`);
                     deltaYesterdayStageRev = yesterdayStageRevValuePlusGageZero - value1;
-                    console.log("deltaYesterdayStageRev: ", deltaYesterdayStageRev);
+                    // console.log("deltaYesterdayStageRev: ", deltaYesterdayStageRev);
                 } else {
-                    console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
+                    // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
                 }
 
                 const graftonDay1 = GraftonForecast["Grafton-Mississippi"][0].value;
-                console.log("graftonDay1: ", graftonDay1);
+                // console.log("graftonDay1: ", graftonDay1);
 
                 const graftonDay1PlusGageZero = graftonDay1 + 403.79;
-                console.log("graftonDay1PlusGageZero: ", graftonDay1PlusGageZero);
+                // console.log("graftonDay1PlusGageZero: ", graftonDay1PlusGageZero);
 
                 const stage2 = graftonDay1PlusGageZero;
                 const flowRate2 = todayNetmissFlowValue;
-                console.log(stage2, flowRate2, jsonFileName);
+                // console.log(stage2, flowRate2, jsonFileName);
                 let deltaTodayStageRev = null;
                 let value2 = await readJSONTable(stage2, flowRate2, jsonFileName);
-                console.log("value2: ", value2);
+                // console.log("value2: ", value2);
                 if (value2 !== null) {
-                    console.log(`Interpolated reading for flow rate ${flowRate2} and stage ${stage2} at table ${jsonFileName}: ${value2}`);
+                    // console.log(`Interpolated reading for flow rate ${flowRate2} and stage ${stage2} at table ${jsonFileName}: ${value2}`);
                     deltaTodayStageRev = value2 - 418.0;
-                    console.log("deltaTodayStageRev: ", deltaTodayStageRev);
+                    // console.log("deltaTodayStageRev: ", deltaTodayStageRev);
                 } else {
-                    console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
+                    // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
                 }
 
                 total = deltaTodayStageRev + deltaYesterdayStageRev;
-                console.log("total: ", total);
+                // console.log("total: ", total);
 
                 if (total) {
                     day1 = "<div title='" + "--" + "'>" + total.toFixed(1) + "</div>";
                 } else {
                     day1 = "<div title='" + "--" + "'>" + "--" + "</div>";
                 }
+            
             } else {
                 if (convertedData !== null) {
                     day1 = "<div title='" + convertedData.values[0] + "'>" +
