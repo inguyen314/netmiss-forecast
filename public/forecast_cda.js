@@ -428,6 +428,7 @@ async function processAllData(data) {
             return;
         }
 
+        // console.log("latest7AMRvfValue: ", latest7AMRvfValue);
         // console.log("data: ", data);
         // console.log("BirdsPointForecastValue: ", BirdsPointForecastValue);
         // console.log("BirdsPointForecastValue for Birds Point-Mississippi: ", BirdsPointForecastValue["Birds Point-Mississippi"]);
@@ -1199,7 +1200,6 @@ async function processAllData(data) {
                 // console.log("total2: ", total2);
 
                 total = total2;
-                hardinDay1 = total;
 
                 if (total) {
                     day1 = "<div title='" + "Grafton day1 is off due to LD 25 TW rating table" + "'>" + total.toFixed(1) + "</div>";
@@ -1335,6 +1335,12 @@ async function processAllData(data) {
                     day1 = "<div title='" + "--" + "'>" + "--" + "</div>";
                 }
             
+            } else if (location_id === "Cairo-Ohio") {
+                if (latest7AMRvfValue[0] !== null) {
+                    day1 = "<div title='" + latest7AMRvfValue[0].value + "'>" +
+                        (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[0].value).toFixed(1) + "</strong>" : (latest7AMRvfValue[0].value).toFixed(1)) +
+                        "</div>";
+                }
             } else {
                 if (convertedData !== null) {
                     day1 = "<div title='" + convertedData.values[0] + "'>" +
@@ -1345,10 +1351,6 @@ async function processAllData(data) {
                     let roundedValueOnePlace = Math.round(roundedValue * 10) / 10;
                     day1 = "<div title='" + BirdsPointForecastValue[0].value + "'>" +
                         (tsid_forecast_location === true ? "<strong>" + roundedValueOnePlace.toFixed(1) + "</strong>" : roundedValueOnePlace.toFixed(1)) +
-                        "</div>";
-                } else if (latest7AMRvfValue[0] !== null && latest7AMRvfValue[0] !== undefined) {
-                    day1 = "<div title='" + latest7AMRvfValue[0] + "'>" +
-                        (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[0].value).toFixed(1) + "</strong>" : (Math.round((latest7AMRvfValue[0].value) * 10) / 10).toFixed(1)) +
                         "</div>";
                 } else {
                     day1 = "<div>" + "-" + "</div>";
@@ -1384,6 +1386,12 @@ async function processAllData(data) {
                 totalGraysPtDay2 = totalGraysPtDay1+(((((todayUpstreamNetmiss-yesterdayUpstreamNetmiss)-(todayDownstreamNetmiss-yesterdayDownstreamNetmiss))/(riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
 
                 day2 = "<div>" + totalGraysPtDay2.toFixed(1) + "</div>";
+            } else if (location_id === "Cairo-Ohio") {
+                if (latest7AMRvfValue[1] !== null) {
+                    day2 = "<div title='" + latest7AMRvfValue[1].value + "'>" +
+                        (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[1].value).toFixed(1) + "</strong>" : (latest7AMRvfValue[1].value).toFixed(1)) +
+                        "</div>";
+                }
             } else {
                 if (convertedData !== null) {
                     day2 = "<div title='" + convertedData.values[1] + "'>" +
@@ -1394,10 +1402,6 @@ async function processAllData(data) {
                     let roundedValueOnePlace = Math.round(roundedValue * 10) / 10;
                     day2 = "<div title='" + BirdsPointForecastValue[0].value + "'>" +
                         (tsid_forecast_location === true ? "<strong>" + roundedValueOnePlace.toFixed(1) + "</strong>" : roundedValueOnePlace.toFixed(1)) +
-                        "</div>";
-                } else if (latest7AMRvfValue[1] !== null) {
-                    day2 = "<div title='" + latest7AMRvfValue[1] + "'>" +
-                        (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[1].value).toFixed(1) + "</strong>" : (latest7AMRvfValue[1].value).toFixed(1)) +
                         "</div>";
                 } else {
                     day2 = "<div>" + "-" + "</div>";
@@ -1432,6 +1436,12 @@ async function processAllData(data) {
                 totalGraysPtDay3 = totalGraysPtDay2+(((((todayUpstreamNetmiss-yesterdayUpstreamNetmiss)-(todayDownstreamNetmiss-yesterdayDownstreamNetmiss))/(riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
 
                 day3 = "<div>" + totalGraysPtDay3.toFixed(1) + "</div>";
+            } else if (location_id === "Cairo-Ohio") {
+                if (latest7AMRvfValue[2] !== null) {
+                    day2 = "<div title='" + latest7AMRvfValue[2].value + "'>" +
+                        (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[2].value).toFixed(1) + "</strong>" : (latest7AMRvfValue[2].value).toFixed(1)) +
+                        "</div>";
+                }
             } else {
                 if (convertedData !== null) {
                     day3 = "<div title='" + convertedData.values[2] + "'>" +
@@ -1442,10 +1452,6 @@ async function processAllData(data) {
                     let roundedValueOnePlace = Math.round(roundedValue * 10) / 10;
                     day3 = "<div title='" + BirdsPointForecastValue[0].value + "'>" +
                         (tsid_forecast_location === true ? "<strong>" + roundedValueOnePlace.toFixed(1) + "</strong>" : roundedValueOnePlace.toFixed(1)) +
-                        "</div>";
-                } else if (latest7AMRvfValue[2] !== null) {
-                    day3 = "<div title='" + latest7AMRvfValue[2] + "'>" +
-                        (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[2].value).toFixed(1) + "</strong>" : (latest7AMRvfValue[2].value).toFixed(1)) +
                         "</div>";
                 } else {
                     day3 = "<div>" + "-" + "</div>";
@@ -1480,6 +1486,12 @@ async function processAllData(data) {
                 totalGraysPtDay4 = totalGraysPtDay3+(((((todayUpstreamNetmiss-yesterdayUpstreamNetmiss)-(todayDownstreamNetmiss-yesterdayDownstreamNetmiss))/(riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
 
                 day4 = "<div>" + totalGraysPtDay4.toFixed(1) + "</div>";
+            } else if (location_id === "Cairo-Ohio") {
+                if (latest7AMRvfValue[3] !== null) {
+                    day2 = "<div title='" + latest7AMRvfValue[3].value + "'>" +
+                        (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[3].value).toFixed(1) + "</strong>" : (latest7AMRvfValue[3].value).toFixed(1)) +
+                        "</div>";
+                }
             } else {
                 if (convertedData !== null) {
                     day4 = "<div title='" + convertedData.values[3] + "'>" +
@@ -1490,10 +1502,6 @@ async function processAllData(data) {
                     let roundedValueOnePlace = Math.round(roundedValue * 10) / 10;
                     day4 = "<div title='" + BirdsPointForecastValue[0].value + "'>" +
                         (tsid_forecast_location === true ? "<strong>" + roundedValueOnePlace.toFixed(1) + "</strong>" : roundedValueOnePlace.toFixed(1)) +
-                        "</div>";
-                } else if (latest7AMRvfValue[3] !== null) {
-                    day4 = "<div title='" + latest7AMRvfValue[3] + "'>" +
-                        (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[3].value).toFixed(1) + "</strong>" : (latest7AMRvfValue[3].value).toFixed(1)) +
                         "</div>";
                 } else {
                     day4 = "<div>" + "-" + "</div>";
@@ -1528,6 +1536,12 @@ async function processAllData(data) {
                 totalGraysPtDay5 = totalGraysPtDay4+(((((todayUpstreamNetmiss-yesterdayUpstreamNetmiss)-(todayDownstreamNetmiss-yesterdayDownstreamNetmiss))/(riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
 
                 day5 = "<div>" + totalGraysPtDay5.toFixed(1) + "</div>";
+            } else if (location_id === "Cairo-Ohio") {
+                if (latest7AMRvfValue[5] !== null) {
+                    day2 = "<div title='" + latest7AMRvfValue[5].value + "'>" +
+                        (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[5].value).toFixed(1) + "</strong>" : (latest7AMRvfValue[5].value).toFixed(1)) +
+                        "</div>";
+                }
             } else {
                 if (convertedData !== null) {
                     day5 = "<div title='" + convertedData.values[4] + "'>" +
@@ -1538,10 +1552,6 @@ async function processAllData(data) {
                     let roundedValueOnePlace = Math.round(roundedValue * 10) / 10;
                     day5 = "<div title='" + BirdsPointForecastValue[0].value + "'>" +
                         (tsid_forecast_location === true ? "<strong>" + roundedValueOnePlace.toFixed(1) + "</strong>" : roundedValueOnePlace.toFixed(1)) +
-                        "</div>";
-                } else if (latest7AMRvfValue[4] !== null) {
-                    day5 = "<div title='" + latest7AMRvfValue[4] + "'>" +
-                        (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[4].value).toFixed(1) + "</strong>" : (latest7AMRvfValue[4].value).toFixed(1)) +
                         "</div>";
                 } else {
                     day5 = "<div>" + "-" + "</div>";
@@ -1576,6 +1586,12 @@ async function processAllData(data) {
                 totalGraysPtDay6 = totalGraysPtDay5+(((((todayUpstreamNetmiss-yesterdayUpstreamNetmiss)-(todayDownstreamNetmiss-yesterdayDownstreamNetmiss))/(riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
 
                 day6 = "<div>" + totalGraysPtDay6.toFixed(1) + "</div>";
+            }  else if (location_id === "Cairo-Ohio") {
+                if (latest7AMRvfValue[6] !== null) {
+                    day2 = "<div title='" + latest7AMRvfValue[6].value + "'>" +
+                        (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[6].value).toFixed(1) + "</strong>" : (latest7AMRvfValue[6].value).toFixed(1)) +
+                        "</div>";
+                }
             } else {
                 if (convertedData !== null) {
                     day6 = "<div title='" + convertedData.values[5] + "'>" +
@@ -1586,10 +1602,6 @@ async function processAllData(data) {
                     let roundedValueOnePlace = Math.round(roundedValue * 10) / 10;
                     day6 = "<div title='" + BirdsPointForecastValue[0].value + "'>" +
                         (tsid_forecast_location === true ? "<strong>" + roundedValueOnePlace.toFixed(1) + "</strong>" : roundedValueOnePlace.toFixed(1)) +
-                        "</div>";
-                } else if (latest7AMRvfValue[5] !== null) {
-                    day6 = "<div title='" + latest7AMRvfValue[5] + "'>" +
-                        (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[5].value).toFixed(1) + "</strong>" : (latest7AMRvfValue[5].value).toFixed(1)) +
                         "</div>";
                 } else {
                     day6 = "<div>" + "-" + "</div>";
@@ -1603,27 +1615,29 @@ async function processAllData(data) {
             let totalGraysPtDay7 = null;
             if (location_id === "Grays Pt-Mississippi") {
                 const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[5][1]);
-                console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
+                // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
 
                 const todayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[6][1]);
-                console.log("todayUpstreamNetmiss = ", todayUpstreamNetmiss);
+                // console.log("todayUpstreamNetmiss = ", todayUpstreamNetmiss);
 
                 const todayDownstreamNetmiss = ForecastValues["Birds Point-Mississippi"][6].value;
-                console.log("todayDownstreamNetmiss = ", todayDownstreamNetmiss);
+                // console.log("todayDownstreamNetmiss = ", todayDownstreamNetmiss);
 
                 const yesterdayDownstreamNetmiss = ForecastValues["Birds Point-Mississippi"][5].value;
-                console.log("yesterdayDownstreamNetmiss = ", yesterdayDownstreamNetmiss);
+                // console.log("yesterdayDownstreamNetmiss = ", yesterdayDownstreamNetmiss);
 
                 const riverMile = river_mile_hard_coded;
                 const riverMileUpstream = netmiss_river_mile_hard_coded_upstream;
                 const riverMileDownstream = netmiss_river_mile_hard_coded_downstream;
-                console.log("riverMile = ", riverMile);
-                console.log("riverMileUpstream = ", riverMileUpstream);
-                console.log("riverMileDownstream = ", riverMileDownstream);
+                // console.log("riverMile = ", riverMile);
+                // console.log("riverMileUpstream = ", riverMileUpstream);
+                // console.log("riverMileDownstream = ", riverMileDownstream);
 
                 totalGraysPtDay7 = totalGraysPtDay6+(((((todayUpstreamNetmiss-yesterdayUpstreamNetmiss)-(todayDownstreamNetmiss-yesterdayDownstreamNetmiss))/(riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
 
                 day7 = "<div>" + totalGraysPtDay7.toFixed(1) + "</div>";
+            } else if (location_id === "LD 24 Pool-Mississippi" || location_id === "LD 24 TW-Mississippi" || location_id === "LD 25 Pool-Mississippi" || location_id === "LD 25 TW-Mississippi") {
+                day7 = "<div>" + "-" + "</div>";
             } else {
                 if (convertedData !== null && convertedData.values[6] !== null) {
                     day7 = "<div title='" + convertedData.values[6] + "'>" +
@@ -1634,10 +1648,6 @@ async function processAllData(data) {
                     let roundedValueOnePlace = Math.round(roundedValue * 10) / 10;
                     day7 = "<div title='" + BirdsPointForecastValue[0].value + "'>" +
                         (tsid_forecast_location === true ? "<strong>" + roundedValueOnePlace.toFixed(1) + "</strong>" : roundedValueOnePlace.toFixed(1)) +
-                        "</div>";
-                } else if (latest7AMRvfValue[6] !== null) {
-                    day7 = "<div title='" + latest7AMRvfValue[6] + "'>" +
-                        (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[6].value).toFixed(1) + "</strong>" : (latest7AMRvfValue[6].value).toFixed(1)) +
                         "</div>";
                 } else {
                     day7 = "<div>" + "-" + "</div>";
