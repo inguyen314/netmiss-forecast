@@ -428,7 +428,7 @@ async function processAllData(data) {
             return;
         }
 
-        // console.log("latest7AMRvfValue: ", latest7AMRvfValue);
+        console.log("latest7AMRvfValue: ", latest7AMRvfValue);
         // console.log("data: ", data);
         // console.log("BirdsPointForecastValue: ", BirdsPointForecastValue);
         // console.log("BirdsPointForecastValue for Birds Point-Mississippi: ", BirdsPointForecastValue["Birds Point-Mississippi"]);
@@ -437,7 +437,7 @@ async function processAllData(data) {
         // console.log("totalGraftonForecastDay1 for Grafton: ", totalGraftonForecastDay1["Grafton-Mississippi"]);
 
         // Starting Processing All Gages
-        if (1===1) {
+        if (1 === 1) {
             // LOCATION
             const locationIdCell = row.insertCell();
             locationIdCell.innerHTML = location_id;
@@ -446,14 +446,14 @@ async function processAllData(data) {
             const level6AmCell = row.insertCell();
             if (latest6AMValue.value) {
                 level6AmCell.innerHTML = "<div title='" + latest6AMValue.date + " " + latest6AMValue.value + "'>" +
-                "<a href='../../chart/public/chart.html?cwms_ts_id=" + tsid + "' target='_blank'>" +
-                (tsid_forecast_location === true ? "<strong>" + (Math.round((latest6AMValue.value) * 100) / 100).toFixed(2) + "</strong>" : (Math.round((latest6AMValue.value) * 100) / 100).toFixed(2)) + "</a>" +
-                "</div>";
+                    "<a href='../../chart/public/chart.html?cwms_ts_id=" + tsid + "' target='_blank'>" +
+                    (tsid_forecast_location === true ? "<strong>" + (Math.round((latest6AMValue.value) * 100) / 100).toFixed(2) + "</strong>" : (Math.round((latest6AMValue.value) * 100) / 100).toFixed(2)) + "</a>" +
+                    "</div>";
             } else {
                 level6AmCell.innerHTML = "<div title='" + latest6AMValue.date + " " + latest6AMValue.value + "'>" +
-                "<a href='../../chart/public/chart.html?cwms_ts_id=" + tsid + "' target='_blank'>" +
-                (tsid_forecast_location === true ? "<strong>" + "No Data" + "</strong>" : "No Data") + "</a>" +
-                "</div>";
+                    "<a href='../../chart/public/chart.html?cwms_ts_id=" + tsid + "' target='_blank'>" +
+                    (tsid_forecast_location === true ? "<strong>" + "No Data" + "</strong>" : "No Data") + "</a>" +
+                    "</div>";
             }
 
             // DAY1
@@ -1267,7 +1267,7 @@ async function processAllData(data) {
                 } else {
                     day1 = "<div title='" + "--" + "'>" + "total is null" + "</div>";
                 }
-           
+
             } else if (location_id === "Meredosia-Illinois") {
                 // YESYERDAY
                 // console.log("location_id: ", location_id);
@@ -1334,7 +1334,7 @@ async function processAllData(data) {
                 } else {
                     day1 = "<div title='" + "--" + "'>" + "--" + "</div>";
                 }
-            
+
             } else if (location_id === "Cairo-Ohio") {
                 if (latest7AMRvfValue[0] !== null) {
                     day1 = "<div title='" + latest7AMRvfValue[0].value + "'>" +
@@ -1383,7 +1383,7 @@ async function processAllData(data) {
                 // console.log("riverMileUpstream = ", riverMileUpstream);
                 // console.log("riverMileDownstream = ", riverMileDownstream);
 
-                totalGraysPtDay2 = totalGraysPtDay1+(((((todayUpstreamNetmiss-yesterdayUpstreamNetmiss)-(todayDownstreamNetmiss-yesterdayDownstreamNetmiss))/(riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
+                totalGraysPtDay2 = totalGraysPtDay1 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
 
                 day2 = "<div>" + totalGraysPtDay2.toFixed(1) + "</div>";
             } else if (location_id === "Cairo-Ohio") {
@@ -1433,12 +1433,12 @@ async function processAllData(data) {
                 // console.log("riverMileUpstream = ", riverMileUpstream);
                 // console.log("riverMileDownstream = ", riverMileDownstream);
 
-                totalGraysPtDay3 = totalGraysPtDay2+(((((todayUpstreamNetmiss-yesterdayUpstreamNetmiss)-(todayDownstreamNetmiss-yesterdayDownstreamNetmiss))/(riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
+                totalGraysPtDay3 = totalGraysPtDay2 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
 
                 day3 = "<div>" + totalGraysPtDay3.toFixed(1) + "</div>";
             } else if (location_id === "Cairo-Ohio") {
                 if (latest7AMRvfValue[2] !== null) {
-                    day2 = "<div title='" + latest7AMRvfValue[2].value + "'>" +
+                    day3 = "<div title='" + latest7AMRvfValue[2].value + "'>" +
                         (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[2].value).toFixed(1) + "</strong>" : (latest7AMRvfValue[2].value).toFixed(1)) +
                         "</div>";
                 }
@@ -1483,12 +1483,12 @@ async function processAllData(data) {
                 // console.log("riverMileUpstream = ", riverMileUpstream);
                 // console.log("riverMileDownstream = ", riverMileDownstream);
 
-                totalGraysPtDay4 = totalGraysPtDay3+(((((todayUpstreamNetmiss-yesterdayUpstreamNetmiss)-(todayDownstreamNetmiss-yesterdayDownstreamNetmiss))/(riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
+                totalGraysPtDay4 = totalGraysPtDay3 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
 
                 day4 = "<div>" + totalGraysPtDay4.toFixed(1) + "</div>";
             } else if (location_id === "Cairo-Ohio") {
                 if (latest7AMRvfValue[3] !== null) {
-                    day2 = "<div title='" + latest7AMRvfValue[3].value + "'>" +
+                    day4 = "<div title='" + latest7AMRvfValue[3].value + "'>" +
                         (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[3].value).toFixed(1) + "</strong>" : (latest7AMRvfValue[3].value).toFixed(1)) +
                         "</div>";
                 }
@@ -1533,13 +1533,13 @@ async function processAllData(data) {
                 // console.log("riverMileUpstream = ", riverMileUpstream);
                 // console.log("riverMileDownstream = ", riverMileDownstream);
 
-                totalGraysPtDay5 = totalGraysPtDay4+(((((todayUpstreamNetmiss-yesterdayUpstreamNetmiss)-(todayDownstreamNetmiss-yesterdayDownstreamNetmiss))/(riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
+                totalGraysPtDay5 = totalGraysPtDay4 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
 
                 day5 = "<div>" + totalGraysPtDay5.toFixed(1) + "</div>";
             } else if (location_id === "Cairo-Ohio") {
-                if (latest7AMRvfValue[5] !== null) {
-                    day2 = "<div title='" + latest7AMRvfValue[5].value + "'>" +
-                        (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[5].value).toFixed(1) + "</strong>" : (latest7AMRvfValue[5].value).toFixed(1)) +
+                if (latest7AMRvfValue[4] !== null) {
+                    day5 = "<div title='" + latest7AMRvfValue[4].value + "'>" +
+                        (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[4].value).toFixed(1) + "</strong>" : (latest7AMRvfValue[4].value).toFixed(1)) +
                         "</div>";
                 }
             } else {
@@ -1583,13 +1583,13 @@ async function processAllData(data) {
                 // console.log("riverMileUpstream = ", riverMileUpstream);
                 // console.log("riverMileDownstream = ", riverMileDownstream);
 
-                totalGraysPtDay6 = totalGraysPtDay5+(((((todayUpstreamNetmiss-yesterdayUpstreamNetmiss)-(todayDownstreamNetmiss-yesterdayDownstreamNetmiss))/(riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
+                totalGraysPtDay6 = totalGraysPtDay5 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
 
                 day6 = "<div>" + totalGraysPtDay6.toFixed(1) + "</div>";
-            }  else if (location_id === "Cairo-Ohio") {
-                if (latest7AMRvfValue[6] !== null) {
-                    day2 = "<div title='" + latest7AMRvfValue[6].value + "'>" +
-                        (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[6].value).toFixed(1) + "</strong>" : (latest7AMRvfValue[6].value).toFixed(1)) +
+            } else if (location_id === "Cairo-Ohio") {
+                if (latest7AMRvfValue[5] !== null) {
+                    day6 = "<div title='" + latest7AMRvfValue[5].value + "'>" +
+                        (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[5].value).toFixed(1) + "</strong>" : (latest7AMRvfValue[5].value).toFixed(1)) +
                         "</div>";
                 }
             } else {
@@ -1633,11 +1633,17 @@ async function processAllData(data) {
                 // console.log("riverMileUpstream = ", riverMileUpstream);
                 // console.log("riverMileDownstream = ", riverMileDownstream);
 
-                totalGraysPtDay7 = totalGraysPtDay6+(((((todayUpstreamNetmiss-yesterdayUpstreamNetmiss)-(todayDownstreamNetmiss-yesterdayDownstreamNetmiss))/(riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
+                totalGraysPtDay7 = totalGraysPtDay6 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
 
                 day7 = "<div>" + totalGraysPtDay7.toFixed(1) + "</div>";
             } else if (location_id === "LD 24 Pool-Mississippi" || location_id === "LD 24 TW-Mississippi" || location_id === "LD 25 Pool-Mississippi" || location_id === "LD 25 TW-Mississippi") {
                 day7 = "<div>" + "-" + "</div>";
+            } else if (location_id === "Cairo-Ohio") {
+                if (latest7AMRvfValue[6] !== null) {
+                    day7 = "<div title='" + latest7AMRvfValue[6].value + "'>" +
+                        (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[6].value).toFixed(1) + "</strong>" : (latest7AMRvfValue[6].value).toFixed(1)) +
+                        "</div>";
+                }
             } else {
                 if (convertedData !== null && convertedData.values[6] !== null) {
                     day7 = "<div title='" + convertedData.values[6] + "'>" +
