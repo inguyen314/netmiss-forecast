@@ -472,6 +472,7 @@ async function processAllData(data) {
             let totalRedRockLdgDay1 = null;
             let totalGrandTowerDay1 = null;
             let totalMoccasinSpringsDay1 = null;
+            let totalLD27PoolDay1 = null;
             // Process netmiss interpolation for each gage here
             if (location_id === "LD 24 Pool-Mississippi") {
                 // Compare downstream gage to determine "Open River" or Not
@@ -514,19 +515,14 @@ async function processAllData(data) {
                     day1 = "<div>" + "--" + "</div>";
                 }
             } else if (location_id === "LD 27 Pool-Mississippi") {
-                // Process data7 - stage rev 6am level
-                const result7 = getLatest6AMValue(data7);
-                const latest6AMValueUpstream = result7.latest6AMValue;
-                const tsid7 = result7.tsid;
+                // Process data
                 // console.log("latest6AMValue: ", latest6AMValue);
-
-                let total = null;
                 // console.log("latest6AMValue.value = ", latest6AMValue.value);
                 // console.log("convertedNetmissUpstreamData.values[0][1] = ", convertedNetmissUpstreamData.values[0][1]);
-                // console.log("latest6AMValueUpstream.value = ", latest6AMValueUpstream.value);
+                // console.log("convertedNetmissDownstreamData.values[0][1] = ", convertedNetmissDownstreamData.values[0][1]);
 
-                total = parseFloat(latest6AMValue.value) + parseFloat(convertedNetmissUpstreamData.values[0][1]) - parseFloat(latest6AMValueUpstream.value);
-                day1 = "<div title='" + (latest6AMValue.value).toFixed(2) + " + " + (convertedNetmissUpstreamData.values[0][1]).toFixed(2) + " - " + (latest6AMValueUpstream.value).toFixed(2) + " = " + total.toFixed(2) + "'>" + (tsid_forecast_location === true ? "<strong>" + total.toFixed(1) : total.toFixed(1)) + "</div>";
+                totalLD27PoolDay1 = parseFloat(latest6AMValue.value) + parseFloat(convertedNetmissUpstreamData.values[0][1]) - parseFloat(convertedNetmissDownstreamData.values[0][1]);
+                day1 = "<div title='" + "--" + "'>" + (tsid_forecast_location === true ? "<strong>" + totalLD27PoolDay1.toFixed(1) : totalLD27PoolDay1.toFixed(1)) + "</div>";
             } else if (location_id === "LD 27 TW-Mississippi") {
                 // Process data9 - stage rev 6am level
                 const result9 = getLatest6AMValue(data9);
@@ -1325,6 +1321,7 @@ async function processAllData(data) {
             let totalRedRockLdgDay2 = null;
             let totalGrandTowerDay2 = null;
             let totalMoccasinSpringsDay2 = null;
+            let totalLD27PoolDay2 = null;
             // Process netmiss interpolation for each gage here
             if (location_id === "Grays Pt-Mississippi") {
                 const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[0][1]);
@@ -1605,6 +1602,14 @@ async function processAllData(data) {
                 totalMoccasinSpringsDay2 = totalMoccasinSpringsDay1 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
 
                 day2 = "<div>" + totalMoccasinSpringsDay2.toFixed(1) + "</div>";
+            } else if (location_id === "LD 27 Pool-Mississippi") {
+                // Process data
+                // console.log("totalLD27PoolDay1: ", totalLD27PoolDay1);
+                // console.log("convertedNetmissUpstreamData.values[0][1] = ", convertedNetmissUpstreamData.values[0][1]);
+                // console.log("convertedNetmissUpstreamData.values[1][1] = ", convertedNetmissUpstreamData.values[1][1]);
+
+                totalLD27PoolDay2 = parseFloat(totalLD27PoolDay1) + parseFloat(convertedNetmissUpstreamData.values[1][1]) - parseFloat(convertedNetmissUpstreamData.values[0][1]);
+                day2 = "<div title='" + "--" + "'>" + (tsid_forecast_location === true ? "<strong>" + totalLD27PoolDay2.toFixed(1) : totalLD27PoolDay2.toFixed(1)) + "</div>";
             } else {
                 if (convertedData !== null) {
                     day2 = "<div title='" + convertedData.values[1] + "'>" +
@@ -1636,6 +1641,7 @@ async function processAllData(data) {
             let totalRedRockLdgDay3 = null;
             let totalGrandTowerDay3 = null;
             let totalMoccasinSpringsDay3 = null;
+            let totalLD27PoolDay3 = null;
             if (location_id === "Grays Pt-Mississippi") {
                 const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[1][1]);
                 // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
@@ -1907,6 +1913,14 @@ async function processAllData(data) {
                 totalMoccasinSpringsDay3 = totalMoccasinSpringsDay2 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
 
                 day3 = "<div>" + totalMoccasinSpringsDay3.toFixed(1) + "</div>";
+            } else if (location_id === "LD 27 Pool-Mississippi") {
+                // Process data
+                // console.log("totalLD27PoolDay2: ", totalLD27PoolDay2);
+                // console.log("convertedNetmissUpstreamData.values[2][1] = ", convertedNetmissUpstreamData.values[2][1]);
+                // console.log("convertedNetmissUpstreamData.values[1][1] = ", convertedNetmissUpstreamData.values[1][1]);
+
+                totalLD27PoolDay3 = parseFloat(totalLD27PoolDay2) + parseFloat(convertedNetmissUpstreamData.values[2][1]) - parseFloat(convertedNetmissUpstreamData.values[1][1]);
+                day3 = "<div title='" + "--" + "'>" + (tsid_forecast_location === true ? "<strong>" + totalLD27PoolDay3.toFixed(1) : totalLD27PoolDay3.toFixed(1)) + "</div>";
             } else {
                 if (convertedData !== null) {
                     day3 = "<div title='" + convertedData.values[2] + "'>" +
@@ -1938,6 +1952,7 @@ async function processAllData(data) {
             let totalRedRockLdgDay4 = null;
             let totalGrandTowerDay4 = null;
             let totalMoccasinSpringsDay4 = null;
+            let totalLD27PoolDay4 = null;
             if (location_id === "Grays Pt-Mississippi") {
                 const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[2][1]);
                 // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
@@ -2209,6 +2224,14 @@ async function processAllData(data) {
                 totalMoccasinSpringsDay4 = totalMoccasinSpringsDay3 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
 
                 day4 = "<div>" + totalMoccasinSpringsDay4.toFixed(1) + "</div>";
+            } else if (location_id === "LD 27 Pool-Mississippi") {
+                // Process data
+                // console.log("totalLD27PoolDay3: ", totalLD27PoolDay3);
+                // console.log("convertedNetmissUpstreamData.values[2][1] = ", convertedNetmissUpstreamData.values[2][1]);
+                // console.log("convertedNetmissUpstreamData.values[3][1] = ", convertedNetmissUpstreamData.values[3][1]);
+
+                totalLD27PoolDay4 = parseFloat(totalLD27PoolDay3) + parseFloat(convertedNetmissUpstreamData.values[3][1]) - parseFloat(convertedNetmissUpstreamData.values[2][1]);
+                day4 = "<div title='" + "--" + "'>" + (tsid_forecast_location === true ? "<strong>" + totalLD27PoolDay4.toFixed(1) : totalLD27PoolDay4.toFixed(1)) + "</div>";
             } else {
                 if (convertedData !== null) {
                     day4 = "<div title='" + convertedData.values[3] + "'>" +
@@ -2240,6 +2263,7 @@ async function processAllData(data) {
             let totalRedRockLdgDay5 = null;
             let totalGrandTowerDay5 = null;
             let totalMoccasinSpringsDay5 = null;
+            let totalLD27PoolDay5 = null;
             if (location_id === "Grays Pt-Mississippi") {
                 const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[3][1]);
                 // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
@@ -2511,6 +2535,14 @@ async function processAllData(data) {
                 totalMoccasinSpringsDay5 = totalMoccasinSpringsDay4 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
 
                 day5 = "<div>" + totalMoccasinSpringsDay5.toFixed(1) + "</div>";
+            } else if (location_id === "LD 27 Pool-Mississippi") {
+                // Process data
+                // console.log("totalLD27PoolDay4: ", totalLD27PoolDay4);
+                // console.log("convertedNetmissUpstreamData.values[4][1] = ", convertedNetmissUpstreamData.values[4][1]);
+                // console.log("convertedNetmissUpstreamData.values[3][1] = ", convertedNetmissUpstreamData.values[3][1]);
+
+                totalLD27PoolDay5 = parseFloat(totalLD27PoolDay4) + parseFloat(convertedNetmissUpstreamData.values[4][1]) - parseFloat(convertedNetmissUpstreamData.values[3][1]);
+                day5 = "<div title='" + "--" + "'>" + (tsid_forecast_location === true ? "<strong>" + totalLD27PoolDay5.toFixed(1) : totalLD27PoolDay5.toFixed(1)) + "</div>";
             } else {
                 if (convertedData !== null) {
                     day5 = "<div title='" + convertedData.values[4] + "'>" +
@@ -2542,6 +2574,7 @@ async function processAllData(data) {
             let totalRedRockLdgDay6 = null;
             let totalGrandTowerDay6 = null;
             let totalMoccasinSpringsDay6 = null;
+            let totalLD27PoolDay6 = null;
             if (location_id === "Grays Pt-Mississippi") {
                 const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[4][1]);
                 // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
@@ -2813,6 +2846,14 @@ async function processAllData(data) {
                 totalMoccasinSpringsDay6 = totalMoccasinSpringsDay5 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
 
                 day6 = "<div>" + totalMoccasinSpringsDay6.toFixed(1) + "</div>";
+            } else if (location_id === "LD 27 Pool-Mississippi") {
+                // Process data
+                // console.log("totalLD27PoolDay5: ", totalLD27PoolDay5);
+                // console.log("convertedNetmissUpstreamData.values[4][1] = ", convertedNetmissUpstreamData.values[4][1]);
+                // console.log("convertedNetmissUpstreamData.values[5][1] = ", convertedNetmissUpstreamData.values[5][1]);
+
+                totalLD27PoolDay6 = parseFloat(totalLD27PoolDay5) + parseFloat(convertedNetmissUpstreamData.values[5][1]) - parseFloat(convertedNetmissUpstreamData.values[4][1]);
+                day6 = "<div title='" + "--" + "'>" + (tsid_forecast_location === true ? "<strong>" + totalLD27PoolDay6.toFixed(1) : totalLD27PoolDay6.toFixed(1)) + "</div>";
             } else {
                 if (convertedData !== null) {
                     day6 = "<div title='" + convertedData.values[5] + "'>" +
@@ -2844,6 +2885,7 @@ async function processAllData(data) {
             let totalRedRockLdgDay7 = null;
             let totalGrandTowerDay7 = null;
             let totalMoccasinSpringsDay7 = null;
+            let totalLD27PoolDay7 = null;
             if (location_id === "Grays Pt-Mississippi") {
                 const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[5][1]);
                 // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
@@ -3117,6 +3159,14 @@ async function processAllData(data) {
                 totalMoccasinSpringsDay7 = totalMoccasinSpringsDay6 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
 
                 day7 = "<div>" + totalMoccasinSpringsDay7.toFixed(1) + "</div>";
+            } else if (location_id === "LD 27 Pool-Mississippi") {
+                // Process data
+                // console.log("totalLD27PoolDay6: ", totalLD27PoolDay6);
+                // console.log("convertedNetmissUpstreamData.values[6][1] = ", convertedNetmissUpstreamData.values[6][1]);
+                // console.log("convertedNetmissUpstreamData.values[5][1] = ", convertedNetmissUpstreamData.values[5][1]);
+
+                totalLD27PoolDay7 = parseFloat(totalLD27PoolDay6) + parseFloat(convertedNetmissUpstreamData.values[6][1]) - parseFloat(convertedNetmissUpstreamData.values[5][1]);
+                day7 = "<div title='" + "--" + "'>" + (tsid_forecast_location === true ? "<strong>" + totalLD27PoolDay7.toFixed(1) : totalLD27PoolDay7.toFixed(1)) + "</div>";
             } else {
                 if (convertedData !== null && convertedData.values[6] !== null) {
                     day7 = "<div title='" + convertedData.values[6] + "'>" +
