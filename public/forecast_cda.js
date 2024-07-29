@@ -1,6 +1,8 @@
+// Store Birds Point Forcasts
 let ForecastValues = {
 };
 
+// Store Grafton Forcasts
 let GraftonForecast = {
 };
 
@@ -467,6 +469,9 @@ async function processAllData(data) {
             let totalHerculaneumDay1 = null;
             let totalEngineersDepotDay1 = null;
             let totalNavTWDay1 = null;
+            let totalRedRockLdgDay1 = null;
+            let totalGrandTowerDay1 = null;
+            let totalMoccasinSpringsDay1 = null;
             // Process netmiss interpolation for each gage here
             if (location_id === "LD 24 Pool-Mississippi") {
                 // Compare downstream gage to determine "Open River" or Not
@@ -655,8 +660,6 @@ async function processAllData(data) {
 
                 day1 = "<div title='" + "--" + "'>" + totalNavTWDay1.toFixed(1) + "</div>";
             } else if (location_id === "Red Rock Ldg-Mississippi") {
-                // const formula = "P27+ ((((Q26-Q27)/Q28)*Q29)+Q30)";
-                const formula = "yesterday6AMValue + (((((todayUpstreamNetmiss - yesterday6AMValueUpstream)-(todayDownstreamNetmiss - yesterday6AMValueDownstream))/(riverMileUpstream - riverMileDownstream))*(riverMile - riverMileDownstream))+(todayDownstreamNetmiss - yesterday6AMValueDownstream))";
                 // Get all variables to do calculation
                 const yesterday6AMValue = ((getLatest6AMValue(data2)).latest6AMValue).value;
                 const yesterday6AMValueUpstream = ((getLatest6AMValue(data7)).latest6AMValue).value;
@@ -676,20 +679,11 @@ async function processAllData(data) {
                 // console.log("riverMileUpstream = ", riverMileUpstream);
                 // console.log("riverMileDownstream = ", riverMileDownstream);
 
-                // console.log("Q26 = ", (todayUpstreamNetmiss - yesterday6AMValueUpstream));
-                // console.log("Q27 = ", (todayDownstreamNetmiss - yesterday6AMValueDownstream));
-                // console.log("Q28 = ", (riverMileUpstream - riverMileDownstream));
-                // console.log("Q29 = ", (riverMile - riverMileDownstream));
-                // console.log("Q30 = ", (todayDownstreamNetmiss - yesterday6AMValueDownstream));
+                totalRedRockLdgDay1 = yesterday6AMValue + (((((todayUpstreamNetmiss - yesterday6AMValueUpstream) - (todayDownstreamNetmiss - yesterday6AMValueDownstream)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterday6AMValueDownstream));
+                // console.log("totalRedRockLdgDay1 = ", totalRedRockLdgDay1);
 
-                let total = null;
-                total = yesterday6AMValue + (((((todayUpstreamNetmiss - yesterday6AMValueUpstream) - (todayDownstreamNetmiss - yesterday6AMValueDownstream)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterday6AMValueDownstream));
-                // console.log("total = ", total);
-
-                day1 = "<div title='" + formula + "'>" + total.toFixed(1) + "</div>";
+                day1 = "<div title='" + "--" + "'>" + totalRedRockLdgDay1.toFixed(1) + "</div>";
             } else if (location_id === "Grand Tower-Mississippi") {
-                // const formula = "P27+ ((((Q26-Q27)/Q28)*Q29)+Q30)";
-                const formula = "yesterday6AMValue + (((((todayUpstreamNetmiss - yesterday6AMValueUpstream)-(todayDownstreamNetmiss - yesterday6AMValueDownstream))/(riverMileUpstream - riverMileDownstream))*(riverMile - riverMileDownstream))+(todayDownstreamNetmiss - yesterday6AMValueDownstream))";
                 // Get all variables to do calculation
                 const yesterday6AMValue = ((getLatest6AMValue(data2)).latest6AMValue).value;
                 const yesterday6AMValueUpstream = ((getLatest6AMValue(data7)).latest6AMValue).value;
@@ -709,20 +703,11 @@ async function processAllData(data) {
                 // console.log("riverMileUpstream = ", riverMileUpstream);
                 // console.log("riverMileDownstream = ", riverMileDownstream);
 
-                // console.log("Q26 = ", (todayUpstreamNetmiss - yesterday6AMValueUpstream));
-                // console.log("Q27 = ", (todayDownstreamNetmiss - yesterday6AMValueDownstream));
-                // console.log("Q28 = ", (riverMileUpstream - riverMileDownstream));
-                // console.log("Q29 = ", (riverMile - riverMileDownstream));
-                // console.log("Q30 = ", (todayDownstreamNetmiss - yesterday6AMValueDownstream));
+                totalGrandTowerDay1 = yesterday6AMValue + (((((todayUpstreamNetmiss - yesterday6AMValueUpstream) - (todayDownstreamNetmiss - yesterday6AMValueDownstream)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterday6AMValueDownstream));
+                // console.log("totalGrandTowerDay1 = ", totalGrandTowerDay1);
 
-                let total = null;
-                total = yesterday6AMValue + (((((todayUpstreamNetmiss - yesterday6AMValueUpstream) - (todayDownstreamNetmiss - yesterday6AMValueDownstream)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterday6AMValueDownstream));
-                // console.log("total = ", total);
-
-                day1 = "<div title='" + formula + "'>" + total.toFixed(1) + "</div>";
+                day1 = "<div title='" + "--" + "'>" + totalGrandTowerDay1.toFixed(1) + "</div>";
             } else if (location_id === "Moccasin Springs-Mississippi") {
-                // const formula = "P27+ ((((Q26-Q27)/Q28)*Q29)+Q30)";
-                const formula = "yesterday6AMValue + (((((todayUpstreamNetmiss - yesterday6AMValueUpstream)-(todayDownstreamNetmiss - yesterday6AMValueDownstream))/(riverMileUpstream - riverMileDownstream))*(riverMile - riverMileDownstream))+(todayDownstreamNetmiss - yesterday6AMValueDownstream))";
                 // Get all variables to do calculation
                 const yesterday6AMValue = ((getLatest6AMValue(data2)).latest6AMValue).value;
                 const yesterday6AMValueUpstream = ((getLatest6AMValue(data7)).latest6AMValue).value;
@@ -742,17 +727,10 @@ async function processAllData(data) {
                 // console.log("riverMileUpstream = ", riverMileUpstream);
                 // console.log("riverMileDownstream = ", riverMileDownstream);
 
-                // console.log("Q26 = ", (todayUpstreamNetmiss - yesterday6AMValueUpstream));
-                // console.log("Q27 = ", (todayDownstreamNetmiss - yesterday6AMValueDownstream));
-                // console.log("Q28 = ", (riverMileUpstream - riverMileDownstream));
-                // console.log("Q29 = ", (riverMile - riverMileDownstream));
-                // console.log("Q30 = ", (todayDownstreamNetmiss - yesterday6AMValueDownstream));
+                totalMoccasinSpringsDay1 = yesterday6AMValue + (((((todayUpstreamNetmiss - yesterday6AMValueUpstream) - (todayDownstreamNetmiss - yesterday6AMValueDownstream)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterday6AMValueDownstream));
+                // console.log("totalMoccasinSpringsDay1 = ", totalMoccasinSpringsDay1);
 
-                let total = null;
-                total = yesterday6AMValue + (((((todayUpstreamNetmiss - yesterday6AMValueUpstream) - (todayDownstreamNetmiss - yesterday6AMValueDownstream)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterday6AMValueDownstream));
-                // console.log("total = ", total);
-
-                day1 = "<div title='" + formula + "'>" + total.toFixed(1) + "</div>";
+                day1 = "<div title='" + "--" + "'>" + totalMoccasinSpringsDay1.toFixed(1) + "</div>";
             } else if (location_id === "Thebes-Mississippi") {
                 const formula = "yesterday6AMStageRevValue + (((((todayUpstreamNetmiss - yesterdayUpstream6AMStageRevValue)-(todayDownstreamNetmiss - yesterdayDownstream6AMStageRevValue))/(riverMileUpstream - riverMileDownstream))*(riverMile - riverMileDownstream))+(todayDownstreamNetmiss - yesterdayDownstream6AMStageRevValue))";
                 const yesterday6AMStageRevValue = ((getLatest6AMValue(data2)).latest6AMValue).value;
@@ -1344,6 +1322,9 @@ async function processAllData(data) {
             let totalHerculaneumDay2 = null;
             let totalEngineersDepotDay2 = null;
             let totalNavTWDay2 = null;
+            let totalRedRockLdgDay2 = null;
+            let totalGrandTowerDay2 = null;
+            let totalMoccasinSpringsDay2 = null;
             // Process netmiss interpolation for each gage here
             if (location_id === "Grays Pt-Mississippi") {
                 const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[0][1]);
@@ -1549,6 +1530,81 @@ async function processAllData(data) {
                 totalNavTWDay2 = totalNavTWDay1 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
 
                 day2 = "<div>" + totalNavTWDay2.toFixed(1) + "</div>";
+            } else if (location_id === "Red Rock Ldg-Mississippi") {
+                // console.log("totalRedRockLdgDay1 = ", totalRedRockLdgDay1);
+
+                const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[0][1]);
+                // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
+
+                const todayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[1][1]);
+                // console.log("todayUpstreamNetmiss = ", todayUpstreamNetmiss);
+
+                const todayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[1][1]);
+                // console.log("todayDownstreamNetmiss = ", todayDownstreamNetmiss);
+
+                const yesterdayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[0][1]);
+                // console.log("yesterdayDownstreamNetmiss = ", yesterdayDownstreamNetmiss);
+
+                const riverMile = river_mile_hard_coded;
+                const riverMileUpstream = netmiss_river_mile_hard_coded_upstream;
+                const riverMileDownstream = netmiss_river_mile_hard_coded_downstream;
+                // console.log("riverMile = ", riverMile);
+                // console.log("riverMileUpstream = ", riverMileUpstream);
+                // console.log("riverMileDownstream = ", riverMileDownstream);
+
+                totalRedRockLdgDay2 = totalRedRockLdgDay1 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
+
+                day2 = "<div>" + totalRedRockLdgDay2.toFixed(1) + "</div>";
+            } else if (location_id === "Grand Tower-Mississippi") {
+                // console.log("totalGrandTowerDay1 = ", totalGrandTowerDay1);
+
+                const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[0][1]);
+                // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
+
+                const todayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[1][1]);
+                // console.log("todayUpstreamNetmiss = ", todayUpstreamNetmiss);
+
+                const todayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[1][1]);
+                // console.log("todayDownstreamNetmiss = ", todayDownstreamNetmiss);
+
+                const yesterdayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[0][1]);
+                // console.log("yesterdayDownstreamNetmiss = ", yesterdayDownstreamNetmiss);
+
+                const riverMile = river_mile_hard_coded;
+                const riverMileUpstream = netmiss_river_mile_hard_coded_upstream;
+                const riverMileDownstream = netmiss_river_mile_hard_coded_downstream;
+                // console.log("riverMile = ", riverMile);
+                // console.log("riverMileUpstream = ", riverMileUpstream);
+                // console.log("riverMileDownstream = ", riverMileDownstream);
+
+                totalGrandTowerDay2 = totalGrandTowerDay1 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
+
+                day2 = "<div>" + totalGrandTowerDay2.toFixed(1) + "</div>";
+            } else if (location_id === "Moccasin Springs-Mississippi") {
+                // console.log("totalMoccasinSpringsDay1 = ", totalMoccasinSpringsDay1);
+
+                const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[0][1]);
+                // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
+
+                const todayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[1][1]);
+                // console.log("todayUpstreamNetmiss = ", todayUpstreamNetmiss);
+
+                const todayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[1][1]);
+                // console.log("todayDownstreamNetmiss = ", todayDownstreamNetmiss);
+
+                const yesterdayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[0][1]);
+                // console.log("yesterdayDownstreamNetmiss = ", yesterdayDownstreamNetmiss);
+
+                const riverMile = river_mile_hard_coded;
+                const riverMileUpstream = netmiss_river_mile_hard_coded_upstream;
+                const riverMileDownstream = netmiss_river_mile_hard_coded_downstream;
+                // console.log("riverMile = ", riverMile);
+                // console.log("riverMileUpstream = ", riverMileUpstream);
+                // console.log("riverMileDownstream = ", riverMileDownstream);
+
+                totalMoccasinSpringsDay2 = totalMoccasinSpringsDay1 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
+
+                day2 = "<div>" + totalMoccasinSpringsDay2.toFixed(1) + "</div>";
             } else {
                 if (convertedData !== null) {
                     day2 = "<div title='" + convertedData.values[1] + "'>" +
@@ -1577,6 +1633,9 @@ async function processAllData(data) {
             let totalHerculaneumDay3 = null;
             let totalEngineersDepotDay3 = null;
             let totalNavTWDay3 = null;
+            let totalRedRockLdgDay3 = null;
+            let totalGrandTowerDay3 = null;
+            let totalMoccasinSpringsDay3 = null;
             if (location_id === "Grays Pt-Mississippi") {
                 const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[1][1]);
                 // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
@@ -1773,6 +1832,81 @@ async function processAllData(data) {
                 totalNavTWDay3 = totalNavTWDay2 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
 
                 day3 = "<div>" + totalNavTWDay3.toFixed(1) + "</div>";
+            } else if (location_id === "Red Rock Ldg-Mississippi") {
+                // console.log("totalRedRockLdgDay2 = ", totalRedRockLdgDay2);
+
+                const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[1][1]);
+                // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
+
+                const todayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[2][1]);
+                // console.log("todayUpstreamNetmiss = ", todayUpstreamNetmiss);
+
+                const todayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[2][1]);
+                // console.log("todayDownstreamNetmiss = ", todayDownstreamNetmiss);
+
+                const yesterdayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[1][1]);
+                // console.log("yesterdayDownstreamNetmiss = ", yesterdayDownstreamNetmiss);
+
+                const riverMile = river_mile_hard_coded;
+                const riverMileUpstream = netmiss_river_mile_hard_coded_upstream;
+                const riverMileDownstream = netmiss_river_mile_hard_coded_downstream;
+                // console.log("riverMile = ", riverMile);
+                // console.log("riverMileUpstream = ", riverMileUpstream);
+                // console.log("riverMileDownstream = ", riverMileDownstream);
+
+                totalRedRockLdgDay3 = totalRedRockLdgDay2 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
+
+                day3 = "<div>" + totalRedRockLdgDay3.toFixed(1) + "</div>";
+            } else if (location_id === "Grand Tower-Mississippi") {
+                // console.log("totalGrandTowerDay2 = ", totalGrandTowerDay2);
+
+                const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[1][1]);
+                // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
+
+                const todayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[2][1]);
+                // console.log("todayUpstreamNetmiss = ", todayUpstreamNetmiss);
+
+                const todayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[2][1]);
+                // console.log("todayDownstreamNetmiss = ", todayDownstreamNetmiss);
+
+                const yesterdayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[1][1]);
+                // console.log("yesterdayDownstreamNetmiss = ", yesterdayDownstreamNetmiss);
+
+                const riverMile = river_mile_hard_coded;
+                const riverMileUpstream = netmiss_river_mile_hard_coded_upstream;
+                const riverMileDownstream = netmiss_river_mile_hard_coded_downstream;
+                // console.log("riverMile = ", riverMile);
+                // console.log("riverMileUpstream = ", riverMileUpstream);
+                // console.log("riverMileDownstream = ", riverMileDownstream);
+
+                totalGrandTowerDay3 = totalGrandTowerDay2 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
+
+                day3 = "<div>" + totalGrandTowerDay3.toFixed(1) + "</div>";
+            } else if (location_id === "Moccasin Springs-Mississippi") {
+                // console.log("totalMoccasinSpringsDay2 = ", totalMoccasinSpringsDay2);
+
+                const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[1][1]);
+                // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
+
+                const todayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[2][1]);
+                // console.log("todayUpstreamNetmiss = ", todayUpstreamNetmiss);
+
+                const todayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[2][1]);
+                // console.log("todayDownstreamNetmiss = ", todayDownstreamNetmiss);
+
+                const yesterdayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[1][1]);
+                // console.log("yesterdayDownstreamNetmiss = ", yesterdayDownstreamNetmiss);
+
+                const riverMile = river_mile_hard_coded;
+                const riverMileUpstream = netmiss_river_mile_hard_coded_upstream;
+                const riverMileDownstream = netmiss_river_mile_hard_coded_downstream;
+                // console.log("riverMile = ", riverMile);
+                // console.log("riverMileUpstream = ", riverMileUpstream);
+                // console.log("riverMileDownstream = ", riverMileDownstream);
+
+                totalMoccasinSpringsDay3 = totalMoccasinSpringsDay2 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
+
+                day3 = "<div>" + totalMoccasinSpringsDay3.toFixed(1) + "</div>";
             } else {
                 if (convertedData !== null) {
                     day3 = "<div title='" + convertedData.values[2] + "'>" +
@@ -1801,6 +1935,9 @@ async function processAllData(data) {
             let totalHerculaneumDay4 = null;
             let totalEngineersDepotDay4 = null;
             let totalNavTWDay4 = null;
+            let totalRedRockLdgDay4 = null;
+            let totalGrandTowerDay4 = null;
+            let totalMoccasinSpringsDay4 = null;
             if (location_id === "Grays Pt-Mississippi") {
                 const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[2][1]);
                 // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
@@ -1997,6 +2134,81 @@ async function processAllData(data) {
                 totalNavTWDay4 = totalNavTWDay3 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
 
                 day4 = "<div>" + totalNavTWDay4.toFixed(1) + "</div>";
+            } else if (location_id === "Red Rock Ldg-Mississippi") {
+                // console.log("totalRedRockLdgDay3 = ", totalRedRockLdgDay3);
+
+                const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[2][1]);
+                // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
+
+                const todayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[3][1]);
+                // console.log("todayUpstreamNetmiss = ", todayUpstreamNetmiss);
+
+                const todayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[3][1]);
+                // console.log("todayDownstreamNetmiss = ", todayDownstreamNetmiss);
+
+                const yesterdayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[2][1]);
+                // console.log("yesterdayDownstreamNetmiss = ", yesterdayDownstreamNetmiss);
+
+                const riverMile = river_mile_hard_coded;
+                const riverMileUpstream = netmiss_river_mile_hard_coded_upstream;
+                const riverMileDownstream = netmiss_river_mile_hard_coded_downstream;
+                // console.log("riverMile = ", riverMile);
+                // console.log("riverMileUpstream = ", riverMileUpstream);
+                // console.log("riverMileDownstream = ", riverMileDownstream);
+
+                totalRedRockLdgDay4 = totalRedRockLdgDay3 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
+
+                day4 = "<div>" + totalRedRockLdgDay4.toFixed(1) + "</div>";
+            } else if (location_id === "Grand Tower-Mississippi") {
+                // console.log("totalGrandTowerDay3 = ", totalGrandTowerDay3);
+
+                const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[2][1]);
+                // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
+
+                const todayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[3][1]);
+                // console.log("todayUpstreamNetmiss = ", todayUpstreamNetmiss);
+
+                const todayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[3][1]);
+                // console.log("todayDownstreamNetmiss = ", todayDownstreamNetmiss);
+
+                const yesterdayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[2][1]);
+                // console.log("yesterdayDownstreamNetmiss = ", yesterdayDownstreamNetmiss);
+
+                const riverMile = river_mile_hard_coded;
+                const riverMileUpstream = netmiss_river_mile_hard_coded_upstream;
+                const riverMileDownstream = netmiss_river_mile_hard_coded_downstream;
+                // console.log("riverMile = ", riverMile);
+                // console.log("riverMileUpstream = ", riverMileUpstream);
+                // console.log("riverMileDownstream = ", riverMileDownstream);
+
+                totalGrandTowerDay4 = totalGrandTowerDay3 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
+
+                day4 = "<div>" + totalGrandTowerDay4.toFixed(1) + "</div>";
+            } else if (location_id === "Moccasin Springs-Mississippi") {
+                // console.log("totalMoccasinSpringsDay3 = ", totalMoccasinSpringsDay3);
+
+                const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[2][1]);
+                // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
+
+                const todayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[3][1]);
+                // console.log("todayUpstreamNetmiss = ", todayUpstreamNetmiss);
+
+                const todayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[3][1]);
+                // console.log("todayDownstreamNetmiss = ", todayDownstreamNetmiss);
+
+                const yesterdayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[2][1]);
+                // console.log("yesterdayDownstreamNetmiss = ", yesterdayDownstreamNetmiss);
+
+                const riverMile = river_mile_hard_coded;
+                const riverMileUpstream = netmiss_river_mile_hard_coded_upstream;
+                const riverMileDownstream = netmiss_river_mile_hard_coded_downstream;
+                // console.log("riverMile = ", riverMile);
+                // console.log("riverMileUpstream = ", riverMileUpstream);
+                // console.log("riverMileDownstream = ", riverMileDownstream);
+
+                totalMoccasinSpringsDay4 = totalMoccasinSpringsDay3 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
+
+                day4 = "<div>" + totalMoccasinSpringsDay4.toFixed(1) + "</div>";
             } else {
                 if (convertedData !== null) {
                     day4 = "<div title='" + convertedData.values[3] + "'>" +
@@ -2025,6 +2237,9 @@ async function processAllData(data) {
             let totalHerculaneumDay5 = null;
             let totalEngineersDepotDay5 = null;
             let totalNavTWDay5 = null;
+            let totalRedRockLdgDay5 = null;
+            let totalGrandTowerDay5 = null;
+            let totalMoccasinSpringsDay5 = null;
             if (location_id === "Grays Pt-Mississippi") {
                 const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[3][1]);
                 // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
@@ -2221,6 +2436,81 @@ async function processAllData(data) {
                 totalNavTWDay5 = totalNavTWDay4 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
 
                 day5 = "<div>" + totalNavTWDay5.toFixed(1) + "</div>";
+            } else if (location_id === "Red Rock Ldg-Mississippi") {
+                // console.log("totalRedRockLdgDay4 = ", totalRedRockLdgDay4);
+
+                const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[3][1]);
+                // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
+
+                const todayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[4][1]);
+                // console.log("todayUpstreamNetmiss = ", todayUpstreamNetmiss);
+
+                const todayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[4][1]);
+                // console.log("todayDownstreamNetmiss = ", todayDownstreamNetmiss);
+
+                const yesterdayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[3][1]);
+                // console.log("yesterdayDownstreamNetmiss = ", yesterdayDownstreamNetmiss);
+
+                const riverMile = river_mile_hard_coded;
+                const riverMileUpstream = netmiss_river_mile_hard_coded_upstream;
+                const riverMileDownstream = netmiss_river_mile_hard_coded_downstream;
+                // console.log("riverMile = ", riverMile);
+                // console.log("riverMileUpstream = ", riverMileUpstream);
+                // console.log("riverMileDownstream = ", riverMileDownstream);
+
+                totalRedRockLdgDay5 = totalRedRockLdgDay4 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
+
+                day5 = "<div>" + totalRedRockLdgDay5.toFixed(1) + "</div>";
+            } else if (location_id === "Grand Tower-Mississippi") {
+                // console.log("totalGrandTowerDay4 = ", totalGrandTowerDay4);
+
+                const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[3][1]);
+                // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
+
+                const todayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[4][1]);
+                // console.log("todayUpstreamNetmiss = ", todayUpstreamNetmiss);
+
+                const todayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[4][1]);
+                // console.log("todayDownstreamNetmiss = ", todayDownstreamNetmiss);
+
+                const yesterdayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[3][1]);
+                // console.log("yesterdayDownstreamNetmiss = ", yesterdayDownstreamNetmiss);
+
+                const riverMile = river_mile_hard_coded;
+                const riverMileUpstream = netmiss_river_mile_hard_coded_upstream;
+                const riverMileDownstream = netmiss_river_mile_hard_coded_downstream;
+                // console.log("riverMile = ", riverMile);
+                // console.log("riverMileUpstream = ", riverMileUpstream);
+                // console.log("riverMileDownstream = ", riverMileDownstream);
+
+                totalGrandTowerDay5 = totalGrandTowerDay4 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
+
+                day5 = "<div>" + totalGrandTowerDay5.toFixed(1) + "</div>";
+            } else if (location_id === "Moccasin Springs-Mississippi") {
+                // console.log("totalMoccasinSpringsDay4 = ", totalMoccasinSpringsDay4);
+
+                const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[3][1]);
+                // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
+
+                const todayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[4][1]);
+                // console.log("todayUpstreamNetmiss = ", todayUpstreamNetmiss);
+
+                const todayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[4][1]);
+                // console.log("todayDownstreamNetmiss = ", todayDownstreamNetmiss);
+
+                const yesterdayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[3][1]);
+                // console.log("yesterdayDownstreamNetmiss = ", yesterdayDownstreamNetmiss);
+
+                const riverMile = river_mile_hard_coded;
+                const riverMileUpstream = netmiss_river_mile_hard_coded_upstream;
+                const riverMileDownstream = netmiss_river_mile_hard_coded_downstream;
+                // console.log("riverMile = ", riverMile);
+                // console.log("riverMileUpstream = ", riverMileUpstream);
+                // console.log("riverMileDownstream = ", riverMileDownstream);
+
+                totalMoccasinSpringsDay5 = totalMoccasinSpringsDay4 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
+
+                day5 = "<div>" + totalMoccasinSpringsDay5.toFixed(1) + "</div>";
             } else {
                 if (convertedData !== null) {
                     day5 = "<div title='" + convertedData.values[4] + "'>" +
@@ -2249,6 +2539,9 @@ async function processAllData(data) {
             let totalHerculaneumDay6 = null;
             let totalEngineersDepotDay6 = null;
             let totalNavTWDay6 = null;
+            let totalRedRockLdgDay6 = null;
+            let totalGrandTowerDay6 = null;
+            let totalMoccasinSpringsDay6 = null;
             if (location_id === "Grays Pt-Mississippi") {
                 const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[4][1]);
                 // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
@@ -2445,6 +2738,81 @@ async function processAllData(data) {
                 totalNavTWDay6 = totalNavTWDay5 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
 
                 day6 = "<div>" + totalNavTWDay6.toFixed(1) + "</div>";
+            } else if (location_id === "Red Rock Ldg-Mississippi") {
+                // console.log("totalRedRockLdgDay5 = ", totalRedRockLdgDay5);
+
+                const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[4][1]);
+                // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
+
+                const todayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[5][1]);
+                // console.log("todayUpstreamNetmiss = ", todayUpstreamNetmiss);
+
+                const todayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[5][1]);
+                // console.log("todayDownstreamNetmiss = ", todayDownstreamNetmiss);
+
+                const yesterdayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[4][1]);
+                // console.log("yesterdayDownstreamNetmiss = ", yesterdayDownstreamNetmiss);
+
+                const riverMile = river_mile_hard_coded;
+                const riverMileUpstream = netmiss_river_mile_hard_coded_upstream;
+                const riverMileDownstream = netmiss_river_mile_hard_coded_downstream;
+                // console.log("riverMile = ", riverMile);
+                // console.log("riverMileUpstream = ", riverMileUpstream);
+                // console.log("riverMileDownstream = ", riverMileDownstream);
+
+                totalRedRockLdgDay6 = totalRedRockLdgDay5 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
+
+                day6 = "<div>" + totalRedRockLdgDay6.toFixed(1) + "</div>";
+            } else if (location_id === "Grand Tower-Mississippi") {
+                // console.log("totalGrandTowerDay5 = ", totalGrandTowerDay5);
+
+                const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[4][1]);
+                // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
+
+                const todayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[5][1]);
+                // console.log("todayUpstreamNetmiss = ", todayUpstreamNetmiss);
+
+                const todayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[5][1]);
+                // console.log("todayDownstreamNetmiss = ", todayDownstreamNetmiss);
+
+                const yesterdayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[4][1]);
+                // console.log("yesterdayDownstreamNetmiss = ", yesterdayDownstreamNetmiss);
+
+                const riverMile = river_mile_hard_coded;
+                const riverMileUpstream = netmiss_river_mile_hard_coded_upstream;
+                const riverMileDownstream = netmiss_river_mile_hard_coded_downstream;
+                // console.log("riverMile = ", riverMile);
+                // console.log("riverMileUpstream = ", riverMileUpstream);
+                // console.log("riverMileDownstream = ", riverMileDownstream);
+
+                totalGrandTowerDay6 = totalGrandTowerDay5 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
+
+                day6 = "<div>" + totalGrandTowerDay6.toFixed(1) + "</div>";
+            } else if (location_id === "Moccasin Springs-Mississippi") {
+                // console.log("totalMoccasinSpringsDay5 = ", totalMoccasinSpringsDay5);
+
+                const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[4][1]);
+                // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
+
+                const todayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[5][1]);
+                // console.log("todayUpstreamNetmiss = ", todayUpstreamNetmiss);
+
+                const todayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[5][1]);
+                // console.log("todayDownstreamNetmiss = ", todayDownstreamNetmiss);
+
+                const yesterdayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[4][1]);
+                // console.log("yesterdayDownstreamNetmiss = ", yesterdayDownstreamNetmiss);
+
+                const riverMile = river_mile_hard_coded;
+                const riverMileUpstream = netmiss_river_mile_hard_coded_upstream;
+                const riverMileDownstream = netmiss_river_mile_hard_coded_downstream;
+                // console.log("riverMile = ", riverMile);
+                // console.log("riverMileUpstream = ", riverMileUpstream);
+                // console.log("riverMileDownstream = ", riverMileDownstream);
+
+                totalMoccasinSpringsDay6 = totalMoccasinSpringsDay5 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
+
+                day6 = "<div>" + totalMoccasinSpringsDay6.toFixed(1) + "</div>";
             } else {
                 if (convertedData !== null) {
                     day6 = "<div title='" + convertedData.values[5] + "'>" +
@@ -2473,6 +2841,9 @@ async function processAllData(data) {
             let totalHerculaneumDay7 = null;
             let totalEngineersDepotDay7 = null;
             let totalNavTWDay7 = null;
+            let totalRedRockLdgDay7 = null;
+            let totalGrandTowerDay7 = null;
+            let totalMoccasinSpringsDay7 = null;
             if (location_id === "Grays Pt-Mississippi") {
                 const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[5][1]);
                 // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
@@ -2671,6 +3042,81 @@ async function processAllData(data) {
                 totalNavTWDay7 = totalNavTWDay6 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
 
                 day7 = "<div>" + totalNavTWDay7.toFixed(1) + "</div>";
+            } else if (location_id === "Red Rock Ldg-Mississippi") {
+                // console.log("totalRedRockLdgDay6 = ", totalRedRockLdgDay6);
+
+                const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[5][1]);
+                // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
+
+                const todayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[6][1]);6
+                // console.log("todayUpstreamNetmiss = ", todayUpstreamNetmiss);
+
+                const todayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[6][1]);
+                // console.log("todayDownstreamNetmiss = ", todayDownstreamNetmiss);
+
+                const yesterdayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[5][1]);
+                // console.log("yesterdayDownstreamNetmiss = ", yesterdayDownstreamNetmiss);
+
+                const riverMile = river_mile_hard_coded;
+                const riverMileUpstream = netmiss_river_mile_hard_coded_upstream;
+                const riverMileDownstream = netmiss_river_mile_hard_coded_downstream;
+                // console.log("riverMile = ", riverMile);
+                // console.log("riverMileUpstream = ", riverMileUpstream);
+                // console.log("riverMileDownstream = ", riverMileDownstream);
+
+                totalRedRockLdgDay7 = totalRedRockLdgDay6 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
+
+                day7 = "<div>" + totalRedRockLdgDay7.toFixed(1) + "</div>";
+            } else if (location_id === "Grand Tower-Mississippi") {
+                // console.log("totalGrandTowerDay6 = ", totalGrandTowerDay6);
+
+                const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[5][1]);
+                // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
+
+                const todayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[6][1]);6
+                // console.log("todayUpstreamNetmiss = ", todayUpstreamNetmiss);
+
+                const todayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[6][1]);
+                // console.log("todayDownstreamNetmiss = ", todayDownstreamNetmiss);
+
+                const yesterdayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[5][1]);
+                // console.log("yesterdayDownstreamNetmiss = ", yesterdayDownstreamNetmiss);
+
+                const riverMile = river_mile_hard_coded;
+                const riverMileUpstream = netmiss_river_mile_hard_coded_upstream;
+                const riverMileDownstream = netmiss_river_mile_hard_coded_downstream;
+                // console.log("riverMile = ", riverMile);
+                // console.log("riverMileUpstream = ", riverMileUpstream);
+                // console.log("riverMileDownstream = ", riverMileDownstream);
+
+                totalGrandTowerDay7 = totalGrandTowerDay6 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
+
+                day7 = "<div>" + totalGrandTowerDay7.toFixed(1) + "</div>";
+            } else if (location_id === "Moccasin Springs-Mississippi") {
+                // console.log("totalMoccasinSpringsDay6 = ", totalMoccasinSpringsDay6);
+
+                const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[5][1]);
+                // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
+
+                const todayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[6][1]);6
+                // console.log("todayUpstreamNetmiss = ", todayUpstreamNetmiss);
+
+                const todayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[6][1]);
+                // console.log("todayDownstreamNetmiss = ", todayDownstreamNetmiss);
+
+                const yesterdayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[5][1]);
+                // console.log("yesterdayDownstreamNetmiss = ", yesterdayDownstreamNetmiss);
+
+                const riverMile = river_mile_hard_coded;
+                const riverMileUpstream = netmiss_river_mile_hard_coded_upstream;
+                const riverMileDownstream = netmiss_river_mile_hard_coded_downstream;
+                // console.log("riverMile = ", riverMile);
+                // console.log("riverMileUpstream = ", riverMileUpstream);
+                // console.log("riverMileDownstream = ", riverMileDownstream);
+
+                totalMoccasinSpringsDay7 = totalMoccasinSpringsDay6 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
+
+                day7 = "<div>" + totalMoccasinSpringsDay7.toFixed(1) + "</div>";
             } else {
                 if (convertedData !== null && convertedData.values[6] !== null) {
                     day7 = "<div title='" + convertedData.values[6] + "'>" +
