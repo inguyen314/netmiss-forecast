@@ -519,9 +519,9 @@ async function processAllData(data) {
                 // console.log("latest6AMValue: ", latest6AMValue);
                 // console.log("latest6AMValue.value = ", latest6AMValue.value);
                 // console.log("convertedNetmissUpstreamData.values[0][1] = ", convertedNetmissUpstreamData.values[0][1]);
-                // console.log("convertedNetmissDownstreamData.values[0][1] = ", convertedNetmissDownstreamData.values[0][1]);
+                // console.log("((getLatest6AMValue(data7)).latest6AMValue).value = ", ((getLatest6AMValue(data7)).latest6AMValue).value);
 
-                totalLD27PoolDay1 = parseFloat(latest6AMValue.value) + parseFloat(convertedNetmissUpstreamData.values[0][1]) - parseFloat(convertedNetmissDownstreamData.values[0][1]);
+                totalLD27PoolDay1 = parseFloat(latest6AMValue.value) + parseFloat(convertedNetmissUpstreamData.values[0][1]) - parseFloat(((getLatest6AMValue(data7)).latest6AMValue).value);
                 day1 = "<div title='" + "--" + "'>" + (tsid_forecast_location === true ? "<strong>" + totalLD27PoolDay1.toFixed(1) : totalLD27PoolDay1.toFixed(1)) + "</div>";
             } else if (location_id === "LD 27 TW-Mississippi") {
                 // Process data9 - stage rev 6am level
