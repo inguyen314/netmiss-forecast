@@ -478,24 +478,33 @@ async function processAllData(data) {
             let totalLouisianaDay1 = null;
             // Process netmiss interpolation for each gage here
             if (location_id === "LD 24 Pool-Mississippi") {
-                // Compare downstream gage to determine "Open River" or Not
+                let isOpenRiver = null;
+
+                // Ensure that both convertedData and convertedNetmissDownstreamData are not null
                 if (convertedData !== null && convertedNetmissDownstreamData !== null) {
-                    // Calculate downstream value to determine for "Open River"
-                    let downstreamValueToCompare = parseFloat(data6.elevation) + 0.5 + convertedNetmissDownstreamData.values[0][1];
+                    // Calculate the downstream value by adding the elevation from data6, a fixed increment (0.5), and the value from convertedNetmissDownstreamData
+                    let downstreamValueToCompare = 421.81 + 0.5 + convertedNetmissDownstreamData.values[0][1];
                     // console.log("downstreamValueToCompare: ", downstreamValueToCompare);
 
-                    // Get today netmiss forecast to compare and determine for "Open River"
+                    // Retrieve today's netmiss forecast value
                     let todayNetmissForecast = convertedData.values[0][1];
                     // console.log("todayNetmissForecast: ", todayNetmissForecast);
 
-                    // Determine if today is "Open River"
-                    if (downstreamValueToCompare > todayNetmissForecast) {
-                        day1 = "<div title='" + "(" + parseFloat(data6.elevation).toFixed(2) + " + 0.5 + " + (convertedNetmissDownstreamData.values[0][1]).toFixed(2) + ") (" + downstreamValueToCompare.toFixed(2) + " >= " + todayNetmissForecast.toFixed(2) + ") = Open River" + "'>" + (tsid_forecast_location === true ? "<strong>" + "Open River" : "-Error-") + "</div>";
+                    // Determine if the downstream value is greater than today's forecast to decide if it's an "Open River"
+                    isOpenRiver = downstreamValueToCompare > todayNetmissForecast;
+                    // console.log("isOpenRiver: ", isOpenRiver);
+
+                    // Construct HTML content based on whether it's an "Open River" or not
+                    if (isOpenRiver) {
+                        // If it's "Open River", display with "Open River" label, otherwise display an error message
+                        day1 = "<div title='" + "isOpenRiver = " + isOpenRiver + "'>" + (tsid_forecast_location === true ? "<strong>" + "Open River" : "-Error-") + "</div>";
                     } else {
-                        day1 = "<div title='" + convertedData.values[0] + "'>" + (tsid_forecast_location === true ? "<strong>" + (convertedData.values[0][1]).toFixed(1) : (convertedData.values[0][1]).toFixed(1)) + "</div>";
+                        // If it's not "Open River", display today's forecast value with or without strong formatting based on tsid_forecast_location
+                        day1 = "<div title='" + "isOpenRiver = " + isOpenRiver + "'>" + (tsid_forecast_location === true ? "<strong>" + (convertedData.values[0][1]).toFixed(1) : (convertedData.values[0][1]).toFixed(1)) + "</div>";
                     }
                 } else {
-                    day1 = "<div>" + "--" + "</div>";
+                    // If either convertedData or convertedNetmissDownstreamData is null, default to showing a placeholder value (909)
+                    day1 = "<div>" + 909 + "</div>";
                 }
             } else if (location_id === "LD 25 Pool-Mississippi") {
                 // Compare downstream gage to determine "Open River" or Not
@@ -1781,6 +1790,35 @@ async function processAllData(data) {
                 totalLouisianaDay2 = all;
 
                 day2 = "<div title='" + "--" + "'>" + totalLouisianaDay2.toFixed(1) + "</div>";
+            } else if (location_id === "LD 24 Pool-Mississippi") {
+                let isOpenRiver = null;
+
+                // Ensure that both convertedData and convertedNetmissDownstreamData are not null
+                if (convertedData !== null && convertedNetmissDownstreamData !== null) {
+                    // Calculate the downstream value by adding the elevation from data6, a fixed increment (0.5), and the value from convertedNetmissDownstreamData
+                    let downstreamValueToCompare = 421.81 + 0.5 + convertedNetmissDownstreamData.values[1][1];
+                    // console.log("downstreamValueToCompare: ", downstreamValueToCompare);
+
+                    // Retrieve today's netmiss forecast value
+                    let todayNetmissForecast = convertedData.values[1][1];
+                    // console.log("todayNetmissForecast: ", todayNetmissForecast);
+
+                    // Determine if the downstream value is greater than today's forecast to decide if it's an "Open River"
+                    isOpenRiver = downstreamValueToCompare > todayNetmissForecast;
+                    // console.log("isOpenRiver: ", isOpenRiver);
+
+                    // Construct HTML content based on whether it's an "Open River" or not
+                    if (isOpenRiver) {
+                        // If it's "Open River", display with "Open River" label, otherwise display an error message
+                        day2 = "<div title='" + "isOpenRiver = " + isOpenRiver + "'>" + (tsid_forecast_location === true ? "<strong>" + "Open River" : "-Error-") + "</div>";
+                    } else {
+                        // If it's not "Open River", display today's forecast value with or without strong formatting based on tsid_forecast_location
+                        day2 = "<div title='" + "isOpenRiver = " + isOpenRiver + "'>" + (tsid_forecast_location === true ? "<strong>" + (convertedData.values[1][1]).toFixed(1) : (convertedData.values[1][1]).toFixed(1)) + "</div>";
+                    }
+                } else {
+                    // If either convertedData or convertedNetmissDownstreamData is null, default to showing a placeholder value (909)
+                    day2 = "<div>" + 909 + "</div>";
+                }
             } else {
                 if (convertedData !== null) {
                     day2 = "<div title='" + convertedData.values[1] + "'>" +
@@ -2267,6 +2305,35 @@ async function processAllData(data) {
                 totalLouisianaDay3 = all;
 
                 day3 = "<div title='" + "--" + "'>" + totalLouisianaDay3.toFixed(1) + "</div>";
+            } else if (location_id === "LD 24 Pool-Mississippi") {
+                let isOpenRiver = null;
+
+                // Ensure that both convertedData and convertedNetmissDownstreamData are not null
+                if (convertedData !== null && convertedNetmissDownstreamData !== null) {
+                    // Calculate the downstream value by adding the elevation from data6, a fixed increment (0.5), and the value from convertedNetmissDownstreamData
+                    let downstreamValueToCompare = 421.81 + 0.5 + convertedNetmissDownstreamData.values[2][1];
+                    // console.log("downstreamValueToCompare: ", downstreamValueToCompare);
+
+                    // Retrieve today's netmiss forecast value
+                    let todayNetmissForecast = convertedData.values[2][1];
+                    // console.log("todayNetmissForecast: ", todayNetmissForecast);
+
+                    // Determine if the downstream value is greater than today's forecast to decide if it's an "Open River"
+                    isOpenRiver = downstreamValueToCompare > todayNetmissForecast;
+                    // console.log("isOpenRiver: ", isOpenRiver);
+
+                    // Construct HTML content based on whether it's an "Open River" or not
+                    if (isOpenRiver) {
+                        // If it's "Open River", display with "Open River" label, otherwise display an error message
+                        day3 = "<div title='" + "isOpenRiver = " + isOpenRiver + "'>" + (tsid_forecast_location === true ? "<strong>" + "Open River" : "-Error-") + "</div>";
+                    } else {
+                        // If it's not "Open River", display today's forecast value with or without strong formatting based on tsid_forecast_location
+                        day3 = "<div title='" + "isOpenRiver = " + isOpenRiver + "'>" + (tsid_forecast_location === true ? "<strong>" + (convertedData.values[2][1]).toFixed(1) : (convertedData.values[2][1]).toFixed(1)) + "</div>";
+                    }
+                } else {
+                    // If either convertedData or convertedNetmissDownstreamData is null, default to showing a placeholder value (909)
+                    day3 = "<div>" + 909 + "</div>";
+                }
             } else {
                 if (convertedData !== null) {
                     day3 = "<div title='" + convertedData.values[2] + "'>" +
@@ -2753,6 +2820,35 @@ async function processAllData(data) {
                 totalLouisianaDay4 = all;
 
                 day4 = "<div title='" + "--" + "'>" + totalLouisianaDay4.toFixed(1) + "</div>";
+            } else if (location_id === "LD 24 Pool-Mississippi") {
+                let isOpenRiver = null;
+
+                // Ensure that both convertedData and convertedNetmissDownstreamData are not null
+                if (convertedData !== null && convertedNetmissDownstreamData !== null) {
+                    // Calculate the downstream value by adding the elevation from data6, a fixed increment (0.5), and the value from convertedNetmissDownstreamData
+                    let downstreamValueToCompare = 421.81 + 0.5 + convertedNetmissDownstreamData.values[3][1];
+                    console.log("downstreamValueToCompare: ", downstreamValueToCompare);
+
+                    // Retrieve today's netmiss forecast value
+                    let todayNetmissForecast = convertedData.values[3][1];
+                    console.log("todayNetmissForecast: ", todayNetmissForecast);
+
+                    // Determine if the downstream value is greater than today's forecast to decide if it's an "Open River"
+                    isOpenRiver = downstreamValueToCompare > todayNetmissForecast;
+                    console.log("isOpenRiver: ", isOpenRiver);
+
+                    // Construct HTML content based on whether it's an "Open River" or not
+                    if (isOpenRiver) {
+                        // If it's "Open River", display with "Open River" label, otherwise display an error message
+                        day4 = "<div title='" + "isOpenRiver = " + isOpenRiver + "'>" + (tsid_forecast_location === true ? "<strong>" + "Open River" : "-Error-") + "</div>";
+                    } else {
+                        // If it's not "Open River", display today's forecast value with or without strong formatting based on tsid_forecast_location
+                        day4 = "<div title='" + "isOpenRiver = " + isOpenRiver + "'>" + (tsid_forecast_location === true ? "<strong>" + (convertedData.values[3][1]).toFixed(1) : (convertedData.values[3][1]).toFixed(1)) + "</div>";
+                    }
+                } else {
+                    // If either convertedData or convertedNetmissDownstreamData is null, default to showing a placeholder value (909)
+                    day4 = "<div>" + 909 + "</div>";
+                }
             } else {
                 if (convertedData !== null) {
                     day4 = "<div title='" + convertedData.values[3] + "'>" +
@@ -3239,6 +3335,35 @@ async function processAllData(data) {
                 totalLouisianaDay5 = all;
 
                 day5 = "<div title='" + "--" + "'>" + totalLouisianaDay5.toFixed(1) + "</div>";
+            } else if (location_id === "LD 24 Pool-Mississippi") {
+                let isOpenRiver = null;
+
+                // Ensure that both convertedData and convertedNetmissDownstreamData are not null
+                if (convertedData !== null && convertedNetmissDownstreamData !== null) {
+                    // Calculate the downstream value by adding the elevation from data6, a fixed increment (0.5), and the value from convertedNetmissDownstreamData
+                    let downstreamValueToCompare = 421.81 + 0.5 + convertedNetmissDownstreamData.values[4][1];
+                    console.log("downstreamValueToCompare: ", downstreamValueToCompare);
+
+                    // Retrieve today's netmiss forecast value
+                    let todayNetmissForecast = convertedData.values[4][1];
+                    console.log("todayNetmissForecast: ", todayNetmissForecast);
+
+                    // Determine if the downstream value is greater than today's forecast to decide if it's an "Open River"
+                    isOpenRiver = downstreamValueToCompare > todayNetmissForecast;
+                    console.log("isOpenRiver: ", isOpenRiver);
+
+                    // Construct HTML content based on whether it's an "Open River" or not
+                    if (isOpenRiver) {
+                        // If it's "Open River", display with "Open River" label, otherwise display an error message
+                        day5 = "<div title='" + "isOpenRiver = " + isOpenRiver + "'>" + (tsid_forecast_location === true ? "<strong>" + "Open River" : "-Error-") + "</div>";
+                    } else {
+                        // If it's not "Open River", display today's forecast value with or without strong formatting based on tsid_forecast_location
+                        day5 = "<div title='" + "isOpenRiver = " + isOpenRiver + "'>" + (tsid_forecast_location === true ? "<strong>" + (convertedData.values[4][1]).toFixed(1) : (convertedData.values[4][1]).toFixed(1)) + "</div>";
+                    }
+                } else {
+                    // If either convertedData or convertedNetmissDownstreamData is null, default to showing a placeholder value (909)
+                    day5 = "<div>" + 909 + "</div>";
+                }
             } else {
                 if (convertedData !== null) {
                     day5 = "<div title='" + convertedData.values[4] + "'>" +
@@ -3725,6 +3850,35 @@ async function processAllData(data) {
                 totalLouisianaDay6 = all;
 
                 day6 = "<div title='" + "--" + "'>" + totalLouisianaDay6.toFixed(1) + "</div>";
+            } else if (location_id === "LD 24 Pool-Mississippi") {
+                let isOpenRiver = null;
+
+                // Ensure that both convertedData and convertedNetmissDownstreamData are not null
+                if (convertedData !== null && convertedNetmissDownstreamData !== null) {
+                    // Calculate the downstream value by adding the elevation from data6, a fixed increment (0.5), and the value from convertedNetmissDownstreamData
+                    let downstreamValueToCompare = 421.81 + 0.5 + convertedNetmissDownstreamData.values[5][1];
+                    console.log("downstreamValueToCompare: ", downstreamValueToCompare);
+
+                    // Retrieve today's netmiss forecast value
+                    let todayNetmissForecast = convertedData.values[5][1];
+                    console.log("todayNetmissForecast: ", todayNetmissForecast);
+
+                    // Determine if the downstream value is greater than today's forecast to decide if it's an "Open River"
+                    isOpenRiver = downstreamValueToCompare > todayNetmissForecast;
+                    console.log("isOpenRiver: ", isOpenRiver);
+
+                    // Construct HTML content based on whether it's an "Open River" or not
+                    if (isOpenRiver) {
+                        // If it's "Open River", display with "Open River" label, otherwise display an error message
+                        day6 = "<div title='" + "isOpenRiver = " + isOpenRiver + "'>" + (tsid_forecast_location === true ? "<strong>" + "Open River" : "-Error-") + "</div>";
+                    } else {
+                        // If it's not "Open River", display today's forecast value with or without strong formatting based on tsid_forecast_location
+                        day6 = "<div title='" + "isOpenRiver = " + isOpenRiver + "'>" + (tsid_forecast_location === true ? "<strong>" + (convertedData.values[5][1]).toFixed(1) : (convertedData.values[5][1]).toFixed(1)) + "</div>";
+                    }
+                } else {
+                    // If either convertedData or convertedNetmissDownstreamData is null, default to showing a placeholder value (909)
+                    day6 = "<div>" + 909 + "</div>";
+                }
             } else {
                 if (convertedData !== null) {
                     day6 = "<div title='" + convertedData.values[5] + "'>" +
@@ -4052,6 +4206,8 @@ async function processAllData(data) {
             } else if (location_id === "LD 22 TW-Mississippi") {
                 day7 = "<div title='" + "total is different because rating table is off" + "'>" + "" + "</div>";
             } else if (location_id === "Louisiana-Mississippi") {
+                day7 = "<div title='" + "--" + "'>" + "" + "</div>";
+            } else if (location_id === "LD 24 Pool-Mississippi") {
                 day7 = "<div title='" + "--" + "'>" + "" + "</div>";
             } else {
                 if (convertedData !== null && convertedData.values[6] !== null) {
