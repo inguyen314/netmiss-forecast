@@ -422,7 +422,8 @@ async function processAllData(data) {
         data20,
         data21,
         data22,
-        totalGraftonForecastDay1
+        totalGraftonForecastDay1,
+        totalGraftonForecastDay2
     }) => {
         // Ensure row exists and is a valid DOM element
         if (!row || !(row instanceof HTMLElement)) {
@@ -1081,10 +1082,10 @@ async function processAllData(data) {
                 day1 = "<div title='" + "--" + "'>" + totalLouisianaDay1.toFixed(1) + "</div>";
             } else if (location_id === "Grafton-Mississippi") {
                 // Grafton data process is in fetch.js
-                // console.log("GraftonForecast", GraftonForecast["Grafton-Mississippi"][0].value);
-                // console.log("GraftonForecast", totalGraftonForecastDay1);
+                console.log("GraftonForecast['Grafton-Mississippi'][0].value: ", GraftonForecast["Grafton-Mississippi"][0].value);
+                console.log("totalGraftonForecastDay1: ", totalGraftonForecastDay1);
 
-                day1 = "<div title='" + "Rating LD 25 TW is off between database and excel" + "'>" + (Math.round(GraftonForecast["Grafton-Mississippi"][0].value * 100) / 100).toFixed(1) + "</div>";
+                day1 = "<div title='" + "Only RP/isOpenRiverUseBackWater" + "'>" + (Math.round(totalGraftonForecastDay1[0].value * 100) / 100).toFixed(1) + "</div>";
             } else if (location_id === "Hardin-Illinois") {
                 // console.log("location_id: ", location_id);
                 // YESYERDAY
@@ -1926,6 +1927,11 @@ async function processAllData(data) {
                 // console.log("totalMosierLdgDay2 = ", totalMosierLdgDay2);
 
                 day2 = "<div title='" + "--" + "'>" + totalMosierLdgDay2.toFixed(1) + "</div>";
+            } else if (location_id === "Grafton-Mississippi") {
+                // Grafton data process is in fetch.js
+                // console.log("totalGraftonForecastDay2: ", totalGraftonForecastDay2);
+
+                day2 = "<div title='" + "Only RP/isOpenRiverUseBackWater" + "'>" + (Math.round(totalGraftonForecastDay2[0].value * 100) / 100).toFixed(1) + "</div>";
             } else {
                 if (convertedData !== null) {
                     day2 = "<div title='" + convertedData.values[1] + "'>" +
