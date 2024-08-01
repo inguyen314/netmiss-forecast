@@ -423,7 +423,11 @@ async function processAllData(data) {
         data21,
         data22,
         totalGraftonForecastDay1,
-        totalGraftonForecastDay2
+        totalGraftonForecastDay2,
+        totalGraftonForecastDay3,
+        totalGraftonForecastDay4,
+        totalGraftonForecastDay5,
+        totalGraftonForecastDay6,
     }) => {
         // Ensure row exists and is a valid DOM element
         if (!row || !(row instanceof HTMLElement)) {
@@ -1082,10 +1086,10 @@ async function processAllData(data) {
                 day1 = "<div title='" + "--" + "'>" + totalLouisianaDay1.toFixed(1) + "</div>";
             } else if (location_id === "Grafton-Mississippi") {
                 // Grafton data process is in fetch.js
-                console.log("GraftonForecast['Grafton-Mississippi'][0].value: ", GraftonForecast["Grafton-Mississippi"][0].value);
-                console.log("totalGraftonForecastDay1: ", totalGraftonForecastDay1);
+                // console.log("GraftonForecast['Grafton-Mississippi'][0].value: ", GraftonForecast["Grafton-Mississippi"][0].value);
+                // console.log("totalGraftonForecastDay1: ", totalGraftonForecastDay1);
 
-                day1 = "<div title='" + "Only RP/isOpenRiverUseBackWater" + "'>" + (Math.round(totalGraftonForecastDay1[0].value * 100) / 100).toFixed(1) + "</div>";
+                day1 = "<div title='" + "Only RP/isOpenRiverUseBackWater, database rating is off from excel" + "'>" + (Math.round(totalGraftonForecastDay1[0].value * 100) / 100).toFixed(1) + "</div>";
             } else if (location_id === "Hardin-Illinois") {
                 // console.log("location_id: ", location_id);
                 // YESYERDAY
@@ -1931,7 +1935,7 @@ async function processAllData(data) {
                 // Grafton data process is in fetch.js
                 // console.log("totalGraftonForecastDay2: ", totalGraftonForecastDay2);
 
-                day2 = "<div title='" + "Only RP/isOpenRiverUseBackWater" + "'>" + (Math.round(totalGraftonForecastDay2[0].value * 100) / 100).toFixed(1) + "</div>";
+                day2 = "<div title='" + "Only RP/isOpenRiverUseBackWater, database rating is off from excel" + "'>" + (Math.round(totalGraftonForecastDay2[0].value * 100) / 100).toFixed(1) + "</div>";
             } else {
                 if (convertedData !== null) {
                     day2 = "<div title='" + convertedData.values[1] + "'>" +
@@ -2553,6 +2557,11 @@ async function processAllData(data) {
                 // console.log("totalMosierLdgDay3 = ", totalMosierLdgDay3);
 
                 day3 = "<div title='" + "--" + "'>" + totalMosierLdgDay3.toFixed(1) + "</div>";
+            } else if (location_id === "Grafton-Mississippi") {
+                // Grafton data process is in fetch.js
+                // console.log("totalGraftonForecastDay3: ", totalGraftonForecastDay3);
+
+                day3 = "<div title='" + "Only RP/isOpenRiverUseBackWater, database rating is off from excel" + "'>" + (Math.round(totalGraftonForecastDay3[0].value * 100) / 100).toFixed(1) + "</div>";
             } else {
                 if (convertedData !== null) {
                     day3 = "<div title='" + convertedData.values[2] + "'>" +
@@ -3174,6 +3183,11 @@ async function processAllData(data) {
                 // console.log("totalMosierLdgDay4 = ", totalMosierLdgDay4);
 
                 day4 = "<div title='" + "--" + "'>" + totalMosierLdgDay4.toFixed(1) + "</div>";
+            } else if (location_id === "Grafton-Mississippi") {
+                // Grafton data process is in fetch.js
+                // console.log("totalGraftonForecastDay4: ", totalGraftonForecastDay4);
+
+                day4 = "<div title='" + "Only RP/isOpenRiverUseBackWater, database rating is off from excel" + "'>" + (Math.round(totalGraftonForecastDay4[0].value * 100) / 100).toFixed(1) + "</div>";
             } else {
                 if (convertedData !== null) {
                     day4 = "<div title='" + convertedData.values[3] + "'>" +
@@ -3795,6 +3809,11 @@ async function processAllData(data) {
                 // console.log("totalMosierLdgDay5 = ", totalMosierLdgDay5);
 
                 day5 = "<div title='" + "--" + "'>" + totalMosierLdgDay5.toFixed(1) + "</div>";
+            } else if (location_id === "Grafton-Mississippi") {
+                // Grafton data process is in fetch.js
+                // console.log("totalGraftonForecastDay5: ", totalGraftonForecastDay5);
+
+                day5 = "<div title='" + "Only RP/isOpenRiverUseBackWater, database rating is off from excel" + "'>" + (Math.round(totalGraftonForecastDay5[0].value * 100) / 100).toFixed(1) + "</div>";
             } else {
                 if (convertedData !== null) {
                     day5 = "<div title='" + convertedData.values[4] + "'>" +
@@ -4416,6 +4435,11 @@ async function processAllData(data) {
                 // console.log("totalMosierLdgDay6 = ", totalMosierLdgDay6);
 
                 day6 = "<div title='" + "--" + "'>" + totalMosierLdgDay6.toFixed(1) + "</div>";
+            } else if (location_id === "Grafton-Mississippi") {
+                // Grafton data process is in fetch.js
+                // console.log("totalGraftonForecastDay6: ", totalGraftonForecastDay6);
+
+                day6 = "<div title='" + "Only RP/isOpenRiverUseBackWater, database rating is off from excel" + "'>" + (Math.round(totalGraftonForecastDay6[0].value * 100) / 100).toFixed(1) + "</div>";
             } else {
                 if (convertedData !== null) {
                     day6 = "<div title='" + convertedData.values[5] + "'>" +
