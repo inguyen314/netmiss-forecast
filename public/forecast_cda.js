@@ -1284,9 +1284,9 @@ async function processAllData(data) {
                 // console.log("totalMeredosiaDay1: ", totalMeredosiaDay1);
 
                 if (totalMeredosiaDay1) {
-                    day1 = "<div title='" + "--" + "'>" + totalMeredosiaDay1.toFixed(1) + "</div>";
+                    day1 = "<div title='" + "Depends on Grafton Forecasts" + "'>" + totalMeredosiaDay1.toFixed(1) + "</div>";
                 } else {
-                    day1 = "<div title='" + "--" + "'>" + "--" + "</div>";
+                    day1 = "<div title='" + "Depends on Grafton Forecasts" + "'>" + "--" + "</div>";
                 }
             } else if (location_id === "Cairo-Ohio") {
                 if (latest7AMRvfValue[0] !== null) {
@@ -2130,9 +2130,9 @@ async function processAllData(data) {
                 // console.log("totalMeredosiaDay2: ", totalMeredosiaDay2);
 
                 if (totalMeredosiaDay2) {
-                    day2 = "<div title='" + "--" + "'>" + totalMeredosiaDay2.toFixed(1) + "</div>";
+                    day2 = "<div title='" + "Depends on Grafton Forecasts" + "'>" + totalMeredosiaDay2.toFixed(1) + "</div>";
                 } else {
-                    day2 = "<div title='" + "--" + "'>" + "--" + "</div>";
+                    day2 = "<div title='" + "Depends on Grafton Forecasts" + "'>" + "--" + "</div>";
                 }
             } else {
                 if (convertedData !== null) {
@@ -2961,9 +2961,9 @@ async function processAllData(data) {
                 // console.log("totalMeredosiaDay3: ", totalMeredosiaDay3);
 
                 if (totalMeredosiaDay3) {
-                    day3 = "<div title='" + "--" + "'>" + totalMeredosiaDay3.toFixed(1) + "</div>";
+                    day3 = "<div title='" + "Depends on Grafton Forecasts" + "'>" + totalMeredosiaDay3.toFixed(1) + "</div>";
                 } else {
-                    day3 = "<div title='" + "--" + "'>" + "--" + "</div>";
+                    day3 = "<div title='" + "Depends on Grafton Forecasts" + "'>" + "--" + "</div>";
                 }
             } else {
                 if (convertedData !== null) {
@@ -3794,9 +3794,9 @@ async function processAllData(data) {
                 // console.log("totalMeredosiaDay4: ", totalMeredosiaDay4);
 
                 if (totalMeredosiaDay4) {
-                    day4 = "<div title='" + "--" + "'>" + totalMeredosiaDay4.toFixed(1) + "</div>";
+                    day4 = "<div title='" + "Depends on Grafton Forecasts" + "'>" + totalMeredosiaDay4.toFixed(1) + "</div>";
                 } else {
-                    day4 = "<div title='" + "--" + "'>" + "--" + "</div>";
+                    day4 = "<div title='" + "Depends on Grafton Forecasts" + "'>" + "--" + "</div>";
                 }
             } else {
                 if (convertedData !== null) {
@@ -4627,9 +4627,9 @@ async function processAllData(data) {
                 // console.log("totalMeredosiaDay5: ", totalMeredosiaDay5);
 
                 if (totalMeredosiaDay5) {
-                    day5 = "<div title='" + "--" + "'>" + totalMeredosiaDay5.toFixed(1) + "</div>";
+                    day5 = "<div title='" + "Depends on Grafton Forecasts" + "'>" + totalMeredosiaDay5.toFixed(1) + "</div>";
                 } else {
-                    day5 = "<div title='" + "--" + "'>" + "--" + "</div>";
+                    day5 = "<div title='" + "Depends on Grafton Forecasts" + "'>" + "--" + "</div>";
                 }
             } else {
                 if (convertedData !== null) {
@@ -5460,9 +5460,9 @@ async function processAllData(data) {
                 // console.log("totalMeredosiaDay6: ", totalMeredosiaDay6);
 
                 if (totalMeredosiaDay6) {
-                    day6 = "<div title='" + "--" + "'>" + totalMeredosiaDay6.toFixed(1) + "</div>";
+                    day6 = "<div title='" + "Depends on Grafton Forecasts" + "'>" + totalMeredosiaDay6.toFixed(1) + "</div>";
                 } else {
-                    day6 = "<div title='" + "--" + "'>" + "--" + "</div>";
+                    day6 = "<div title='" + "Depends on Grafton Forecasts" + "'>" + "--" + "</div>";
                 }
             } else {
                 if (convertedData !== null) {
