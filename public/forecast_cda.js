@@ -1663,78 +1663,78 @@ async function processAllData(data) {
 
                 day2 = "<div title='" + "total is different because rating table is off" + "'>" + totalLD22TwDay2.toFixed(1) + "</div>";
             } else if (location_id === "Louisiana-Mississippi") {
-                // console.log("location_id: ", location_id);
+                console.log("location_id: ", location_id);
 
                 // Get current and yesterday data
                 const yesterdayStageRevValue = ((getLatest6AMValue(data2)).latest6AMValue).value;
-                // console.log("yesterdayStageRevValue: ", yesterdayStageRevValue);
+                console.log("yesterdayStageRevValue: ", yesterdayStageRevValue);
 
                 const yesterdayDownstreamStageRevValue = ((getLatest6AMValue(data9)).latest6AMValue).value;
-                // console.log("yesterdayDownstreamStageRevValue: ", yesterdayDownstreamStageRevValue);
+                console.log("yesterdayDownstreamStageRevValue: ", yesterdayDownstreamStageRevValue);
 
                 const convertedNetmissFlowValuesToCst = convertUTCtoCentralTime(data15);
                 const yesterdayNetmissFlowValue = (convertedNetmissFlowValuesToCst.values[0][1]);
                 const todayNetmissFlowValue = (convertedNetmissFlowValuesToCst.values[2][1]);
                 const yesterdayUpstreamStageRevValue = ((getLatest6AMValue(data7)).latest6AMValue).value;
-                // console.log("convertedNetmissFlowValuesToCst: ", convertedNetmissFlowValuesToCst);
-                // console.log("yesterdayNetmissFlowValue: ", yesterdayNetmissFlowValue);
-                // console.log("todayNetmissFlowValue: ", todayNetmissFlowValue);
-                // console.log("yesterdayUpstreamStageRevValue: ", yesterdayUpstreamStageRevValue);
+                console.log("convertedNetmissFlowValuesToCst: ", convertedNetmissFlowValuesToCst);
+                console.log("yesterdayNetmissFlowValue: ", yesterdayNetmissFlowValue);
+                console.log("todayNetmissFlowValue: ", todayNetmissFlowValue);
+                console.log("yesterdayUpstreamStageRevValue: ", yesterdayUpstreamStageRevValue);
 
                 // Downstream Netmiss
                 const todayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[1][1]);
                 const yesterdayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[0][1]);
-                // console.log("todayDownstreamNetmiss = ", todayDownstreamNetmiss);
-                // console.log("yesterdayDownstreamNetmiss = ", yesterdayDownstreamNetmiss);
+                console.log("todayDownstreamNetmiss = ", todayDownstreamNetmiss);
+                console.log("yesterdayDownstreamNetmiss = ", yesterdayDownstreamNetmiss);
 
                 // Get special gages flow data
                 const convertedSpecialGage1NetmissFlowValuesToCst = convertUTCtoCentralTime(data18);
                 const yesterdaySpecialGage1NetmissFlowValue = (convertedSpecialGage1NetmissFlowValuesToCst.values[0][1]);
                 const todaySpecialGage1NetmissFlowValue = (convertedSpecialGage1NetmissFlowValuesToCst.values[2][1]);
-                // console.log("convertedSpecialGage1NetmissFlowValuesToCst: ", convertedSpecialGage1NetmissFlowValuesToCst);
-                // console.log("yesterdaySpecialGage1NetmissFlowValue: ", yesterdaySpecialGage1NetmissFlowValue);
-                // console.log("todaySpecialGage1NetmissFlowValue: ", todaySpecialGage1NetmissFlowValue);
+                console.log("convertedSpecialGage1NetmissFlowValuesToCst: ", convertedSpecialGage1NetmissFlowValuesToCst);
+                console.log("yesterdaySpecialGage1NetmissFlowValue: ", yesterdaySpecialGage1NetmissFlowValue);
+                console.log("todaySpecialGage1NetmissFlowValue: ", todaySpecialGage1NetmissFlowValue);
 
                 const convertedSpecialGage2NetmissFlowValuesToCst = convertUTCtoCentralTime(data20);
                 const yesterdaySpecialGage2NetmissFlowValue = (convertedSpecialGage2NetmissFlowValuesToCst.values[0][1]);
                 const todaySpecialGage2NetmissFlowValue = (convertedSpecialGage2NetmissFlowValuesToCst.values[2][1]);
-                // console.log("convertedSpecialGage2NetmissFlowValuesToCst: ", convertedSpecialGage2NetmissFlowValuesToCst);
-                // console.log("yesterdaySpecialGage2NetmissFlowValue: ", yesterdaySpecialGage2NetmissFlowValue);
-                // console.log("todaySpecialGage2NetmissFlowValue: ", todaySpecialGage2NetmissFlowValue);
+                console.log("convertedSpecialGage2NetmissFlowValuesToCst: ", convertedSpecialGage2NetmissFlowValuesToCst);
+                console.log("yesterdaySpecialGage2NetmissFlowValue: ", yesterdaySpecialGage2NetmissFlowValue);
+                console.log("todaySpecialGage2NetmissFlowValue: ", todaySpecialGage2NetmissFlowValue);
 
                 // Get the sum
                 const sumYesterdayNetmissFlowPlusSpecialNetmissFlowValue = (parseFloat(yesterdayNetmissFlowValue) + parseFloat(yesterdaySpecialGage1NetmissFlowValue));
                 const sumYesterdayNetmissFlowPlusSpecialNetmissFlowValueDividedOneThousand = ((parseFloat(yesterdayNetmissFlowValue) + parseFloat(yesterdaySpecialGage1NetmissFlowValue))) / 1000;
                 const sumYesterdayNetmissFlowPlusOneThousandDividedOneThousand = ((parseFloat(yesterdayNetmissFlowValue) + 1000)) / 1000;
-                // console.log("sumYesterdayNetmissFlowPlusSpecialNetmissFlowValue: ", sumYesterdayNetmissFlowPlusSpecialNetmissFlowValue);
-                // console.log("sumYesterdayNetmissFlowPlusSpecialNetmissFlowValueDividedOneThousand: ", sumYesterdayNetmissFlowPlusSpecialNetmissFlowValueDividedOneThousand);
-                // console.log("sumYesterdayNetmissFlowPlusOneThousandDividedOneThousand: ", sumYesterdayNetmissFlowPlusOneThousandDividedOneThousand);
+                console.log("sumYesterdayNetmissFlowPlusSpecialNetmissFlowValue: ", sumYesterdayNetmissFlowPlusSpecialNetmissFlowValue);
+                console.log("sumYesterdayNetmissFlowPlusSpecialNetmissFlowValueDividedOneThousand: ", sumYesterdayNetmissFlowPlusSpecialNetmissFlowValueDividedOneThousand);
+                console.log("sumYesterdayNetmissFlowPlusOneThousandDividedOneThousand: ", sumYesterdayNetmissFlowPlusOneThousandDividedOneThousand);
 
                 const sumTodayNetmissFlowPlusSpecialNetmissFlowValue = (parseFloat(todayNetmissFlowValue) + parseFloat(todaySpecialGage1NetmissFlowValue));
                 const sumTodayNetmissFlowPlusOneThousandDividedOneThousand = ((parseFloat(todayNetmissFlowValue) + 1000)) / 1000;
-                // console.log("sumTodayNetmissFlowPlusSpecialNetmissFlowValue: ", sumTodayNetmissFlowPlusSpecialNetmissFlowValue);
-                // console.log("sumTodayNetmissFlowPlusOneThousandDividedOneThousand: ", sumTodayNetmissFlowPlusOneThousandDividedOneThousand);
+                console.log("sumTodayNetmissFlowPlusSpecialNetmissFlowValue: ", sumTodayNetmissFlowPlusSpecialNetmissFlowValue);
+                console.log("sumTodayNetmissFlowPlusOneThousandDividedOneThousand: ", sumTodayNetmissFlowPlusOneThousandDividedOneThousand);
 
                 // Determine if yesterday upstream is open river or regulated pool
                 const isTodayOpenRiver = sumTodayNetmissFlowPlusOneThousandDividedOneThousand > 150.0;
                 const isTodayRegulatedPool = sumTodayNetmissFlowPlusOneThousandDividedOneThousand <= 150.0;
-                // console.log("isTodayOpenRiver: ", isTodayOpenRiver);
-                // console.log("isTodayRegulatedPool: ", isTodayRegulatedPool);
+                console.log("isTodayOpenRiver: ", isTodayOpenRiver);
+                console.log("isTodayRegulatedPool: ", isTodayRegulatedPool);
 
                 const isYesterdaySpecialNetmissOpenRiver = sumYesterdayNetmissFlowPlusSpecialNetmissFlowValueDividedOneThousand > 150.0;
-                // console.log("isYesterdaySpecialNetmissOpenRiver: ", isYesterdaySpecialNetmissOpenRiver);
+                console.log("isYesterdaySpecialNetmissOpenRiver: ", isYesterdaySpecialNetmissOpenRiver);
 
                 // Get rating tables
                 const ratingTableCoe = data16["simple-rating"][0]["rating-points"].point;
                 const ratingTableCoeUpstream = data17["simple-rating"][0]["rating-points"].point;
-                // console.log("ratingTableCoe: ", ratingTableCoe);
-                // console.log("ratingTableCoeUpstream: ", ratingTableCoeUpstream);
+                console.log("ratingTableCoe: ", ratingTableCoe);
+                console.log("ratingTableCoeUpstream: ", ratingTableCoeUpstream);
 
                 // Process and get today corresponding flow values
                 const yesterdayCorrespondingUpstreamFlowValue = findDepByInd(yesterdayUpstreamStageRevValue, ratingTableCoeUpstream);
                 const yesterdayCorrespondingSumNetmissFlowPlusSpecialNetmissFlowValue = findIndByDep(sumYesterdayNetmissFlowPlusSpecialNetmissFlowValue, ratingTableCoeUpstream);
-                // console.log("yesterdayCorrespondingUpstreamFlowValue: ", yesterdayCorrespondingUpstreamFlowValue);
-                // console.log("yesterdayCorrespondingSumNetmissFlowPlusSpecialNetmissFlowValue: ", yesterdayCorrespondingSumNetmissFlowPlusSpecialNetmissFlowValue);
+                console.log("yesterdayCorrespondingUpstreamFlowValue: ", yesterdayCorrespondingUpstreamFlowValue);
+                console.log("yesterdayCorrespondingSumNetmissFlowPlusSpecialNetmissFlowValue: ", yesterdayCorrespondingSumNetmissFlowPlusSpecialNetmissFlowValue);
 
                 const sumYesterdayNetmissFlowValuePlusSpecialNetmissFlowValueDividedOneThousand = (parseFloat(yesterdayNetmissFlowValue) + parseFloat(yesterdaySpecialGage1NetmissFlowValue)) / 1000;
                 // console.log("sumYesterdayNetmissFlowValuePlusSpecialNetmissFlowValueDividedOneThousand: ", sumYesterdayNetmissFlowValuePlusSpecialNetmissFlowValueDividedOneThousand);
@@ -1742,8 +1742,8 @@ async function processAllData(data) {
                 // Determine if yesterday upstream is open river or regulated pool
                 const isYesterdayOpenRiver = sumYesterdayNetmissFlowPlusOneThousandDividedOneThousand > 150.0;
                 const isYesterdayRegulatedPool = sumYesterdayNetmissFlowPlusOneThousandDividedOneThousand <= 150.0;
-                // console.log("isYesterdayOpenRiver: ", isYesterdayOpenRiver);
-                // console.log("isYesterdayRegulatedPool: ", isYesterdayRegulatedPool);
+                console.log("isYesterdayOpenRiver: ", isYesterdayOpenRiver);
+                console.log("isYesterdayRegulatedPool: ", isYesterdayRegulatedPool);
 
                 let yesterdayCorrespondingNetmissWithSpecialNetmissFlowValue = null;
                 let tDelta = null;
@@ -1751,33 +1751,33 @@ async function processAllData(data) {
                 if (isTodayOpenRiver) {
                     // Lookup yesterdayCorrespondingUpstreamFlowValue to Louisiana-Mississippi Rating COE Table 
                     yesterdayCorrespondingNetmissWithSpecialNetmissFlowValue = findIndByDep(sumYesterdayNetmissFlowPlusSpecialNetmissFlowValue, ratingTableCoe);
-                    // console.log("yesterdayCorrespondingNetmissWithSpecialNetmissFlowValue: ", yesterdayCorrespondingNetmissWithSpecialNetmissFlowValue);
+                    console.log("yesterdayCorrespondingNetmissWithSpecialNetmissFlowValue: ", yesterdayCorrespondingNetmissWithSpecialNetmissFlowValue);
 
                     tDelta = 0 + (yesterdayStageRevValue - yesterdayCorrespondingNetmissWithSpecialNetmissFlowValue);
-                    // console.log("tDelta: ", tDelta);
+                    console.log("tDelta: ", tDelta);
 
                     // Lookup todayCorrespondingUpstreamFlowValue to Louisiana-Mississippi Rating COE Table 
                     const todayCorrespondingNetmissWithSpecialNetmissFlowValue = findIndByDep(sumTodayNetmissFlowPlusSpecialNetmissFlowValue, ratingTableCoe);
-                    // console.log("todayCorrespondingNetmissWithSpecialNetmissFlowValue: ", todayCorrespondingNetmissWithSpecialNetmissFlowValue);
+                    console.log("todayCorrespondingNetmissWithSpecialNetmissFlowValue: ", todayCorrespondingNetmissWithSpecialNetmissFlowValue);
 
                     all = todayCorrespondingNetmissWithSpecialNetmissFlowValue + tDelta;
                     // console.log("all: ", all);
                 } else if (isTodayRegulatedPool) {
                     if (isYesterdaySpecialNetmissOpenRiver) {
                         const deltaX = 0 + yesterdayStageRevValue - yesterdayCorrespondingSumNetmissFlowPlusSpecialNetmissFlowValue;
-                        // console.log("deltaX: ", deltaX);
+                        console.log("deltaX: ", deltaX);
 
                         const sumTodayNetmissFlowPlusSpecialNetmissFlowValueDividedOneThousand = sumTodayNetmissFlowPlusSpecialNetmissFlowValue / 1000;
-                        // console.log("sumTodayNetmissFlowPlusSpecialNetmissFlowValueDividedOneThousand: ", sumTodayNetmissFlowPlusSpecialNetmissFlowValueDividedOneThousand);
+                        console.log("sumTodayNetmissFlowPlusSpecialNetmissFlowValueDividedOneThousand: ", sumTodayNetmissFlowPlusSpecialNetmissFlowValueDividedOneThousand);
 
                         // BACKWATER RATING HARDIN
                         let jsonFileName = "ratingLouisiana.json";
                         const stage = todayDownstreamNetmiss;
                         const flowRate = sumTodayNetmissFlowPlusSpecialNetmissFlowValueDividedOneThousand;
-                        // console.log(stage, flowRate, jsonFileName);
+                        console.log(stage, flowRate, jsonFileName);
                         let value = await readJSONTable(stage, flowRate, jsonFileName);
                         if (value !== null) {
-                            // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
+                            console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
                         } else {
                             console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
                         }
