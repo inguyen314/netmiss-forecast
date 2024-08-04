@@ -485,13 +485,13 @@ async function fetchData(location_id
                 if (data11 !== null && location_id === "Grafton-Mississippi") {
                     todayGraftonUpstreamNetmissValue = parseFloat(convertedNetmissForecastingPointUpstreamData.values[0][1]);
                     todayGraftonUpstreamNetmissValuePlus001 = todayGraftonUpstreamNetmissValue + 0.001;
-                    // console.log("todayGraftonUpstreamNetmissValue: ", todayGraftonUpstreamNetmissValue);
-                    // console.log("todayGraftonUpstreamNetmissValuePlus001: ", todayGraftonUpstreamNetmissValuePlus001);
+                    console.log("todayGraftonUpstreamNetmissValue: ", todayGraftonUpstreamNetmissValue);
+                    console.log("todayGraftonUpstreamNetmissValuePlus001: ", todayGraftonUpstreamNetmissValuePlus001);
                 }
                 let todayGraftonDownstreamNetmissStageValue = null;
                 if (data12 !== null && location_id === "Grafton-Mississippi") {
                     todayGraftonDownstreamNetmissStageValue = data12.values[0][1];
-                    // console.log("todayGraftonDownstreamNetmissStageValue: ", todayGraftonDownstreamNetmissStageValue);
+                    console.log("todayGraftonDownstreamNetmissStageValue: ", todayGraftonDownstreamNetmissStageValue);
                 }
 
                 let graftonNetmissDownstreamDataDay1 = null;
@@ -499,30 +499,30 @@ async function fetchData(location_id
                 if (data4 !== null && location_id === "Grafton-Mississippi") {
                     graftonNetmissDownstreamDataDay1 = convertUTCtoCentralTime(data4).values[0][1];
                     isMelPricePoolOpenRiver = parseFloat(todayGraftonDownstreamNetmissStageValue) + 395.48 + 0.5 > graftonNetmissDownstreamDataDay1;
-                    // console.log("graftonNetmissDownstreamDataDay1: ", graftonNetmissDownstreamDataDay1);
-                    // console.log("isMelPricePoolOpenRiver: ", isMelPricePoolOpenRiver);
+                    console.log("graftonNetmissDownstreamDataDay1: ", graftonNetmissDownstreamDataDay1);
+                    console.log("isMelPricePoolOpenRiver: ", isMelPricePoolOpenRiver);
                 }
 
                 // yesterday
                 let yesterdayGraftonStageRevValue = null;
                 if (data2 !== null && location_id === "Grafton-Mississippi") {
                     yesterdayGraftonStageRevValue = latest6AMValue.value;
-                    // console.log("yesterdayGraftonStageRevValue: ", yesterdayGraftonStageRevValue);
+                    console.log("yesterdayGraftonStageRevValue: ", yesterdayGraftonStageRevValue);
                 }
                 let yesterdayGraftonUpstreamStageRevValue = null;
                 let yesterdayGraftonUpstreamStageRevValuePlus0001 = null;
                 if (data7 !== null && location_id === "Grafton-Mississippi") {
                     yesterdayGraftonUpstreamStageRevValue = ((getLatest6AMValue(data7)).latest6AMValue).value;
                     yesterdayGraftonUpstreamStageRevValuePlus0001 = yesterdayGraftonUpstreamStageRevValue + 0.001;
-                    // console.log("yesterdayGraftonUpstreamStageRevValue: ", yesterdayGraftonUpstreamStageRevValue);
-                    // console.log("yesterdayGraftonUpstreamStageRevValuePlus0001: ", yesterdayGraftonUpstreamStageRevValuePlus0001);
+                    console.log("yesterdayGraftonUpstreamStageRevValue: ", yesterdayGraftonUpstreamStageRevValue);
+                    console.log("yesterdayGraftonUpstreamStageRevValuePlus0001: ", yesterdayGraftonUpstreamStageRevValuePlus0001);
                 }
                 let yesterdayGraftonDownstreamStageRevValue = null;
                 if (data9 !== null && data22 !== null && location_id === "Grafton-Mississippi") {
                     yesterdayGraftonDownstreamStageRevValue = ((getLatest6AMValue(data9)).latest6AMValue).value;
                     yesterdayGraftonDownstreamStageRevValue2 = ((getLatest6AMValue(data22)).latest6AMValue).value;
-                    // console.log("yesterdayGraftonDownstreamStageRevValue: ", yesterdayGraftonDownstreamStageRevValue);
-                    // console.log("yesterdayGraftonDownstreamStageRevValue2: ", yesterdayGraftonDownstreamStageRevValue2);
+                    console.log("yesterdayGraftonDownstreamStageRevValue: ", yesterdayGraftonDownstreamStageRevValue);
+                    console.log("yesterdayGraftonDownstreamStageRevValue2: ", yesterdayGraftonDownstreamStageRevValue2);
                 }
 
                 // special gage 1
@@ -532,9 +532,9 @@ async function fetchData(location_id
                     const convertedGraftonSpecialNetmissFlowValuesToCst = convertUTCtoCentralTime(data18);
                     yesterdayGraftonSpecialNetmissFlowValue = (convertedGraftonSpecialNetmissFlowValuesToCst.values[0][1]);
                     todayGraftonSpecialNetmissFlowValue = (convertedGraftonSpecialNetmissFlowValuesToCst.values[1][1]);
-                    // console.log("convertedGraftonSpecialNetmissFlowValuesToCst: ", convertedGraftonSpecialNetmissFlowValuesToCst);
-                    // console.log("yesterdayGraftonSpecialNetmissFlowValue: ", yesterdayGraftonSpecialNetmissFlowValue);
-                    // console.log("todayGraftonSpecialNetmissFlowValue: ", todayGraftonSpecialNetmissFlowValue);
+                    console.log("convertedGraftonSpecialNetmissFlowValuesToCst: ", convertedGraftonSpecialNetmissFlowValuesToCst);
+                    console.log("yesterdayGraftonSpecialNetmissFlowValue: ", yesterdayGraftonSpecialNetmissFlowValue);
+                    console.log("todayGraftonSpecialNetmissFlowValue: ", todayGraftonSpecialNetmissFlowValue);
                 }
 
                 // Special gage 2
@@ -544,9 +544,9 @@ async function fetchData(location_id
                     const convertedGraftonSpecialNetmissGage2FlowValuesToCst = convertUTCtoCentralTime(data20);
                     yesterdayGraftonSpecialGage2NetmissFlowValue = convertedGraftonSpecialNetmissGage2FlowValuesToCst.values[0][1];
                     todayGraftonSpecialGage2NetmissFlowValue = convertedGraftonSpecialNetmissGage2FlowValuesToCst.values[1][1];
-                    // console.log("convertedGraftonSpecialNetmissGage2FlowValuesToCst: ", convertedGraftonSpecialNetmissGage2FlowValuesToCst);
-                    // console.log("yesterdayGraftonSpecialGage2NetmissFlowValue: ", yesterdayGraftonSpecialGage2NetmissFlowValue);
-                    // console.log("todayGraftonSpecialGage2NetmissFlowValue: ", todayGraftonSpecialGage2NetmissFlowValue);
+                    console.log("convertedGraftonSpecialNetmissGage2FlowValuesToCst: ", convertedGraftonSpecialNetmissGage2FlowValuesToCst);
+                    console.log("yesterdayGraftonSpecialGage2NetmissFlowValue: ", yesterdayGraftonSpecialGage2NetmissFlowValue);
+                    console.log("todayGraftonSpecialGage2NetmissFlowValue: ", todayGraftonSpecialGage2NetmissFlowValue);
                 }
 
                 // Get rating tables
@@ -559,43 +559,53 @@ async function fetchData(location_id
                 let sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand = null;
                 if (data16 !== null && data17 !== null && data19 !== null && location_id === "Grafton-Mississippi") {
                     ratingGraftonTableCoe = data16["simple-rating"]["rating-points"].point; // Grafton-Mississippi
-                    ratingGraftonTableCoeUpstream = data17["simple-rating"][0]["rating-points"].point; // LD 25 TW-Mississippi // [0] because active[0] and inactive[1]
+                    ratingGraftonTableCoeUpstream = data17["simple-rating"][0]["rating-points"].point; // LD 25 TW-Mississippi
                     ratingGraftonTableCoeDownstream = data19["simple-rating"]["rating-points"].point; // Mel Price TW-Mississippi
 
-                    // console.log("ratingGraftonTableCoe: ", ratingGraftonTableCoe); console.log("data16: ", data16);
-                    // console.log("ratingGraftonTableCoeUpstream: ", ratingGraftonTableCoeUpstream); console.log("data17: ", data17);
-                    // console.log("ratingGraftonTableCoeDownstream: ", ratingGraftonTableCoeDownstream); console.log("data19: ", data19);
+                    console.log("data16: ", data16);
+                    console.log("data17: ", data17);
+                    console.log("data19: ", data19);
+                    console.log("ratingGraftonTableCoe: ", ratingGraftonTableCoe);
+                    console.log("ratingGraftonTableCoeUpstream: ", ratingGraftonTableCoeUpstream);
+                    console.log("ratingGraftonTableCoeDownstream: ", ratingGraftonTableCoeDownstream);
 
-                    todayGraftonCorrespondingUpstreamNetmissFlowValue = findDepByInd(todayGraftonUpstreamNetmissValuePlus001, ratingGraftonTableCoeUpstream);
-                    todayGraftonCorrespondingDownstreamNetmissFlowValue = findDepByInd(todayGraftonDownstreamNetmissStageValue, ratingGraftonTableCoeDownstream);
-                    // console.log("todayGraftonCorrespondingUpstreamNetmissFlowValue: (database rating is off from excel) ", todayGraftonCorrespondingUpstreamNetmissFlowValue);
-                    // console.log("todayGraftonCorrespondingDownstreamNetmissFlowValue: ", todayGraftonCorrespondingDownstreamNetmissFlowValue);
+
+                    // get rating tables from ratings.js
+                    console.log("ratingStageFlowGrafton: ", ratingStageFlowGrafton);
+                    console.log("ratingStageFlowLouisiana: ", ratingStageFlowLouisiana);
+                    console.log("ratingStageFlowLd25Tw: ", ratingStageFlowLd25Tw);
+                    console.log("ratingStageFlowMelPriceTw: ", ratingStageFlowMelPriceTw);
+                    ratingGraftonTableCoeUpstream
+                    todayGraftonCorrespondingUpstreamNetmissFlowValue = findDepByInd(todayGraftonUpstreamNetmissValuePlus001, ratingStageFlowLd25Tw); // for database rating table use ratingGraftonTableCoeUpstream
+                    todayGraftonCorrespondingDownstreamNetmissFlowValue = findDepByInd(todayGraftonDownstreamNetmissStageValue, ratingStageFlowMelPriceTw); // for database rating table use ratingGraftonTableCoeDownstream
+                    console.log("todayGraftonCorrespondingUpstreamNetmissFlowValue: (database rating is off from excel) ", todayGraftonCorrespondingUpstreamNetmissFlowValue);
+                    console.log("todayGraftonCorrespondingDownstreamNetmissFlowValue: ", todayGraftonCorrespondingDownstreamNetmissFlowValue);
 
                     // sum
                     sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand = (parseFloat(todayGraftonSpecialGage2NetmissFlowValue) + parseFloat(todayGraftonCorrespondingUpstreamNetmissFlowValue)) / 1000;
-                    // console.log("sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand: ", sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand);
+                    console.log("sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand: ", sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand);
                 }
 
                 let totalGrafton = null;
 
                 if (location_id === "Grafton-Mississippi") {
                     const isGraftonForecastBasedUponLd25MPTw = parseFloat(sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand) > 300;
-                    // console.log("isGraftonForecastBasedUponLd25MPTw: (True if > 300) ", isGraftonForecastBasedUponLd25MPTw);
+                    console.log("isGraftonForecastBasedUponLd25MPTw: (True if > 300) ", isGraftonForecastBasedUponLd25MPTw);
 
                     const isGraftonForecastBasedUponOpenRiver = parseFloat(sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand) <= 300;
-                    // console.log("isGraftonForecastBasedUponOpenRiver: (True if <= 300) ", isGraftonForecastBasedUponOpenRiver);
+                    console.log("isGraftonForecastBasedUponOpenRiver: (True if <= 300) ", isGraftonForecastBasedUponOpenRiver);
 
-                    const yesterdayGraftonCorrespondingUpstreamNetmissFlowValue = findDepByInd(yesterdayGraftonUpstreamStageRevValuePlus0001, ratingGraftonTableCoeUpstream);
-                    // console.log("yesterdayGraftonCorrespondingUpstreamNetmissFlowValue: ", yesterdayGraftonCorrespondingUpstreamNetmissFlowValue);
+                    const yesterdayGraftonCorrespondingUpstreamNetmissFlowValue = findDepByInd(yesterdayGraftonUpstreamStageRevValuePlus0001, ratingStageFlowLd25Tw); // for database rating table use ratingGraftonTableCoeUpstream
+                    console.log("yesterdayGraftonCorrespondingUpstreamNetmissFlowValue: ", yesterdayGraftonCorrespondingUpstreamNetmissFlowValue);
 
                     const valueCompareOpenRiver = ((yesterdayGraftonCorrespondingUpstreamNetmissFlowValue + yesterdayGraftonSpecialGage2NetmissFlowValue) / 1000);
-                    // console.log("valueCompareOpenRiver: ", valueCompareOpenRiver);
+                    console.log("valueCompareOpenRiver: ", valueCompareOpenRiver);
 
                     const isOpenRiverUseStageFlowRating = valueCompareOpenRiver > 300;
-                    // console.log("isOpenRiverUseStageFlowRating : ", isOpenRiverUseStageFlowRating);
+                    console.log("isOpenRiverUseStageFlowRating : ", isOpenRiverUseStageFlowRating);
 
                     const isOpenRiverUseBackWater = valueCompareOpenRiver <= 300;
-                    // console.log("isOpenRiverUseBackWater : ", isOpenRiverUseBackWater);
+                    console.log("isOpenRiverUseBackWater : ", isOpenRiverUseBackWater);
 
                     // Determine Grafton Forecast Based on Conditions
                     if (isGraftonForecastBasedUponOpenRiver) {
@@ -604,62 +614,64 @@ async function fetchData(location_id
 
                             if (isOpenRiverUseStageFlowRating) {
                                 const ratingTableSpecial1 = data21["simple-rating"][0]["rating-points"].point;
-                                // console.log("ratingTableSpecial1: ", ratingTableSpecial1);
+                                console.log("ratingTableSpecial1: ", ratingTableSpecial1);
 
                                 const flowToSend = (yesterdayGraftonCorrespondingUpstreamNetmissFlowValue + yesterdayGraftonSpecialGage2NetmissFlowValue);
-                                // console.log("flowToSend: ", flowToSend);
+                                console.log("flowToSend: ", flowToSend);
 
                                 const t = findIndByDep(flowToSend, ratingTableSpecial1);
-                                // console.log("t: ", t);
+                                console.log("t: ", t);
 
                                 deltaYesterdayStage = yesterdayGraftonStageRevValue - t;
-                                // console.log("deltaYesterdayStage: ", deltaYesterdayStage);
+                                console.log("deltaYesterdayStage: ", deltaYesterdayStage);
 
                                 const todayGraftonUpstreamNetmissValuePlus001 = todayGraftonUpstreamNetmissValue + 0.001;
-                                // console.log("todayGraftonUpstreamNetmissValuePlus001: ", todayGraftonUpstreamNetmissValuePlus001);
+                                console.log("todayGraftonUpstreamNetmissValuePlus001: ", todayGraftonUpstreamNetmissValuePlus001);
 
                                 const todayFlowSum = todayGraftonCorrespondingUpstreamNetmissFlowValue + todayGraftonSpecialGage2NetmissFlowValue;
-                                // console.log("todayFlowSum: ", todayFlowSum);
+                                console.log("todayFlowSum: ", todayFlowSum);
 
                                 const x = todayGraftonDownstreamNetmissStageValue + 395.48 + 0.5;
                                 console.log("x: ", x);
                             } else if (isOpenRiverUseBackWater) {
+                                console.log("total is based upon isGraftonForecastBasedUponOpenRiver, isMelPricePoolOpenRiver, isOpenRiverUseBackWater");
+
                                 const ratingTableSpecial1 = data21["simple-rating"][0]["rating-points"].point;
-                                // console.log("ratingTableSpecial1: ", ratingTableSpecial1);
+                                console.log("ratingTableSpecial1: ", ratingTableSpecial1);
 
                                 let jsonFileName = "ratingGrafton.json"; //"ratingGrafton.json";
 
                                 // Call the function and log the result
                                 const stage = yesterdayGraftonDownstreamStageRevValue2; // yesterdayGraftonDownstreamStageRevValue2
                                 const flowRate = valueCompareOpenRiver; // valueCompareOpenRiver
-                                // console.log("stage, flowRate, jsonFileName: ", stage, flowRate, jsonFileName);
+                                console.log("stage, flowRate, jsonFileName: ", stage, flowRate, jsonFileName);
                                 readJSONTable2(stage, flowRate, jsonFileName).then(value => {
                                     if (value !== null) {
-                                        // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
+                                        console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
 
                                         deltaYesterdayStage = yesterdayGraftonStageRevValue - value;
-                                        // console.log("deltaYesterdayStage: ", deltaYesterdayStage);
+                                        console.log("deltaYesterdayStage: ", deltaYesterdayStage);
                                     } else {
-                                        // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
+                                        console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
                                     }
                                 });
 
                                 // Call the function and log the result
                                 const stage2 = todayGraftonDownstreamNetmissStageValue + 395.48 + 0.5; // yesterdayGraftonDownstreamStageRevValue2
                                 const flowRate2 = sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand; // valueCompareOpenRiver
-                                // console.log("stage2, flowRate2, jsonFileName: ", stage2, flowRate2, jsonFileName);
+                                console.log("stage2, flowRate2, jsonFileName: ", stage2, flowRate2, jsonFileName);
                                 readJSONTable2(stage2, flowRate2, jsonFileName).then(value => {
                                     if (value !== null) {
-                                        // console.log(`Interpolated reading for flow rate ${flowRate2} and stage ${stage2} at table ${jsonFileName}: ${value}`);
+                                        console.log(`Interpolated reading for flow rate ${flowRate2} and stage ${stage2} at table ${jsonFileName}: ${value}`);
 
                                         totalGrafton = value + deltaYesterdayStage;
-                                        // console.log("totalGrafton: ", totalGrafton);
+                                        console.log("totalGrafton: ", totalGrafton);
 
                                         // push data to GraftonForecast
                                         totalGraftonForecastDay1.push({ "value": totalGrafton });
                                         GraftonForecast[location_id].push({ "value": totalGrafton });
                                     } else {
-                                        // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
+                                        console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
                                     }
                                 });
                             }
@@ -668,471 +680,7 @@ async function fetchData(location_id
                             if (isOpenRiverUseStageFlowRating) {
 
                             } else if (isOpenRiverUseBackWater) {
-                                // Grafton Rating Table
-                                const ratingGrafton = {
-                                    "412": {
-                                        "0": 8.21,
-                                        "10": 8.56,
-                                        "20": 8.91,
-                                        "30": 9.27,
-                                        "40": 9.62,
-                                        "50": 9.98,
-                                        "60": 10.35,
-                                        "70": 10.71,
-                                        "80": 11.08,
-                                        "90": 11.45,
-                                        "100": 11.83,
-                                        "110": 12.20,
-                                        "120": 12.58,
-                                        "130": 12.96,
-                                        "140": 13.35,
-                                        "150": 13.73,
-                                        "160": 14.12,
-                                        "170": 14.52,
-                                        "180": 14.91,
-                                        "190": 15.31,
-                                        "200": 15.71,
-                                        "210": 16.11,
-                                        "220": 16.51,
-                                        "230": 16.91,
-                                        "240": 17.34,
-                                        "250": 17.82,
-                                        "260": 18.41,
-                                        "270": 19.12,
-                                        "280": 19.87,
-                                        "290": 20.80,
-                                        "300": 21.85
-                                    },
-                                    "413": {
-                                        "0": 9.21,
-                                        "10": 9.49,
-                                        "20": 9.78,
-                                        "30": 10.07,
-                                        "40": 10.37,
-                                        "50": 10.68,
-                                        "60": 10.99,
-                                        "70": 11.31,
-                                        "80": 11.64,
-                                        "90": 11.97,
-                                        "100": 12.31,
-                                        "110": 12.65,
-                                        "120": 13.00,
-                                        "130": 13.36,
-                                        "140": 13.72,
-                                        "150": 14.09,
-                                        "160": 14.47,
-                                        "170": 14.85,
-                                        "180": 15.24,
-                                        "190": 15.63,
-                                        "200": 16.03,
-                                        "210": 16.43,
-                                        "220": 16.83,
-                                        "230": 17.23,
-                                        "240": 17.66,
-                                        "250": 18.14,
-                                        "260": 18.73,
-                                        "270": 19.44,
-                                        "280": 20.19,
-                                        "290": 21.00,
-                                        "300": 21.85
-                                    },
-                                    "414": {
-                                        "0": 10.21,
-                                        "10": 10.42,
-                                        "20": 10.65,
-                                        "30": 10.88,
-                                        "40": 11.13,
-                                        "50": 11.38,
-                                        "60": 11.64,
-                                        "70": 11.91,
-                                        "80": 12.20,
-                                        "90": 12.49,
-                                        "100": 12.79,
-                                        "110": 13.10,
-                                        "120": 13.43,
-                                        "130": 13.76,
-                                        "140": 14.10,
-                                        "150": 14.45,
-                                        "160": 14.81,
-                                        "170": 15.18,
-                                        "180": 15.56,
-                                        "190": 15.95,
-                                        "200": 16.35,
-                                        "210": 16.75,
-                                        "220": 17.15,
-                                        "230": 17.55,
-                                        "240": 17.95,
-                                        "250": 18.42,
-                                        "260": 19.00,
-                                        "270": 19.68,
-                                        "280": 20.41,
-                                        "290": 21.13,
-                                        "300": 21.85
-                                    },
-                                    "415": {
-                                        "0": 11.21,
-                                        "10": 11.35,
-                                        "20": 11.51,
-                                        "30": 11.68,
-                                        "40": 11.87,
-                                        "50": 12.06,
-                                        "60": 12.28,
-                                        "70": 12.50,
-                                        "80": 12.74,
-                                        "90": 12.99,
-                                        "100": 13.25,
-                                        "110": 13.53,
-                                        "120": 13.82,
-                                        "130": 14.12,
-                                        "140": 14.44,
-                                        "150": 14.77,
-                                        "160": 15.11,
-                                        "170": 15.47,
-                                        "180": 15.84,
-                                        "190": 16.22,
-                                        "200": 16.60,
-                                        "210": 16.99,
-                                        "220": 17.39,
-                                        "230": 17.82,
-                                        "240": 18.20,
-                                        "250": 18.66,
-                                        "260": 19.21,
-                                        "270": 19.84,
-                                        "280": 20.51,
-                                        "290": 21.18,
-                                        "300": 21.85
-                                    },
-                                    "416": {
-                                        "0": 12.21,
-                                        "10": 12.28,
-                                        "20": 12.37,
-                                        "30": 12.48,
-                                        "40": 12.60,
-                                        "50": 12.74,
-                                        "60": 12.90,
-                                        "70": 13.07,
-                                        "80": 13.26,
-                                        "90": 13.47,
-                                        "100": 13.69,
-                                        "110": 13.94,
-                                        "120": 14.19,
-                                        "130": 14.47,
-                                        "140": 14.76,
-                                        "150": 15.07,
-                                        "160": 15.40,
-                                        "170": 15.74,
-                                        "180": 16.10,
-                                        "190": 16.46,
-                                        "200": 16.82,
-                                        "210": 17.20,
-                                        "220": 17.60,
-                                        "230": 18.00,
-                                        "240": 18.45,
-                                        "250": 18.90,
-                                        "260": 19.42,
-                                        "270": 20.00,
-                                        "280": 20.62,
-                                        "290": 21.23,
-                                        "300": 21.85
-                                    },
-                                    "417": {
-                                        "0": 13.21,
-                                        "10": 13.24,
-                                        "20": 13.28,
-                                        "30": 13.34,
-                                        "40": 13.42,
-                                        "50": 13.51,
-                                        "60": 13.62,
-                                        "70": 13.74,
-                                        "80": 13.88,
-                                        "90": 14.04,
-                                        "100": 14.21,
-                                        "110": 14.40,
-                                        "120": 14.63,
-                                        "130": 14.88,
-                                        "140": 15.16,
-                                        "150": 15.45,
-                                        "160": 15.76,
-                                        "170": 16.09,
-                                        "180": 16.44,
-                                        "190": 16.79,
-                                        "200": 17.16,
-                                        "210": 17.55,
-                                        "220": 17.94,
-                                        "230": 18.34,
-                                        "240": 18.78,
-                                        "250": 19.23,
-                                        "260": 19.73,
-                                        "270": 20.23,
-                                        "280": 20.73,
-                                        "290": 21.25,
-                                        "300": 21.85
-                                    },
-                                    "418": {
-                                        "0": 14.21,
-                                        "10": 14.24,
-                                        "20": 14.27,
-                                        "30": 14.32,
-                                        "40": 14.37,
-                                        "50": 14.44,
-                                        "60": 14.51,
-                                        "70": 14.60,
-                                        "80": 14.69,
-                                        "90": 14.79,
-                                        "100": 14.90,
-                                        "110": 15.02,
-                                        "120": 15.22,
-                                        "130": 15.45,
-                                        "140": 15.72,
-                                        "150": 16.00,
-                                        "160": 16.29,
-                                        "170": 16.60,
-                                        "180": 16.92,
-                                        "190": 17.25,
-                                        "200": 17.59,
-                                        "210": 17.95,
-                                        "220": 18.33,
-                                        "230": 18.72,
-                                        "240": 19.13,
-                                        "250": 19.55,
-                                        "260": 19.98,
-                                        "270": 20.40,
-                                        "280": 20.84,
-                                        "290": 21.29,
-                                        "300": 21.85
-                                    },
-                                    "419": {
-                                        "0": 15.21,
-                                        "10": 15.24,
-                                        "20": 15.27,
-                                        "30": 15.31,
-                                        "40": 15.36,
-                                        "50": 15.41,
-                                        "60": 15.47,
-                                        "70": 15.54,
-                                        "80": 15.62,
-                                        "90": 15.71,
-                                        "100": 15.82,
-                                        "110": 15.93,
-                                        "120": 16.04,
-                                        "130": 16.18,
-                                        "140": 16.36,
-                                        "150": 16.56,
-                                        "160": 16.79,
-                                        "170": 17.05,
-                                        "180": 17.34,
-                                        "190": 17.64,
-                                        "200": 17.95,
-                                        "210": 18.28,
-                                        "220": 18.65,
-                                        "230": 19.03,
-                                        "240": 19.42,
-                                        "250": 19.80,
-                                        "260": 20.19,
-                                        "270": 20.58,
-                                        "280": 20.98,
-                                        "290": 21.38,
-                                        "300": 21.85
-                                    },
-                                    "420": {
-                                        "0": 16.21,
-                                        "10": 16.24,
-                                        "20": 16.28,
-                                        "30": 16.32,
-                                        "40": 16.37,
-                                        "50": 16.42,
-                                        "60": 16.47,
-                                        "70": 16.53,
-                                        "80": 16.61,
-                                        "90": 16.69,
-                                        "100": 16.77,
-                                        "110": 16.83,
-                                        "120": 16.87,
-                                        "130": 16.94,
-                                        "140": 17.07,
-                                        "150": 17.25,
-                                        "160": 17.47,
-                                        "170": 17.71,
-                                        "180": 17.97,
-                                        "190": 18.25,
-                                        "200": 18.50,
-                                        "210": 18.79,
-                                        "220": 19.10,
-                                        "230": 19.43,
-                                        "240": 19.76,
-                                        "250": 20.09,
-                                        "260": 20.42,
-                                        "270": 20.76,
-                                        "280": 21.10,
-                                        "290": 21.45,
-                                        "300": 21.85
-                                    },
-                                    "421": {
-                                        "0": 17.21,
-                                        "10": 17.24,
-                                        "20": 17.27,
-                                        "30": 17.31,
-                                        "40": 17.35,
-                                        "50": 17.40,
-                                        "60": 17.44,
-                                        "70": 17.50,
-                                        "80": 17.56,
-                                        "90": 17.63,
-                                        "100": 17.70,
-                                        "110": 17.75,
-                                        "120": 17.79,
-                                        "130": 17.85,
-                                        "140": 17.96,
-                                        "150": 18.10,
-                                        "160": 18.28,
-                                        "170": 18.48,
-                                        "180": 18.70,
-                                        "190": 18.92,
-                                        "200": 19.13,
-                                        "210": 19.36,
-                                        "220": 19.62,
-                                        "230": 19.88,
-                                        "240": 20.15,
-                                        "250": 20.42,
-                                        "260": 20.69,
-                                        "270": 20.96,
-                                        "280": 21.24,
-                                        "290": 21.52,
-                                        "300": 21.85
-                                    },
-                                    "422": {
-                                        "0": 18.21,
-                                        "10": 18.24,
-                                        "20": 18.27,
-                                        "30": 18.30,
-                                        "40": 18.34,
-                                        "50": 18.38,
-                                        "60": 18.42,
-                                        "70": 18.46,
-                                        "80": 18.52,
-                                        "90": 18.58,
-                                        "100": 18.63,
-                                        "110": 18.68,
-                                        "120": 18.71,
-                                        "130": 18.76,
-                                        "140": 18.85,
-                                        "150": 18.96,
-                                        "160": 19.10,
-                                        "170": 19.25,
-                                        "180": 19.42,
-                                        "190": 19.59,
-                                        "200": 19.76,
-                                        "210": 19.94,
-                                        "220": 20.13,
-                                        "230": 20.34,
-                                        "240": 20.54,
-                                        "250": 20.75,
-                                        "260": 20.96,
-                                        "270": 21.17,
-                                        "280": 21.38,
-                                        "290": 21.60,
-                                        "300": 21.85
-                                    },
-                                    "423": {
-                                        "0": 19.21,
-                                        "10": 19.24,
-                                        "20": 19.26,
-                                        "30": 19.29,
-                                        "40": 19.32,
-                                        "50": 19.36,
-                                        "60": 19.39,
-                                        "70": 19.43,
-                                        "80": 19.47,
-                                        "90": 19.52,
-                                        "100": 19.56,
-                                        "110": 19.60,
-                                        "120": 19.63,
-                                        "130": 19.67,
-                                        "140": 19.73,
-                                        "150": 19.82,
-                                        "160": 19.92,
-                                        "170": 20.03,
-                                        "180": 20.14,
-                                        "190": 20.27,
-                                        "200": 20.38,
-                                        "210": 20.51,
-                                        "220": 20.65,
-                                        "230": 20.79,
-                                        "240": 20.94,
-                                        "250": 21.08,
-                                        "260": 21.23,
-                                        "270": 21.37,
-                                        "280": 21.52,
-                                        "290": 21.68,
-                                        "300": 21.85
-                                    },
-                                    "424": {
-                                        "0": 20.21,
-                                        "10": 20.23,
-                                        "20": 20.26,
-                                        "30": 20.28,
-                                        "40": 20.31,
-                                        "50": 20.34,
-                                        "60": 20.36,
-                                        "70": 20.39,
-                                        "80": 20.43,
-                                        "90": 20.46,
-                                        "100": 20.49,
-                                        "110": 20.52,
-                                        "120": 20.55,
-                                        "130": 20.58,
-                                        "140": 20.62,
-                                        "150": 20.67,
-                                        "160": 20.73,
-                                        "170": 20.80,
-                                        "180": 20.87,
-                                        "190": 20.94,
-                                        "200": 21.01,
-                                        "210": 21.08,
-                                        "220": 21.16,
-                                        "230": 21.25,
-                                        "240": 21.33,
-                                        "250": 21.41,
-                                        "260": 21.49,
-                                        "270": 21.58,
-                                        "280": 21.66,
-                                        "290": 21.75,
-                                        "300": 21.85
-                                    },
-                                    "425": {
-                                        "0": 21.21,
-                                        "10": 21.23,
-                                        "20": 21.25,
-                                        "30": 21.27,
-                                        "40": 21.30,
-                                        "50": 21.32,
-                                        "60": 21.34,
-                                        "70": 21.36,
-                                        "80": 21.38,
-                                        "90": 21.40,
-                                        "100": 21.42,
-                                        "110": 21.44,
-                                        "120": 21.47,
-                                        "130": 21.49,
-                                        "140": 21.51,
-                                        "150": 21.53,
-                                        "160": 21.55,
-                                        "170": 21.57,
-                                        "180": 21.59,
-                                        "190": 21.61,
-                                        "200": 21.64,
-                                        "210": 21.66,
-                                        "220": 21.68,
-                                        "230": 21.70,
-                                        "240": 21.72,
-                                        "250": 21.74,
-                                        "260": 21.76,
-                                        "270": 21.78,
-                                        "280": 21.81,
-                                        "290": 21.83,
-                                        "300": 21.85
-                                    }
-                                }
+                                console.log("********************** total is based upon isGraftonForecastBasedUponOpenRiver, !isMelPricePoolOpenRiver, isOpenRiverUseBackWater");
 
                                 // Interpolating Grafton Rating Table
                                 function interpolateValue(rating, point) {
@@ -1182,27 +730,27 @@ async function fetchData(location_id
                                 const flowRate = valueCompareOpenRiver;
                                 const interpolatedValue = interpolateValue(stage, flowRate);
 
-                                // console.log(`Interpolated value for stage ${stage} and flowRate ${flowRate}: ${interpolatedValue}`);
+                                console.log(`Interpolated value for stage ${stage} and flowRate ${flowRate}: ${interpolatedValue}`);
 
                                 const deltaFirst = yesterdayGraftonStageRevValue - interpolatedValue;
-                                // console.log("deltaFirst: ", deltaFirst);
+                                console.log("deltaFirst: ", deltaFirst);
 
                                 // deltaSecond
                                 const stage2 = graftonNetmissDownstreamDataDay1;
                                 const flowRate2 = sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand;
                                 const interpolatedValue2 = interpolateValue(stage2, flowRate2);
 
-                                // console.log(`Interpolated value for stage ${stage2} and flowRate ${flowRate2}: ${interpolatedValue2}`);
+                                console.log(`Interpolated value for stage ${stage2} and flowRate ${flowRate2}: ${interpolatedValue2}`);
 
                                 totalGrafton = deltaFirst + interpolatedValue2;
-                                // console.log("totalGrafton: ", totalGrafton);
+                                console.log("totalGrafton: ", totalGrafton);
 
                                 // push data to GraftonForecast
                                 totalGraftonForecastDay1.push({ "value": totalGrafton });
                                 GraftonForecast[location_id].push({ "value": totalGrafton });
                             } else {
                                 totalGrafton = 999;
-                                // console.log("totalGrafton: ", totalGrafton);
+                                console.log("totalGrafton: ", totalGrafton);
                             }
                             // push data to GraftonForecast
                             totalGraftonForecastDay1.push({ "value": totalGrafton });
@@ -1210,14 +758,14 @@ async function fetchData(location_id
                         }
                     } else if (isGraftonForecastBasedUponLd25MPTw) {
                         totalGrafton = yesterdayGraftonStageRevValue + (((todayGraftonUpstreamNetmissValue - yesterdayGraftonUpstreamStageRevValue) + (todayGraftonDownstreamNetmissStageValue - yesterdayGraftonDownstreamStageRevValue)) / 2);
-                        // console.log("totalGrafton: ", totalGrafton);
+                        console.log("totalGrafton: ", totalGrafton);
 
                         // push data to GraftonForecast
                         totalGraftonForecastDay1.push({ "value": totalGrafton });
                         GraftonForecast[location_id].push({ "value": totalGrafton });
                     } else {
                         totalGrafton = 909;
-                        // console.log("totalGrafton: ", totalGrafton);
+                        console.log("totalGrafton: ", totalGrafton);
 
                         // push data to GraftonForecast
                         totalGraftonForecastDay1.push({ "value": totalGrafton });

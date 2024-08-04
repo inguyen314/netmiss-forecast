@@ -345,7 +345,7 @@ function findDepByInd(indValue, table) {
     // Convert table entries to numbers
     const numericTable = table.map(entry => ({
         ind: Number(entry.ind),
-        dep: Number(entry.dep)
+        dep: Number(entry.dep.replace(/,/g, '')) // Removing commas and converting to number
     }));
 
     // Find the closest entries in the table
