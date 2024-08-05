@@ -978,8 +978,10 @@ async function processAllData(data) {
                 // Downstream Netmiss
                 const todayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[1][1]);
                 const yesterdayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[0][1]);
+                const currentDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[0][1]);
                 // console.log("todayDownstreamNetmiss = ", todayDownstreamNetmiss);
                 // console.log("yesterdayDownstreamNetmiss = ", yesterdayDownstreamNetmiss);
+                // console.log("currentDownstreamNetmiss = ", currentDownstreamNetmiss);
 
                 // Get special gages flow data
                 const convertedSpecialGage1NetmissFlowValuesToCst = convertUTCtoCentralTime(data18);
@@ -1069,7 +1071,7 @@ async function processAllData(data) {
                         // console.log("deltaX: ", deltaX);
 
                         const sumTodayNetmissFlowPlusSpecialNetmissFlowValueDividedOneThousand = sumTodayNetmissFlowPlusSpecialNetmissFlowValue / 1000;
-                        // console.log("sumTodayNetmissFlowPlusSpecialNetmissFlowValueDividedOneThousand: ", sumTodayNetmissFlowPlusSpecialNetmissFlowValueDividedOneThousand);
+                        console.log("sumTodayNetmissFlowPlusSpecialNetmissFlowValueDividedOneThousand: ", sumTodayNetmissFlowPlusSpecialNetmissFlowValueDividedOneThousand);
 
                         // BACKWATER RATING HARDIN
                         let jsonFileName = "ratingLouisiana.json";
@@ -1080,14 +1082,40 @@ async function processAllData(data) {
                         if (value !== null) {
                             // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
                         } else {
-                            // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
+                            console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
                         }
 
                         all = deltaX + value;
                         // console.log("all: ", all);
                     } else if (isYesterdaySpecialNetmissRegulatedPool) {
                         // console.log("******************* isTodayRegulatedPool, isYesterdaySpecialNetmissRegulatedPool *******************");
-                        all = 909;
+                        
+                        // BACKWATER RATING HARDIN
+                        let jsonFileName = "ratingLouisiana.json";
+                        const stage = yesterdayDownstreamStageRevValue;
+                        const flowRate = sumYesterdayNetmissFlowValuePlusSpecialNetmissFlowValueDividedOneThousand;
+                        // console.log(stage, flowRate, jsonFileName);
+                        let value = await readJSONTable(stage, flowRate, jsonFileName);
+                        if (value !== null) {
+                            // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
+                        } else {
+                            console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
+                        }
+
+                        const deltaX = 0 + yesterdayStageRevValue - value;
+                        // console.log("deltaX: ", deltaX);
+
+                        const stage2 = currentDownstreamNetmiss;
+                        const flowRate2 = sumTodayNetmissFlowPlusSpecialNetmissFlowValueDividedOneThousand ;
+                        // console.log(stage2, flowRate2, jsonFileName);
+                        let value2 = await readJSONTable(stage2, flowRate2, jsonFileName);
+                        if (value !== null) {
+                            // console.log(`Interpolated reading for flow rate ${flowRate2} and stage ${stage2} at table ${jsonFileName}: ${value2}`);
+                        } else {
+                            console.log(`No data found for flow rate ${flowRate2} and stage ${stage2}`);
+                        }
+
+                        all = deltaX + value2;
                         // console.log("all: ", all);
                     } else {
                         all = 909;
@@ -1697,8 +1725,10 @@ async function processAllData(data) {
                 // Downstream Netmiss
                 const todayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[1][1]);
                 const yesterdayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[0][1]);
+                const currentDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[1][1]);
                 // console.log("todayDownstreamNetmiss = ", todayDownstreamNetmiss);
                 // console.log("yesterdayDownstreamNetmiss = ", yesterdayDownstreamNetmiss);
+                // console.log("currentDownstreamNetmiss = ", currentDownstreamNetmiss);
 
                 // Get special gages flow data
                 const convertedSpecialGage1NetmissFlowValuesToCst = convertUTCtoCentralTime(data18);
@@ -1799,7 +1829,7 @@ async function processAllData(data) {
                         if (value !== null) {
                             // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
                         } else {
-                            // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
+                            console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
                         }
 
                         all = deltaX + value;
@@ -1807,7 +1837,32 @@ async function processAllData(data) {
                     } else if (isYesterdayRegulatedPool) {
                         // console.log("******************* isTodayRegulatedPool, isYesterdayRegulatedPool *******************");
 
-                        all = 909;
+                        // BACKWATER RATING HARDIN
+                        let jsonFileName = "ratingLouisiana.json";
+                        const stage = yesterdayDownstreamStageRevValue;
+                        const flowRate = sumYesterdayNetmissFlowValuePlusSpecialNetmissFlowValueDividedOneThousand;
+                        // console.log(stage, flowRate, jsonFileName);
+                        let value = await readJSONTable(stage, flowRate, jsonFileName);
+                        if (value !== null) {
+                            // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
+                        } else {
+                            console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
+                        }
+
+                        const deltaX = 0 + yesterdayStageRevValue - value;
+                        // console.log("deltaX: ", deltaX);
+
+                        const stage2 = currentDownstreamNetmiss;
+                        const flowRate2 = sumTodayNetmissFlowPlusSpecialNetmissFlowValueDividedOneThousand ;
+                        // console.log(stage2, flowRate2, jsonFileName);
+                        let value2 = await readJSONTable(stage2, flowRate2, jsonFileName);
+                        if (value !== null) {
+                            // console.log(`Interpolated reading for flow rate ${flowRate2} and stage ${stage2} at table ${jsonFileName}: ${value2}`);
+                        } else {
+                            console.log(`No data found for flow rate ${flowRate2} and stage ${stage2}`);
+                        }
+
+                        all = deltaX + value2;
                         // console.log("all: ", all);
                     } else {
                         all = 909;
@@ -2544,8 +2599,10 @@ async function processAllData(data) {
                 // Downstream Netmiss
                 const todayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[2][1]);
                 const yesterdayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[1][1]);
+                const currentDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[2][1]);
                 // console.log("todayDownstreamNetmiss = ", todayDownstreamNetmiss);
                 // console.log("yesterdayDownstreamNetmiss = ", yesterdayDownstreamNetmiss);
+                // console.log("currentDownstreamNetmiss = ", currentDownstreamNetmiss);
 
                 // Get special gages flow data
                 const convertedSpecialGage1NetmissFlowValuesToCst = convertUTCtoCentralTime(data18);
@@ -2651,7 +2708,32 @@ async function processAllData(data) {
                     } else if (isYesterdayRegulatedPool) {
                         // console.log("******************* isTodayRegulatedPool, isYesterdayRegulatedPool *******************");
 
-                        all = 909;
+                        // BACKWATER RATING HARDIN
+                        let jsonFileName = "ratingLouisiana.json";
+                        const stage = yesterdayDownstreamStageRevValue;
+                        const flowRate = sumYesterdayNetmissFlowValuePlusSpecialNetmissFlowValueDividedOneThousand;
+                        // console.log(stage, flowRate, jsonFileName);
+                        let value = await readJSONTable(stage, flowRate, jsonFileName);
+                        if (value !== null) {
+                            // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
+                        } else {
+                            console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
+                        }
+
+                        const deltaX = 0 + yesterdayStageRevValue - value;
+                        // console.log("deltaX: ", deltaX);
+
+                        const stage2 = currentDownstreamNetmiss;
+                        const flowRate2 = sumTodayNetmissFlowPlusSpecialNetmissFlowValueDividedOneThousand ;
+                        // console.log(stage2, flowRate2, jsonFileName);
+                        let value2 = await readJSONTable(stage2, flowRate2, jsonFileName);
+                        if (value !== null) {
+                            // console.log(`Interpolated reading for flow rate ${flowRate2} and stage ${stage2} at table ${jsonFileName}: ${value2}`);
+                        } else {
+                            console.log(`No data found for flow rate ${flowRate2} and stage ${stage2}`);
+                        }
+
+                        all = deltaX + value2;
                         // console.log("all: ", all);
                     } else {
                         all = 909;
@@ -3388,8 +3470,10 @@ async function processAllData(data) {
                 // Downstream Netmiss
                 const todayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[3][1]);
                 const yesterdayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[2][1]);
+                const currentDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[3][1]);
                 // console.log("todayDownstreamNetmiss = ", todayDownstreamNetmiss);
                 // console.log("yesterdayDownstreamNetmiss = ", yesterdayDownstreamNetmiss);
+                // console.log("currentDownstreamNetmiss = ", currentDownstreamNetmiss);
 
                 // Get special gages flow data
                 const convertedSpecialGage1NetmissFlowValuesToCst = convertUTCtoCentralTime(data18);
@@ -3496,7 +3580,32 @@ async function processAllData(data) {
                     } else if (isYesterdayRegulatedPool) {
                         // console.log("******************* isTodayRegulatedPool, isYesterdayRegulatedPool *******************");
 
-                        all = 909;
+                        // BACKWATER RATING HARDIN
+                        let jsonFileName = "ratingLouisiana.json";
+                        const stage = yesterdayDownstreamStageRevValue;
+                        const flowRate = sumYesterdayNetmissFlowValuePlusSpecialNetmissFlowValueDividedOneThousand;
+                        // console.log(stage, flowRate, jsonFileName);
+                        let value = await readJSONTable(stage, flowRate, jsonFileName);
+                        if (value !== null) {
+                            // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
+                        } else {
+                            console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
+                        }
+
+                        const deltaX = 0 + yesterdayStageRevValue - value;
+                        // console.log("deltaX: ", deltaX);
+
+                        const stage2 = currentDownstreamNetmiss;
+                        const flowRate2 = sumTodayNetmissFlowPlusSpecialNetmissFlowValueDividedOneThousand ;
+                        // console.log(stage2, flowRate2, jsonFileName);
+                        let value2 = await readJSONTable(stage2, flowRate2, jsonFileName);
+                        if (value !== null) {
+                            // console.log(`Interpolated reading for flow rate ${flowRate2} and stage ${stage2} at table ${jsonFileName}: ${value2}`);
+                        } else {
+                            console.log(`No data found for flow rate ${flowRate2} and stage ${stage2}`);
+                        }
+
+                        all = deltaX + value2;
                         // console.log("all: ", all);
                     } else {
                         all = 909;
@@ -4235,8 +4344,10 @@ async function processAllData(data) {
                 // Downstream Netmiss
                 const todayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[4][1]);
                 const yesterdayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[3][1]);
+                const currentDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[4][1]);
                 // console.log("todayDownstreamNetmiss = ", todayDownstreamNetmiss);
                 // console.log("yesterdayDownstreamNetmiss = ", yesterdayDownstreamNetmiss);
+                // console.log("currentDownstreamNetmiss = ", currentDownstreamNetmiss);
 
                 // Get special gages flow data
                 const convertedSpecialGage1NetmissFlowValuesToCst = convertUTCtoCentralTime(data18);
@@ -4342,7 +4453,32 @@ async function processAllData(data) {
                     } else if (isYesterdayRegulatedPool) {
                         // console.log("******************* isTodayRegulatedPool, isYesterdayRegulatedPool *******************");
 
-                        all = 909;
+                        // BACKWATER RATING HARDIN
+                        let jsonFileName = "ratingLouisiana.json";
+                        const stage = yesterdayDownstreamStageRevValue;
+                        const flowRate = sumYesterdayNetmissFlowValuePlusSpecialNetmissFlowValueDividedOneThousand;
+                        // console.log(stage, flowRate, jsonFileName);
+                        let value = await readJSONTable(stage, flowRate, jsonFileName);
+                        if (value !== null) {
+                            // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
+                        } else {
+                            console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
+                        }
+
+                        const deltaX = 0 + yesterdayStageRevValue - value;
+                        // console.log("deltaX: ", deltaX);
+
+                        const stage2 = currentDownstreamNetmiss;
+                        const flowRate2 = sumTodayNetmissFlowPlusSpecialNetmissFlowValueDividedOneThousand ;
+                        // console.log(stage2, flowRate2, jsonFileName);
+                        let value2 = await readJSONTable(stage2, flowRate2, jsonFileName);
+                        if (value !== null) {
+                            // console.log(`Interpolated reading for flow rate ${flowRate2} and stage ${stage2} at table ${jsonFileName}: ${value2}`);
+                        } else {
+                            console.log(`No data found for flow rate ${flowRate2} and stage ${stage2}`);
+                        }
+
+                        all = deltaX + value2;
                         // console.log("all: ", all);
                     } else {
                         all = 909;
@@ -5081,8 +5217,10 @@ async function processAllData(data) {
                 // Downstream Netmiss
                 const todayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[5][1]);
                 const yesterdayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[4][1]);
+                const currentDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[5][1]);
                 // console.log("todayDownstreamNetmiss = ", todayDownstreamNetmiss);
                 // console.log("yesterdayDownstreamNetmiss = ", yesterdayDownstreamNetmiss);
+                // console.log("currentDownstreamNetmiss = ", currentDownstreamNetmiss);
 
                 // Get special gages flow data
                 const convertedSpecialGage1NetmissFlowValuesToCst = convertUTCtoCentralTime(data18);
@@ -5188,7 +5326,32 @@ async function processAllData(data) {
                     } else if (isYesterdayRegulatedPool) {
                         // console.log("******************* isTodayRegulatedPool, isYesterdayRegulatedPool *******************");
 
-                        all = 909;
+                        // BACKWATER RATING HARDIN
+                        let jsonFileName = "ratingLouisiana.json";
+                        const stage = yesterdayDownstreamStageRevValue;
+                        const flowRate = sumYesterdayNetmissFlowValuePlusSpecialNetmissFlowValueDividedOneThousand;
+                        // console.log(stage, flowRate, jsonFileName);
+                        let value = await readJSONTable(stage, flowRate, jsonFileName);
+                        if (value !== null) {
+                            // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
+                        } else {
+                            console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
+                        }
+
+                        const deltaX = 0 + yesterdayStageRevValue - value;
+                        // console.log("deltaX: ", deltaX);
+
+                        const stage2 = currentDownstreamNetmiss;
+                        const flowRate2 = sumTodayNetmissFlowPlusSpecialNetmissFlowValueDividedOneThousand ;
+                        // console.log(stage2, flowRate2, jsonFileName);
+                        let value2 = await readJSONTable(stage2, flowRate2, jsonFileName);
+                        if (value !== null) {
+                            // console.log(`Interpolated reading for flow rate ${flowRate2} and stage ${stage2} at table ${jsonFileName}: ${value2}`);
+                        } else {
+                            console.log(`No data found for flow rate ${flowRate2} and stage ${stage2}`);
+                        }
+
+                        all = deltaX + value2;
                         // console.log("all: ", all);
                     } else {
                         all = 909;
