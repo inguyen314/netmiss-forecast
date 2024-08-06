@@ -649,9 +649,80 @@ async function readJSONTable2(stage, flowRate, Table) {
     }
 }
 
+// Payload setup
 function getDateWithTimeSet(daysToAdd, hours, minutes) {
     let date = new Date();
     date.setDate(date.getDate() + daysToAdd);
     date.setHours(hours, minutes, 0, 0); // Set hours, minutes, seconds, milliseconds to 6 AM
     return date.getTime();
+}
+
+// CDA Write Data
+async function writeTS(payload) {
+    if (!payload) throw new Error("You must specify a payload!");
+
+    try {
+        const response = await fetch("https://wm.mvs.ds.usace.army.mil/mvs-data/timeseries?store-rule=REPLACE%20ALL", {
+            method: "POST",
+            headers: {
+                "accept": "*/*",
+                "Content-Type": "application/json;version=2",
+            },
+
+
+            body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+        }
+
+        // const data = await response.json();
+        // console.log('Success:', data);
+        // return data;
+        return true;
+
+    } catch (error) {
+        console.error('Error writing timeseries:', error);
+        throw error;
+    }
+}
+
+async function isLoggedIn() {
+    try {
+        const response = await fetch("https://wm.mvs.ds.usace.army.mil/mvs-data/auth/keys", {
+            method: "GET"
+        });
+
+        if (response.status === 401) return false;
+
+        console.log('status', response.status);
+        return true;
+
+    } catch (error) {
+        console.error('Error checking login status:', error);
+        return false;
+    }
+}
+
+async function loginCDA() {
+    console.log("page");
+    if (await isLoggedIn()) return true;
+    console.log('is false');
+
+    // Redirect to login page
+    window.location.href = `https://wm.mvs.ds.usace.army.mil:8243/CWMSLogin/login?OriginalLocation=${encodeURIComponent(window.location.href)}`;
+}
+
+async function loginStateController(cdaBtn) {
+    cdaBtn.disabled = true
+    if (await isLoggedIn()) {
+            // TODO: look into other ways to handle state management in JS 
+            // Variables / attributes of the element/dom
+            cdaBtn.innerText = "Submit"
+        } else {
+            cdaBtn.innerText = "Login"
+        }
+    cdaBtn.disabled = false
 }

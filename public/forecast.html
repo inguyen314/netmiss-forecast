@@ -7,36 +7,38 @@
     const param1Value = urlParams.get('cda'); // Output: "value1"
     const param2Value = urlParams.get('interpolate'); // Output: "value2"
 
-    urlParams.forEach(function(value, key) {
+    urlParams.forEach(function (value, key) {
         console.log(key, value);
     });
 </script>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Operation Forecast</title>
-        <meta name="Description" content="U.S. Army Corps of Engineers St. Louis District Home Page" />
-        <link rel="stylesheet" href="../../css/body.css" />
-        <link rel="stylesheet" href="stylesheets/style.css" />
-        <link rel="stylesheet" href="../../css/breadcrumbs.css" />
-        <link rel="stylesheet" href="../../css/jumpMenu.css" />
-        <script type="text/javascript" src="../../js/main.js"></script>
 
-        <!-- Add sidebar.css IF NOT LOAD SIDEBAR TEMPLATE -->
-        <link rel="stylesheet" href="../../css/sidebar.css"/>
-        <!-- Include Moment.js -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-        <!-- Include the Chart.js library -->
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <!-- Include the Moment.js adapter for Chart.js -->
-        <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@1.0.0"></script>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operation Forecast</title>
+    <meta name="Description" content="U.S. Army Corps of Engineers St. Louis District Home Page" />
+    <link rel="stylesheet" href="../../css/body.css" />
+    <link rel="stylesheet" href="stylesheets/style.css" />
+    <link rel="stylesheet" href="../../css/breadcrumbs.css" />
+    <link rel="stylesheet" href="../../css/jumpMenu.css" />
+    <script type="text/javascript" src="../../js/main.js"></script>
 
-        <style>
-            /* Button Styles */
-            #sendEmailBtn {
-            background-color: darkblue; /* blue */
+    <!-- Add sidebar.css IF NOT LOAD SIDEBAR TEMPLATE -->
+    <link rel="stylesheet" href="../../css/sidebar.css" />
+    <!-- Include Moment.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <!-- Include the Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Include the Moment.js adapter for Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@1.0.0"></script>
+
+    <style>
+        /* Button Styles */
+        #sendEmailBtn {
+            background-color: darkblue;
+            /* blue */
             border: none;
             color: white;
             padding: 15px 32px;
@@ -49,14 +51,16 @@
             transition-duration: 0.4s;
             cursor: pointer;
             border-radius: 8px;
-            }
+        }
 
-            #sendEmailBtn:hover {
-            background-color: darkblue; /* Darker Green */
-            }
+        #sendEmailBtn:hover {
+            background-color: darkblue;
+            /* Darker Green */
+        }
 
-            #interpolateGagesButton {
-            background-color: darkblue; /* blue */
+        #interpolateGagesButton {
+            background-color: darkblue;
+            /* blue */
             border: none;
             color: white;
             padding: 15px 32px;
@@ -69,144 +73,170 @@
             transition-duration: 0.4s;
             cursor: pointer;
             border-radius: 8px;
-            }
-        </style>
-    </head>
-    <body>
-        <div id="page-container">
-            <header id="header">
-                <!--Header content populated here by JavaScript Tag at end of body -->
-            </header>
-            <div class="page-wrap">
-                <div class="container-fluid">
-                    <div id="breadcrumbs">
-                    </div>
-                    <!--APP STARTS-->
-                    <div class="page-content">
-						<div id="topPane" class="col-md backend-cp-collapsible">
-							<div class="box-usace">
-								<h2 class="box-header-striped">
-									<span class="titleLabel title">7-Day Operational River Forecast</span>
-									<span class="rss"></span>
-								</h2>
-								<div class="box-content" style="background-color:white;margin:auto">
-									<div class="content">
-                                        <!-- <span><h3><a href='forecast.html?cda=internal'>Switch to Cloud Internal</a></h3></span>
+        }
+    </style>
+</head>
+
+<body>
+    <div id="page-container">
+        <header id="header">
+            <!--Header content populated here by JavaScript Tag at end of body -->
+        </header>
+        <div class="page-wrap">
+            <div class="container-fluid">
+                <div id="breadcrumbs">
+                </div>
+                <!--APP STARTS-->
+                <div class="page-content">
+                    <div id="topPane" class="col-md backend-cp-collapsible">
+                        <div class="box-usace">
+                            <h2 class="box-header-striped">
+                                <span class="titleLabel title">7-Day Operational River Forecast</span>
+                                <span class="rss"></span>
+                            </h2>
+                            <div class="box-content" style="background-color:white;margin:auto">
+                                <div class="content">
+                                    <!-- <span><h3><a href='forecast.html?cda=internal'>Switch to Cloud Internal</a></h3></span>
                                         <span><h3><a href='forecast.html?cda=public'>Switch to Cloud Public</a></h3></span> -->
-                                        <div>
-                                            Note - This operational forecast is intended for internal use. The official river forecasting agency of the 
-                                            Federal Government is the NWS. The NWS forecast for these locations can be found by clicking the blue hyperlink 
-                                            associated with each gage location. If there are any questions, please call the water control office at 1-(800)432-1208 
-                                            or (314)331-8342.
-                                        </div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-                    <script>
-                        var cda = urlParams.get('cda');
-                        console.log('cda: ', cda);
-
-                        var interpolate = urlParams.get('interpolate');
-                        console.log('interpolate: ', interpolate);
-
-                        // Append the 'cda' value to the text content of the <span>
-                            var spanElement = document.querySelector('.titleLabel.title');
-                        if (cda && spanElement) {
-                            // spanElement.textContent += ' ' + cda;
-                            spanElement.textContent += ' ' + ' ';
-                        }
-                    </script>
-                    <div id="loading_forecast" style="display: none;"><img src="../../images/loading4.gif" style='height: 50px; width: 50px;' alt="Loading..." /></div>
-                    <div id="table_container_forecast"></div>
-                    <script type="text/javascript" src="ratings.js"></script>
-                    <script type="text/javascript" src="functions.js"></script>
-                    <script type="text/javascript" src="fetch.js"></script>
-                    <script src="forecast_cda.js"></script>	
-
-                    <div style="display: flex; justify-content: center; align-items: center; width: 100%; background-color: darkgray; margin-top: 50px">
-                        <img src="https://mrcc.purdue.edu/files/cliwatch/GIS_plots/prcp_mpe/prcp_mpe_007_tot-0.png" alt="7-day Observed" style="width: 50%; padding-right: 10px;">
-                        <img src="https://www.wpc.ncep.noaa.gov/qpf/p168i.gif?1512662281" alt="7-day QPF" style="width: 50%; padding-left: 10px; border: 1px solid black;">
-                    </div>
-
-                    <button id="sendEmailBtn">Send Internal River Forecast Email</button>
-                    <br>
-                    <button id="interpolateGagesButton">Interpolate Gages</button>
-                    <script>
-                        // JavaScript to add click event listener to the button
-                        document.getElementById("interpolateGagesButton").addEventListener("click", function() {
-                            // Open the desired URL in a new tab
-                            window.open("forecast_interpolate.html", "_blank");
-                        });
-                      </script>
-                    <script>
-                        document.getElementById("sendEmailBtn").addEventListener("click", function() {
-                            sendEmail();
-                        });
-
-                        function sendEmail() {
-                            // Get table HTML
-                            const tableHTML = document.getElementById("table_container_forecast").innerHTML;
-                            // Send table HTML to PHP script using AJAX
-                            const xhr = new XMLHttpRequest();
-                            xhr.open("POST", "send_email.php", true);
-                            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                            xhr.onreadystatechange = function() {
-                                if (xhr.readyState === 4) {
-                                    if (xhr.status === 200) {
-                                        // AJAX request completed successfully
-                                        console.log(xhr.responseText); // Log response from PHP script
-                                        // Display popup alert
-                                        alert('Email sent successfully');
-                                    } else {
-                                        // AJAX request failed
-                                        console.error('Error:', xhr.statusText);
-                                    }
-                                }
-                            };
-                            xhr.send("tableHTML=" + encodeURIComponent(tableHTML));
-                        }
-                    </script>
-                    <br><br><br><br>
-                    <!--APP ENDS-->
-                    <div class="page-content">
-                        <sidebar id="sidebar">
-                        <!--Side bar content populated here by JavaScript Tag at end of body -->
-                        </sidebar>
-                        <div id="topPane" class="col-md backend-cp-collapsible">
-                            <!-- Page Content Here -->
-                            <div class="box-usace">
-                                <h2 class="box-header-striped">
-                                    <span class="titleLabel title">Note</span>
-                                    <span class="rss"></span>
-                                </h2>
-                                <div class="box-content" style="background-color:white;margin:auto">
-                                    <div class="content">
-                                        <!-- Box Content Here -->
-                                        <p>Please note that after midnight, no data will be available. You will see the message: <strong>"Daily forecasts are updated around noon."</strong>
-                                        <br>To load the data, please run the NetMiss forecast after this time.</p>
+                                    <div>
+                                        Note - This operational forecast is intended for internal use. The official
+                                        river forecasting agency of the
+                                        Federal Government is the NWS. The NWS forecast for these locations can be found
+                                        by clicking the blue hyperlink
+                                        associated with each gage location. If there are any questions, please call the
+                                        water control office at 1-(800)432-1208
+                                        or (314)331-8342.
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <button id="returnTop" title="Return to Top of Page">Top</button>
+                <!-- load url variables -->
+                <script>
+                    var cda = urlParams.get('cda');
+                    console.log('cda: ', cda);
+
+                    var interpolate = urlParams.get('interpolate');
+                    console.log('interpolate: ', interpolate);
+
+                    // Append the 'cda' value to the text content of the <span>
+                    var spanElement = document.querySelector('.titleLabel.title');
+                    if (cda && spanElement) {
+                        // spanElement.textContent += ' ' + cda;
+                        spanElement.textContent += ' ' + ' ';
+                    }
+                </script>
+
+                <!-- save data via cda -->
+                <div class="status"></div>
+                <button id="cda-btn" disabled>Login</button>
+
+                <div id="loading_forecast" style="display: none;"><img src="../../images/loading4.gif"
+                        style='height: 50px; width: 50px;' alt="Loading..." /></div>
+                <div id="table_container_forecast"></div>
+                <script type="text/javascript" src="ratings.js"></script>
+                <script type="text/javascript" src="functions.js"></script>
+                <script type="text/javascript" src="fetch.js"></script>
+                <script type="text/javascript" src="forecast_cda.js"></script>
+
+                <!-- images -->
+                <div
+                    style="display: flex; justify-content: center; align-items: center; width: 100%; background-color: darkgray; margin-top: 50px">
+                    <img src="https://mrcc.purdue.edu/files/cliwatch/GIS_plots/prcp_mpe/prcp_mpe_007_tot-0.png"
+                        alt="7-day Observed" style="width: 50%; padding-right: 10px;">
+                    <img src="https://www.wpc.ncep.noaa.gov/qpf/p168i.gif?1512662281" alt="7-day QPF"
+                        style="width: 50%; padding-left: 10px; border: 1px solid black;">
+                </div>
+
+                <!-- email buttons -->
+                <button id="sendEmailBtn">Send Internal River Forecast Email</button>
+                <br>
+                <button id="interpolateGagesButton">Interpolate Gages</button>
+
+                <!-- interpolate (not in use) -->
+                <script>
+                    // JavaScript to add click event listener to the button
+                    document.getElementById("interpolateGagesButton").addEventListener("click", function () {
+                        // Open the desired URL in a new tab
+                        window.open("forecast_interpolate.html", "_blank");
+                    });
+                </script>
+
+                <!-- send email -->
+                <script>
+                    document.getElementById("sendEmailBtn").addEventListener("click", function () {
+                        sendEmail();
+                    });
+
+                    function sendEmail() {
+                        // Get table HTML
+                        const tableHTML = document.getElementById("table_container_forecast").innerHTML;
+                        // Send table HTML to PHP script using AJAX
+                        const xhr = new XMLHttpRequest();
+                        xhr.open("POST", "send_email.php", true);
+                        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                        xhr.onreadystatechange = function () {
+                            if (xhr.readyState === 4) {
+                                if (xhr.status === 200) {
+                                    // AJAX request completed successfully
+                                    console.log(xhr.responseText); // Log response from PHP script
+                                    // Display popup alert
+                                    alert('Email sent successfully');
+                                } else {
+                                    // AJAX request failed
+                                    console.error('Error:', xhr.statusText);
+                                }
+                            }
+                        };
+                        xhr.send("tableHTML=" + encodeURIComponent(tableHTML));
+                    }
+                </script>
+                <br>
+                <br>
+                <br>
+                <br>
+                <!--APP ENDS-->
+                <div class="page-content">
+                    <sidebar id="sidebar">
+                        <!--Side bar content populated here by JavaScript Tag at end of body -->
+                    </sidebar>
+                    <div id="topPane" class="col-md backend-cp-collapsible">
+                        <!-- Page Content Here -->
+                        <div class="box-usace">
+                            <h2 class="box-header-striped">
+                                <span class="titleLabel title">Note</span>
+                                <span class="rss"></span>
+                            </h2>
+                            <div class="box-content" style="background-color:white;margin:auto">
+                                <div class="content">
+                                    <!-- Box Content Here -->
+                                    <p>Please note that after midnight, no data will be available. You will see the
+                                        message: <strong>"Daily forecasts are updated around noon."</strong>
+                                        <br>To load the data, please run the NetMiss forecast after this time.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+            <button id="returnTop" title="Return to Top of Page">Top</button>
         </div>
-        <footer id="footer">
-            <!--Footer content populated here by script tag at end of body -->
-        </footer>
-        <script src="../../js/libraries/jQuery-3.3.6.min.js"></script>
-        <script defer>
-            // When the document has loaded pull in the page header and footer skins
-            $(document).ready(function () {
-                // Change the v= to a different number to force clearing the cached version on the client browser
-                $('#header').load('../../templates/DISTRICT.header.html');
-                //$('#sidebar').load('../../templates/DISTRICT.sidebar.html');
-                $('#footer').load('../../templates/DISTRICT.footer.html');
-            })
-        </script>
-    </body>
+    </div>
+    <footer id="footer">
+        <!--Footer content populated here by script tag at end of body -->
+    </footer>
+    <script src="../../js/libraries/jQuery-3.3.6.min.js"></script>
+    <script defer>
+        // When the document has loaded pull in the page header and footer skins
+        $(document).ready(function () {
+            // Change the v= to a different number to force clearing the cached version on the client browser
+            $('#header').load('../../templates/DISTRICT.header.html');
+            //$('#sidebar').load('../../templates/DISTRICT.sidebar.html');
+            $('#footer').load('../../templates/DISTRICT.footer.html');
+        })
+    </script>
+</body>
+
 </html>

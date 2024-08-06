@@ -6,10 +6,20 @@ let ForecastValues = {
 let GraftonForecast = {
 };
 
+let timeseriesPayload = {
+};
+
+let isLoading = true;
+
+const statusBtn = document.querySelector(".status");
+const cdaBtn = document.getElementById("cda-btn");
+
 const loadingIndicator = document.getElementById('loading_forecast');
 const tableContainer = document.getElementById('table_container_forecast');
 
 document.addEventListener('DOMContentLoaded', function () {
+    cdaBtn.disabled = isLoading;
+    
     // Display the loading_alarm_mvs indicator
     loadingIndicator.style.display = 'block';
 
@@ -68,6 +78,35 @@ document.addEventListener('DOMContentLoaded', function () {
             // Call the function to create and populate the table
             createTable(jsonDataFiltered);
 
+            // Save data using CDA
+
+            cdaBtn.onclick = async () => {
+                if (cdaBtn.innerText === "Login") {
+                    const loginResult = await loginCDA();
+                    console.log({ loginResult });
+                    if (loginResult) {
+                        cdaBtn.innerText = "Submit";
+                    } else {
+                        statusBtn.innerText = "Failed to Login!";
+                    }
+                } else {
+                    try {
+                        // Write timeseries to CDA
+                        console.log("Write!");
+                        await writeTS(timeseriesPayload);
+                        statusBtn.innerText = "Write successful!";
+                    } catch (error) {
+                        statusBtn.innerText = "Failed to write data!";
+                    }
+                }
+            };
+
+            loginStateController(cdaBtn)
+            // Setup timers
+            setInterval(async () => {
+                loginStateController(cdaBtn)
+            }, 10000) // time is in millis
+
             // loading indicator set to none
             loadingIndicator.style.display = 'none';
         })
@@ -78,6 +117,8 @@ document.addEventListener('DOMContentLoaded', function () {
         .finally(() => {
             // Hide the loading_alarm_mvs indicator regardless of success or failure
             loadingIndicator.style.display = 'none';
+            isLoading = false;
+            cdaBtn.disabled = isLoading;
         });
 });
 
@@ -482,6 +523,10 @@ async function processAllData(data) {
                     ],
                 ]
             };
+
+            timeseriesPayload = payloadGrafton;
+
+            // timeseriesPayload.push(payloadGrafton)
 
             console.log("payloadGrafton: ", payloadGrafton);
         }
