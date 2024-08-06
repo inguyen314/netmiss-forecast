@@ -648,3 +648,10 @@ async function readJSONTable2(stage, flowRate, Table) {
         return null;
     }
 }
+
+function getDateWithTimeSet(daysToAdd, hours, minutes) {
+    let date = new Date();
+    date.setDate(date.getDate() + daysToAdd);
+    date.setHours(hours, minutes, 0, 0); // Set hours, minutes, seconds, milliseconds to 6 AM
+    return date.getTime();
+}

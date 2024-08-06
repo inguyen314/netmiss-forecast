@@ -440,8 +440,51 @@ async function processAllData(data) {
         // console.log("BirdsPointForecastValue: ", BirdsPointForecastValue);
         // console.log("BirdsPointForecastValue for Birds Point-Mississippi: ", BirdsPointForecastValue["Birds Point-Mississippi"]);
 
-        // console.log("totalGraftonForecastDay1: ", totalGraftonForecastDay1);
-        // console.log("totalGraftonForecastDay1 for Grafton: ", totalGraftonForecastDay1["Grafton-Mississippi"]);
+        // PREPARE GRAFTON PAYLOAD
+        if (location_id === "Grafton-Mississippi") {
+            console.log("totalGraftonForecastDay1: ", totalGraftonForecastDay1);
+            console.log("totalGraftonForecastDay1: ", totalGraftonForecastDay1[0].value);
+
+            const graftonpPayload = {
+                "name": totalGraftonForecastDay1[1].value + ".Stage.Inst.~1Day.0.netmiss-fcst",
+                "office-id": "MVS",
+                "units": "ft",
+                "values": [
+                    [
+                        getDateWithTimeSet(1, 6, 0),
+                        totalGraftonForecastDay1[0].value,
+                        0
+                    ],
+                    [
+                        getDateWithTimeSet(2, 6, 0),
+                        totalGraftonForecastDay2[0].value,
+                        0
+                    ],
+                    [
+                        getDateWithTimeSet(3, 6, 0),
+                        totalGraftonForecastDay3[0].value,
+                        0
+                    ],
+                    [
+                        getDateWithTimeSet(4, 6, 0),
+                        totalGraftonForecastDay4[0].value,
+                        0
+                    ],
+                    [
+                        getDateWithTimeSet(5, 6, 0),
+                        totalGraftonForecastDay5[0].value,
+                        0
+                    ],
+                    [
+                        getDateWithTimeSet(6, 6, 0),
+                        totalGraftonForecastDay6[0].value,
+                        0
+                    ],
+                ]
+            };
+
+            console.log("graftonpPayload: ", graftonpPayload);
+        }
 
         // Starting Processing All Gages
         if (1 === 1) {
