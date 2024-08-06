@@ -670,7 +670,6 @@ async function fetchData(location_id
                                         // push data to GraftonForecast
                                         totalGraftonForecastDay1.push({ "value": totalGrafton });
                                         GraftonForecast[location_id].push({ "value": totalGrafton });
-                                        totalGraftonForecastDay1.push({ "value": location_id});
                                     } else {
                                         // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
                                     }
@@ -749,7 +748,6 @@ async function fetchData(location_id
                                 // push data to GraftonForecast
                                 totalGraftonForecastDay1.push({ "value": totalGrafton });
                                 GraftonForecast[location_id].push({ "value": totalGrafton });
-                                totalGraftonForecastDay1.push({ "value": location_id});
                             } else {
                                 totalGrafton = 999;
                                 // console.log("totalGrafton: ", totalGrafton);
@@ -757,7 +755,6 @@ async function fetchData(location_id
                             // push data to GraftonForecast
                             totalGraftonForecastDay1.push({ "value": totalGrafton });
                             GraftonForecast[location_id].push({ "value": totalGrafton });
-                            totalGraftonForecastDay1.push({ "value": location_id});
                         }
                     } else if (isGraftonForecastBasedUponLd25MPTw) {
                         totalGrafton = yesterdayGraftonStageRevValue + (((todayGraftonUpstreamNetmissValue - yesterdayGraftonUpstreamStageRevValue) + (todayGraftonDownstreamNetmissStageValue - yesterdayGraftonDownstreamStageRevValue)) / 2);
@@ -766,7 +763,6 @@ async function fetchData(location_id
                         // push data to GraftonForecast
                         totalGraftonForecastDay1.push({ "value": totalGrafton });
                         GraftonForecast[location_id].push({ "value": totalGrafton });
-                        totalGraftonForecastDay1.push({ "value": location_id});
                     } else {
                         totalGrafton = 909;
                         // console.log("totalGrafton: ", totalGrafton);
@@ -774,7 +770,6 @@ async function fetchData(location_id
                         // push data to GraftonForecast
                         totalGraftonForecastDay1.push({ "value": totalGrafton });
                         GraftonForecast[location_id].push({ "value": totalGrafton });
-                        totalGraftonForecastDay1.push({ "value": location_id});
                     }
                 }
             }

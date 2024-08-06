@@ -440,13 +440,13 @@ async function processAllData(data) {
         // console.log("BirdsPointForecastValue: ", BirdsPointForecastValue);
         // console.log("BirdsPointForecastValue for Birds Point-Mississippi: ", BirdsPointForecastValue["Birds Point-Mississippi"]);
 
+        // console.log("totalGraftonForecastDay1: ", totalGraftonForecastDay1);
+        // console.log("totalGraftonForecastDay1: ", totalGraftonForecastDay1[0].value);
+
         // PREPARE GRAFTON PAYLOAD
         if (location_id === "Grafton-Mississippi") {
-            console.log("totalGraftonForecastDay1: ", totalGraftonForecastDay1);
-            console.log("totalGraftonForecastDay1: ", totalGraftonForecastDay1[0].value);
-
-            const graftonpPayload = {
-                "name": totalGraftonForecastDay1[1].value + ".Stage.Inst.~1Day.0.netmiss-fcst",
+            const payloadGrafton = {
+                "name": "Grafton-Mississippi.Stage.Inst.~1Day.0.netmiss-fcst",
                 "office-id": "MVS",
                 "units": "ft",
                 "values": [
@@ -483,7 +483,7 @@ async function processAllData(data) {
                 ]
             };
 
-            console.log("graftonpPayload: ", graftonpPayload);
+            console.log("payloadGrafton: ", payloadGrafton);
         }
 
         // Starting Processing All Gages
@@ -6561,6 +6561,48 @@ async function processAllData(data) {
                 }
             }
             day7Cell.innerHTML = day7;
+
+            // PREPARE PAYLOAD FOR ALL GAGES
+            if (location_id === "Grays Pt-Mississippi") {
+                const payloadGraysPt = {
+                    "name": "Grays Pt-Mississippi.Stage.Inst.~1Day.0.netmiss-fcst",
+                    "office-id": "MVS",
+                    "units": "ft",
+                    "values": [
+                        [
+                            getDateWithTimeSet(1, 6, 0),
+                            totalGraysPtDay1,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(2, 6, 0),
+                            totalGraysPtDay2,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(3, 6, 0),
+                            totalGraysPtDay3,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(4, 6, 0),
+                            totalGraysPtDay4,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(5, 6, 0),
+                            totalGraysPtDay5,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(6, 6, 0),
+                            totalGraysPtDay6,
+                            0
+                        ],
+                    ]
+                };
+                console.log("payloadGraysPt: ", payloadGraysPt);
+            }
         }
     });
 }
