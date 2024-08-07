@@ -141,11 +141,11 @@ document.addEventListener('DOMContentLoaded', function () {
 function createTable(jsonDataFiltered) {
     // Create a table element
     const table = document.createElement('table');
-    table.setAttribute('id', 'forecast'); // Set the id to "gage_data"
+    table.style.width = '100%';
+    table.style.borderCollapse = 'collapse';
+    // table.setAttribute('id', 'forecast'); // Set the id to "gage_data"
 
-    // console.log("jsonDataFiltered inside createTable Function = ", jsonDataFiltered);
-
-    // Create the first header row with rowspan for the first column
+    // Create the first header row
     const headerRowTitle = document.createElement('tr');
 
     // Create table header for the first column with rowspan of 3
@@ -154,6 +154,8 @@ function createTable(jsonDataFiltered) {
     thLocation.rowSpan = 3;
     thLocation.style.height = '50px';
     thLocation.style.backgroundColor = 'darkblue';
+    thLocation.style.color = 'white'; // Set the text color to white
+    thLocation.style.border = '1px solid gray'; // Add border
     headerRowTitle.appendChild(thLocation);
 
     // Create table headers for the remaining columns in the first row
@@ -163,6 +165,8 @@ function createTable(jsonDataFiltered) {
         th.textContent = columnName;
         th.style.height = '50px';
         th.style.backgroundColor = 'darkblue';
+        th.style.color = 'white'; // Set the text color to white
+        th.style.border = '1px solid gray'; // Add border
 
         // If the column is "Forecast", set colspan to 7
         if (columnName === "Forecast") {
@@ -172,7 +176,7 @@ function createTable(jsonDataFiltered) {
         headerRowTitle.appendChild(th);
     });
 
-    // Append the first header row to the table
+    // Add the header row to the table (assuming you have a table element already)
     table.appendChild(headerRowTitle);
 
     // Create a table header row for the second header row
@@ -185,6 +189,8 @@ function createTable(jsonDataFiltered) {
         th.textContent = columnName;
         th.style.height = '50px';
         th.style.backgroundColor = 'darkblue';
+        th.style.color = 'white'; // Set the text color to white
+        th.style.border = '1px solid gray'; // Add border
         headerRowDay.appendChild(th);
     });
 
@@ -284,12 +290,14 @@ function createTable(jsonDataFiltered) {
 
 
     // Create table headers for the desired columns
-    const columns2 = [nws_day0_date, nws_day1_date, nws_day2_date, nws_day3_date, nws_day4_date, nws_day5_date, nws_day6_date, nws_day7_date];
+    const columns2 = [nws_day0_date_title, nws_day1_date_title, nws_day2_date_title, nws_day3_date_title, nws_day4_date_title, nws_day5_date_title, nws_day6_date_title, nws_day7_date_title];
     columns2.forEach((columnName) => {
         const th = document.createElement('th');
         th.textContent = columnName;
         th.style.height = '50px';
         th.style.backgroundColor = 'darkblue';
+        th.style.color = 'white'; // Set the text color to white
+        th.style.border = '1px solid gray'; // Add border
         headerRowDate.appendChild(th);
     });
 
@@ -553,10 +561,16 @@ async function processAllData(data) {
         if (1 === 1) {
             // LOCATION
             const locationIdCell = row.insertCell();
-            locationIdCell.innerHTML = location_id;
+            locationIdCell.style.textAlign = 'center';
+            locationIdCell.style.border = '1px solid gray'; // Add border
+            locationIdCell.innerHTML = location_id.split('-')[0];
 
             // OBSERVED 6AM
             const level6AmCell = row.insertCell();
+            level6AmCell.style.textAlign = 'center';
+            level6AmCell.style.border = '1px solid gray'; // Add border
+            level6AmCell.innerHTML = location_id.split('-')[0];
+
             if (latest6AMValue.value) {
                 level6AmCell.innerHTML = "<div title='" + latest6AMValue.date + " " + latest6AMValue.value + "'>" +
                     "<a href='../../chart/public/chart.html?cwms_ts_id=" + tsid + "' target='_blank'>" +
@@ -571,6 +585,10 @@ async function processAllData(data) {
 
             // DAY1
             const day1Cell = row.insertCell();
+            day1Cell.style.textAlign = 'center';
+            day1Cell.style.border = '1px solid gray'; // Add border
+            day1Cell.innerHTML = location_id.split('-')[0];
+
             let day1 = null;
             let totalGraysPtDay1 = null;
             let totalThebesDay1 = null;
@@ -1523,6 +1541,10 @@ async function processAllData(data) {
 
             // DAY2
             const day2Cell = row.insertCell();
+            day2Cell.style.textAlign = 'center';
+            day2Cell.style.border = '1px solid gray'; // Add border
+            day2Cell.innerHTML = location_id.split('-')[0];
+
             let day2 = null;
             let totalGraysPtDay2 = null;
             let totalThebesDay2 = null;
@@ -2479,6 +2501,10 @@ async function processAllData(data) {
 
             // DAY3
             const day3Cell = row.insertCell();
+            day3Cell.style.textAlign = 'center';
+            day3Cell.style.border = '1px solid gray'; // Add border
+            day3Cell.innerHTML = location_id.split('-')[0];
+
             let day3 = null;
             let totalGraysPtDay3 = null;
             let totalThebesDay3 = null;
@@ -3429,6 +3455,10 @@ async function processAllData(data) {
 
             // DAY4
             const day4Cell = row.insertCell();
+            day4Cell.style.textAlign = 'center';
+            day4Cell.style.border = '1px solid gray'; // Add border
+            day4Cell.innerHTML = location_id.split('-')[0];
+
             let day4 = null;
             let totalGraysPtDay4 = null;
             let totalThebesDay4 = null;
@@ -4382,6 +4412,10 @@ async function processAllData(data) {
 
             // DAY5
             const day5Cell = row.insertCell();
+            day5Cell.style.textAlign = 'center';
+            day5Cell.style.border = '1px solid gray'; // Add border
+            day5Cell.innerHTML = location_id.split('-')[0];
+
             let day5 = null;
             let totalGraysPtDay5 = null;
             let totalThebesDay5 = null;
@@ -5334,6 +5368,10 @@ async function processAllData(data) {
 
             // DAY6
             const day6Cell = row.insertCell();
+            day6Cell.style.textAlign = 'center';
+            day6Cell.style.border = '1px solid gray'; // Add border
+            day6Cell.innerHTML = location_id.split('-')[0];
+
             let day6 = null;
             let totalGraysPtDay6 = null;
             let totalThebesDay6 = null;
@@ -6286,6 +6324,10 @@ async function processAllData(data) {
 
             // DAY7
             const day7Cell = row.insertCell();
+            day7Cell.style.textAlign = 'center';
+            day7Cell.style.border = '1px solid gray'; // Add border
+            day7Cell.innerHTML = location_id.split('-')[0];
+
             let day7 = null;
             let totalGraysPtDay7 = null;
             let totalThebesDay7 = null;
