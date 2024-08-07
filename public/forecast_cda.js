@@ -6,8 +6,7 @@ let ForecastValues = {
 let GraftonForecast = {
 };
 
-let timeseriesPayload = {
-};
+let timeseriesPayload = []
 
 let isLoading = true;
 
@@ -18,6 +17,7 @@ const loadingIndicator = document.getElementById('loading_forecast');
 const tableContainer = document.getElementById('table_container_forecast');
 
 document.addEventListener('DOMContentLoaded', function () {
+    console.log("start")
     cdaBtn.disabled = isLoading;
     
     // Display the loading_alarm_mvs indicator
@@ -93,8 +93,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     try {
                         // Write timeseries to CDA
                         console.log("Write!");
-                        await writeTS(timeseriesPayload);
-                        statusBtn.innerText = "Write successful!";
+                        if (await writeTS(timeseriesPayload))
+                            statusBtn.innerText = "Write successful!";
+                        else
+                            statusBtn.innerText = "Failed to write Timeseries. Check logs"
                     } catch (error) {
                         statusBtn.innerText = "Failed to write data!";
                     }
@@ -117,8 +119,6 @@ document.addEventListener('DOMContentLoaded', function () {
         .finally(() => {
             // Hide the loading_alarm_mvs indicator regardless of success or failure
             loadingIndicator.style.display = 'none';
-            isLoading = false;
-            cdaBtn.disabled = isLoading;
         });
 });
 
@@ -413,10 +413,14 @@ async function populateTableCells(jsonDataFiltered, table, nws_day1_date) {
             , location.tsid_netmiss_downstream_stage_rev_2
         ))
     });
-    Promise.all(promises).then((d) => {
+    Promise.all(promises).then(async (d) => {
         console.log("got all my data!", d)
         // do all drawing my combined data
-        processAllData(d);
+        await processAllData(d);
+        
+        isLoading = false;
+        cdaBtn.disabled = isLoading;
+        console.log("done!")
     })
     loadingIndicator.style.display = 'none';
 }
@@ -524,9 +528,7 @@ async function processAllData(data) {
                 ]
             };
 
-            timeseriesPayload = payloadGrafton;
-
-            // timeseriesPayload.push(payloadGrafton)
+            timeseriesPayload.push(payloadGrafton)
 
             console.log("payloadGrafton: ", payloadGrafton);
         }
@@ -6647,6 +6649,8 @@ async function processAllData(data) {
                     ]
                 };
                 console.log("payloadGraysPt: ", payloadGraysPt);
+                timeseriesPayload.push(payloadGraysPt)
+
             }
         }
     });

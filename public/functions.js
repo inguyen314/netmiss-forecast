@@ -659,34 +659,37 @@ function getDateWithTimeSet(daysToAdd, hours, minutes) {
 
 // CDA Write Data
 async function writeTS(payload) {
+    console.log(payload, Array.isArray(payload))
     if (!payload) throw new Error("You must specify a payload!");
-
-    try {
-        const response = await fetch("https://wm.mvs.ds.usace.army.mil/mvs-data/timeseries?store-rule=REPLACE%20ALL", {
-            method: "POST",
-            headers: {
-                "accept": "*/*",
-                "Content-Type": "application/json;version=2",
-            },
-
-
-            body: JSON.stringify(payload)
-        });
-
-        if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
-        }
-
-        // const data = await response.json();
-        // console.log('Success:', data);
-        // return data;
-        return true;
-
-    } catch (error) {
-        console.error('Error writing timeseries:', error);
-        throw error;
+    if (!Array.isArray(payload)) {
+        payload = [payload]
     }
+    let promises = []
+    payload.forEach((ts_payload) => {
+        promises.push(
+            fetch("https://wm.mvs.ds.usace.army.mil/mvs-data/timeseries?store-rule=REPLACE%20ALL", {
+                method: "POST",
+                headers: {
+                    "accept": "*/*",
+                    "Content-Type": "application/json;version=2",
+                },
+
+
+                body: JSON.stringify(ts_payload)
+            }).then(async r => { 
+                const message = await r.text()
+                const status = r.status
+                return { 'message': message, "status": status }
+             })
+        )
+    })
+
+    const return_values = await Promise.all(promises)
+    console.log({return_values})
+    console.log(return_values.map((v)=> v?.status != 200))
+    const has_errors = return_values.map((v)=> v?.status != 200).filter(Boolean).length == 0
+    return has_errors
+
 }
 
 async function isLoggedIn() {
@@ -716,13 +719,11 @@ async function loginCDA() {
 }
 
 async function loginStateController(cdaBtn) {
-    cdaBtn.disabled = true
     if (await isLoggedIn()) {
-            // TODO: look into other ways to handle state management in JS 
-            // Variables / attributes of the element/dom
-            cdaBtn.innerText = "Submit"
-        } else {
-            cdaBtn.innerText = "Login"
-        }
-    cdaBtn.disabled = false
+        // TODO: look into other ways to handle state management in JS 
+        // Variables / attributes of the element/dom
+        cdaBtn.innerText = "Submit"
+    } else {
+        cdaBtn.innerText = "Login"
+    }
 }
