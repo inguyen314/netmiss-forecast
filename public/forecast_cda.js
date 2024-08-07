@@ -19,7 +19,7 @@ const tableContainer = document.getElementById('table_container_forecast');
 document.addEventListener('DOMContentLoaded', function () {
     console.log("start")
     cdaBtn.disabled = isLoading;
-    
+
     // Display the loading_alarm_mvs indicator
     loadingIndicator.style.display = 'block';
 
@@ -78,38 +78,54 @@ document.addEventListener('DOMContentLoaded', function () {
             // Call the function to create and populate the table
             createTable(jsonDataFiltered);
 
-            // Save data using CDA
-
+            // Event handler for the cdaBtn click event
             cdaBtn.onclick = async () => {
+                // Check if the button's text is "Login"
                 if (cdaBtn.innerText === "Login") {
+                    // Attempt to log in to CDA
                     const loginResult = await loginCDA();
                     console.log({ loginResult });
+
+                    // If login is successful, change button text to "Submit"
                     if (loginResult) {
                         cdaBtn.innerText = "Submit";
                     } else {
+                        // If login fails, update the status button text
                         statusBtn.innerText = "Failed to Login!";
                     }
                 } else {
+                    // If the button's text is not "Login", attempt to write timeseries data
                     try {
-                        // Write timeseries to CDA
                         console.log("Write!");
-                        if (await writeTS(timeseriesPayload))
+
+                        // Write timeseries to CDA
+                        const writeResult = await writeTS(timeseriesPayload);
+
+                        // If writing is successful, update the status button text
+                        if (!writeResult) {
                             statusBtn.innerText = "Write successful!";
-                        else
-                            statusBtn.innerText = "Failed to write Timeseries. Check logs"
+                        } else {
+                            // If writing fails, update the status button text
+                            statusBtn.innerText = "Failed to write Timeseries. Check logs";
+                        }
                     } catch (error) {
+                        // Log any errors that occur and update the status button text
+                        console.error("Error writing data:", error);
                         statusBtn.innerText = "Failed to write data!";
                     }
                 }
             };
 
-            loginStateController(cdaBtn)
-            // Setup timers
-            setInterval(async () => {
-                loginStateController(cdaBtn)
-            }, 10000) // time is in millis
+            // Initialize the button state based on current login status
+            loginStateController(cdaBtn);
 
-            // loading indicator set to none
+            // Setup a timer to periodically check and update the button state
+            setInterval(async () => {
+                // Periodically update the button state based on login status
+                loginStateController(cdaBtn);
+            }, 10000); // Time is in milliseconds (10 seconds)
+
+            // Hide the loading indicator when it's no longer needed
             loadingIndicator.style.display = 'none';
         })
         .catch(error => {
@@ -417,7 +433,7 @@ async function populateTableCells(jsonDataFiltered, table, nws_day1_date) {
         console.log("got all my data!", d)
         // do all drawing my combined data
         await processAllData(d);
-        
+
         isLoading = false;
         cdaBtn.disabled = isLoading;
         console.log("done!")

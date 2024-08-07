@@ -657,73 +657,95 @@ function getDateWithTimeSet(daysToAdd, hours, minutes) {
     return date.getTime();
 }
 
-// CDA Write Data
+// Function to write timeseries data
 async function writeTS(payload) {
-    console.log(payload, Array.isArray(payload))
+    // Log the input payload and check if it's an array
+    console.log("payload =", payload);
+    console.log("isPayloadAnArray =", Array.isArray(payload));
+    
+    // Throw an error if payload is not specified
     if (!payload) throw new Error("You must specify a payload!");
+
+    // If the payload is not an array, convert it to an array
     if (!Array.isArray(payload)) {
-        payload = [payload]
+        payload = [payload];
     }
-    let promises = []
-    payload.forEach((ts_payload) => {
-        promises.push(
-            fetch("https://wm.mvs.ds.usace.army.mil/mvs-data/timeseries?store-rule=REPLACE%20ALL", {
-                method: "POST",
-                headers: {
-                    "accept": "*/*",
-                    "Content-Type": "application/json;version=2",
-                },
 
+    // Create an array of promises to handle multiple payloads
+    let promises = payload.map(ts_payload => {
+        return fetch("https://wm.mvs.ds.usace.army.mil/mvs-data/timeseries?store-rule=REPLACE%20ALL", {
+            method: "POST",
+            headers: {
+                "accept": "*/*",
+                "Content-Type": "application/json;version=2",
+            },
+            body: JSON.stringify(ts_payload)
+        }).then(async r => {
+            // Get the response message and status
+            const message = await r.text();
+            const status = r.status;
+            return { 'message': message, 'status': status };
+        }).catch(error => {
+            // Handle fetch errors
+            return { 'message': error.message, 'status': 'fetch_error' };
+        });
+    });
 
-                body: JSON.stringify(ts_payload)
-            }).then(async r => { 
-                const message = await r.text()
-                const status = r.status
-                return { 'message': message, "status": status }
-             })
-        )
-    })
+    // Wait for all promises to resolve
+    const return_values = await Promise.all(promises);
+    console.log("Return values from writeTS:", return_values);
 
-    const return_values = await Promise.all(promises)
-    console.log({return_values})
-    console.log(return_values.map((v)=> v?.status != 200))
-    const has_errors = return_values.map((v)=> v?.status != 200).filter(Boolean).length == 0
-    return has_errors
-
+    // Check for errors based on status and message content
+    const has_errors = return_values.some(v => v.status !== 200 || v.message.includes("error") || v.message.includes("fail"));
+    return has_errors;
 }
 
+// Function to check if the user is logged in
 async function isLoggedIn() {
     try {
+        // Make a GET request to the auth/keys endpoint
         const response = await fetch("https://wm.mvs.ds.usace.army.mil/mvs-data/auth/keys", {
             method: "GET"
         });
 
+        // If the response status is 401 (Unauthorized), return false
         if (response.status === 401) return false;
 
+        // Log the response status for debugging
         console.log('status', response.status);
-        return true;
+        return true; // Return true if the status is not 401
 
     } catch (error) {
+        // Log any errors that occur during the fetch
         console.error('Error checking login status:', error);
-        return false;
+        return false; // Return false if there's an error
     }
 }
 
+// Function to handle the login process for CDA
 async function loginCDA() {
     console.log("page");
+
+    // Check if the user is already logged in
     if (await isLoggedIn()) return true;
+    
+    // Log if the user is not logged in
     console.log('is false');
 
-    // Redirect to login page
+    // Redirect to the login page with the current URL as the OriginalLocation parameter
     window.location.href = `https://wm.mvs.ds.usace.army.mil:8243/CWMSLogin/login?OriginalLocation=${encodeURIComponent(window.location.href)}`;
 }
 
+// Function to control the login state and update the button text accordingly
 async function loginStateController(cdaBtn) {
+    // Check if the user is already logged in
     if (await isLoggedIn()) {
-        // TODO: look into other ways to handle state management in JS 
-        // Variables / attributes of the element/dom
-        cdaBtn.innerText = "Submit"
+        // If logged in, set the button text to "Submit"
+        // TODO: look into other ways to handle state management in JS
+        // Using variables or attributes of the element/dom for state management
+        cdaBtn.innerText = "Submit";
     } else {
-        cdaBtn.innerText = "Login"
+        // If not logged in, set the button text to "Login"
+        cdaBtn.innerText = "Login";
     }
 }
