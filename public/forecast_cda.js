@@ -561,9 +561,19 @@ async function processAllData(data) {
         if (1 === 1) {
             // LOCATION
             const locationIdCell = row.insertCell();
+            let isProjectGage = null;
+            if (location_id.split('-')[0] === "LD 24 Pool" || location_id.split('-')[0] === "LD 25 Pool" || location_id.split('-')[0] === "Mel Price Pool") {
+                isProjectGage = true;
+            } else {
+                isProjectGage = false;
+            }
             locationIdCell.style.textAlign = 'center';
-            locationIdCell.style.border = '1px solid gray'; // Add border
-            locationIdCell.innerHTML = location_id.split('-')[0];
+            locationIdCell.style.border = '1px solid gray';
+            if (isProjectGage) {
+                locationIdCell.innerHTML = "<a href='" + "https://wm.mvs.ds.usace.army.mil/web_apps/plot_macro/public/plot_macro.php?cwms_ts_id=" + location_id + ".Elev.Inst.~1Day.0.netmiss-fcst" + "&start_day=0&end_day=7" + "' target='_blank'>" + location_id.split('-')[0] + "</a>";
+            } else {
+                locationIdCell.innerHTML = "<a href='" + "https://wm.mvs.ds.usace.army.mil/web_apps/plot_macro/public/plot_macro.php?cwms_ts_id=" + location_id + ".Stage.Inst.~1Day.0.netmiss-fcst" + "&start_day=0&end_day=7" + "' target='_blank'>" + location_id.split('-')[0] + "</a>";
+            }
 
             // OBSERVED 6AM
             const level6AmCell = row.insertCell();
