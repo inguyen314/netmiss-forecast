@@ -317,15 +317,15 @@ function createTable(jsonDataFiltered) {
 
             // Get St Louis netmiss to set the date
             const dateObjectFirstForecastDayByDayAndMonth = await fetchFirstNetmissDay("St Louis-Mississippi.Stage.Inst.~1Day.0.netmiss-fcst", currentDateTime, currentDateTimePlus7Days, cda);
-            console.log("dateObjectFirstForecastDayByDayAndMonth: ", dateObjectFirstForecastDayByDayAndMonth);
-            console.log("dateObjectFirstForecastDayByDayAndMonth.date: ", dateObjectFirstForecastDayByDayAndMonth.date);
-            console.log("dateObjectFirstForecastDayByDayAndMonth.length: ", dateObjectFirstForecastDayByDayAndMonth.length);
+            // console.log("dateObjectFirstForecastDayByDayAndMonth: ", dateObjectFirstForecastDayByDayAndMonth);
+            // console.log("dateObjectFirstForecastDayByDayAndMonth.date: ", dateObjectFirstForecastDayByDayAndMonth.date);
+            // console.log("dateObjectFirstForecastDayByDayAndMonth.length: ", dateObjectFirstForecastDayByDayAndMonth.length);
 
             // Testing - Forced to output a table
             // populateTableCells(jsonDataFiltered, table, nws_day1_date);
 
             if (dateObjectFirstForecastDayByDayAndMonth.date > todaysDataOnly & dateObjectFirstForecastDayByDayAndMonth.length >= 7) {
-                console.log("dateObjectFirstForecastDayByDayAndMonth is after todaysDataOnly, output data table");
+                // console.log("dateObjectFirstForecastDayByDayAndMonth is after todaysDataOnly, output data table");
 
                 // Display netmiss data here based on time
                 if (current_hour < 0 || current_hour >= 10) {  // current_hour in 24-hour format

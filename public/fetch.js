@@ -27,7 +27,7 @@ async function fetchFirstNetmissDay(tsid, begin, end, cda) {
             return response.json();
         })
         .then(FirstNetmissDayData => {
-            console.log("FirstNetmissDayData", FirstNetmissDayData);
+            // console.log("FirstNetmissDayData", FirstNetmissDayData);
 
             // Get the length of the values array
             const arrayLength = FirstNetmissDayData.values.length;
@@ -479,299 +479,319 @@ async function fetchData(location_id
             GraftonForecast[location_id] = [];
 
             if (totalGraftonForecastDay1 === totalGraftonForecastDay1) {
-                // today
-                let todayGraftonUpstreamNetmissValue = null;
-                let todayGraftonUpstreamNetmissValuePlus001 = null;
-                if (data11 !== null && location_id === "Grafton-Mississippi") {
-                    todayGraftonUpstreamNetmissValue = parseFloat(convertedNetmissForecastingPointUpstreamData.values[0][1]);
-                    todayGraftonUpstreamNetmissValuePlus001 = todayGraftonUpstreamNetmissValue + 0.001;
+                if (location_id === "Grafton-Mississippi") {
+                    // Get today upstream day1 forecast (LD 25 TW)
+                    const todayGraftonUpstreamNetmissValue = parseFloat(convertedNetmissForecastingPointUpstreamData.values[0][1]);
+                    const todayGraftonUpstreamNetmissValuePlus001 = todayGraftonUpstreamNetmissValue + 0.001;
                     // console.log("todayGraftonUpstreamNetmissValue: ", todayGraftonUpstreamNetmissValue);
                     // console.log("todayGraftonUpstreamNetmissValuePlus001: ", todayGraftonUpstreamNetmissValuePlus001);
-                }
-                let todayGraftonDownstreamNetmissStageValue = null;
-                if (data12 !== null && location_id === "Grafton-Mississippi") {
-                    todayGraftonDownstreamNetmissStageValue = data12.values[0][1];
-                    // console.log("todayGraftonDownstreamNetmissStageValue: ", todayGraftonDownstreamNetmissStageValue);
-                }
 
-                let graftonNetmissDownstreamDataDay1 = null;
-                let isMelPricePoolOpenRiver = null;
-                if (data4 !== null && location_id === "Grafton-Mississippi") {
-                    graftonNetmissDownstreamDataDay1 = convertUTCtoCentralTime(data4).values[0][1];
-                    isMelPricePoolOpenRiver = parseFloat(todayGraftonDownstreamNetmissStageValue) + 395.48 + 0.5 > graftonNetmissDownstreamDataDay1;
-                    // console.log("graftonNetmissDownstreamDataDay1: ", graftonNetmissDownstreamDataDay1);
-                    // console.log("isMelPricePoolOpenRiver: ", isMelPricePoolOpenRiver);
-                }
 
-                // yesterday
-                let yesterdayGraftonStageRevValue = null;
-                if (data2 !== null && location_id === "Grafton-Mississippi") {
-                    yesterdayGraftonStageRevValue = latest6AMValue.value;
-                    // console.log("yesterdayGraftonStageRevValue: ", yesterdayGraftonStageRevValue);
-                }
-                let yesterdayGraftonUpstreamStageRevValue = null;
-                let yesterdayGraftonUpstreamStageRevValuePlus0001 = null;
-                if (data7 !== null && location_id === "Grafton-Mississippi") {
-                    yesterdayGraftonUpstreamStageRevValue = ((getLatest6AMValue(data7)).latest6AMValue).value;
-                    yesterdayGraftonUpstreamStageRevValuePlus0001 = yesterdayGraftonUpstreamStageRevValue + 0.001;
-                    // console.log("yesterdayGraftonUpstreamStageRevValue: ", yesterdayGraftonUpstreamStageRevValue);
-                    // console.log("yesterdayGraftonUpstreamStageRevValuePlus0001: ", yesterdayGraftonUpstreamStageRevValuePlus0001);
-                }
-                let yesterdayGraftonDownstreamStageRevValue = null;
-                if (data9 !== null && data22 !== null && location_id === "Grafton-Mississippi") {
-                    yesterdayGraftonDownstreamStageRevValue = ((getLatest6AMValue(data9)).latest6AMValue).value;
-                    yesterdayGraftonDownstreamStageRevValue2 = ((getLatest6AMValue(data22)).latest6AMValue).value;
-                    // console.log("yesterdayGraftonDownstreamStageRevValue: ", yesterdayGraftonDownstreamStageRevValue);
-                    // console.log("yesterdayGraftonDownstreamStageRevValue2: ", yesterdayGraftonDownstreamStageRevValue2);
-                }
+                    // Get upstream day1 forecast cooresponding flow
+                    const todayGraftonCorrespondingUpstreamNetmissFlowValue = findDepByInd(todayGraftonUpstreamNetmissValuePlus001, ratingStageFlowLd25Tw); // for database rating table use ratingGraftonTableCoeUpstream
+                    // console.log("todayGraftonCorrespondingUpstreamNetmissFlowValue: (rating.js) ", todayGraftonCorrespondingUpstreamNetmissFlowValue);
 
-                // special gage 1
-                let yesterdayGraftonSpecialNetmissFlowValue = null;
-                let todayGraftonSpecialNetmissFlowValue = null;
-                if (data18 !== null && location_id === "Grafton-Mississippi") {
-                    const convertedGraftonSpecialNetmissFlowValuesToCst = convertUTCtoCentralTime(data18);
-                    yesterdayGraftonSpecialNetmissFlowValue = (convertedGraftonSpecialNetmissFlowValuesToCst.values[0][1]);
-                    todayGraftonSpecialNetmissFlowValue = (convertedGraftonSpecialNetmissFlowValuesToCst.values[1][1]);
-                    // console.log("convertedGraftonSpecialNetmissFlowValuesToCst: ", convertedGraftonSpecialNetmissFlowValuesToCst);
-                    // console.log("yesterdayGraftonSpecialNetmissFlowValue: ", yesterdayGraftonSpecialNetmissFlowValue);
-                    // console.log("todayGraftonSpecialNetmissFlowValue: ", todayGraftonSpecialNetmissFlowValue);
-                }
 
-                // Special gage 2
-                let yesterdayGraftonSpecialGage2NetmissFlowValue = null;
-                let todayGraftonSpecialGage2NetmissFlowValue = null;
-                if (data20 !== null && location_id === "Grafton-Mississippi") {
+                    // Get today special gage 2 cooresponding flow
                     const convertedGraftonSpecialNetmissGage2FlowValuesToCst = convertUTCtoCentralTime(data20);
-                    yesterdayGraftonSpecialGage2NetmissFlowValue = convertedGraftonSpecialNetmissGage2FlowValuesToCst.values[0][1];
-                    todayGraftonSpecialGage2NetmissFlowValue = convertedGraftonSpecialNetmissGage2FlowValuesToCst.values[1][1];
+                    const todayGraftonSpecialGage2NetmissFlowValue = convertedGraftonSpecialNetmissGage2FlowValuesToCst.values[1][1];
                     // console.log("convertedGraftonSpecialNetmissGage2FlowValuesToCst: ", convertedGraftonSpecialNetmissGage2FlowValuesToCst);
-                    // console.log("yesterdayGraftonSpecialGage2NetmissFlowValue: ", yesterdayGraftonSpecialGage2NetmissFlowValue);
                     // console.log("todayGraftonSpecialGage2NetmissFlowValue: ", todayGraftonSpecialGage2NetmissFlowValue);
-                }
-
-                // Get rating tables
-                let ratingGraftonTableCoe = null;
-                let ratingGraftonTableCoeUpstream = null;
-                let ratingGraftonTableCoeDownstream = null;
-                let todayGraftonCorrespondingUpstreamNetmissFlowValue = null;
-                let todayGraftonCorrespondingDownstreamNetmissFlowValue = null;
-                let sumGraftonTodayHermannFlowPlusLd25TwFlow = null;
-                let sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand = null;
-                if (data16 !== null && data17 !== null && data19 !== null && location_id === "Grafton-Mississippi") {
-                    ratingGraftonTableCoe = data16["simple-rating"]["rating-points"].point; // Grafton-Mississippi
-                    ratingGraftonTableCoeUpstream = data17["simple-rating"][0]["rating-points"].point; // LD 25 TW-Mississippi
-                    ratingGraftonTableCoeDownstream = data19["simple-rating"]["rating-points"].point; // Mel Price TW-Mississippi
-
-                    // console.log("data16: ", data16);
-                    // console.log("data17: ", data17);
-                    // console.log("data19: ", data19);
-                    // console.log("ratingGraftonTableCoe: ", ratingGraftonTableCoe);
-                    // console.log("ratingGraftonTableCoeUpstream: ", ratingGraftonTableCoeUpstream);
-                    // console.log("ratingGraftonTableCoeDownstream: ", ratingGraftonTableCoeDownstream);
 
 
-                    // get rating tables from ratings.js
-                    // console.log("ratingStageFlowGrafton: ", ratingStageFlowGrafton);
-                    // console.log("ratingStageFlowLouisiana: ", ratingStageFlowLouisiana);
-                    // console.log("ratingStageFlowLd25Tw: ", ratingStageFlowLd25Tw);
-                    // console.log("ratingStageFlowMelPriceTw: ", ratingStageFlowMelPriceTw);
-                    
-                    todayGraftonCorrespondingUpstreamNetmissFlowValue = findDepByInd(todayGraftonUpstreamNetmissValuePlus001, ratingStageFlowLd25Tw); // for database rating table use ratingGraftonTableCoeUpstream
-                    todayGraftonCorrespondingDownstreamNetmissFlowValue = findDepByInd(todayGraftonDownstreamNetmissStageValue, ratingStageFlowMelPriceTw); // for database rating table use ratingGraftonTableCoeDownstream
-                    // console.log("todayGraftonCorrespondingUpstreamNetmissFlowValue: (database rating is off from excel) ", todayGraftonCorrespondingUpstreamNetmissFlowValue);
-                    // console.log("todayGraftonCorrespondingDownstreamNetmissFlowValue: ", todayGraftonCorrespondingDownstreamNetmissFlowValue);
-
-                    // sum
-                    sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand = (parseFloat(todayGraftonSpecialGage2NetmissFlowValue) + parseFloat(todayGraftonCorrespondingUpstreamNetmissFlowValue)) / 1000;
+                    // Sum "upstream day1 forecast cooresponding flow" and "special gage 2 cooresponding flow"
+                    const sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand = (parseFloat(todayGraftonSpecialGage2NetmissFlowValue) + parseFloat(todayGraftonCorrespondingUpstreamNetmissFlowValue)) / 1000;
                     // console.log("sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand: ", sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand);
-                }
 
-                let totalGrafton = null;
 
-                if (location_id === "Grafton-Mississippi") {
+                    // Check forecast day1 is based upon what conditions
                     const isGraftonForecastBasedUponLd25MPTw = parseFloat(sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand) > 300;
                     // console.log("isGraftonForecastBasedUponLd25MPTw: (True if > 300) ", isGraftonForecastBasedUponLd25MPTw);
-
                     const isGraftonForecastBasedUponOpenRiver = parseFloat(sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand) <= 300;
                     // console.log("isGraftonForecastBasedUponOpenRiver: (True if <= 300) ", isGraftonForecastBasedUponOpenRiver);
 
-                    const yesterdayGraftonCorrespondingUpstreamNetmissFlowValue = findDepByInd(yesterdayGraftonUpstreamStageRevValuePlus0001, ratingStageFlowLd25Tw); // for database rating table use ratingGraftonTableCoeUpstream
-                    // console.log("yesterdayGraftonCorrespondingUpstreamNetmissFlowValue: ", yesterdayGraftonCorrespondingUpstreamNetmissFlowValue);
 
-                    const valueCompareOpenRiver = ((yesterdayGraftonCorrespondingUpstreamNetmissFlowValue + yesterdayGraftonSpecialGage2NetmissFlowValue) / 1000);
-                    // console.log("valueCompareOpenRiver: ", valueCompareOpenRiver);
+                    // Check upstream forecasting point is open river (Mel Price Pool)
+                    const todayGraftonDownstreamNetmissStageValue = data12.values[0][1];
+                    // console.log("todayGraftonDownstreamNetmissStageValue: ", todayGraftonDownstreamNetmissStageValue);
+                    const graftonNetmissDownstreamDataDay1 = convertUTCtoCentralTime(data4).values[0][1];
+                    // console.log("graftonNetmissDownstreamDataDay1: ", graftonNetmissDownstreamDataDay1);
+                    const isMelPricePoolOpenRiver = parseFloat(todayGraftonDownstreamNetmissStageValue) + 395.48 + 0.5 > graftonNetmissDownstreamDataDay1;
+                    // console.log("isMelPricePoolOpenRiver: ", isMelPricePoolOpenRiver);
+                    const isMelPricePoolRegulatedPool = parseFloat(todayGraftonDownstreamNetmissStageValue) + 395.48 + 0.5 <= graftonNetmissDownstreamDataDay1;
+                    // console.log("isMelPricePoolRegulatedPool: ", isMelPricePoolRegulatedPool);
 
-                    const isOpenRiverUseStageFlowRating = valueCompareOpenRiver > 300;
-                    // console.log("isOpenRiverUseStageFlowRating : ", isOpenRiverUseStageFlowRating);
+                    // Condition 1
+                    if (isGraftonForecastBasedUponOpenRiver === true && isMelPricePoolRegulatedPool === true) {
+                        // console.log("isGraftonForecastBasedUponOpenRiver and isMelPricePoolRegulatedPool");
 
-                    const isOpenRiverUseBackWater = valueCompareOpenRiver <= 300;
-                    // console.log("isOpenRiverUseBackWater : ", isOpenRiverUseBackWater);
+                        // Get grafton yesterday stagerev value
+                        const yesterdayGraftonStageRevValue = latest6AMValue.value;
+                        // console.log("yesterdayGraftonStageRevValue: ", yesterdayGraftonStageRevValue);
 
-                    // Determine Grafton Forecast Based on Conditions
-                    if (isGraftonForecastBasedUponOpenRiver) {
-                        if (isMelPricePoolOpenRiver) {
-                            let deltaYesterdayStage = null;
+                        // Get yesterday upstream stagerev value
+                        const yesterdayGraftonUpstreamStageRevValue = ((getLatest6AMValue(data7)).latest6AMValue).value;
+                        const yesterdayGraftonUpstreamStageRevValuePlus0001 = yesterdayGraftonUpstreamStageRevValue + 0.001;
+                        // console.log("yesterdayGraftonUpstreamStageRevValue: ", yesterdayGraftonUpstreamStageRevValue);
+                        // console.log("yesterdayGraftonUpstreamStageRevValuePlus0001: ", yesterdayGraftonUpstreamStageRevValuePlus0001);
 
-                            if (isOpenRiverUseStageFlowRating) {
-                                const ratingTableSpecial1 = data21["simple-rating"][0]["rating-points"].point;
-                                // console.log("ratingTableSpecial1: ", ratingTableSpecial1);
+                        // Get cooresponding flow for yesterday upstream stagerev
+                        const yesterdayGraftonCorrespondingUpstreamNetmissFlowValue = findDepByInd(yesterdayGraftonUpstreamStageRevValuePlus0001, ratingStageFlowLd25Tw); // for database rating table use ratingGraftonTableCoeUpstream
+                        // console.log("yesterdayGraftonCorrespondingUpstreamNetmissFlowValue: ", yesterdayGraftonCorrespondingUpstreamNetmissFlowValue);
 
-                                const flowToSend = (yesterdayGraftonCorrespondingUpstreamNetmissFlowValue + yesterdayGraftonSpecialGage2NetmissFlowValue);
-                                // console.log("flowToSend: ", flowToSend);
+                        // Get yesterday special gage 2 cooresponding flow
+                        const convertedGraftonSpecialNetmissGage2FlowValuesToCst = convertUTCtoCentralTime(data20);
+                        const yesterdayGraftonSpecialGage2NetmissFlowValue = convertedGraftonSpecialNetmissGage2FlowValuesToCst.values[0][1];
+                        // console.log("convertedGraftonSpecialNetmissGage2FlowValuesToCst: ", convertedGraftonSpecialNetmissGage2FlowValuesToCst);
+                        // console.log("yesterdayGraftonSpecialGage2NetmissFlowValue: ", yesterdayGraftonSpecialGage2NetmissFlowValue);
 
-                                const t = findIndByDep(flowToSend, ratingTableSpecial1);
-                                // console.log("t: ", t);
+                        // Sum 
+                        const valueCompareOpenRiver = ((yesterdayGraftonCorrespondingUpstreamNetmissFlowValue + yesterdayGraftonSpecialGage2NetmissFlowValue) / 1000);
+                        // console.log("valueCompareOpenRiver: ", valueCompareOpenRiver);
 
-                                deltaYesterdayStage = yesterdayGraftonStageRevValue - t;
-                                // console.log("deltaYesterdayStage: ", deltaYesterdayStage);
+                        // Check which method to use (StageFlowRating or BackWater)
+                        const isOpenRiverUseStageFlowRating = valueCompareOpenRiver > 300;
+                        // console.log("isOpenRiverUseStageFlowRating : ", isOpenRiverUseStageFlowRating);
 
-                                const todayGraftonUpstreamNetmissValuePlus001 = todayGraftonUpstreamNetmissValue + 0.001;
-                                // console.log("todayGraftonUpstreamNetmissValuePlus001: ", todayGraftonUpstreamNetmissValuePlus001);
+                        const isOpenRiverUseBackWater = valueCompareOpenRiver <= 300;
+                        // console.log("isOpenRiverUseBackWater : ", isOpenRiverUseBackWater);
 
-                                const todayFlowSum = todayGraftonCorrespondingUpstreamNetmissFlowValue + todayGraftonSpecialGage2NetmissFlowValue;
-                                // console.log("todayFlowSum: ", todayFlowSum);
+                        // Condition 1 - Method 1
+                        if (isOpenRiverUseBackWater) {
+                            // console.log("isOpenRiverUseBackWater");
 
-                                const x = todayGraftonDownstreamNetmissStageValue + 395.48 + 0.5;
-                                console.log("x: ", x);
-                            } else if (isOpenRiverUseBackWater) {
-                                // console.log("total is based upon isGraftonForecastBasedUponOpenRiver, isMelPricePoolOpenRiver, isOpenRiverUseBackWater");
+                            // Need these values
+                            // console.log("yesterdayGraftonUpstreamStageRevValuePlus0001 : ", yesterdayGraftonUpstreamStageRevValuePlus0001);
+                            // console.log("yesterdayGraftonCorrespondingUpstreamNetmissFlowValue : ", yesterdayGraftonCorrespondingUpstreamNetmissFlowValue);
+                            // console.log("yesterdayGraftonSpecialGage2NetmissFlowValue : ", yesterdayGraftonSpecialGage2NetmissFlowValue);
 
-                                const ratingTableSpecial1 = data21["simple-rating"][0]["rating-points"].point;
-                                // console.log("ratingTableSpecial1: ", ratingTableSpecial1);
+                            // Get yesterday downstream project stage
+                            const yesterdayGraftonDownstreamStageRevValue2 = ((getLatest6AMValue(data22)).latest6AMValue).value;
+                            // console.log("yesterdayGraftonDownstreamStageRevValue2: ", yesterdayGraftonDownstreamStageRevValue2);
 
-                                let jsonFileName = "ratingGrafton.json"; //"ratingGrafton.json";
+                            const ratingTableSpecial1 = data21["simple-rating"][0]["rating-points"].point;
+                            // console.log("ratingTableSpecial1: ", ratingTableSpecial1);
 
-                                // Call the function and log the result
-                                const stage = yesterdayGraftonDownstreamStageRevValue2; // yesterdayGraftonDownstreamStageRevValue2
-                                const flowRate = valueCompareOpenRiver; // valueCompareOpenRiver
-                                console.log("stage, flowRate, jsonFileName: ", stage, flowRate, jsonFileName);
-                                readJSONTable2(stage, flowRate, jsonFileName).then(value => {
-                                    if (value !== null) {
-                                        // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
+                            let jsonFileName = "ratingGrafton.json"; //"ratingGrafton.json";
 
-                                        deltaYesterdayStage = yesterdayGraftonStageRevValue - value;
-                                        // console.log("deltaYesterdayStage: ", deltaYesterdayStage);
-                                    } else {
-                                        // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
-                                    }
-                                });
+                            // Call the function and log the result
+                            const stage = yesterdayGraftonDownstreamStageRevValue2; // yesterdayGraftonDownstreamStageRevValue2
+                            const flowRate = valueCompareOpenRiver; // valueCompareOpenRiver
+                            // console.log("stage, flowRate, jsonFileName: ", stage, flowRate, jsonFileName);
+                            readJSONTable2(stage, flowRate, jsonFileName).then(value => {
+                                if (value !== null) {
+                                    // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
 
-                                // Call the function and log the result
-                                const stage2 = todayGraftonDownstreamNetmissStageValue + 395.48 + 0.5; // yesterdayGraftonDownstreamStageRevValue2
-                                const flowRate2 = sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand; // valueCompareOpenRiver
-                                // console.log("stage2, flowRate2, jsonFileName: ", stage2, flowRate2, jsonFileName);
-                                readJSONTable2(stage2, flowRate2, jsonFileName).then(value => {
-                                    if (value !== null) {
-                                        // console.log(`Interpolated reading for flow rate ${flowRate2} and stage ${stage2} at table ${jsonFileName}: ${value}`);
-
-                                        totalGrafton = value + deltaYesterdayStage;
-                                        // console.log("totalGrafton: ", totalGrafton);
-
-                                        // push data to GraftonForecast
-                                        totalGraftonForecastDay1.push({ "value": totalGrafton });
-                                        GraftonForecast[location_id].push({ "value": totalGrafton });
-                                    } else {
-                                        // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
-                                    }
-                                });
-                            }
-                        } else {
-                            // Regulated Pool
-                            if (isOpenRiverUseStageFlowRating) {
-
-                            } else if (isOpenRiverUseBackWater) {
-                                // console.log("********************** total is based upon isGraftonForecastBasedUponOpenRiver, !isMelPricePoolOpenRiver, isOpenRiverUseBackWater **********************");
-
-                                // Interpolating Grafton Rating Table
-                                function interpolateValue(rating, point) {
-                                    const keys = Object.keys(ratingGrafton).map(Number);
-
-                                    // Find the two closest keys
-                                    let lowerKey = null, upperKey = null;
-
-                                    for (let i = 0; i < keys.length; i++) {
-                                        if (keys[i] <= rating) lowerKey = keys[i];
-                                        if (keys[i] > rating && upperKey === null) upperKey = keys[i];
-                                    }
-
-                                    if (lowerKey === null || upperKey === null) {
-                                        throw new Error('Rating out of bounds.');
-                                    }
-
-                                    const lowerValues = ratingGrafton[lowerKey];
-                                    const upperValues = ratingGrafton[upperKey];
-
-                                    // Find the two closest values within these ranges
-                                    const lowerPoints = Object.keys(lowerValues).map(Number);
-                                    const upperPoints = Object.keys(upperValues).map(Number);
-
-                                    let lowerPoint = null, upperPoint = null;
-
-                                    for (let i = 0; i < lowerPoints.length; i++) {
-                                        if (lowerPoints[i] <= point) lowerPoint = lowerPoints[i];
-                                        if (lowerPoints[i] > point && upperPoint === null) upperPoint = lowerPoints[i];
-                                    }
-
-                                    if (lowerPoint === null || upperPoint === null) {
-                                        throw new Error('Point out of bounds.');
-                                    }
-
-                                    const lowerValue = lowerValues[lowerPoint];
-                                    const upperValue = upperValues[upperPoint];
-
-                                    // Perform interpolation
-                                    const interpolatedValue = lowerValue + ((point - lowerPoint) / (upperPoint - lowerPoint)) * (upperValue - lowerValue);
-
-                                    return interpolatedValue;
+                                    deltaYesterdayStage = yesterdayGraftonStageRevValue - value;
+                                    // console.log("deltaYesterdayStage: ", deltaYesterdayStage);
+                                } else {
+                                    // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
                                 }
+                            });
 
-                                // deltaFirst
-                                const stage = yesterdayGraftonDownstreamStageRevValue2;
-                                const flowRate = valueCompareOpenRiver;
-                                const interpolatedValue = interpolateValue(stage, flowRate);
+                            // Need these values
+                            // console.log("todayGraftonUpstreamNetmissValuePlus001 : ", todayGraftonUpstreamNetmissValuePlus001);
+                            // console.log("todayGraftonCorrespondingUpstreamNetmissFlowValue : ", todayGraftonCorrespondingUpstreamNetmissFlowValue);
+                            // console.log("todayGraftonSpecialGage2NetmissFlowValue : ", todayGraftonSpecialGage2NetmissFlowValue);
+                            // console.log("sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand : ", sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand);
 
-                                // console.log(`Interpolated value for stage ${stage} and flowRate ${flowRate}: ${interpolatedValue}`);
+                            // Call the function and log the result
+                            const stage2 = graftonNetmissDownstreamDataDay1 // todayGraftonDownstreamNetmissStageValue + 395.48 + 0.5; // yesterdayGraftonDownstreamStageRevValue2
+                            const flowRate2 = sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand; // valueCompareOpenRiver
+                            // console.log("stage2, flowRate2, jsonFileName: ", stage2, flowRate2, jsonFileName);
+                            readJSONTable2(stage2, flowRate2, jsonFileName).then(value => {
+                                if (value !== null) {
+                                    // console.log(`Interpolated reading for flow rate 2 ${flowRate2} and stage 2 ${stage2} at table ${jsonFileName}: ${value}`);
 
-                                const deltaFirst = yesterdayGraftonStageRevValue - interpolatedValue;
-                                // console.log("deltaFirst: ", deltaFirst);
+                                    totalGrafton = value + deltaYesterdayStage;
+                                    // console.log("totalGrafton: ", totalGrafton);
 
-                                // deltaSecond
-                                const stage2 = graftonNetmissDownstreamDataDay1;
-                                const flowRate2 = sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand;
-                                const interpolatedValue2 = interpolateValue(stage2, flowRate2);
-
-                                // console.log(`Interpolated value for stage ${stage2} and flowRate ${flowRate2}: ${interpolatedValue2}`);
-
-                                totalGrafton = deltaFirst + interpolatedValue2;
-                                // console.log("totalGrafton: ", totalGrafton);
-
-                                // push data to GraftonForecast
-                                totalGraftonForecastDay1.push({ "value": totalGrafton });
-                                GraftonForecast[location_id].push({ "value": totalGrafton });
-                            } else {
-                                totalGrafton = 999;
-                                // console.log("totalGrafton: ", totalGrafton);
-                            }
-                            // push data to GraftonForecast
-                            totalGraftonForecastDay1.push({ "value": totalGrafton });
-                            GraftonForecast[location_id].push({ "value": totalGrafton });
+                                    // push data to GraftonForecast
+                                    totalGraftonForecastDay1.push({ "value": totalGrafton });
+                                    GraftonForecast[location_id].push({ "value": totalGrafton });
+                                } else {
+                                    // console.log(`No data found for flow rate 2 ${flowRate} and stage 2 ${stage}`);
+                                }
+                            });
                         }
-                    } else if (isGraftonForecastBasedUponLd25MPTw) {
-                        totalGrafton = yesterdayGraftonStageRevValue + (((todayGraftonUpstreamNetmissValue - yesterdayGraftonUpstreamStageRevValue) + (todayGraftonDownstreamNetmissStageValue - yesterdayGraftonDownstreamStageRevValue)) / 2);
-                        // console.log("totalGrafton: ", totalGrafton);
 
-                        // push data to GraftonForecast
-                        totalGraftonForecastDay1.push({ "value": totalGrafton });
-                        GraftonForecast[location_id].push({ "value": totalGrafton });
-                    } else {
-                        totalGrafton = 909;
-                        // console.log("totalGrafton: ", totalGrafton);
+                        // Condition 1 - Method 1=2
+                        if (isOpenRiverUseStageFlowRating) {
 
-                        // push data to GraftonForecast
-                        totalGraftonForecastDay1.push({ "value": totalGrafton });
-                        GraftonForecast[location_id].push({ "value": totalGrafton });
+                        }
                     }
                 }
+
+                // // special gage 1
+                // let yesterdayGraftonSpecialNetmissFlowValue = null;
+                // let todayGraftonSpecialNetmissFlowValue = null;
+                // if (data18 !== null && location_id === "Grafton-Mississippi") {
+                //     const convertedGraftonSpecialNetmissFlowValuesToCst = convertUTCtoCentralTime(data18);
+                //     yesterdayGraftonSpecialNetmissFlowValue = (convertedGraftonSpecialNetmissFlowValuesToCst.values[0][1]);
+                //     todayGraftonSpecialNetmissFlowValue = (convertedGraftonSpecialNetmissFlowValuesToCst.values[1][1]);
+                //     // console.log("convertedGraftonSpecialNetmissFlowValuesToCst: ", convertedGraftonSpecialNetmissFlowValuesToCst);
+                //     // console.log("yesterdayGraftonSpecialNetmissFlowValue: ", yesterdayGraftonSpecialNetmissFlowValue);
+                //     // console.log("todayGraftonSpecialNetmissFlowValue: ", todayGraftonSpecialNetmissFlowValue);
+                // }
+                // // Get rating tables
+                // let ratingGraftonTableCoe = null;
+                // let ratingGraftonTableCoeUpstream = null;
+                // let ratingGraftonTableCoeDownstream = null;
+                // let todayGraftonCorrespondingDownstreamNetmissFlowValue = null;
+                // let sumGraftonTodayHermannFlowPlusLd25TwFlow = null;
+                // let sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand = null;
+                // if (data16 !== null && data17 !== null && data19 !== null && location_id === "Grafton-Mississippi") {
+                //     ratingGraftonTableCoe = data16["simple-rating"]["rating-points"].point; // Grafton-Mississippi
+                //     ratingGraftonTableCoeUpstream = data17["simple-rating"][0]["rating-points"].point; // LD 25 TW-Mississippi
+                //     ratingGraftonTableCoeDownstream = data19["simple-rating"]["rating-points"].point; // Mel Price TW-Mississippi
+
+                //     // console.log("data16: ", data16);
+                //     // console.log("data17: ", data17);
+                //     // console.log("data19: ", data19);
+                //     // console.log("ratingGraftonTableCoe: ", ratingGraftonTableCoe);
+                //     // console.log("ratingGraftonTableCoeUpstream: ", ratingGraftonTableCoeUpstream);
+                //     // console.log("ratingGraftonTableCoeDownstream: ", ratingGraftonTableCoeDownstream);
+
+
+                //     // get rating tables from ratings.js
+                //     // console.log("ratingStageFlowGrafton: ", ratingStageFlowGrafton);
+                //     // console.log("ratingStageFlowLouisiana: ", ratingStageFlowLouisiana);
+                //     // console.log("ratingStageFlowLd25Tw: ", ratingStageFlowLd25Tw);
+                //     // console.log("ratingStageFlowMelPriceTw: ", ratingStageFlowMelPriceTw);
+
+
+                //     todayGraftonCorrespondingDownstreamNetmissFlowValue = findDepByInd(todayGraftonDownstreamNetmissStageValue, ratingStageFlowMelPriceTw); // for database rating table use ratingGraftonTableCoeDownstream
+
+                //     // console.log("todayGraftonCorrespondingDownstreamNetmissFlowValue: ", todayGraftonCorrespondingDownstreamNetmissFlowValue);
+                // }
+                // let totalGrafton = null;
+                // if (location_id === "Grafton-Mississippi") {
+                //     // Determine Grafton Forecast Based on Conditions
+                //     if (isGraftonForecastBasedUponOpenRiver) {
+                //         if (isMelPricePoolOpenRiver) {
+                //             let deltaYesterdayStage = null;
+
+                //             if (isOpenRiverUseStageFlowRating) {
+                //                 const ratingTableSpecial1 = data21["simple-rating"][0]["rating-points"].point;
+                //                 // console.log("ratingTableSpecial1: ", ratingTableSpecial1);
+
+                //                 const flowToSend = (yesterdayGraftonCorrespondingUpstreamNetmissFlowValue + yesterdayGraftonSpecialGage2NetmissFlowValue);
+                //                 // console.log("flowToSend: ", flowToSend);
+
+                //                 const t = findIndByDep(flowToSend, ratingTableSpecial1);
+                //                 // console.log("t: ", t);
+
+                //                 deltaYesterdayStage = yesterdayGraftonStageRevValue - t;
+                //                 // console.log("deltaYesterdayStage: ", deltaYesterdayStage);
+
+                //                 const todayGraftonUpstreamNetmissValuePlus001 = todayGraftonUpstreamNetmissValue + 0.001;
+                //                 // console.log("todayGraftonUpstreamNetmissValuePlus001: ", todayGraftonUpstreamNetmissValuePlus001);
+
+                //                 const todayFlowSum = todayGraftonCorrespondingUpstreamNetmissFlowValue + todayGraftonSpecialGage2NetmissFlowValue;
+                //                 // console.log("todayFlowSum: ", todayFlowSum);
+
+                //                 const x = todayGraftonDownstreamNetmissStageValue + 395.48 + 0.5;
+                //                 console.log("x: ", x);
+                //             } else if (isOpenRiverUseBackWater) {
+
+                //             }
+                //         } else {
+                //             // Regulated Pool
+                //             if (isOpenRiverUseStageFlowRating) {
+
+                //             } else if (isOpenRiverUseBackWater) {
+                //                 // console.log("********************** total is based upon isGraftonForecastBasedUponOpenRiver, !isMelPricePoolOpenRiver, isOpenRiverUseBackWater **********************");
+
+                //                 // Interpolating Grafton Rating Table
+                //                 function interpolateValue(rating, point) {
+                //                     const keys = Object.keys(ratingGrafton).map(Number);
+
+                //                     // Find the two closest keys
+                //                     let lowerKey = null, upperKey = null;
+
+                //                     for (let i = 0; i < keys.length; i++) {
+                //                         if (keys[i] <= rating) lowerKey = keys[i];
+                //                         if (keys[i] > rating && upperKey === null) upperKey = keys[i];
+                //                     }
+
+                //                     if (lowerKey === null || upperKey === null) {
+                //                         throw new Error('Rating out of bounds.');
+                //                     }
+
+                //                     const lowerValues = ratingGrafton[lowerKey];
+                //                     const upperValues = ratingGrafton[upperKey];
+
+                //                     // Find the two closest values within these ranges
+                //                     const lowerPoints = Object.keys(lowerValues).map(Number);
+                //                     const upperPoints = Object.keys(upperValues).map(Number);
+
+                //                     let lowerPoint = null, upperPoint = null;
+
+                //                     for (let i = 0; i < lowerPoints.length; i++) {
+                //                         if (lowerPoints[i] <= point) lowerPoint = lowerPoints[i];
+                //                         if (lowerPoints[i] > point && upperPoint === null) upperPoint = lowerPoints[i];
+                //                     }
+
+                //                     if (lowerPoint === null || upperPoint === null) {
+                //                         throw new Error('Point out of bounds.');
+                //                     }
+
+                //                     const lowerValue = lowerValues[lowerPoint];
+                //                     const upperValue = upperValues[upperPoint];
+
+                //                     // Perform interpolation
+                //                     const interpolatedValue = lowerValue + ((point - lowerPoint) / (upperPoint - lowerPoint)) * (upperValue - lowerValue);
+
+                //                     return interpolatedValue;
+                //                 }
+
+                //                 // deltaFirst
+                //                 const stage = yesterdayGraftonDownstreamStageRevValue2;
+                //                 const flowRate = valueCompareOpenRiver;
+                //                 const interpolatedValue = interpolateValue(stage, flowRate);
+
+                //                 // console.log(`Interpolated value for stage ${stage} and flowRate ${flowRate}: ${interpolatedValue}`);
+
+                //                 const deltaFirst = yesterdayGraftonStageRevValue - interpolatedValue;
+                //                 // console.log("deltaFirst: ", deltaFirst);
+
+                //                 // deltaSecond
+                //                 const stage2 = graftonNetmissDownstreamDataDay1;
+                //                 const flowRate2 = sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand;
+                //                 const interpolatedValue2 = interpolateValue(stage2, flowRate2);
+
+                //                 // console.log(`Interpolated value for stage ${stage2} and flowRate ${flowRate2}: ${interpolatedValue2}`);
+
+                //                 totalGrafton = deltaFirst + interpolatedValue2;
+                //                 // console.log("totalGrafton: ", totalGrafton);
+
+                //                 // push data to GraftonForecast
+                //                 totalGraftonForecastDay1.push({ "value": totalGrafton });
+                //                 GraftonForecast[location_id].push({ "value": totalGrafton });
+                //             } else {
+                //                 totalGrafton = 999;
+                //                 // console.log("totalGrafton: ", totalGrafton);
+                //             }
+                //             // push data to GraftonForecast
+                //             totalGraftonForecastDay1.push({ "value": totalGrafton });
+                //             GraftonForecast[location_id].push({ "value": totalGrafton });
+                //         }
+                //     } else if (isGraftonForecastBasedUponLd25MPTw) {
+                //         totalGrafton = yesterdayGraftonStageRevValue + (((todayGraftonUpstreamNetmissValue - yesterdayGraftonUpstreamStageRevValue) + (todayGraftonDownstreamNetmissStageValue - yesterdayGraftonDownstreamStageRevValue)) / 2);
+                //         // console.log("totalGrafton: ", totalGrafton);
+
+                //         // push data to GraftonForecast
+                //         totalGraftonForecastDay1.push({ "value": totalGrafton });
+                //         GraftonForecast[location_id].push({ "value": totalGrafton });
+                //     } else {
+                //         totalGrafton = 909;
+                //         // console.log("totalGrafton: ", totalGrafton);
+
+                //         // push data to GraftonForecast
+                //         totalGraftonForecastDay1.push({ "value": totalGrafton });
+                //         GraftonForecast[location_id].push({ "value": totalGrafton });
+                //     }
+                // }
             }
 
             if (totalGraftonForecastDay2 === totalGraftonForecastDay2) {
