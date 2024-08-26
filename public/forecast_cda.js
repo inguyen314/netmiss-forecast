@@ -1506,7 +1506,7 @@ async function processAllData(data) {
                     // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
                 }
 
-                const graftonToday = GraftonForecast["Grafton-Mississippi"][0].value; // ********************* Use 0, 2, 4, 6, 8, 10
+                const graftonToday = GraftonForecast["Grafton-Mississippi"][0].value; 
                 // console.log("graftonToday: ", graftonToday);
 
                 const graftonDay1PlusGageZero = graftonToday + 403.79;
@@ -2342,7 +2342,7 @@ async function processAllData(data) {
                     // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
                 }
 
-                const graftonToday = GraftonForecast["Grafton-Mississippi"][2].value; // ********************* Use 0, 2, 4, 6, 8, 10
+                const graftonToday = GraftonForecast["Grafton-Mississippi"][2].value; 
                 // console.log("graftonToday: ", graftonToday);
                 // console.log("GraftonForecast['Grafton-Mississippi']: ", GraftonForecast["Grafton-Mississippi"]);
 
@@ -2409,7 +2409,7 @@ async function processAllData(data) {
                 const delta = yesterdayStageRevValuePlusGageZero - value1;
                 // console.log("delta: ", delta);
 
-                const graftonToday = GraftonForecast["Grafton-Mississippi"][2].value; // ********************* Use 0, 2, 4, 6, 8, 10
+                const graftonToday = GraftonForecast["Grafton-Mississippi"][2].value; 
                 // console.log("graftonToday: ", graftonToday);
 
                 const graftonDay1PlusGageZero = (graftonToday) + 403.79;
@@ -2472,7 +2472,7 @@ async function processAllData(data) {
                     // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
                 }
 
-                const graftonToday = GraftonForecast["Grafton-Mississippi"][2].value; // ********************* Use 0, 2, 4, 6, 8, 10
+                const graftonToday = GraftonForecast["Grafton-Mississippi"][2].value; 
                 // console.log("graftonToday: ", graftonToday);
 
                 const graftonDay1PlusGageZero = graftonToday + 403.79;
@@ -3296,7 +3296,7 @@ async function processAllData(data) {
                     // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
                 }
 
-                const graftonToday = GraftonForecast["Grafton-Mississippi"][4].value; // ********************* Use 0, 2, 4, 6, 8, 10
+                const graftonToday = GraftonForecast["Grafton-Mississippi"][4].value; 
                 // console.log("graftonToday: ", graftonToday);
                 // console.log("GraftonForecast['Grafton-Mississippi']: ", GraftonForecast["Grafton-Mississippi"]);
 
@@ -3363,7 +3363,7 @@ async function processAllData(data) {
                 const delta = yesterdayStageRevValuePlusGageZero - value1;
                 // console.log("delta: ", delta);
 
-                const graftonToday = GraftonForecast["Grafton-Mississippi"][4].value; // ********************* Use 0, 2, 4, 6, 8, 10
+                const graftonToday = GraftonForecast["Grafton-Mississippi"][4].value; 
                 // console.log("graftonToday: ", graftonToday);
 
                 const graftonDay1PlusGageZero = (graftonToday) + 403.79;
@@ -3426,7 +3426,7 @@ async function processAllData(data) {
                     // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
                 }
 
-                const graftonToday = GraftonForecast["Grafton-Mississippi"][4].value; // ********************* Use 0, 2, 4, 6, 8, 10
+                const graftonToday = GraftonForecast["Grafton-Mississippi"][4].value; 
                 // console.log("graftonToday: ", graftonToday);
 
                 const graftonDay1PlusGageZero = graftonToday + 403.79;
@@ -4253,7 +4253,7 @@ async function processAllData(data) {
                     // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
                 }
 
-                const graftonToday = GraftonForecast["Grafton-Mississippi"][6].value; // ********************* Use 0, 2, 4, 6, 8, 10
+                const graftonToday = GraftonForecast["Grafton-Mississippi"][3].value; 
                 // console.log("graftonToday: ", graftonToday);
                 // console.log("GraftonForecast['Grafton-Mississippi']: ", GraftonForecast["Grafton-Mississippi"]);
 
@@ -4320,7 +4320,7 @@ async function processAllData(data) {
                 const delta = yesterdayStageRevValuePlusGageZero - value1;
                 // console.log("delta: ", delta);
 
-                const graftonToday = GraftonForecast["Grafton-Mississippi"][6].value; // ********************* Use 0, 2, 4, 6, 8, 10
+                const graftonToday = GraftonForecast["Grafton-Mississippi"][3].value; 
                 // console.log("graftonToday: ", graftonToday);
 
                 const graftonDay1PlusGageZero = (graftonToday) + 403.79;
@@ -4383,7 +4383,7 @@ async function processAllData(data) {
                     // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
                 }
 
-                const graftonToday = GraftonForecast["Grafton-Mississippi"][6].value; // ********************* Use 0, 2, 4, 6, 8, 10
+                const graftonToday = GraftonForecast["Grafton-Mississippi"][3].value; 
                 // console.log("graftonToday: ", graftonToday);
 
                 const graftonDay1PlusGageZero = graftonToday + 403.79;
@@ -5209,7 +5209,7 @@ async function processAllData(data) {
                     // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
                 }
 
-                const graftonToday = GraftonForecast["Grafton-Mississippi"][8].value; // ********************* Use 0, 2, 4, 6, 8, 10
+                const graftonToday = GraftonForecast["Grafton-Mississippi"][4].value; 
                 // console.log("graftonToday: ", graftonToday);
                 // console.log("GraftonForecast['Grafton-Mississippi']: ", GraftonForecast["Grafton-Mississippi"]);
 
@@ -5276,7 +5276,7 @@ async function processAllData(data) {
                 const delta = yesterdayStageRevValuePlusGageZero - value1;
                 // console.log("delta: ", delta);
 
-                const graftonToday = GraftonForecast["Grafton-Mississippi"][8].value; // ********************* Use 0, 2, 4, 6, 8, 10
+                const graftonToday = GraftonForecast["Grafton-Mississippi"][4].value; 
                 // console.log("graftonToday: ", graftonToday);
 
                 const graftonDay1PlusGageZero = (graftonToday) + 403.79;
@@ -5339,7 +5339,7 @@ async function processAllData(data) {
                     // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
                 }
 
-                const graftonToday = GraftonForecast["Grafton-Mississippi"][8].value; // ********************* Use 0, 2, 4, 6, 8, 10
+                const graftonToday = GraftonForecast["Grafton-Mississippi"][5].value; 
                 // console.log("graftonToday: ", graftonToday);
 
                 const graftonDay1PlusGageZero = graftonToday + 403.79;
@@ -6165,7 +6165,7 @@ async function processAllData(data) {
                     // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
                 }
 
-                const graftonToday = GraftonForecast["Grafton-Mississippi"][8].value; // ********************* change here and use 0-day1, 2-day2, 4-day3, 6-day4, 8-day5, 10-day6
+                const graftonToday = GraftonForecast["Grafton-Mississippi"][5].value; // ********************* change here and use 0-day1, 2-day2, 4-day3, 6-day4, 8-day5, 10-day6
                 // console.log("graftonToday: ", graftonToday);
                 // console.log("GraftonForecast['Grafton-Mississippi']: ", GraftonForecast["Grafton-Mississippi"]);
 
@@ -6232,7 +6232,7 @@ async function processAllData(data) {
                 const delta = yesterdayStageRevValuePlusGageZero - value1;
                 // console.log("delta: ", delta);
 
-                const graftonToday = GraftonForecast["Grafton-Mississippi"][8].value; // ********************* Use 0, 2, 4, 6, 8, 10
+                const graftonToday = GraftonForecast["Grafton-Mississippi"][5].value; 
                 // console.log("graftonToday: ", graftonToday);
 
                 const graftonDay1PlusGageZero = (graftonToday) + 403.79;
@@ -6295,7 +6295,7 @@ async function processAllData(data) {
                     // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
                 }
 
-                const graftonToday = GraftonForecast["Grafton-Mississippi"][8].value; // ********************* Use 0, 2, 4, 6, 8, 10
+                const graftonToday = GraftonForecast["Grafton-Mississippi"][5].value; 
                 // console.log("graftonToday: ", graftonToday);
 
                 const graftonDay1PlusGageZero = graftonToday + 403.79;
