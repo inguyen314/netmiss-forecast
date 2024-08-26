@@ -369,7 +369,7 @@ function createTable(jsonDataFiltered) {
             } else {
                 console.log("dateObjectFirstForecastDayByDayAndMonth is the same as todaysDataOnly");
                 const message = document.createElement('h1');
-                message.innerHTML = 'Daily forecasts are updated around noon.';
+                message.innerHTML = 'Run the netmiss forecasts first';
                 // Set the background color to yellow and add more styles for better appearance
                 message.style.backgroundColor = 'yellow';
                 message.style.color = 'black'; // Text color
@@ -1326,11 +1326,19 @@ async function processAllData(data) {
 
                 day1 = "<div title='" + "--" + "'>" + totalLouisianaDay1.toFixed(1) + "</div>";
             } else if (location_id === "Grafton-Mississippi") {
+                console.log("GraftonForecast['Grafton-Mississippi']", GraftonForecast['Grafton-Mississippi']);
+                console.log("totalGraftonForecastDay1: ", totalGraftonForecastDay1);
+                console.log("totalGraftonForecastDay2: ", totalGraftonForecastDay2);
+                console.log("totalGraftonForecastDay3: ", totalGraftonForecastDay3);
+                console.log("totalGraftonForecastDay4: ", totalGraftonForecastDay4);
+                console.log("totalGraftonForecastDay5: ", totalGraftonForecastDay5);
+                console.log("totalGraftonForecastDay6: ", totalGraftonForecastDay6);
+
                 // Grafton data process is in fetch.js
                 // console.log("GraftonForecast['Grafton-Mississippi'][0].value: ", GraftonForecast["Grafton-Mississippi"][0].value);
                 // console.log("totalGraftonForecastDay1: ", totalGraftonForecastDay1);
 
-                day1 = "<div title='" + "Only RP/isOpenRiverUseBackWater, database LD 25 TW-Mississippi rating is off from excel" + "'>" + (Math.round(totalGraftonForecastDay1[0].value * 100) / 100).toFixed(1) + "</div>";
+                day1 = "<div title='" + totalGraftonForecastDay1[0].value + "'>" + (Math.round(totalGraftonForecastDay1[0].value * 100) / 100).toFixed(1) + "</div>";
             } else if (location_id === "Hardin-Illinois") {
                 // console.log("location_id: ", location_id);
                 // YESYERDAY
@@ -2289,7 +2297,7 @@ async function processAllData(data) {
                 // Grafton data process is in fetch.js
                 // console.log("totalGraftonForecastDay2: ", totalGraftonForecastDay2);
 
-                day2 = "<div title='" + "Only RP/isOpenRiverUseBackWater, database LD 25 TW-Mississippi rating is off from excel, Uses Hardcoded Upper Miss Rating" + "'>" + (Math.round(totalGraftonForecastDay2[0].value * 100) / 100).toFixed(1) + "</div>";
+                day2 = "<div title='" + totalGraftonForecastDay2[0].value + "'>" + (Math.round(totalGraftonForecastDay2[0].value * 100) / 100).toFixed(1) + "</div>";
             } else if (location_id === "Hardin-Illinois") {
                 // console.log("location_id: ", location_id);
                 // YESYERDAY
@@ -6157,7 +6165,7 @@ async function processAllData(data) {
                     // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
                 }
 
-                const graftonToday = GraftonForecast["Grafton-Mississippi"][10].value; // ********************* change here and use 0-day1, 2-day2, 4-day3, 6-day4, 8-day5, 10-day6
+                const graftonToday = GraftonForecast["Grafton-Mississippi"][8].value; // ********************* change here and use 0-day1, 2-day2, 4-day3, 6-day4, 8-day5, 10-day6
                 // console.log("graftonToday: ", graftonToday);
                 // console.log("GraftonForecast['Grafton-Mississippi']: ", GraftonForecast["Grafton-Mississippi"]);
 
@@ -6224,7 +6232,7 @@ async function processAllData(data) {
                 const delta = yesterdayStageRevValuePlusGageZero - value1;
                 // console.log("delta: ", delta);
 
-                const graftonToday = GraftonForecast["Grafton-Mississippi"][10].value; // ********************* Use 0, 2, 4, 6, 8, 10
+                const graftonToday = GraftonForecast["Grafton-Mississippi"][8].value; // ********************* Use 0, 2, 4, 6, 8, 10
                 // console.log("graftonToday: ", graftonToday);
 
                 const graftonDay1PlusGageZero = (graftonToday) + 403.79;
@@ -6287,7 +6295,7 @@ async function processAllData(data) {
                     // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
                 }
 
-                const graftonToday = GraftonForecast["Grafton-Mississippi"][10].value; // ********************* Use 0, 2, 4, 6, 8, 10
+                const graftonToday = GraftonForecast["Grafton-Mississippi"][8].value; // ********************* Use 0, 2, 4, 6, 8, 10
                 // console.log("graftonToday: ", graftonToday);
 
                 const graftonDay1PlusGageZero = graftonToday + 403.79;
