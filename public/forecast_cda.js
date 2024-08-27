@@ -104,6 +104,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         // If writing is successful, update the status button text
                         if (!writeResult) {
                             statusBtn.innerText = "Write successful!";
+                            alert("Write successful!");
                         } else {
                             // If writing fails, update the status button text
                             statusBtn.innerText = "Failed to write Timeseries. Check logs";
