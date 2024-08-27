@@ -486,11 +486,9 @@ async function fetchData(location_id
                     // console.log("todayGraftonUpstreamNetmissValue: ", todayGraftonUpstreamNetmissValue);
                     // console.log("todayGraftonUpstreamNetmissValuePlus001: ", todayGraftonUpstreamNetmissValuePlus001);
 
-
                     // Get upstream day1 forecast cooresponding flow
                     const todayGraftonCorrespondingUpstreamNetmissFlowValue = findDepByInd(todayGraftonUpstreamNetmissValuePlus001, ratingStageFlowLd25Tw); // for database rating table use ratingGraftonTableCoeUpstream
                     // console.log("todayGraftonCorrespondingUpstreamNetmissFlowValue: (rating.js) ", todayGraftonCorrespondingUpstreamNetmissFlowValue);
-
 
                     // Get today special gage 2 cooresponding flow
                     const convertedGraftonSpecialNetmissGage2FlowValuesToCst = convertUTCtoCentralTime(data20);
@@ -498,18 +496,15 @@ async function fetchData(location_id
                     // console.log("convertedGraftonSpecialNetmissGage2FlowValuesToCst: ", convertedGraftonSpecialNetmissGage2FlowValuesToCst);
                     // console.log("todayGraftonSpecialGage2NetmissFlowValue: ", todayGraftonSpecialGage2NetmissFlowValue);
 
-
                     // Sum "upstream day1 forecast cooresponding flow" and "special gage 2 cooresponding flow"
                     const sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand = (parseFloat(todayGraftonSpecialGage2NetmissFlowValue) + parseFloat(todayGraftonCorrespondingUpstreamNetmissFlowValue)) / 1000;
                     // console.log("sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand: ", sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand);
-
 
                     // Check forecast day1 is based upon what conditions
                     const isGraftonForecastBasedUponLd25MPTw = parseFloat(sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand) > 300;
                     // console.log("isGraftonForecastBasedUponLd25MPTw: (True if > 300) ", isGraftonForecastBasedUponLd25MPTw);
                     const isGraftonForecastBasedUponOpenRiver = parseFloat(sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand) <= 300;
                     // console.log("isGraftonForecastBasedUponOpenRiver: (True if <= 300) ", isGraftonForecastBasedUponOpenRiver);
-
 
                     // Condition 1 - isGraftonForecastBasedUponOpenRiver
                     if (isGraftonForecastBasedUponOpenRiver) {
@@ -518,11 +513,11 @@ async function fetchData(location_id
                         // Check upstream forecasting point is open river (Mel Price Pool)
                         const todayGraftonDownstreamNetmissStageValue = data12.values[0][1];
                         // console.log("todayGraftonDownstreamNetmissStageValue: ", todayGraftonDownstreamNetmissStageValue);
-                        const graftonNetmissDownstreamDataDay1 = convertUTCtoCentralTime(data4).values[0][1];
-                        // console.log("graftonNetmissDownstreamDataDay1: ", graftonNetmissDownstreamDataDay1);
-                        const isMelPricePoolOpenRiver = parseFloat(todayGraftonDownstreamNetmissStageValue) + 395.48 + 0.5 > graftonNetmissDownstreamDataDay1;
+                        const todayGraftonNetmissDownstreamData = convertUTCtoCentralTime(data4).values[0][1];
+                        // console.log("todayGraftonNetmissDownstreamData: ", todayGraftonNetmissDownstreamData);
+                        const isMelPricePoolOpenRiver = parseFloat(todayGraftonDownstreamNetmissStageValue) + 395.48 + 0.5 > todayGraftonNetmissDownstreamData;
                         // console.log("isMelPricePoolOpenRiver: ", isMelPricePoolOpenRiver);
-                        const isMelPricePoolRegulatedPool = parseFloat(todayGraftonDownstreamNetmissStageValue) + 395.48 + 0.5 <= graftonNetmissDownstreamDataDay1;
+                        const isMelPricePoolRegulatedPool = parseFloat(todayGraftonDownstreamNetmissStageValue) + 395.48 + 0.5 <= todayGraftonNetmissDownstreamData;
                         // console.log("isMelPricePoolRegulatedPool: ", isMelPricePoolRegulatedPool);
 
                         // Condition 1 - Sub 1 - isMelPricePoolRegulatedPool
@@ -600,7 +595,7 @@ async function fetchData(location_id
                                 // console.log("sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand : ", sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand);
 
                                 // Call the function and log the result
-                                const stage2 = graftonNetmissDownstreamDataDay1 // todayGraftonDownstreamNetmissStageValue + 395.48 + 0.5; // yesterdayGraftonDownstreamStageRevValue2
+                                const stage2 = todayGraftonNetmissDownstreamData // todayGraftonDownstreamNetmissStageValue + 395.48 + 0.5; // yesterdayGraftonDownstreamStageRevValue2
                                 const flowRate2 = sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand; // valueCompareOpenRiver
                                 // console.log("stage2, flowRate2, jsonFileName: ", stage2, flowRate2, jsonFileName);
                                 readJSONTable2(stage2, flowRate2, jsonFileName).then(value => {
@@ -772,7 +767,7 @@ async function fetchData(location_id
                 //                 // console.log("deltaFirst: ", deltaFirst);
 
                 //                 // deltaSecond
-                //                 const stage2 = graftonNetmissDownstreamDataDay1;
+                //                 const stage2 = todayGraftonNetmissDownstreamData;
                 //                 const flowRate2 = sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand;
                 //                 const interpolatedValue2 = interpolateValue(stage2, flowRate2);
 
@@ -828,8 +823,6 @@ async function fetchData(location_id
                     // console.log("convertedGraftonSpecialNetmissGage2FlowValuesToCst: ", convertedGraftonSpecialNetmissGage2FlowValuesToCst);
                     const todayGraftonSpecialGage2NetmissFlowValue = convertedGraftonSpecialNetmissGage2FlowValuesToCst.values[2][1]; // ************** change here
                     // console.log("todayGraftonSpecialGage2NetmissFlowValue: ", todayGraftonSpecialGage2NetmissFlowValue);
-                    const yesterdayGraftonSpecialGage2NetmissFlowValue = convertedGraftonSpecialNetmissGage2FlowValuesToCst.values[0][1]; // ************** change here (keep the same)
-                    // console.log("yesterdayGraftonSpecialGage2NetmissFlowValue: ", yesterdayGraftonSpecialGage2NetmissFlowValue);
                     const firstDayGraftonSpecialGage2NetmissFlowValue = convertedGraftonSpecialNetmissGage2FlowValuesToCst.values[0][1]; // ************** change here (keep the same)
                     // console.log("firstDayGraftonSpecialGage2NetmissFlowValue: ", firstDayGraftonSpecialGage2NetmissFlowValue);
 
@@ -847,19 +840,19 @@ async function fetchData(location_id
                         // console.log("isGraftonForecastBasedUponOpenRiver");
 
                         // Get downstream netmiss day1
-                        const graftonNetmissDownstreamDataDay1 = convertUTCtoCentralTime(data4).values[1][1]; // ************** change here
-                        // console.log("graftonNetmissDownstreamDataDay1: ", graftonNetmissDownstreamDataDay1);
+                        const todayGraftonNetmissDownstreamData = convertUTCtoCentralTime(data4).values[1][1]; // ************** change here
+                        // console.log("todayGraftonNetmissDownstreamData: ", todayGraftonNetmissDownstreamData);
 
                         // Get downstream netmiss stagerev
                         const todayGraftonDownstreamNetmissStageValue = data12.values[1][1]; // ************** change here
                         // console.log("todayGraftonDownstreamNetmissStageValue: ", todayGraftonDownstreamNetmissStageValue);
 
                         // Check mel price open river
-                        const isMelPricePoolOpenRiver = parseFloat(todayGraftonDownstreamNetmissStageValue) + 395.48 + 0.5 > graftonNetmissDownstreamDataDay1;
+                        const isMelPricePoolOpenRiver = parseFloat(todayGraftonDownstreamNetmissStageValue) + 395.48 + 0.5 > todayGraftonNetmissDownstreamData;
                         // console.log("isMelPricePoolOpenRiver: ", isMelPricePoolOpenRiver);
 
                         // Check mel price regulated pool
-                        const isMelPricePoolRegulatedPool = parseFloat(todayGraftonDownstreamNetmissStageValue) + 395.48 + 0.5 <= graftonNetmissDownstreamDataDay1;
+                        const isMelPricePoolRegulatedPool = parseFloat(todayGraftonDownstreamNetmissStageValue) + 395.48 + 0.5 <= todayGraftonNetmissDownstreamData;
                         // console.log("isMelPricePoolRegulatedPool: ", isMelPricePoolRegulatedPool);
 
                         // Condition 1 - Sub 1 - isMelPricePoolOpenRiver
@@ -919,7 +912,7 @@ async function fetchData(location_id
                                 });
 
                                 // Call the function and log the result
-                                const stage2 = graftonNetmissDownstreamDataDay1;
+                                const stage2 = todayGraftonNetmissDownstreamData;
                                 const flowRate2 = sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand;
                                 // console.log("stage2, flowRate2, jsonFileName: ", stage2, flowRate2, jsonFileName);
                                 readJSONTable2(stage2, flowRate2, jsonFileName).then(value => {
@@ -1553,7 +1546,7 @@ async function fetchData(location_id
                 //                 // console.log("deltaFirst: ", deltaFirst);
 
                 //                 // deltaSecond
-                //                 const stage2 = graftonNetmissDownstreamDataDay1;
+                //                 const stage2 = todayGraftonNetmissDownstreamData;
                 //                 const flowRate2 = sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand;
                 //                 const interpolatedValue2 = interpolateValue(stage2, flowRate2);
 
@@ -1609,8 +1602,6 @@ async function fetchData(location_id
                     // console.log("convertedGraftonSpecialNetmissGage2FlowValuesToCst: ", convertedGraftonSpecialNetmissGage2FlowValuesToCst);
                     const todayGraftonSpecialGage2NetmissFlowValue = convertedGraftonSpecialNetmissGage2FlowValuesToCst.values[3][1]; // ************** change here
                     // console.log("todayGraftonSpecialGage2NetmissFlowValue: ", todayGraftonSpecialGage2NetmissFlowValue);
-                    const yesterdayGraftonSpecialGage2NetmissFlowValue = convertedGraftonSpecialNetmissGage2FlowValuesToCst.values[0][1]; // ************** change here (keep the same)
-                    // console.log("yesterdayGraftonSpecialGage2NetmissFlowValue: ", yesterdayGraftonSpecialGage2NetmissFlowValue);
                     const firstDayGraftonSpecialGage2NetmissFlowValue = convertedGraftonSpecialNetmissGage2FlowValuesToCst.values[0][1]; // ************** change here (keep the same)
                     // console.log("firstDayGraftonSpecialGage2NetmissFlowValue: ", firstDayGraftonSpecialGage2NetmissFlowValue);
 
@@ -1627,19 +1618,19 @@ async function fetchData(location_id
                         // console.log("isGraftonForecastBasedUponOpenRiver");
 
                         // Get downstream netmiss day1
-                        const graftonNetmissDownstreamDataDay1 = convertUTCtoCentralTime(data4).values[2][1]; // ************** change here
-                        // console.log("graftonNetmissDownstreamDataDay1: ", graftonNetmissDownstreamDataDay1);
+                        const todayGraftonNetmissDownstreamData = convertUTCtoCentralTime(data4).values[2][1]; // ************** change here
+                        // console.log("todayGraftonNetmissDownstreamData: ", todayGraftonNetmissDownstreamData);
 
                         // Get downstream netmiss stagerev
                         const todayGraftonDownstreamNetmissStageValue = data12.values[2][1]; // ************** change here
                         // console.log("todayGraftonDownstreamNetmissStageValue: ", todayGraftonDownstreamNetmissStageValue);
 
                         // Check mel price open river
-                        const isMelPricePoolOpenRiver = parseFloat(todayGraftonDownstreamNetmissStageValue) + 395.48 + 0.5 > graftonNetmissDownstreamDataDay1;
+                        const isMelPricePoolOpenRiver = parseFloat(todayGraftonDownstreamNetmissStageValue) + 395.48 + 0.5 > todayGraftonNetmissDownstreamData;
                         // console.log("isMelPricePoolOpenRiver: ", isMelPricePoolOpenRiver);
 
                         // Check mel price regulated pool
-                        const isMelPricePoolRegulatedPool = parseFloat(todayGraftonDownstreamNetmissStageValue) + 395.48 + 0.5 <= graftonNetmissDownstreamDataDay1;
+                        const isMelPricePoolRegulatedPool = parseFloat(todayGraftonDownstreamNetmissStageValue) + 395.48 + 0.5 <= todayGraftonNetmissDownstreamData;
                         // console.log("isMelPricePoolRegulatedPool: ", isMelPricePoolRegulatedPool);
 
                         // Condition 1 - Sub 1 - isMelPricePoolOpenRiver
@@ -1700,7 +1691,7 @@ async function fetchData(location_id
                                 });
 
                                 // Call the function and log the result
-                                const stage2 = graftonNetmissDownstreamDataDay1;
+                                const stage2 = todayGraftonNetmissDownstreamData;
                                 const flowRate2 = sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand;
                                 // console.log("stage2, flowRate2, jsonFileName: ", stage2, flowRate2, jsonFileName);
                                 readJSONTable2(stage2, flowRate2, jsonFileName).then(value => {
@@ -1730,12 +1721,12 @@ async function fetchData(location_id
                 //     // console.log("todayGraftonDownstreamNetmissStageValue: ", todayGraftonDownstreamNetmissStageValue);
                 // }
 
-                // let graftonNetmissDownstreamDataDay1 = null;
+                // let todayGraftonNetmissDownstreamData = null;
                 // let isMelPricePoolOpenRiver = null;
                 // if (data4 !== null && location_id === "Grafton-Mississippi") {
-                //     graftonNetmissDownstreamDataDay1 = convertUTCtoCentralTime(data4).values[2][1]; // ************** change here
-                //     isMelPricePoolOpenRiver = parseFloat(todayGraftonDownstreamNetmissStageValue) + 395.48 + 0.5 > graftonNetmissDownstreamDataDay1;
-                //     // console.log("graftonNetmissDownstreamDataDay1: ", graftonNetmissDownstreamDataDay1);
+                //     todayGraftonNetmissDownstreamData = convertUTCtoCentralTime(data4).values[2][1]; // ************** change here
+                //     isMelPricePoolOpenRiver = parseFloat(todayGraftonDownstreamNetmissStageValue) + 395.48 + 0.5 > todayGraftonNetmissDownstreamData;
+                //     // console.log("todayGraftonNetmissDownstreamData: ", todayGraftonNetmissDownstreamData);
                 //     // console.log("isMelPricePoolOpenRiver: ", isMelPricePoolOpenRiver);
                 // }
 
@@ -2419,7 +2410,7 @@ async function fetchData(location_id
                 //                 // console.log("deltaFirst: ", deltaFirst);
 
                 //                 // deltaSecond
-                //                 const stage2 = graftonNetmissDownstreamDataDay1;
+                //                 const stage2 = todayGraftonNetmissDownstreamData;
                 //                 const flowRate2 = sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand;
                 //                 const interpolatedValue2 = interpolateValue(stage2, flowRate2);
 
@@ -2475,8 +2466,6 @@ async function fetchData(location_id
                     // console.log("convertedGraftonSpecialNetmissGage2FlowValuesToCst: ", convertedGraftonSpecialNetmissGage2FlowValuesToCst);
                     const todayGraftonSpecialGage2NetmissFlowValue = convertedGraftonSpecialNetmissGage2FlowValuesToCst.values[4][1]; // ************** change here
                     // console.log("todayGraftonSpecialGage2NetmissFlowValue: ", todayGraftonSpecialGage2NetmissFlowValue);
-                    const yesterdayGraftonSpecialGage2NetmissFlowValue = convertedGraftonSpecialNetmissGage2FlowValuesToCst.values[0][1]; // ************** change here (keep the same)
-                    // console.log("yesterdayGraftonSpecialGage2NetmissFlowValue: ", yesterdayGraftonSpecialGage2NetmissFlowValue);
                     const firstDayGraftonSpecialGage2NetmissFlowValue = convertedGraftonSpecialNetmissGage2FlowValuesToCst.values[0][1]; // ************** change here (keep the same)
                     // console.log("firstDayGraftonSpecialGage2NetmissFlowValue: ", firstDayGraftonSpecialGage2NetmissFlowValue);
 
@@ -2493,19 +2482,19 @@ async function fetchData(location_id
                         // console.log("isGraftonForecastBasedUponOpenRiver");
 
                         // Get downstream netmiss day1
-                        const graftonNetmissDownstreamDataDay1 = convertUTCtoCentralTime(data4).values[3][1]; // ************** change here
-                        // console.log("graftonNetmissDownstreamDataDay1: ", graftonNetmissDownstreamDataDay1);
+                        const todayGraftonNetmissDownstreamData = convertUTCtoCentralTime(data4).values[3][1]; // ************** change here
+                        // console.log("todayGraftonNetmissDownstreamData: ", todayGraftonNetmissDownstreamData);
 
                         // Get downstream netmiss stagerev
                         const todayGraftonDownstreamNetmissStageValue = data12.values[3][1]; // ************** change here
                         // console.log("todayGraftonDownstreamNetmissStageValue: ", todayGraftonDownstreamNetmissStageValue);
 
                         // Check mel price open river
-                        const isMelPricePoolOpenRiver = parseFloat(todayGraftonDownstreamNetmissStageValue) + 395.48 + 0.5 > graftonNetmissDownstreamDataDay1;
+                        const isMelPricePoolOpenRiver = parseFloat(todayGraftonDownstreamNetmissStageValue) + 395.48 + 0.5 > todayGraftonNetmissDownstreamData;
                         // console.log("isMelPricePoolOpenRiver: ", isMelPricePoolOpenRiver);
 
                         // Check mel price regulated pool
-                        const isMelPricePoolRegulatedPool = parseFloat(todayGraftonDownstreamNetmissStageValue) + 395.48 + 0.5 <= graftonNetmissDownstreamDataDay1;
+                        const isMelPricePoolRegulatedPool = parseFloat(todayGraftonDownstreamNetmissStageValue) + 395.48 + 0.5 <= todayGraftonNetmissDownstreamData;
                         // console.log("isMelPricePoolRegulatedPool: ", isMelPricePoolRegulatedPool);
 
                         // Condition 1 - Sub 1 - isMelPricePoolOpenRiver
@@ -2566,7 +2555,7 @@ async function fetchData(location_id
                                 });
 
                                 // Call the function and log the result
-                                const stage2 = graftonNetmissDownstreamDataDay1;
+                                const stage2 = todayGraftonNetmissDownstreamData;
                                 const flowRate2 = sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand;
                                 // console.log("stage2, flowRate2, jsonFileName: ", stage2, flowRate2, jsonFileName);
                                 readJSONTable2(stage2, flowRate2, jsonFileName).then(value => {
@@ -2604,12 +2593,12 @@ async function fetchData(location_id
                 //     // console.log("todayGraftonDownstreamNetmissStageValue: ", todayGraftonDownstreamNetmissStageValue);
                 // }
 
-                // let graftonNetmissDownstreamDataDay1 = null;
+                // let todayGraftonNetmissDownstreamData = null;
                 // let isMelPricePoolOpenRiver = null;
                 // if (data4 !== null && location_id === "Grafton-Mississippi") {
-                //     graftonNetmissDownstreamDataDay1 = convertUTCtoCentralTime(data4).values[3][1]; // ************** change here
-                //     isMelPricePoolOpenRiver = parseFloat(todayGraftonDownstreamNetmissStageValue) + 395.48 + 0.5 > graftonNetmissDownstreamDataDay1;
-                //     // console.log("graftonNetmissDownstreamDataDay1: ", graftonNetmissDownstreamDataDay1);
+                //     todayGraftonNetmissDownstreamData = convertUTCtoCentralTime(data4).values[3][1]; // ************** change here
+                //     isMelPricePoolOpenRiver = parseFloat(todayGraftonDownstreamNetmissStageValue) + 395.48 + 0.5 > todayGraftonNetmissDownstreamData;
+                //     // console.log("todayGraftonNetmissDownstreamData: ", todayGraftonNetmissDownstreamData);
                 //     // console.log("isMelPricePoolOpenRiver: ", isMelPricePoolOpenRiver);
                 // }
 
@@ -3308,7 +3297,7 @@ async function fetchData(location_id
                 //                 // console.log("deltaFirst: ", deltaFirst);
 
                 //                 // deltaSecond
-                //                 const stage2 = graftonNetmissDownstreamDataDay1;
+                //                 const stage2 = todayGraftonNetmissDownstreamData;
                 //                 const flowRate2 = sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand;
                 //                 const interpolatedValue2 = interpolateValue(stage2, flowRate2);
 
@@ -3364,8 +3353,6 @@ async function fetchData(location_id
                     // console.log("convertedGraftonSpecialNetmissGage2FlowValuesToCst: ", convertedGraftonSpecialNetmissGage2FlowValuesToCst);
                     const todayGraftonSpecialGage2NetmissFlowValue = convertedGraftonSpecialNetmissGage2FlowValuesToCst.values[5][1]; // ************** change here
                     // console.log("todayGraftonSpecialGage2NetmissFlowValue: ", todayGraftonSpecialGage2NetmissFlowValue);
-                    const yesterdayGraftonSpecialGage2NetmissFlowValue = convertedGraftonSpecialNetmissGage2FlowValuesToCst.values[0][1]; // ************** change here (keep the same)
-                    // console.log("yesterdayGraftonSpecialGage2NetmissFlowValue: ", yesterdayGraftonSpecialGage2NetmissFlowValue);
                     const firstDayGraftonSpecialGage2NetmissFlowValue = convertedGraftonSpecialNetmissGage2FlowValuesToCst.values[0][1]; // ************** change here (keep the same)
                     // console.log("firstDayGraftonSpecialGage2NetmissFlowValue: ", firstDayGraftonSpecialGage2NetmissFlowValue);
 
@@ -3382,19 +3369,19 @@ async function fetchData(location_id
                         // console.log("isGraftonForecastBasedUponOpenRiver");
 
                         // Get downstream netmiss day1
-                        const graftonNetmissDownstreamDataDay1 = convertUTCtoCentralTime(data4).values[4][1]; // ************** change here
-                        // console.log("graftonNetmissDownstreamDataDay1: ", graftonNetmissDownstreamDataDay1);
+                        const todayGraftonNetmissDownstreamData = convertUTCtoCentralTime(data4).values[4][1]; // ************** change here
+                        // console.log("todayGraftonNetmissDownstreamData: ", todayGraftonNetmissDownstreamData);
 
                         // Get downstream netmiss stagerev
                         const todayGraftonDownstreamNetmissStageValue = data12.values[4][1]; // ************** change here
                         // console.log("todayGraftonDownstreamNetmissStageValue: ", todayGraftonDownstreamNetmissStageValue);
 
                         // Check mel price open river
-                        const isMelPricePoolOpenRiver = parseFloat(todayGraftonDownstreamNetmissStageValue) + 395.48 + 0.5 > graftonNetmissDownstreamDataDay1;
+                        const isMelPricePoolOpenRiver = parseFloat(todayGraftonDownstreamNetmissStageValue) + 395.48 + 0.5 > todayGraftonNetmissDownstreamData;
                         // console.log("isMelPricePoolOpenRiver: ", isMelPricePoolOpenRiver);
 
                         // Check mel price regulated pool
-                        const isMelPricePoolRegulatedPool = parseFloat(todayGraftonDownstreamNetmissStageValue) + 395.48 + 0.5 <= graftonNetmissDownstreamDataDay1;
+                        const isMelPricePoolRegulatedPool = parseFloat(todayGraftonDownstreamNetmissStageValue) + 395.48 + 0.5 <= todayGraftonNetmissDownstreamData;
                         // console.log("isMelPricePoolRegulatedPool: ", isMelPricePoolRegulatedPool);
 
                         // Condition 1 - Sub 1 - isMelPricePoolOpenRiver
@@ -3455,7 +3442,7 @@ async function fetchData(location_id
                                 });
 
                                 // Call the function and log the result
-                                const stage2 = graftonNetmissDownstreamDataDay1;
+                                const stage2 = todayGraftonNetmissDownstreamData;
                                 const flowRate2 = sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand;
                                 // console.log("stage2, flowRate2, jsonFileName: ", stage2, flowRate2, jsonFileName);
                                 readJSONTable2(stage2, flowRate2, jsonFileName).then(value => {
@@ -3492,12 +3479,12 @@ async function fetchData(location_id
                 //     todayGraftonDownstreamNetmissStageValue = data12.values[1][1];
                 //     // console.log("todayGraftonDownstreamNetmissStageValue: ", todayGraftonDownstreamNetmissStageValue);
                 // }
-                // let graftonNetmissDownstreamDataDay1 = null;
+                // let todayGraftonNetmissDownstreamData = null;
                 // let isMelPricePoolOpenRiver = null;
                 // if (data4 !== null && location_id === "Grafton-Mississippi") {
-                //     graftonNetmissDownstreamDataDay1 = convertUTCtoCentralTime(data4).values[4][1]; // ************** change here
-                //     isMelPricePoolOpenRiver = parseFloat(todayGraftonDownstreamNetmissStageValue) + 395.48 + 0.5 > graftonNetmissDownstreamDataDay1;
-                //     // console.log("graftonNetmissDownstreamDataDay1: ", graftonNetmissDownstreamDataDay1);
+                //     todayGraftonNetmissDownstreamData = convertUTCtoCentralTime(data4).values[4][1]; // ************** change here
+                //     isMelPricePoolOpenRiver = parseFloat(todayGraftonDownstreamNetmissStageValue) + 395.48 + 0.5 > todayGraftonNetmissDownstreamData;
+                //     // console.log("todayGraftonNetmissDownstreamData: ", todayGraftonNetmissDownstreamData);
                 //     // console.log("isMelPricePoolOpenRiver: ", isMelPricePoolOpenRiver);
                 // }
                 // // yesterday
@@ -4190,7 +4177,7 @@ async function fetchData(location_id
                 //                 // console.log("deltaFirst: ", deltaFirst);
 
                 //                 // deltaSecond
-                //                 const stage2 = graftonNetmissDownstreamDataDay1;
+                //                 const stage2 = todayGraftonNetmissDownstreamData;
                 //                 const flowRate2 = sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand;
                 //                 const interpolatedValue2 = interpolateValue(stage2, flowRate2);
 
@@ -4246,8 +4233,6 @@ async function fetchData(location_id
                     // console.log("convertedGraftonSpecialNetmissGage2FlowValuesToCst: ", convertedGraftonSpecialNetmissGage2FlowValuesToCst);
                     const todayGraftonSpecialGage2NetmissFlowValue = convertedGraftonSpecialNetmissGage2FlowValuesToCst.values[6][1]; // ************** change here
                     // console.log("todayGraftonSpecialGage2NetmissFlowValue: ", todayGraftonSpecialGage2NetmissFlowValue);
-                    const yesterdayGraftonSpecialGage2NetmissFlowValue = convertedGraftonSpecialNetmissGage2FlowValuesToCst.values[0][1]; // ************** change here (keep the same)
-                    // console.log("yesterdayGraftonSpecialGage2NetmissFlowValue: ", yesterdayGraftonSpecialGage2NetmissFlowValue);
                     const firstDayGraftonSpecialGage2NetmissFlowValue = convertedGraftonSpecialNetmissGage2FlowValuesToCst.values[0][1]; // ************** change here (keep the same)
                     // console.log("firstDayGraftonSpecialGage2NetmissFlowValue: ", firstDayGraftonSpecialGage2NetmissFlowValue);
 
@@ -4264,19 +4249,19 @@ async function fetchData(location_id
                         // console.log("isGraftonForecastBasedUponOpenRiver");
 
                         // Get downstream netmiss day1
-                        const graftonNetmissDownstreamDataDay1 = convertUTCtoCentralTime(data4).values[5][1]; // ************** change here
-                        // console.log("graftonNetmissDownstreamDataDay1: ", graftonNetmissDownstreamDataDay1);
+                        const todayGraftonNetmissDownstreamData = convertUTCtoCentralTime(data4).values[5][1]; // ************** change here
+                        // console.log("todayGraftonNetmissDownstreamData: ", todayGraftonNetmissDownstreamData);
 
                         // Get downstream netmiss stagerev
                         const todayGraftonDownstreamNetmissStageValue = data12.values[5][1]; // ************** change here
                         // console.log("todayGraftonDownstreamNetmissStageValue: ", todayGraftonDownstreamNetmissStageValue);
 
                         // Check mel price open river
-                        const isMelPricePoolOpenRiver = parseFloat(todayGraftonDownstreamNetmissStageValue) + 395.48 + 0.5 > graftonNetmissDownstreamDataDay1;
+                        const isMelPricePoolOpenRiver = parseFloat(todayGraftonDownstreamNetmissStageValue) + 395.48 + 0.5 > todayGraftonNetmissDownstreamData;
                         // console.log("isMelPricePoolOpenRiver: ", isMelPricePoolOpenRiver);
 
                         // Check mel price regulated pool
-                        const isMelPricePoolRegulatedPool = parseFloat(todayGraftonDownstreamNetmissStageValue) + 395.48 + 0.5 <= graftonNetmissDownstreamDataDay1;
+                        const isMelPricePoolRegulatedPool = parseFloat(todayGraftonDownstreamNetmissStageValue) + 395.48 + 0.5 <= todayGraftonNetmissDownstreamData;
                         // console.log("isMelPricePoolRegulatedPool: ", isMelPricePoolRegulatedPool);
 
                         // Condition 1 - Sub 1 - isMelPricePoolOpenRiver
@@ -4337,7 +4322,7 @@ async function fetchData(location_id
                                 });
 
                                 // Call the function and log the result
-                                const stage2 = graftonNetmissDownstreamDataDay1;
+                                const stage2 = todayGraftonNetmissDownstreamData;
                                 const flowRate2 = sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand;
                                 // console.log("stage2, flowRate2, jsonFileName: ", stage2, flowRate2, jsonFileName);
                                 readJSONTable2(stage2, flowRate2, jsonFileName).then(value => {
@@ -4356,7 +4341,6 @@ async function fetchData(location_id
                                 });
                             }
                         }
-
                     }
                 }
 
@@ -4374,12 +4358,12 @@ async function fetchData(location_id
                 //     todayGraftonDownstreamNetmissStageValue = data12.values[1][1];
                 //     // console.log("todayGraftonDownstreamNetmissStageValue: ", todayGraftonDownstreamNetmissStageValue);
                 // }
-                // let graftonNetmissDownstreamDataDay1 = null;
+                // let todayGraftonNetmissDownstreamData = null;
                 // let isMelPricePoolOpenRiver = null;
                 // if (data4 !== null && location_id === "Grafton-Mississippi") {
-                //     graftonNetmissDownstreamDataDay1 = convertUTCtoCentralTime(data4).values[5][1]; // ************** change here
-                //     isMelPricePoolOpenRiver = parseFloat(todayGraftonDownstreamNetmissStageValue) + 395.48 + 0.5 > graftonNetmissDownstreamDataDay1;
-                //     // console.log("graftonNetmissDownstreamDataDay1: ", graftonNetmissDownstreamDataDay1);
+                //     todayGraftonNetmissDownstreamData = convertUTCtoCentralTime(data4).values[5][1]; // ************** change here
+                //     isMelPricePoolOpenRiver = parseFloat(todayGraftonDownstreamNetmissStageValue) + 395.48 + 0.5 > todayGraftonNetmissDownstreamData;
+                //     // console.log("todayGraftonNetmissDownstreamData: ", todayGraftonNetmissDownstreamData);
                 //     // console.log("isMelPricePoolOpenRiver: ", isMelPricePoolOpenRiver);
                 // }
                 // // yesterday
@@ -5072,7 +5056,7 @@ async function fetchData(location_id
                 //                 // console.log("deltaFirst: ", deltaFirst);
 
                 //                 // deltaSecond
-                //                 const stage2 = graftonNetmissDownstreamDataDay1;
+                //                 const stage2 = todayGraftonNetmissDownstreamData;
                 //                 const flowRate2 = sumGraftonTodayHermannFlowPlusLd25TwFlowDivideOneThousand;
                 //                 const interpolatedValue2 = interpolateValue(stage2, flowRate2);
 
