@@ -507,7 +507,6 @@ async function processAllData(data) {
         // console.log("latest7AMRvfValue: ", latest7AMRvfValue);
         // console.log("data: ", data);
         // console.log("BirdsPointForecastValue: ", BirdsPointForecastValue);
-        // console.log("BirdsPointForecastValue for Birds Point-Mississippi: ", BirdsPointForecastValue["Birds Point-Mississippi"]);
 
         // console.log("totalGraftonForecastDay1: ", totalGraftonForecastDay1);
         // console.log("totalGraftonForecastDay1: ", totalGraftonForecastDay1[0].value);
@@ -553,8 +552,103 @@ async function processAllData(data) {
             };
 
             timeseriesPayload.push(payloadGrafton)
-
             console.log("payloadGrafton: ", payloadGrafton);
+        }
+
+        if (location_id === "Birds Point-Mississippi") {
+            const payloadBirdsPoint = {
+                "name": "Birds Point-Mississippi.Stage.Inst.~1Day.0.netmiss-fcst",
+                "office-id": "MVS",
+                "units": "ft",
+                "values": [
+                    [
+                        getDateWithTimeSet(1, 6, 0),
+                        BirdsPointForecastValue[0].value,
+                        0
+                    ],
+                    [
+                        getDateWithTimeSet(2, 6, 0),
+                        BirdsPointForecastValue[1].value,
+                        0
+                    ],
+                    [
+                        getDateWithTimeSet(3, 6, 0),
+                        BirdsPointForecastValue[2].value,
+                        0
+                    ],
+                    [
+                        getDateWithTimeSet(4, 6, 0),
+                        BirdsPointForecastValue[3].value,
+                        0
+                    ],
+                    [
+                        getDateWithTimeSet(5, 6, 0),
+                        BirdsPointForecastValue[4].value,
+                        0
+                    ],
+                    [
+                        getDateWithTimeSet(6, 6, 0),
+                        BirdsPointForecastValue[5].value,
+                        0
+                    ],
+                    [
+                        getDateWithTimeSet(7, 6, 0),
+                        BirdsPointForecastValue[6].value,
+                        0
+                    ],
+                ]
+            };
+
+            timeseriesPayload.push(payloadBirdsPoint)
+            console.log("payloadBirdsPoint: ", payloadBirdsPoint);
+        }
+
+        if (location_id === "Cairo-Ohio") {
+            const payloadCairo = {
+                "name": "Cairo-Ohio.Stage.Inst.~1Day.0.netmiss-fcst",
+                "office-id": "MVS",
+                "units": "ft",
+                "values": [
+                    [
+                        getDateWithTimeSet(1, 6, 0),
+                        latest7AMRvfValue[0].value,
+                        0
+                    ],
+                    [
+                        getDateWithTimeSet(2, 6, 0),
+                        latest7AMRvfValue[1].value,
+                        0
+                    ],
+                    [
+                        getDateWithTimeSet(3, 6, 0),
+                        latest7AMRvfValue[2].value,
+                        0
+                    ],
+                    [
+                        getDateWithTimeSet(4, 6, 0),
+                        latest7AMRvfValue[3].value,
+                        0
+                    ],
+                    [
+                        getDateWithTimeSet(5, 6, 0),
+                        latest7AMRvfValue[4].value,
+                        0
+                    ],
+                    [
+                        getDateWithTimeSet(6, 6, 0),
+                        latest7AMRvfValue[5].value,
+                        0
+                    ],
+                    [
+                        getDateWithTimeSet(7, 6, 0),
+                        latest7AMRvfValue[6].value,
+                        0
+                    ],
+                ]
+            };
+
+            timeseriesPayload.push(payloadCairo)
+            console.log("payloadCairo: ", payloadCairo);
         }
 
         // Starting Processing All Gages
@@ -562,7 +656,7 @@ async function processAllData(data) {
             // LOCATION
             const locationIdCell = row.insertCell();
             let isProjectGage = null;
-            if (location_id.split('-')[0] === "LD 24 Pool" || location_id.split('-')[0] === "LD 25 Pool" || location_id.split('-')[0] === "Mel Price Pool") {
+            if (location_id.split('-')[0] === "LD 24 Pool" || location_id.split('-')[0] === "LD 25 Pool" || location_id.split('-')[0] === "Mel Price Pool" || location_id.split('-')[0] === "LD 27 Pool" || location_id.split('-')[0] === "LD 27 TW") {
                 isProjectGage = true;
             } else {
                 isProjectGage = false;
@@ -583,12 +677,12 @@ async function processAllData(data) {
 
             if (latest6AMValue.value) {
                 level6AmCell.innerHTML = "<div title='" + latest6AMValue.date + " " + latest6AMValue.value + "'>" +
-                    "<a href='../../chart/public/chart.html?cwms_ts_id=" + tsid + "' target='_blank'>" +
+                    "<a href='https://wm.mvs.ds.usace.army.mil/district_templates/chart/public/chart.html?cwms_ts_id=" + tsid + "' target='_blank'>" +
                     (tsid_forecast_location === true ? "<strong>" + (Math.round((latest6AMValue.value) * 100) / 100).toFixed(2) + "</strong>" : (Math.round((latest6AMValue.value) * 100) / 100).toFixed(2)) + "</a>" +
                     "</div>";
             } else {
                 level6AmCell.innerHTML = "<div title='" + latest6AMValue.date + " " + latest6AMValue.value + "'>" +
-                    "<a href='../../chart/public/chart.html?cwms_ts_id=" + tsid + "' target='_blank'>" +
+                    "<a href='https://wm.mvs.ds.usace.army.mil/district_templates/chart/public/chart.html?cwms_ts_id=" + tsid + "' target='_blank'>" +
                     (tsid_forecast_location === true ? "<strong>" + "No Data" + "</strong>" : "No Data") + "</a>" +
                     "</div>";
             }
@@ -6768,6 +6862,780 @@ async function processAllData(data) {
                 };
                 console.log("payloadLd22Tw: ", payloadLd22Tw);
                 timeseriesPayload.push(payloadLd22Tw);
+            }
+
+            if (location_id === "Louisiana-Mississippi") {
+                const payloadLouisiana = {
+                    "name": "Louisiana-Mississippi.Stage.Inst.~1Day.0.netmiss-fcst",
+                    "office-id": "MVS",
+                    "units": "ft",
+                    "values": [
+                        [
+                            getDateWithTimeSet(1, 6, 0),
+                            totalLouisianaDay1,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(2, 6, 0),
+                            totalLouisianaDay2,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(3, 6, 0),
+                            totalLouisianaDay3,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(4, 6, 0),
+                            totalLouisianaDay4,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(5, 6, 0),
+                            totalLouisianaDay5,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(6, 6, 0),
+                            totalLouisianaDay6,
+                            0
+                        ],
+                    ]
+                };
+                console.log("payloadLouisiana: ", payloadLouisiana);
+                timeseriesPayload.push(payloadLouisiana);
+            }
+
+            if (location_id === "Mosier Ldg-Mississippi") {
+                const payloadMosierLdg = {
+                    "name": "Mosier Ldg-Mississippi.Stage.Inst.~1Day.0.netmiss-fcst",
+                    "office-id": "MVS",
+                    "units": "ft",
+                    "values": [
+                        [
+                            getDateWithTimeSet(1, 6, 0),
+                            totalMosierLdgDay1,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(2, 6, 0),
+                            totalMosierLdgDay2,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(3, 6, 0),
+                            totalMosierLdgDay3,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(4, 6, 0),
+                            totalMosierLdgDay4,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(5, 6, 0),
+                            totalMosierLdgDay5,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(6, 6, 0),
+                            totalMosierLdgDay6,
+                            0
+                        ],
+                    ]
+                };
+                console.log("payloadMosierLdg: ", payloadMosierLdg);
+                timeseriesPayload.push(payloadMosierLdg);
+            }
+
+            if (location_id === "Meredosia-Illinois") {
+                const payloadMeredosia = {
+                    "name": "Meredosia-Illinois.Stage.Inst.~1Day.0.netmiss-fcst",
+                    "office-id": "MVS",
+                    "units": "ft",
+                    "values": [
+                        [
+                            getDateWithTimeSet(1, 6, 0),
+                            totalMeredosiaDay1,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(2, 6, 0),
+                            totalMeredosiaDay2,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(3, 6, 0),
+                            totalMeredosiaDay3,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(4, 6, 0),
+                            totalMeredosiaDay4,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(5, 6, 0),
+                            totalMeredosiaDay5,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(6, 6, 0),
+                            totalMeredosiaDay6,
+                            0
+                        ],
+                    ]
+                };
+                console.log("payloadMeredosia: ", payloadMeredosia);
+                timeseriesPayload.push(payloadMeredosia);
+            }
+
+            if (location_id === "Valley City-Illinois") {
+                const payloadValleyCity = {
+                    "name": "Valley City-Illinois.Stage.Inst.~1Day.0.netmiss-fcst",
+                    "office-id": "MVS",
+                    "units": "ft",
+                    "values": [
+                        [
+                            getDateWithTimeSet(1, 6, 0),
+                            totalValleyCityDay1,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(2, 6, 0),
+                            totalValleyCityDay2,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(3, 6, 0),
+                            totalValleyCityDay3,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(4, 6, 0),
+                            totalValleyCityDay4,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(5, 6, 0),
+                            totalValleyCityDay5,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(6, 6, 0),
+                            totalValleyCityDay6,
+                            0
+                        ],
+                    ]
+                };
+                console.log("payloadValleyCity: ", payloadValleyCity);
+                timeseriesPayload.push(payloadValleyCity);
+            }
+
+            if (location_id === "Hardin-Illinois") {
+                const payloadHardin = {
+                    "name": "Hardin-Illinois.Stage.Inst.~1Day.0.netmiss-fcst",
+                    "office-id": "MVS",
+                    "units": "ft",
+                    "values": [
+                        [
+                            getDateWithTimeSet(1, 6, 0),
+                            totalHardinDay1,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(2, 6, 0),
+                            totalHardinDay2,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(3, 6, 0),
+                            totalHardinDay3,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(4, 6, 0),
+                            totalHardinDay4,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(5, 6, 0),
+                            totalHardinDay5,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(6, 6, 0),
+                            totalHardinDay6,
+                            0
+                        ],
+                    ]
+                };
+                console.log("payloadHardin: ", payloadHardin);
+                timeseriesPayload.push(payloadHardin);
+            }
+
+            if (location_id === "LD 27 Pool-Mississippi") {
+                const payloadLd27Pool = {
+                    "name": "LD 27 Pool-Mississippi.Elev.Inst.~1Day.0.netmiss-fcst",
+                    "office-id": "MVS",
+                    "units": "ft",
+                    "values": [
+                        [
+                            getDateWithTimeSet(1, 6, 0),
+                            totalLD27PoolDay1,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(2, 6, 0),
+                            totalLD27PoolDay2,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(3, 6, 0),
+                            totalLD27PoolDay3,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(4, 6, 0),
+                            totalLD27PoolDay4,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(5, 6, 0),
+                            totalLD27PoolDay5,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(6, 6, 0),
+                            totalLD27PoolDay6,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(7, 6, 0),
+                            totalLD27PoolDay7,
+                            0
+                        ],
+                    ]
+                };
+                console.log("payloadLd27Pool: ", payloadLd27Pool);
+                timeseriesPayload.push(payloadLd27Pool);
+            }
+
+            if (location_id === "LD 27 TW-Mississippi") {
+                const payloadLd27Tw = {
+                    "name": "LD 27 TW-Mississippi.Elev.Inst.~1Day.0.netmiss-fcst",
+                    "office-id": "MVS",
+                    "units": "ft",
+                    "values": [
+                        [
+                            getDateWithTimeSet(1, 6, 0),
+                            totalLD27TwDay1,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(2, 6, 0),
+                            totalLD27TwDay2,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(3, 6, 0),
+                            totalLD27TwDay3,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(4, 6, 0),
+                            totalLD27TwDay4,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(5, 6, 0),
+                            totalLD27TwDay5,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(6, 6, 0),
+                            totalLD27TwDay6,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(7, 6, 0),
+                            totalLD27TwDay7,
+                            0
+                        ],
+                    ]
+                };
+                console.log("payloadLd27Tw: ", payloadLd27Tw);
+                timeseriesPayload.push(payloadLd27Tw);
+            }
+
+            if (location_id === "Engineers Depot-Mississippi") {
+                const payloadEngineersDepot = {
+                    "name": "Engineers Depot-Mississippi.Stage.Inst.~1Day.0.netmiss-fcst",
+                    "office-id": "MVS",
+                    "units": "ft",
+                    "values": [
+                        [
+                            getDateWithTimeSet(1, 6, 0),
+                            totalEngineersDepotDay1,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(2, 6, 0),
+                            totalEngineersDepotDay2,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(3, 6, 0),
+                            totalEngineersDepotDay3,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(4, 6, 0),
+                            totalEngineersDepotDay4,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(5, 6, 0),
+                            totalEngineersDepotDay5,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(6, 6, 0),
+                            totalEngineersDepotDay6,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(7, 6, 0),
+                            totalEngineersDepotDay7,
+                            0
+                        ],
+                    ]
+                };
+                console.log("payloadEngineersDepot: ", payloadEngineersDepot);
+                timeseriesPayload.push(payloadEngineersDepot);
+            }
+
+            if (location_id === "Herculaneum-Mississippi") {
+                const payloadHerculaneum = {
+                    "name": "Herculaneum-Mississippi.Stage.Inst.~1Day.0.netmiss-fcst",
+                    "office-id": "MVS",
+                    "units": "ft",
+                    "values": [
+                        [
+                            getDateWithTimeSet(1, 6, 0),
+                            totalHerculaneumDay1,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(2, 6, 0),
+                            totalHerculaneumDay2,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(3, 6, 0),
+                            totalHerculaneumDay3,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(4, 6, 0),
+                            totalHerculaneumDay4,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(5, 6, 0),
+                            totalHerculaneumDay5,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(6, 6, 0),
+                            totalHerculaneumDay6,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(7, 6, 0),
+                            totalHerculaneumDay7,
+                            0
+                        ],
+                    ]
+                };
+                console.log("payloadHerculaneum: ", payloadHerculaneum);
+                timeseriesPayload.push(payloadHerculaneum);
+            }
+
+            if (location_id === "Nav TW-Kaskaskia") {
+                const payloadNavTw = {
+                    "name": "Nav TW-Kaskaskia.Stage.Inst.~1Day.0.netmiss-fcst",
+                    "office-id": "MVS",
+                    "units": "ft",
+                    "values": [
+                        [
+                            getDateWithTimeSet(1, 6, 0),
+                            totalNavTWDay1,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(2, 6, 0),
+                            totalNavTWDay2,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(3, 6, 0),
+                            totalNavTWDay3,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(4, 6, 0),
+                            totalNavTWDay4,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(5, 6, 0),
+                            totalNavTWDay5,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(6, 6, 0),
+                            totalNavTWDay6,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(7, 6, 0),
+                            totalNavTWDay7,
+                            0
+                        ],
+                    ]
+                };
+                console.log("payloadNavTw: ", payloadNavTw);
+                timeseriesPayload.push(payloadNavTw);
+            }
+
+            if (location_id === "Red Rock Ldg-Mississippi") {
+                const payloadRedRockLdg = {
+                    "name": "Red Rock Ldg-Mississippi.Stage.Inst.~1Day.0.netmiss-fcst",
+                    "office-id": "MVS",
+                    "units": "ft",
+                    "values": [
+                        [
+                            getDateWithTimeSet(1, 6, 0),
+                            totalRedRockLdgDay1,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(2, 6, 0),
+                            totalRedRockLdgDay2,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(3, 6, 0),
+                            totalRedRockLdgDay3,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(4, 6, 0),
+                            totalRedRockLdgDay4,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(5, 6, 0),
+                            totalRedRockLdgDay5,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(6, 6, 0),
+                            totalRedRockLdgDay6,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(7, 6, 0),
+                            totalRedRockLdgDay7,
+                            0
+                        ],
+                    ]
+                };
+                console.log("payloadRedRockLdg: ", payloadRedRockLdg);
+                timeseriesPayload.push(payloadRedRockLdg);
+            }
+
+            if (location_id === "Grand Tower-Mississippi") {
+                const payloadGrandTower = {
+                    "name": "Grand Tower-Mississippi.Stage.Inst.~1Day.0.netmiss-fcst",
+                    "office-id": "MVS",
+                    "units": "ft",
+                    "values": [
+                        [
+                            getDateWithTimeSet(1, 6, 0),
+                            totalGrandTowerDay1,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(2, 6, 0),
+                            totalGrandTowerDay2,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(3, 6, 0),
+                            totalGrandTowerDay3,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(4, 6, 0),
+                            totalGrandTowerDay4,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(5, 6, 0),
+                            totalGrandTowerDay5,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(6, 6, 0),
+                            totalGrandTowerDay6,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(7, 6, 0),
+                            totalGrandTowerDay7,
+                            0
+                        ],
+                    ]
+                };
+                console.log("payloadGrandTower: ", payloadGrandTower);
+                timeseriesPayload.push(payloadGrandTower);
+            }
+
+            if (location_id === "Moccasin Springs-Mississippi") {
+                const payloadMoccasinSprings = {
+                    "name": "Moccasin Springs-Mississippi.Stage.Inst.~1Day.0.netmiss-fcst",
+                    "office-id": "MVS",
+                    "units": "ft",
+                    "values": [
+                        [
+                            getDateWithTimeSet(1, 6, 0),
+                            totalMoccasinSpringsDay1,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(2, 6, 0),
+                            totalMoccasinSpringsDay2,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(3, 6, 0),
+                            totalMoccasinSpringsDay3,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(4, 6, 0),
+                            totalMoccasinSpringsDay4,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(5, 6, 0),
+                            totalMoccasinSpringsDay5,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(6, 6, 0),
+                            totalMoccasinSpringsDay6,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(7, 6, 0),
+                            totalMoccasinSpringsDay7,
+                            0
+                        ],
+                    ]
+                };
+                console.log("payloadMoccasinSprings: ", payloadMoccasinSprings);
+                timeseriesPayload.push(payloadMoccasinSprings);
+            }
+
+            if (location_id === "Grays Pt-Mississippi") {
+                const payloadGraysPt = {
+                    "name": "Grays Pt-Mississippi.Stage.Inst.~1Day.0.netmiss-fcst",
+                    "office-id": "MVS",
+                    "units": "ft",
+                    "values": [
+                        [
+                            getDateWithTimeSet(1, 6, 0),
+                            totalGraysPtDay1,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(2, 6, 0),
+                            totalGraysPtDay2,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(3, 6, 0),
+                            totalGraysPtDay3,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(4, 6, 0),
+                            totalGraysPtDay4,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(5, 6, 0),
+                            totalGraysPtDay5,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(6, 6, 0),
+                            totalGraysPtDay6,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(7, 6, 0),
+                            totalGraysPtDay7,
+                            0
+                        ],
+                    ]
+                };
+                console.log("payloadGraysPt: ", payloadGraysPt);
+                timeseriesPayload.push(payloadGraysPt);
+            }
+
+            if (location_id === "Thebes-Mississippi") {
+                const payloadThebes = {
+                    "name": "Thebes-Mississippi.Stage.Inst.~1Day.0.netmiss-fcst",
+                    "office-id": "MVS",
+                    "units": "ft",
+                    "values": [
+                        [
+                            getDateWithTimeSet(1, 6, 0),
+                            totalThebesDay1,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(2, 6, 0),
+                            totalThebesDay2,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(3, 6, 0),
+                            totalThebesDay3,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(4, 6, 0),
+                            totalThebesDay4,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(5, 6, 0),
+                            totalThebesDay5,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(6, 6, 0),
+                            totalThebesDay6,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(7, 6, 0),
+                            totalThebesDay7,
+                            0
+                        ],
+                    ]
+                };
+                console.log("payloadThebes: ", payloadThebes);
+                timeseriesPayload.push(payloadThebes);
+            }
+
+            if (location_id === "Commerce-Mississippi") {
+                const payloadCommerce = {
+                    "name": "Commerce-Mississippi.Stage.Inst.~1Day.0.netmiss-fcst",
+                    "office-id": "MVS",
+                    "units": "ft",
+                    "values": [
+                        [
+                            getDateWithTimeSet(1, 6, 0),
+                            totalCommerceDay1,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(2, 6, 0),
+                            totalCommerceDay2,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(3, 6, 0),
+                            totalCommerceDay3,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(4, 6, 0),
+                            totalCommerceDay4,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(5, 6, 0),
+                            totalCommerceDay5,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(6, 6, 0),
+                            totalCommerceDay6,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(7, 6, 0),
+                            totalCommerceDay7,
+                            0
+                        ],
+                    ]
+                };
+                console.log("payloadCommerce: ", payloadCommerce);
+                timeseriesPayload.push(payloadCommerce);
+            }
+
+            if (location_id === "Price Ldg-Mississippi") {
+                const payloadPriceLdg = {
+                    "name": "Price Ldg-Mississippi.Stage.Inst.~1Day.0.netmiss-fcst",
+                    "office-id": "MVS",
+                    "units": "ft",
+                    "values": [
+                        [
+                            getDateWithTimeSet(1, 6, 0),
+                            totalPriceLdgDay1,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(2, 6, 0),
+                            totalPriceLdgDay2,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(3, 6, 0),
+                            totalPriceLdgDay3,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(4, 6, 0),
+                            totalPriceLdgDay4,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(5, 6, 0),
+                            totalPriceLdgDay5,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(6, 6, 0),
+                            totalPriceLdgDay6,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(7, 6, 0),
+                            totalPriceLdgDay7,
+                            0
+                        ],
+                    ]
+                };
+                console.log("payloadPriceLdg: ", payloadPriceLdg);
+                timeseriesPayload.push(payloadPriceLdg);
             }
         }
     });

@@ -48,7 +48,7 @@ if(isset($_POST['tableHTML'])) {
     //$mail->ContentType = 'text/html'; // Set content type to HTML
     $mail->ContentType = 'text/html; charset=UTF-8';
     $mail->CharSet = 'UTF-8'; // Set character set
-    $mail->Subject = 'MVS Internal River Forecast 1.0';
+    $mail->Subject = 'MVS Internal River Forecast';
     $paragraphHTML = '<p>Note - This forecast is intended for internal use only for operational decision making.  Do not give out to the public unless requested.  If there are any questions, please call the water control office at (314) 331-8342 and ask for Joan, Davor, Liam, or Rob.</p>';
     $mail->Body    = $paragraphHTMLForecastDate . $paragraphHTMLQPF . $paragraphHTML . $tableHTML;
     $mail->AltBody = 'This is the plain text version of the email'; // Add plain text alternative
