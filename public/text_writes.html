@@ -10,9 +10,41 @@
 <body>
     <div class="status"></div>
     <button id="cda-btn" disabled>Login</button>
+    <button id="cda-delete-btn" disabled>delete</button>
 </body>
 <script defer type="module">
     async function writeTS(payload) {
+        if (!payload) throw new Error("You must specify a payload!");
+
+        try {
+            const response = await fetch("https://wm.mvs.ds.usace.army.mil/mvs-data/timeseries?store-rule=REPLACE%20ALL", {
+                method: "POST",
+                headers: {
+                    "accept": "*/*",
+                    "Content-Type": "application/json;version=2",
+                },
+
+
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+            }
+
+            // const data = await response.json();
+            // console.log('Success:', data);
+            // return data;
+            return true;
+
+        } catch (error) {
+            console.error('Error writing timeseries:', error);
+            throw error;
+        }
+    }
+
+    async function deleteTS(payload) {
         if (!payload) throw new Error("You must specify a payload!");
 
         try {

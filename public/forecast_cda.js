@@ -715,7 +715,37 @@ async function processAllData(data) {
             let totalValleyCityDay1 = null;
             let totalMeredosiaDay1 = null;
             // Process netmiss interpolation for each gage here
-            if (location_id === "LD 24 Pool-Mississippi") {
+            if (location_id === "LD 22 TW-Mississippi") {
+                // Process data14 - netmiss flow data
+                const yesterdayStageRevValue = latest6AMValue.value;
+                // console.log("yesterdayStageRevValue = ", yesterdayStageRevValue);
+
+                const NetmissForecastFlowValuesCst = convertUTCtoCentralTime(data15);
+                // console.log("NetmissForecastFlowValuesCst @ LD 22 TW-Mississippi = ", NetmissForecastFlowValuesCst);
+
+                const yesterdayNetmissForecastFlowValueCst = NetmissForecastFlowValuesCst.values[0][1];
+                // console.log("yesterdayNetmissForecastFlowValueCst = ", yesterdayNetmissForecastFlowValueCst);
+
+                const todayNetmissForecastFlowValueCst = NetmissForecastFlowValuesCst.values[1][1]; // ************** change here
+                // console.log("todayNetmissForecastFlowValueCst = ", todayNetmissForecastFlowValueCst);
+
+                const ratingTableCoe = data16["simple-rating"][0]["rating-points"].point;
+                // console.log("ratingTableCoe = ", ratingTableCoe);
+
+                const todayCorrespondingStageValue = findIndByDep(todayNetmissForecastFlowValueCst, ratingTableCoe);
+                // console.log("todayCorrespondingStageValue:", todayCorrespondingStageValue);
+
+                const yesterdayCorrespondingStageValue = findIndByDep(yesterdayNetmissForecastFlowValueCst, ratingTableCoe);
+                // console.log("yesterdayCorrespondingStageValue:", yesterdayCorrespondingStageValue);
+
+                const deltaT = yesterdayStageRevValue - yesterdayCorrespondingStageValue;
+                // console.log("deltaT:", deltaT);
+
+                totalLD22TwDay1 = deltaT + todayCorrespondingStageValue; // ************** change here
+                // console.log("totalLD22TwDay1 = ", totalLD22TwDay1);
+
+                day1 = "<div title='" + totalLD22TwDay1 + "'>" + totalLD22TwDay1.toFixed(1) + "</div>"; // ************** change here
+            } else if (location_id === "LD 24 Pool-Mississippi") {
                 let isOpenRiver = null;
 
                 // Ensure that both convertedData and convertedNetmissDownstreamData are not null
@@ -1071,39 +1101,6 @@ async function processAllData(data) {
                 // console.log("totalCommerceDay1 = ", totalCommerceDay1);
 
                 day1 = "<div title='" + formula + "'>" + totalCommerceDay1.toFixed(1) + "</div>";
-            } else if (location_id === "LD 22 TW-Mississippi") {
-                // Process data14 - netmiss flow data
-                const yesterdayStageRevValue = latest6AMValue.value;
-                const NetmissForecastFlowValuesCst = convertUTCtoCentralTime(data15);
-                const yesterdayNetmissForecastFlowValueCst = (NetmissForecastFlowValuesCst.values[0][1]).toFixed(1);
-                const todayNetmissForecastFlowValueCst = (NetmissForecastFlowValuesCst.values[1][1]).toFixed(1);
-
-                // Process data16 - get rating table coe
-                const ratingTableCoe = data16["simple-rating"][0]["rating-points"].point;
-                const todayCorrespondingStageValue = findIndByDep(todayNetmissForecastFlowValueCst, ratingTableCoe);
-                const yesterdayCorrespondingStageValue = findIndByDep(yesterdayNetmissForecastFlowValueCst, ratingTableCoe);
-
-                const deltaT = yesterdayStageRevValue - yesterdayCorrespondingStageValue;
-
-                totalLD22TwDay1 = deltaT + todayCorrespondingStageValue;
-
-                // console.log("location_id = ", location_id);
-
-                // console.log("yesterdayStageRevValue = ", yesterdayStageRevValue);
-                // console.log("NetmissForecastFlowValuesCst @ LD 22 TW-Mississippi = ", NetmissForecastFlowValuesCst);
-                // console.log("yesterdayNetmissForecastFlowValueCst = ", yesterdayNetmissForecastFlowValueCst);
-                // console.log("todayNetmissForecastFlowValueCst = ", todayNetmissForecastFlowValueCst);
-
-                // console.log("data16 = ", data16);
-                // console.log("ratingTableCoe = ", ratingTableCoe);
-                // console.log("todayCorrespondingStageValue:", todayCorrespondingStageValue);
-                // console.log("yesterdayCorrespondingStageValue:", yesterdayCorrespondingStageValue);
-
-                // console.log("deltaT:", deltaT);
-
-                // console.log("totalLD22TwDay1 = ", totalLD22TwDay1);
-
-                day1 = "<div title='" + "total is different because rating table is off" + "'>" + totalLD22TwDay1.toFixed(1) + "</div>";
             } else if (location_id === "Mosier Ldg-Mississippi") {
                 // console.log("location_id = ", location_id);
 
@@ -1679,7 +1676,37 @@ async function processAllData(data) {
             let totalValleyCityDay2 = null;
             let totalMeredosiaDay2 = null;
             // Process netmiss interpolation for each gage here
-            if (location_id === "Grays Pt-Mississippi") {
+            if (location_id === "LD 22 TW-Mississippi") {
+                // Process data14 - netmiss flow data
+                const yesterdayStageRevValue = latest6AMValue.value;
+                // console.log("yesterdayStageRevValue = ", yesterdayStageRevValue);
+
+                const NetmissForecastFlowValuesCst = convertUTCtoCentralTime(data15);
+                // console.log("NetmissForecastFlowValuesCst @ LD 22 TW-Mississippi = ", NetmissForecastFlowValuesCst);
+
+                const yesterdayNetmissForecastFlowValueCst = NetmissForecastFlowValuesCst.values[0][1];
+                // console.log("yesterdayNetmissForecastFlowValueCst = ", yesterdayNetmissForecastFlowValueCst);
+
+                const todayNetmissForecastFlowValueCst = NetmissForecastFlowValuesCst.values[2][1]; // ************** change here
+                // console.log("todayNetmissForecastFlowValueCst = ", todayNetmissForecastFlowValueCst);
+
+                const ratingTableCoe = data16["simple-rating"][0]["rating-points"].point;
+                // console.log("ratingTableCoe = ", ratingTableCoe);
+
+                const todayCorrespondingStageValue = findIndByDep(todayNetmissForecastFlowValueCst, ratingTableCoe);
+                // console.log("todayCorrespondingStageValue:", todayCorrespondingStageValue);
+
+                const yesterdayCorrespondingStageValue = findIndByDep(yesterdayNetmissForecastFlowValueCst, ratingTableCoe);
+                // console.log("yesterdayCorrespondingStageValue:", yesterdayCorrespondingStageValue);
+
+                const deltaT = yesterdayStageRevValue - yesterdayCorrespondingStageValue;
+                // console.log("deltaT:", deltaT);
+
+                totalLD22TwDay2 = deltaT + todayCorrespondingStageValue; // ************** change here
+                // console.log("totalLD22TwDay1 = ", totalLD22TwDay1);
+
+                day2 = "<div title='" + totalLD22TwDay2 + "'>" + totalLD22TwDay2.toFixed(1) + "</div>"; // ************** change here
+            } else if (location_id === "Grays Pt-Mississippi") {
                 const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[0][1]);
                 // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
 
@@ -1974,39 +2001,6 @@ async function processAllData(data) {
 
                 totalLD27TwDay2 = parseFloat(totalLD27TwDay1) + parseFloat(convertedNetmissDownstreamData.values[1][1]) - parseFloat(convertedNetmissDownstreamData.values[0][1]);
                 day2 = "<div title='" + "--" + "'>" + (tsid_forecast_location === true ? "<strong>" + totalLD27TwDay2.toFixed(1) : totalLD27TwDay2.toFixed(1)) + "</div>";
-            } else if (location_id === "LD 22 TW-Mississippi") {
-                // Process data14 - netmiss flow data
-                const yesterdayStageRevValue = latest6AMValue.value;
-                const NetmissForecastFlowValuesCst = convertUTCtoCentralTime(data15);
-                const yesterdayNetmissForecastFlowValueCst = (NetmissForecastFlowValuesCst.values[0][1]);
-                const todayNetmissForecastFlowValueCst = (NetmissForecastFlowValuesCst.values[2][1]);
-
-                // Process data16 - get rating table coe
-                const ratingTableCoe = data16["simple-rating"][0]["rating-points"].point;
-                const todayCorrespondingStageValue = findIndByDep(todayNetmissForecastFlowValueCst, ratingTableCoe);
-                const yesterdayCorrespondingStageValue = findIndByDep(yesterdayNetmissForecastFlowValueCst, ratingTableCoe);
-
-                const deltaT = yesterdayStageRevValue - yesterdayCorrespondingStageValue;
-
-                totalLD22TwDay2 = deltaT + todayCorrespondingStageValue;
-
-                // console.log("location_id = ", location_id);
-
-                // console.log("yesterdayStageRevValue = ", yesterdayStageRevValue);
-                // console.log("NetmissForecastFlowValuesCst = ", NetmissForecastFlowValuesCst);
-                // console.log("yesterdayNetmissForecastFlowValueCst = ", yesterdayNetmissForecastFlowValueCst);
-                // console.log("todayNetmissForecastFlowValueCst = ", todayNetmissForecastFlowValueCst);
-
-                // console.log("data16 = ", data16);
-                // console.log("ratingTableCoe = ", ratingTableCoe);
-                // console.log("todayCorrespondingStageValue:", todayCorrespondingStageValue);
-                // console.log("yesterdayCorrespondingStageValue:", yesterdayCorrespondingStageValue);
-
-                // console.log("deltaT:", deltaT);
-
-                // console.log("totalLD22TwDay2 = ", totalLD22TwDay2);
-
-                day2 = "<div title='" + "total is different because rating table is off" + "'>" + totalLD22TwDay2.toFixed(1) + "</div>";
             } else if (location_id === "Louisiana-Mississippi") {
                 // console.log("location_id: ", location_id);
 
@@ -2638,7 +2632,37 @@ async function processAllData(data) {
             let totalHardinDay3 = null;
             let totalValleyCityDay3 = null;
             let totalMeredosiaDay3 = null;
-            if (location_id === "Grays Pt-Mississippi") {
+            if (location_id === "LD 22 TW-Mississippi") {
+                // Process data14 - netmiss flow data
+                const yesterdayStageRevValue = latest6AMValue.value;
+                // console.log("yesterdayStageRevValue = ", yesterdayStageRevValue);
+
+                const NetmissForecastFlowValuesCst = convertUTCtoCentralTime(data15);
+                // console.log("NetmissForecastFlowValuesCst @ LD 22 TW-Mississippi = ", NetmissForecastFlowValuesCst);
+
+                const yesterdayNetmissForecastFlowValueCst = NetmissForecastFlowValuesCst.values[0][1];
+                // console.log("yesterdayNetmissForecastFlowValueCst = ", yesterdayNetmissForecastFlowValueCst);
+
+                const todayNetmissForecastFlowValueCst = NetmissForecastFlowValuesCst.values[3][1]; // ************** change here
+                // console.log("todayNetmissForecastFlowValueCst = ", todayNetmissForecastFlowValueCst);
+
+                const ratingTableCoe = data16["simple-rating"][0]["rating-points"].point;
+                // console.log("ratingTableCoe = ", ratingTableCoe);
+
+                const todayCorrespondingStageValue = findIndByDep(todayNetmissForecastFlowValueCst, ratingTableCoe);
+                // console.log("todayCorrespondingStageValue:", todayCorrespondingStageValue);
+
+                const yesterdayCorrespondingStageValue = findIndByDep(yesterdayNetmissForecastFlowValueCst, ratingTableCoe);
+                // console.log("yesterdayCorrespondingStageValue:", yesterdayCorrespondingStageValue);
+
+                const deltaT = yesterdayStageRevValue - yesterdayCorrespondingStageValue;
+                // console.log("deltaT:", deltaT);
+
+                totalLD22TwDay3 = deltaT + todayCorrespondingStageValue; // ************** change here
+                // console.log("totalLD22TwDay1 = ", totalLD22TwDay1);
+
+                day3 = "<div title='" + totalLD22TwDay3 + "'>" + totalLD22TwDay3.toFixed(1) + "</div>"; // ************** change here
+            } else if (location_id === "Grays Pt-Mississippi") {
                 const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[1][1]);
                 // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
 
@@ -2925,39 +2949,6 @@ async function processAllData(data) {
 
                 totalLD27TwDay3 = parseFloat(totalLD27TwDay2) + parseFloat(convertedNetmissDownstreamData.values[2][1]) - parseFloat(convertedNetmissDownstreamData.values[1][1]);
                 day3 = "<div title='" + "--" + "'>" + (tsid_forecast_location === true ? "<strong>" + totalLD27TwDay3.toFixed(1) : totalLD27TwDay3.toFixed(1)) + "</div>";
-            } else if (location_id === "LD 22 TW-Mississippi") {
-                // Process data14 - netmiss flow data
-                const yesterdayStageRevValue = latest6AMValue.value;
-                const NetmissForecastFlowValuesCst = convertUTCtoCentralTime(data15);
-                const yesterdayNetmissForecastFlowValueCst = (NetmissForecastFlowValuesCst.values[0][1]);
-                const todayNetmissForecastFlowValueCst = (NetmissForecastFlowValuesCst.values[3][1]);
-
-                // Process data16 - get rating table coe
-                const ratingTableCoe = data16["simple-rating"][0]["rating-points"].point;
-                const todayCorrespondingStageValue = findIndByDep(todayNetmissForecastFlowValueCst, ratingTableCoe);
-                const yesterdayCorrespondingStageValue = findIndByDep(yesterdayNetmissForecastFlowValueCst, ratingTableCoe);
-
-                const deltaT = yesterdayStageRevValue - yesterdayCorrespondingStageValue;
-
-                totalLD22TwDay3 = deltaT + todayCorrespondingStageValue;
-
-                // console.log("location_id = ", location_id);
-
-                // console.log("yesterdayStageRevValue = ", yesterdayStageRevValue);
-                // console.log("NetmissForecastFlowValuesCst = ", NetmissForecastFlowValuesCst);
-                // console.log("yesterdayNetmissForecastFlowValueCst = ", yesterdayNetmissForecastFlowValueCst);
-                // console.log("todayNetmissForecastFlowValueCst = ", todayNetmissForecastFlowValueCst);
-
-                // console.log("data16 = ", data16);
-                // console.log("ratingTableCoe = ", ratingTableCoe);
-                // console.log("todayCorrespondingStageValue:", todayCorrespondingStageValue);
-                // console.log("yesterdayCorrespondingStageValue:", yesterdayCorrespondingStageValue);
-
-                // console.log("deltaT:", deltaT);
-
-                // console.log("totalLD22TwDay3 = ", totalLD22TwDay3);
-
-                day3 = "<div title='" + "total is different because rating table is off" + "'>" + totalLD22TwDay3.toFixed(1) + "</div>";
             } else if (location_id === "Louisiana-Mississippi") {
                 // console.log("location_id: ", location_id);
 
@@ -3592,7 +3583,37 @@ async function processAllData(data) {
             let totalHardinDay4 = null;
             let totalValleyCityDay4 = null;
             let totalMeredosiaDay4 = null;
-            if (location_id === "Grays Pt-Mississippi") {
+            if (location_id === "LD 22 TW-Mississippi") {
+                // Process data14 - netmiss flow data
+                const yesterdayStageRevValue = latest6AMValue.value;
+                // console.log("yesterdayStageRevValue = ", yesterdayStageRevValue);
+
+                const NetmissForecastFlowValuesCst = convertUTCtoCentralTime(data15);
+                // console.log("NetmissForecastFlowValuesCst @ LD 22 TW-Mississippi = ", NetmissForecastFlowValuesCst);
+
+                const yesterdayNetmissForecastFlowValueCst = NetmissForecastFlowValuesCst.values[0][1];
+                // console.log("yesterdayNetmissForecastFlowValueCst = ", yesterdayNetmissForecastFlowValueCst);
+
+                const todayNetmissForecastFlowValueCst = NetmissForecastFlowValuesCst.values[4][1]; // ************** change here
+                // console.log("todayNetmissForecastFlowValueCst = ", todayNetmissForecastFlowValueCst);
+
+                const ratingTableCoe = data16["simple-rating"][0]["rating-points"].point;
+                // console.log("ratingTableCoe = ", ratingTableCoe);
+
+                const todayCorrespondingStageValue = findIndByDep(todayNetmissForecastFlowValueCst, ratingTableCoe);
+                // console.log("todayCorrespondingStageValue:", todayCorrespondingStageValue);
+
+                const yesterdayCorrespondingStageValue = findIndByDep(yesterdayNetmissForecastFlowValueCst, ratingTableCoe);
+                // console.log("yesterdayCorrespondingStageValue:", yesterdayCorrespondingStageValue);
+
+                const deltaT = yesterdayStageRevValue - yesterdayCorrespondingStageValue;
+                // console.log("deltaT:", deltaT);
+
+                totalLD22TwDay4 = deltaT + todayCorrespondingStageValue; // ************** change here
+                // console.log("totalLD22TwDay1 = ", totalLD22TwDay1);
+
+                day4 = "<div title='" + totalLD22TwDay4 + "'>" + totalLD22TwDay4.toFixed(1) + "</div>"; // ************** change here
+            } else if (location_id === "Grays Pt-Mississippi") {
                 const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[2][1]);
                 // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
 
@@ -3879,39 +3900,6 @@ async function processAllData(data) {
 
                 totalLD27TwDay4 = parseFloat(totalLD27TwDay3) + parseFloat(convertedNetmissDownstreamData.values[3][1]) - parseFloat(convertedNetmissDownstreamData.values[2][1]);
                 day4 = "<div title='" + "--" + "'>" + (tsid_forecast_location === true ? "<strong>" + totalLD27TwDay4.toFixed(1) : totalLD27TwDay4.toFixed(1)) + "</div>";
-            } else if (location_id === "LD 22 TW-Mississippi") {
-                // Process data14 - netmiss flow data
-                const yesterdayStageRevValue = latest6AMValue.value;
-                const NetmissForecastFlowValuesCst = convertUTCtoCentralTime(data15);
-                const yesterdayNetmissForecastFlowValueCst = (NetmissForecastFlowValuesCst.values[0][1]);
-                const todayNetmissForecastFlowValueCst = (NetmissForecastFlowValuesCst.values[4][1]);
-
-                // Process data16 - get rating table coe
-                const ratingTableCoe = data16["simple-rating"][0]["rating-points"].point;
-                const todayCorrespondingStageValue = findIndByDep(todayNetmissForecastFlowValueCst, ratingTableCoe);
-                const yesterdayCorrespondingStageValue = findIndByDep(yesterdayNetmissForecastFlowValueCst, ratingTableCoe);
-
-                const deltaT = yesterdayStageRevValue - yesterdayCorrespondingStageValue;
-
-                totalLD22TwDay4 = deltaT + todayCorrespondingStageValue;
-
-                // console.log("location_id = ", location_id);
-
-                // console.log("yesterdayStageRevValue = ", yesterdayStageRevValue);
-                // console.log("NetmissForecastFlowValuesCst = ", NetmissForecastFlowValuesCst);
-                // console.log("yesterdayNetmissForecastFlowValueCst = ", yesterdayNetmissForecastFlowValueCst);
-                // console.log("todayNetmissForecastFlowValueCst = ", todayNetmissForecastFlowValueCst);
-
-                // console.log("data16 = ", data16);
-                // console.log("ratingTableCoe = ", ratingTableCoe);
-                // console.log("todayCorrespondingStageValue:", todayCorrespondingStageValue);
-                // console.log("yesterdayCorrespondingStageValue:", yesterdayCorrespondingStageValue);
-
-                // console.log("deltaT:", deltaT);
-
-                // console.log("totalLD22TwDay4 = ", totalLD22TwDay4);
-
-                day4 = "<div title='" + "total is different because rating table is off" + "'>" + totalLD22TwDay4.toFixed(1) + "</div>";
             } else if (location_id === "Louisiana-Mississippi") {
                 // console.log("location_id: ", location_id);
 
@@ -4549,7 +4537,37 @@ async function processAllData(data) {
             let totalHardinDay5 = null;
             let totalValleyCityDay5 = null;
             let totalMeredosiaDay5 = null;
-            if (location_id === "Grays Pt-Mississippi") {
+            if (location_id === "LD 22 TW-Mississippi") {
+                // Process data14 - netmiss flow data
+                const yesterdayStageRevValue = latest6AMValue.value;
+                // console.log("yesterdayStageRevValue = ", yesterdayStageRevValue);
+
+                const NetmissForecastFlowValuesCst = convertUTCtoCentralTime(data15);
+                // console.log("NetmissForecastFlowValuesCst @ LD 22 TW-Mississippi = ", NetmissForecastFlowValuesCst);
+
+                const yesterdayNetmissForecastFlowValueCst = NetmissForecastFlowValuesCst.values[0][1];
+                // console.log("yesterdayNetmissForecastFlowValueCst = ", yesterdayNetmissForecastFlowValueCst);
+
+                const todayNetmissForecastFlowValueCst = NetmissForecastFlowValuesCst.values[5][1]; // ************** change here
+                // console.log("todayNetmissForecastFlowValueCst = ", todayNetmissForecastFlowValueCst);
+
+                const ratingTableCoe = data16["simple-rating"][0]["rating-points"].point;
+                // console.log("ratingTableCoe = ", ratingTableCoe);
+
+                const todayCorrespondingStageValue = findIndByDep(todayNetmissForecastFlowValueCst, ratingTableCoe);
+                // console.log("todayCorrespondingStageValue:", todayCorrespondingStageValue);
+
+                const yesterdayCorrespondingStageValue = findIndByDep(yesterdayNetmissForecastFlowValueCst, ratingTableCoe);
+                // console.log("yesterdayCorrespondingStageValue:", yesterdayCorrespondingStageValue);
+
+                const deltaT = yesterdayStageRevValue - yesterdayCorrespondingStageValue;
+                // console.log("deltaT:", deltaT);
+
+                totalLD22TwDay5 = deltaT + todayCorrespondingStageValue; // ************** change here
+                // console.log("totalLD22TwDay1 = ", totalLD22TwDay1);
+
+                day5 = "<div title='" + totalLD22TwDay5 + "'>" + totalLD22TwDay5.toFixed(1) + "</div>"; // ************** change here
+            } else if (location_id === "Grays Pt-Mississippi") {
                 const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[3][1]);
                 // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
 
@@ -4836,39 +4854,6 @@ async function processAllData(data) {
 
                 totalLD27TwDay5 = parseFloat(totalLD27TwDay4) + parseFloat(convertedNetmissDownstreamData.values[4][1]) - parseFloat(convertedNetmissDownstreamData.values[3][1]);
                 day5 = "<div title='" + "--" + "'>" + (tsid_forecast_location === true ? "<strong>" + totalLD27TwDay5.toFixed(1) : totalLD27TwDay5.toFixed(1)) + "</div>";
-            } else if (location_id === "LD 22 TW-Mississippi") {
-                // Process data14 - netmiss flow data
-                const yesterdayStageRevValue = latest6AMValue.value;
-                const NetmissForecastFlowValuesCst = convertUTCtoCentralTime(data15);
-                const yesterdayNetmissForecastFlowValueCst = (NetmissForecastFlowValuesCst.values[0][1]);
-                const todayNetmissForecastFlowValueCst = (NetmissForecastFlowValuesCst.values[5][1]);
-
-                // Process data16 - get rating table coe
-                const ratingTableCoe = data16["simple-rating"][0]["rating-points"].point;
-                const todayCorrespondingStageValue = findIndByDep(todayNetmissForecastFlowValueCst, ratingTableCoe);
-                const yesterdayCorrespondingStageValue = findIndByDep(yesterdayNetmissForecastFlowValueCst, ratingTableCoe);
-
-                const deltaT = yesterdayStageRevValue - yesterdayCorrespondingStageValue;
-
-                totalLD22TwDay5 = deltaT + todayCorrespondingStageValue;
-
-                // console.log("location_id = ", location_id);
-
-                // console.log("yesterdayStageRevValue = ", yesterdayStageRevValue);
-                // console.log("NetmissForecastFlowValuesCst = ", NetmissForecastFlowValuesCst);
-                // console.log("yesterdayNetmissForecastFlowValueCst = ", yesterdayNetmissForecastFlowValueCst);
-                // console.log("todayNetmissForecastFlowValueCst = ", todayNetmissForecastFlowValueCst);
-
-                // console.log("data16 = ", data16);
-                // console.log("ratingTableCoe = ", ratingTableCoe);
-                // console.log("todayCorrespondingStageValue:", todayCorrespondingStageValue);
-                // console.log("yesterdayCorrespondingStageValue:", yesterdayCorrespondingStageValue);
-
-                // console.log("deltaT:", deltaT);
-
-                // console.log("totalLD22TwDay5 = ", totalLD22TwDay5);
-
-                day5 = "<div title='" + "total is different because rating table is off" + "'>" + totalLD22TwDay5.toFixed(1) + "</div>";
             } else if (location_id === "Louisiana-Mississippi") {
                 // console.log("location_id: ", location_id);
 
@@ -5505,7 +5490,37 @@ async function processAllData(data) {
             let totalHardinDay6 = null;
             let totalValleyCityDay6 = null;
             let totalMeredosiaDay6 = null;
-            if (location_id === "Grays Pt-Mississippi") {
+            if (location_id === "LD 22 TW-Mississippi") {
+                // Process data14 - netmiss flow data
+                const yesterdayStageRevValue = latest6AMValue.value;
+                // console.log("yesterdayStageRevValue = ", yesterdayStageRevValue);
+
+                const NetmissForecastFlowValuesCst = convertUTCtoCentralTime(data15);
+                // console.log("NetmissForecastFlowValuesCst @ LD 22 TW-Mississippi = ", NetmissForecastFlowValuesCst);
+
+                const yesterdayNetmissForecastFlowValueCst = NetmissForecastFlowValuesCst.values[0][1];
+                // console.log("yesterdayNetmissForecastFlowValueCst = ", yesterdayNetmissForecastFlowValueCst);
+
+                const todayNetmissForecastFlowValueCst = NetmissForecastFlowValuesCst.values[6][1]; // ************** change here
+                // console.log("todayNetmissForecastFlowValueCst = ", todayNetmissForecastFlowValueCst);
+
+                const ratingTableCoe = data16["simple-rating"][0]["rating-points"].point;
+                // console.log("ratingTableCoe = ", ratingTableCoe);
+
+                const todayCorrespondingStageValue = findIndByDep(todayNetmissForecastFlowValueCst, ratingTableCoe);
+                // console.log("todayCorrespondingStageValue:", todayCorrespondingStageValue);
+
+                const yesterdayCorrespondingStageValue = findIndByDep(yesterdayNetmissForecastFlowValueCst, ratingTableCoe);
+                // console.log("yesterdayCorrespondingStageValue:", yesterdayCorrespondingStageValue);
+
+                const deltaT = yesterdayStageRevValue - yesterdayCorrespondingStageValue;
+                // console.log("deltaT:", deltaT);
+
+                totalLD22TwDay6 = deltaT + todayCorrespondingStageValue; // ************** change here
+                // console.log("totalLD22TwDay1 = ", totalLD22TwDay1);
+
+                day6 = "<div title='" + totalLD22TwDay6 + "'>" + totalLD22TwDay6.toFixed(1) + "</div>"; // ************** change here
+            } else if (location_id === "Grays Pt-Mississippi") {
                 const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[4][1]);
                 // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
 
@@ -5792,39 +5807,6 @@ async function processAllData(data) {
 
                 totalLD27TwDay6 = parseFloat(totalLD27TwDay5) + parseFloat(convertedNetmissDownstreamData.values[5][1]) - parseFloat(convertedNetmissDownstreamData.values[4][1]);
                 day6 = "<div title='" + "--" + "'>" + (tsid_forecast_location === true ? "<strong>" + totalLD27TwDay6.toFixed(1) : totalLD27TwDay6.toFixed(1)) + "</div>";
-            } else if (location_id === "LD 22 TW-Mississippi") {
-                // Process data14 - netmiss flow data
-                const yesterdayStageRevValue = latest6AMValue.value;
-                const NetmissForecastFlowValuesCst = convertUTCtoCentralTime(data15);
-                const yesterdayNetmissForecastFlowValueCst = (NetmissForecastFlowValuesCst.values[0][1]);
-                const todayNetmissForecastFlowValueCst = (NetmissForecastFlowValuesCst.values[6][1]);
-
-                // Process data16 - get rating table coe
-                const ratingTableCoe = data16["simple-rating"][0]["rating-points"].point;
-                const todayCorrespondingStageValue = findIndByDep(todayNetmissForecastFlowValueCst, ratingTableCoe);
-                const yesterdayCorrespondingStageValue = findIndByDep(yesterdayNetmissForecastFlowValueCst, ratingTableCoe);
-
-                const deltaT = yesterdayStageRevValue - yesterdayCorrespondingStageValue;
-
-                totalLD22TwDay6 = deltaT + todayCorrespondingStageValue;
-
-                // console.log("location_id = ", location_id);
-
-                // console.log("yesterdayStageRevValue = ", yesterdayStageRevValue);
-                // console.log("NetmissForecastFlowValuesCst = ", NetmissForecastFlowValuesCst);
-                // console.log("yesterdayNetmissForecastFlowValueCst = ", yesterdayNetmissForecastFlowValueCst);
-                // console.log("todayNetmissForecastFlowValueCst = ", todayNetmissForecastFlowValueCst);
-
-                // console.log("data16 = ", data16);
-                // console.log("ratingTableCoe = ", ratingTableCoe);
-                // console.log("todayCorrespondingStageValue:", todayCorrespondingStageValue);
-                // console.log("yesterdayCorrespondingStageValue:", yesterdayCorrespondingStageValue);
-
-                // console.log("deltaT:", deltaT);
-
-                // console.log("totalLD22TwDay6 = ", totalLD22TwDay6);
-
-                day6 = "<div title='" + "total is different because rating table is off" + "'>" + totalLD22TwDay6.toFixed(1) + "</div>";
             } else if (location_id === "Louisiana-Mississippi") {
                 // console.log("location_id: ", location_id);
 
@@ -6458,7 +6440,9 @@ async function processAllData(data) {
             let totalLD22TwDay7 = null;
             let totalLouisianaDay7 = null;
             let totalMosierLdgDay7 = null;
-            if (location_id === "Grays Pt-Mississippi") {
+            if (location_id === "LD 22 TW-Mississippi") {
+                day7 = "<div title='" + "No Day7 Forecast" + "'>" + "--" + "</div>";
+            } else if (location_id === "Grays Pt-Mississippi") {
                 const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[5][1]);
                 // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
 
@@ -6747,8 +6731,6 @@ async function processAllData(data) {
 
                 totalLD27TwDay7 = parseFloat(totalLD27TwDay6) + parseFloat(convertedNetmissDownstreamData.values[6][1]) - parseFloat(convertedNetmissDownstreamData.values[5][1]);
                 day7 = "<div title='" + "--" + "'>" + (tsid_forecast_location === true ? "<strong>" + totalLD27TwDay7.toFixed(1) : totalLD27TwDay7.toFixed(1)) + "</div>";
-            } else if (location_id === "LD 22 TW-Mississippi") {
-                day7 = "<div title='" + "total is different because rating table is off" + "'>" + "" + "</div>";
             } else if (location_id === "Louisiana-Mississippi") {
                 day7 = "<div title='" + "--" + "'>" + "" + "</div>";
             } else if (location_id === "LD 24 Pool-Mississippi") {

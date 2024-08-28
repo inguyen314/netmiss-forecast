@@ -37,13 +37,13 @@ if(isset($_POST['tableHTML'])) {
     $mail->setFrom('noreply@usace.army.mil', 'noreply@usace.army.mil');
     $mail->addAddress('ivan.h.nguyen@usace.army.mil', 'Ivan');
     $mail->addAddress('chn262@gmail.com', 'Ivan Personal'); 
-    // $mail->addAddress('liam.wallace@usace.army.mil', 'Liam'); 
-    // $mail->addAddress('davor.karic@usace.army.mil', 'Davor'); 
-    // $mail->addAddress('rob.n.holmquist@usace.army.mil', 'Rob'); 
-    // $mail->addAddress('timothy.j.lauth@usace.army.mil', 'Tim'); 
-    // $mail->addAddress('allen.phillips@usace.army.mil', 'Allen'); 
-    // $mail->addAddress('jmstemler22@gmail.com', 'Joan Personal');
-    // $mail->addAddress('Lcmwallace@gmail.com', 'Liam Personal');
+    $mail->addAddress('liam.wallace@usace.army.mil', 'Liam'); 
+    $mail->addAddress('davor.karic@usace.army.mil', 'Davor'); 
+    $mail->addAddress('rob.n.holmquist@usace.army.mil', 'Rob'); 
+    $mail->addAddress('timothy.j.lauth@usace.army.mil', 'Tim'); 
+    $mail->addAddress('allen.phillips@usace.army.mil', 'Allen'); 
+    $mail->addAddress('jmstemler22@gmail.com', 'Joan Personal');
+    $mail->addAddress('Lcmwallace@gmail.com', 'Liam Personal');
     $mail->isHTML(true);
     //$mail->ContentType = 'text/html'; // Set content type to HTML
     $mail->ContentType = 'text/html; charset=UTF-8';
