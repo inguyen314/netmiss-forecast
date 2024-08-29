@@ -697,6 +697,8 @@ async function processAllData(data) {
             day1Cell.innerHTML = location_id.split('-')[0];
 
             let day1 = null;
+            let totalLD22TwDay1 = null;
+            let totalLouisianaDay1 = null;
             let totalGraysPtDay1 = null;
             let totalThebesDay1 = null;
             let totalCommerceDay1 = null;
@@ -710,8 +712,6 @@ async function processAllData(data) {
             let totalMoccasinSpringsDay1 = null;
             let totalLD27PoolDay1 = null;
             let totalLD27TwDay1 = null;
-            let totalLD22TwDay1 = null;
-            let totalLouisianaDay1 = null;
             let totalMosierLdgDay1 = null;
             let totalHardinDay1 = null;
             let totalValleyCityDay1 = null;
@@ -778,7 +778,7 @@ async function processAllData(data) {
                 // Get Rating Tables
                 const ratingTableCoe = data16["simple-rating"][0]["rating-points"].point;
                 // console.log("ratingTableCoe: ", ratingTableCoe);
-                
+
                 const sumYesterdayNetmissFlowPlusSpecialNetmissFlowValue = yesterdayNetmissFlowValue + yesterdaySpecialGage1NetmissFlowValue;
                 // console.log("sumYesterdayNetmissFlowPlusSpecialNetmissFlowValue: ", sumYesterdayNetmissFlowPlusSpecialNetmissFlowValue);
 
@@ -786,7 +786,7 @@ async function processAllData(data) {
                 // console.log("stageRevValue: ", stageRevValue);
 
                 let all = null;
-                if (isTodayOpenRiver) { 
+                if (isTodayOpenRiver) {
                     const yesterdayCorrespondingNetmissWithSpecialNetmissFlowValue = findIndByDep(sumYesterdayNetmissFlowPlusSpecialNetmissFlowValue, ratingTableCoe);
                     // console.log("yesterdayCorrespondingNetmissWithSpecialNetmissFlowValue: ", yesterdayCorrespondingNetmissWithSpecialNetmissFlowValue);
 
@@ -879,7 +879,7 @@ async function processAllData(data) {
 
                 totalLouisianaDay1 = all; // ************** change here
 
-                day1 = "<div title='" + "--" + "'>" + totalLouisianaDay1.toFixed(1) + "</div>"; // ************** change here
+                day1 = "<div title='" + totalLouisianaDay1 + "'>" + totalLouisianaDay1.toFixed(1) + "</div>"; // ************** change here
             } else if (location_id === "LD 24 Pool-Mississippi") {
                 let isOpenRiver = null;
 
@@ -909,6 +909,125 @@ async function processAllData(data) {
                     // If either convertedData or convertedNetmissDownstreamData is null, default to showing a placeholder value (909)
                     day1 = "<div>" + 909 + "</div>";
                 }
+            } else if (location_id === "Mosier Ldg-Mississippi") {
+                const todayUpstreamNetmissStageValue = parseFloat(convertedNetmissForecastingPointUpstreamData.values[0][1]); // ************** change here
+                // console.log("todayUpstreamNetmissStageValue = ", todayUpstreamNetmissStageValue);
+
+                const ratingTableCoe = data16["simple-rating"][0]["rating-points"].point;
+                const ratingTableCoeUpstream = data17["simple-rating"][0]["rating-points"].point;
+                // console.log("ratingTableCoe = ", ratingTableCoe);
+                // console.log("ratingTableCoeUpstream = ", ratingTableCoeUpstream);
+
+                const todayUpstreamStageRevValuePlusOneOverOneThousand = todayUpstreamNetmissStageValue + 0.001;
+                // console.log("todayUpstreamStageRevValuePlusOneOverOneThousand = ", todayUpstreamStageRevValuePlusOneOverOneThousand);
+
+                const todayCorrespondingUpstreamFlowValue = findDepByInd(todayUpstreamStageRevValuePlusOneOverOneThousand, ratingTableCoeUpstream);
+                // console.log("todayCorrespondingUpstreamFlowValue = ", todayCorrespondingUpstreamFlowValue);
+
+                const todayCorrespondingUpstreamFlowValueDivideOneThousand = todayCorrespondingUpstreamFlowValue / 1000;
+                // console.log("todayCorrespondingUpstreamFlowValueDivideOneThousand = ", todayCorrespondingUpstreamFlowValueDivideOneThousand);
+
+                const isTodayOpenRiver = todayCorrespondingUpstreamFlowValueDivideOneThousand > 140.0;
+                const isTodayRegulatedPool = todayCorrespondingUpstreamFlowValueDivideOneThousand <= 140.0;
+                // console.log("isTodayOpenRiver = ", isTodayOpenRiver);
+                // console.log("isTodayRegulatedPool = ", isTodayRegulatedPool);
+
+                const yesterdayStageRevValue = latest6AMValue.value;
+                // console.log("yesterdayStageRevValue = ", yesterdayStageRevValue);
+
+                const yesterdayUpstreamStageRevValue = ((getLatest6AMValue(data7)).latest6AMValue).value;
+                // console.log("yesterdayUpstreamStageRevValue = ", yesterdayUpstreamStageRevValue);
+
+                const yesterdayUpstreamStageRevValuePlusOneOverOneThousand = yesterdayUpstreamStageRevValue + 0.001;
+                // console.log("yesterdayUpstreamStageRevValuePlusOneOverOneThousand = ", yesterdayUpstreamStageRevValuePlusOneOverOneThousand);
+
+                const yesterdayCorrespondingUpstreamFlowValue = findDepByInd(yesterdayUpstreamStageRevValuePlusOneOverOneThousand, ratingTableCoeUpstream);
+                // console.log("yesterdayCorrespondingUpstreamFlowValue = ", yesterdayCorrespondingUpstreamFlowValue);
+
+                const yesterdayCorrespondingUpstreamFlowValueDivideOneThousand = yesterdayCorrespondingUpstreamFlowValue / 1000;
+                // console.log("yesterdayCorrespondingUpstreamFlowValueDivideOneThousand = ", yesterdayCorrespondingUpstreamFlowValueDivideOneThousand);
+
+                const isYesterdayOpenRiver = yesterdayCorrespondingUpstreamFlowValueDivideOneThousand > 150.0;
+                const isYesterdayRegulatedPool = yesterdayCorrespondingUpstreamFlowValueDivideOneThousand <= 150.0;
+                // console.log("isYesterdayOpenRiver = ", isYesterdayOpenRiver);
+                // console.log("isYesterdayRegulatedPool = ", isYesterdayRegulatedPool);
+
+                const todayDownstreamNetmissValue = parseFloat(convertedNetmissDownstreamData.values[0][1]); // ************** change here
+                // console.log("todayDownstreamNetmissValue = ", todayDownstreamNetmissValue);
+
+                const yesterdayDownstreamStageRevValue = ((getLatest6AMValue(data9)).latest6AMValue).value;
+                // console.log("yesterdayDownstreamStageRevValue = ", yesterdayDownstreamStageRevValue);
+
+                const jsonFileName = "ratingMosierLdg.json";
+
+                if (isTodayOpenRiver) {
+                    const yesterdayCorrespondingUpstreamFlowValueToStageRev = findIndByDep(yesterdayCorrespondingUpstreamFlowValue, ratingTableCoe);
+                    // console.log("yesterdayCorrespondingUpstreamFlowValueToStageRev = ", yesterdayCorrespondingUpstreamFlowValueToStageRev);
+ 
+                    const todayCorrespondingUpstreamFlowValueToStageRev = findIndByDep(todayCorrespondingUpstreamFlowValue, ratingTableCoe);
+                    // console.log("todayCorrespondingUpstreamFlowValueToStageRev = ", todayCorrespondingUpstreamFlowValueToStageRev);
+
+                    if (isYesterdayOpenRiver) {
+                        const OpenRiverForecastAdjustment = yesterdayStageRevValue - yesterdayCorrespondingUpstreamFlowValueToStageRev;
+                        // console.log("OpenRiverForecastAdjustment = ", OpenRiverForecastAdjustment);
+
+                        const t = OpenRiverForecastAdjustment + todayCorrespondingUpstreamFlowValueToStageRev;
+                        // console.log("t = ", t);
+
+                        totalMosierLdgDay1 = 0 + OpenRiverForecastAdjustment + todayCorrespondingUpstreamFlowValueToStageRev; // ************** change here
+                    }
+                    
+                    if (isYesterdayRegulatedPool) {
+                        const OpenRiverForecastAdjustment = yesterdayStageRevValue - yesterdayCorrespondingUpstreamFlowValueToStageRev;
+                        // console.log("OpenRiverForecastAdjustment = ", OpenRiverForecastAdjustment);
+
+                        const stage = todayDownstreamNetmissValue;
+                        const flowRate = todayCorrespondingUpstreamFlowValueDivideOneThousand;
+                        let value = await readJSONTable2(stage, flowRate, jsonFileName);
+                        if (value !== null) {
+                            // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
+                        } else {
+                            // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
+                        }
+
+                        const t = OpenRiverForecastAdjustment + value;
+                        // console.log("t = ", t);
+
+                        totalMosierLdgDay1 = t; // ************** change here
+                    }
+                }
+
+                if (isTodayRegulatedPool) {
+                    if (isYesterdayOpenRiver) {
+                        totalMosierLdgDay1 = 909; // ************** change here
+                    }
+                    if (isYesterdayRegulatedPool) {
+                        const stage = yesterdayDownstreamStageRevValue;
+                        const flowRate = yesterdayCorrespondingUpstreamFlowValueDivideOneThousand;
+                        let value = await readJSONTable2(stage, flowRate, jsonFileName);
+                        if (value !== null) {
+                            // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
+                        } else {
+                            // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
+                        }
+
+                        const delta = yesterdayStageRevValue - value;
+                        // console.log("delta = ", delta);
+
+                        const stage2 = todayDownstreamNetmissValue;
+                        const flowRate2 = todayCorrespondingUpstreamFlowValueDivideOneThousand;
+                        let value2 = await readJSONTable2(stage2, flowRate2, jsonFileName);
+                        if (value2 !== null) {
+                            // console.log(`Interpolated reading for flow rate2 ${flowRate2} and stage2 ${stage2} at table ${jsonFileName}: ${value2}`);
+                        } else {
+                            // console.log(`No data found for flow rate2 ${flowRate2} and stage2 ${stage2}`);
+                        }
+
+                        totalMosierLdgDay1 = delta + value2; // ************** change here
+                    }
+                }
+
+                day1 = "<div title='" + totalMosierLdgDay1 + "'>" + totalMosierLdgDay1.toFixed(1) + "</div>"; // ************** change here
             } else if (location_id === "LD 25 Pool-Mississippi") {
                 let isOpenRiver = null;
 
@@ -1236,150 +1355,6 @@ async function processAllData(data) {
                 // console.log("totalCommerceDay1 = ", totalCommerceDay1);
 
                 day1 = "<div title='" + formula + "'>" + totalCommerceDay1.toFixed(1) + "</div>";
-            } else if (location_id === "Mosier Ldg-Mississippi") {
-                // console.log("location_id = ", location_id);
-
-                // Get today and yesterday values
-                const yesterdayUpstreamStageRevValue = ((getLatest6AMValue(data7)).latest6AMValue).value;
-                const yesterdayStageRevValue = latest6AMValue.value;
-                const yesterdayDownstreamStageRevValue = ((getLatest6AMValue(data9)).latest6AMValue).value;
-                const todayUpstreamNetmissStageValue = parseFloat(convertedNetmissForecastingPointUpstreamData.values[0][1]);
-                const todayDownstreamNetmissValue = parseFloat(convertedNetmissDownstreamData.values[0][1])
-                // console.log("yesterdayUpstreamStageRevValue = ", yesterdayUpstreamStageRevValue);
-                // console.log("yesterdayStageRevValue = ", yesterdayStageRevValue);
-                // console.log("yesterdayDownstreamStageRevValue = ", yesterdayDownstreamStageRevValue);
-                // console.log("todayUpstreamNetmissStageValue = ", todayUpstreamNetmissStageValue);
-                // console.log("todayDownstreamNetmissValue = ", todayDownstreamNetmissValue);
-
-                // Process and get rating tables
-                const ratingTableCoe = data16["simple-rating"][0]["rating-points"].point;
-                const ratingTableCoeUpstream = data17["simple-rating"][0]["rating-points"].point;
-                // console.log("ratingTableCoe = ", ratingTableCoe);
-                // console.log("ratingTableCoeUpstream = ", ratingTableCoeUpstream);
-
-                // Add 0.001 to yesterdayUpstreamStageRevValue
-                const todayUpstreamStageRevValuePlusOneOverOneThousand = todayUpstreamNetmissStageValue + 0.001;
-                // console.log("todayUpstreamStageRevValuePlusOneOverOneThousand = ", todayUpstreamStageRevValuePlusOneOverOneThousand);
-
-                // Process and get today upstream corresponding flow values
-                const todayCorrespondingUpstreamFlowValue = findDepByInd(todayUpstreamStageRevValuePlusOneOverOneThousand, ratingTableCoeUpstream);
-                // console.log("todayCorrespondingUpstreamFlowValue = ", todayCorrespondingUpstreamFlowValue);
-
-                const todayCorrespondingUpstreamFlowValueDivideOneThousand = todayCorrespondingUpstreamFlowValue / 1000;
-                // console.log("todayCorrespondingUpstreamFlowValueDivideOneThousand = ", todayCorrespondingUpstreamFlowValueDivideOneThousand);
-
-                // Determine if today upstream is open river or regulated pool
-                const isTodayOpenRiver = todayCorrespondingUpstreamFlowValueDivideOneThousand > 140.0;
-                const isTodayRegulatedPool = todayCorrespondingUpstreamFlowValueDivideOneThousand <= 140.0;
-                // console.log("isTodayOpenRiver = ", isTodayOpenRiver);
-                // console.log("isTodayRegulatedPool = ", isTodayRegulatedPool);
-
-                // Add 0.001 to yesterdayUpstreamStageRevValue
-                const yesterdayUpstreamStageRevValuePlusOneOverOneThousand = yesterdayUpstreamStageRevValue + 0.001;
-                // console.log("yesterdayUpstreamStageRevValuePlusOneOverOneThousand = ", yesterdayUpstreamStageRevValuePlusOneOverOneThousand);
-
-                // Process and get yesterday corresponding stage values
-                const yesterdayCorrespondingUpstreamFlowValue = findDepByInd(yesterdayUpstreamStageRevValuePlusOneOverOneThousand, ratingTableCoeUpstream);
-                // console.log("yesterdayCorrespondingUpstreamFlowValue = ", yesterdayCorrespondingUpstreamFlowValue);
-
-                const yesterdayCorrespondingUpstreamFlowValueDivideOneThousand = yesterdayCorrespondingUpstreamFlowValue / 1000;
-                // console.log("yesterdayCorrespondingUpstreamFlowValueDivideOneThousand = ", yesterdayCorrespondingUpstreamFlowValueDivideOneThousand);
-
-                // Determine if yesterday upstream is open river or regulated pool
-                const isYesterdayOpenRiver = yesterdayCorrespondingUpstreamFlowValueDivideOneThousand > 150.0;
-                const isYesterdayRegulatedPool = yesterdayCorrespondingUpstreamFlowValueDivideOneThousand <= 150.0;
-                // console.log("isYesterdayOpenRiver = ", isYesterdayOpenRiver);
-                // console.log("isYesterdayRegulatedPool = ", isYesterdayRegulatedPool);
-
-                // Lookup yesterdayCorrespondingUpstreamFlowValue to Mosier Ldg-Mississippi Rating COE Table 
-                const yesterdayCorrespondingUpstreamFlowValueToStageRev = findIndByDep(yesterdayCorrespondingUpstreamFlowValue, ratingTableCoe);
-                // console.log("yesterdayCorrespondingUpstreamFlowValueToStageRev = ", yesterdayCorrespondingUpstreamFlowValueToStageRev);
-
-                // Lookup todayCorrespondingUpstreamFlowValue to Mosier Ldg-Mississippi Rating COE Table 
-                const todayCorrespondingUpstreamFlowValueToStageRev = findIndByDep(todayCorrespondingUpstreamFlowValue, ratingTableCoe);
-                // console.log("todayCorrespondingUpstreamFlowValueToStageRev = ", todayCorrespondingUpstreamFlowValueToStageRev);
-
-                const yesterdayStageRevValueMinusCorrespondingUpstreamFlowValueToStageRev = yesterdayStageRevValue - yesterdayCorrespondingUpstreamFlowValueToStageRev;
-                // console.log("yesterdayStageRevValueMinusCorrespondingUpstreamFlowValueToStageRev = ", yesterdayStageRevValueMinusCorrespondingUpstreamFlowValueToStageRev);
-
-                let jsonFileName = "ratingMosierLdg.json";
-                // Open River or Regulated Pool Calculations  
-                if (isTodayOpenRiver) {
-                    if (isYesterdayOpenRiver) {
-                        // console.log("**************** isTodayOpenRiver, isYesterdayOpenRiver");
-
-                        // Calculate Open River forecast adjustment
-                        const OpenRiverForecastAdjustment = yesterdayStageRevValue - yesterdayCorrespondingUpstreamFlowValueToStageRev;
-                        // console.log("OpenRiverForecastAdjustment = ", OpenRiverForecastAdjustment);
-
-                        const t = OpenRiverForecastAdjustment + todayCorrespondingUpstreamFlowValueToStageRev;
-                        // console.log("t = ", t);
-
-                        totalMosierLdgDay1 = 0 + OpenRiverForecastAdjustment + todayCorrespondingUpstreamFlowValueToStageRev;
-                    } else if (isYesterdayRegulatedPool) {
-                        // console.log("**************** isTodayOpenRiver, isYesterdayRegulatedPool");
-
-                        const OpenRiverForecastAdjustment = yesterdayStageRevValue - yesterdayCorrespondingUpstreamFlowValueToStageRev;
-                        // console.log("OpenRiverForecastAdjustment = ", OpenRiverForecastAdjustment);
-
-                        // Rating Lookup
-                        const stage = todayDownstreamNetmissValue;
-                        const flowRate = todayCorrespondingUpstreamFlowValueDivideOneThousand;
-                        let value = await readJSONTable2(stage, flowRate, jsonFileName);
-                        if (value !== null) {
-                            // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
-                        } else {
-                            // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
-                        }
-
-                        const t = OpenRiverForecastAdjustment + value;
-                        // console.log("t = ", t);
-
-                        totalMosierLdgDay1 = t;
-                    } else {
-                        // console.log("**************** isTodayOpenRiver, else");
-                        totalMosierLdgDay1 = 909;
-                    }
-                } else if (isTodayRegulatedPool) {
-                    if (isYesterdayOpenRiver) {
-                        // console.log("**************** isTodayRegulatedPool, isYesterdayOpenRiver");
-                        totalMosierLdgDay1 = 909;
-
-                    } else if (isYesterdayRegulatedPool) {
-                        // console.log("**************** isTodayRegulatedPool, isYesterdayRegulatedPool");
-
-                        // Rating Lookup
-                        const stage = todayDownstreamNetmissValue;
-                        const flowRate = yesterdayCorrespondingUpstreamFlowValueDivideOneThousand;
-                        let value = await readJSONTable2(stage, flowRate, jsonFileName);
-                        if (value !== null) {
-                            // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
-                        } else {
-                            // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
-                        }
-
-                        const delta = yesterdayStageRevValue - value;
-                        // console.log("delta = ", delta);
-
-                        // Rating Lookup 2
-                        const stage2 = todayDownstreamNetmissValue;
-                        const flowRate2 = todayCorrespondingUpstreamFlowValueDivideOneThousand;
-                        let value2 = await readJSONTable2(stage2, flowRate2, jsonFileName);
-                        if (value2 !== null) {
-                            // console.log(`Interpolated reading for flow rate ${flowRate2} and stage ${stage2} at table ${jsonFileName}: ${value2}`);
-                        } else {
-                            // console.log(`No data found for flow rate ${flowRate2} and stage ${stage2}`);
-                        }
-
-                        totalMosierLdgDay1 = delta + value2;
-                    }
-                } else {
-                    // console.log("**************** else");
-                    totalMosierLdgDay1 = 909;
-                }
-                // console.log("totalMosierLdgDay1 = ", totalMosierLdgDay1);
-
-                day1 = "<div title='" + "--" + "'>" + totalMosierLdgDay1.toFixed(1) + "</div>";
             } else if (location_id === "Grafton-Mississippi") {
                 // console.log("GraftonForecast['Grafton-Mississippi']", GraftonForecast['Grafton-Mississippi']);
                 // console.log("totalGraftonForecastDay1: ", totalGraftonForecastDay1);
@@ -1619,6 +1594,8 @@ async function processAllData(data) {
             day2Cell.innerHTML = location_id.split('-')[0];
 
             let day2 = null;
+            let totalLD22TwDay2 = null;
+            let totalLouisianaDay2 = null;
             let totalGraysPtDay2 = null;
             let totalThebesDay2 = null;
             let totalCommerceDay2 = null;
@@ -1632,8 +1609,6 @@ async function processAllData(data) {
             let totalMoccasinSpringsDay2 = null;
             let totalLD27PoolDay2 = null;
             let totalLD27TwDay2 = null;
-            let totalLD22TwDay2 = null;
-            let totalLouisianaDay2 = null;
             let totalMosierLdgDay2 = null;
             let totalHardinDay2 = null;
             let totalValleyCityDay2 = null;
@@ -1700,7 +1675,7 @@ async function processAllData(data) {
                 // Get Rating Tables
                 const ratingTableCoe = data16["simple-rating"][0]["rating-points"].point;
                 // console.log("ratingTableCoe: ", ratingTableCoe);
-                
+
                 const sumYesterdayNetmissFlowPlusSpecialNetmissFlowValue = yesterdayNetmissFlowValue + yesterdaySpecialGage1NetmissFlowValue;
                 // console.log("sumYesterdayNetmissFlowPlusSpecialNetmissFlowValue: ", sumYesterdayNetmissFlowPlusSpecialNetmissFlowValue);
 
@@ -1708,7 +1683,7 @@ async function processAllData(data) {
                 // console.log("stageRevValue: ", stageRevValue);
 
                 let all = null;
-                if (isTodayOpenRiver) { 
+                if (isTodayOpenRiver) {
                     const yesterdayCorrespondingNetmissWithSpecialNetmissFlowValue = findIndByDep(sumYesterdayNetmissFlowPlusSpecialNetmissFlowValue, ratingTableCoe);
                     // console.log("yesterdayCorrespondingNetmissWithSpecialNetmissFlowValue: ", yesterdayCorrespondingNetmissWithSpecialNetmissFlowValue);
 
@@ -1801,7 +1776,155 @@ async function processAllData(data) {
 
                 totalLouisianaDay2 = all; // ************** change here
 
-                day2 = "<div title='" + "--" + "'>" + totalLouisianaDay2.toFixed(1) + "</div>"; // ************** change here
+                day2 = "<div title='" + totalLouisianaDay2 + "'>" + totalLouisianaDay2.toFixed(1) + "</div>"; // ************** change here
+            } else if (location_id === "LD 24 Pool-Mississippi") {
+                let isOpenRiver = null;
+
+                // Ensure that both convertedData and convertedNetmissDownstreamData are not null
+                if (convertedData !== null && convertedNetmissDownstreamData !== null) {
+                    // Calculate the downstream value by adding the elevation from data6, a fixed increment (0.5), and the value from convertedNetmissDownstreamData
+                    let downstreamValueToCompare = 421.81 + 0.5 + convertedNetmissDownstreamData.values[1][1];
+                    // console.log("downstreamValueToCompare: ", downstreamValueToCompare);
+
+                    // Retrieve today's netmiss forecast value
+                    let todayNetmissForecast = convertedData.values[1][1];
+                    // console.log("todayNetmissForecast: ", todayNetmissForecast);
+
+                    // Determine if the downstream value is greater than today's forecast to decide if it's an "Open River"
+                    isOpenRiver = downstreamValueToCompare > todayNetmissForecast;
+                    // console.log("isOpenRiver: ", isOpenRiver);
+
+                    // Construct HTML content based on whether it's an "Open River" or not
+                    if (isOpenRiver) {
+                        // If it's "Open River", display with "Open River" label, otherwise display an error message
+                        day2 = "<div title='" + "isOpenRiver = " + isOpenRiver + "'>" + (tsid_forecast_location === true ? "<strong>" + "Open River" : "-Error-") + "</div>";
+                    } else {
+                        // If it's not "Open River", display today's forecast value with or without strong formatting based on tsid_forecast_location
+                        day2 = "<div title='" + "isOpenRiver = " + isOpenRiver + "'>" + (tsid_forecast_location === true ? "<strong>" + (convertedData.values[1][1]).toFixed(1) : (convertedData.values[1][1]).toFixed(1)) + "</div>";
+                    }
+                } else {
+                    // If either convertedData or convertedNetmissDownstreamData is null, default to showing a placeholder value (909)
+                    day2 = "<div>" + 909 + "</div>";
+                }
+            } else if (location_id === "Mosier Ldg-Mississippi") {
+                const todayUpstreamNetmissStageValue = parseFloat(convertedNetmissForecastingPointUpstreamData.values[1][1]); // ************** change here
+                // console.log("todayUpstreamNetmissStageValue = ", todayUpstreamNetmissStageValue);
+
+                const ratingTableCoe = data16["simple-rating"][0]["rating-points"].point;
+                const ratingTableCoeUpstream = data17["simple-rating"][0]["rating-points"].point;
+                // console.log("ratingTableCoe = ", ratingTableCoe);
+                // console.log("ratingTableCoeUpstream = ", ratingTableCoeUpstream);
+
+                const todayUpstreamStageRevValuePlusOneOverOneThousand = todayUpstreamNetmissStageValue + 0.001;
+                // console.log("todayUpstreamStageRevValuePlusOneOverOneThousand = ", todayUpstreamStageRevValuePlusOneOverOneThousand);
+
+                const todayCorrespondingUpstreamFlowValue = findDepByInd(todayUpstreamStageRevValuePlusOneOverOneThousand, ratingTableCoeUpstream);
+                // console.log("todayCorrespondingUpstreamFlowValue = ", todayCorrespondingUpstreamFlowValue);
+
+                const todayCorrespondingUpstreamFlowValueDivideOneThousand = todayCorrespondingUpstreamFlowValue / 1000;
+                // console.log("todayCorrespondingUpstreamFlowValueDivideOneThousand = ", todayCorrespondingUpstreamFlowValueDivideOneThousand);
+
+                const isTodayOpenRiver = todayCorrespondingUpstreamFlowValueDivideOneThousand > 140.0;
+                const isTodayRegulatedPool = todayCorrespondingUpstreamFlowValueDivideOneThousand <= 140.0;
+                // console.log("isTodayOpenRiver = ", isTodayOpenRiver);
+                // console.log("isTodayRegulatedPool = ", isTodayRegulatedPool);
+
+                const yesterdayStageRevValue = latest6AMValue.value;
+                // console.log("yesterdayStageRevValue = ", yesterdayStageRevValue);
+
+                const yesterdayUpstreamStageRevValue = ((getLatest6AMValue(data7)).latest6AMValue).value;
+                // console.log("yesterdayUpstreamStageRevValue = ", yesterdayUpstreamStageRevValue);
+
+                const yesterdayUpstreamStageRevValuePlusOneOverOneThousand = yesterdayUpstreamStageRevValue + 0.001;
+                // console.log("yesterdayUpstreamStageRevValuePlusOneOverOneThousand = ", yesterdayUpstreamStageRevValuePlusOneOverOneThousand);
+
+                const yesterdayCorrespondingUpstreamFlowValue = findDepByInd(yesterdayUpstreamStageRevValuePlusOneOverOneThousand, ratingTableCoeUpstream);
+                // console.log("yesterdayCorrespondingUpstreamFlowValue = ", yesterdayCorrespondingUpstreamFlowValue);
+
+                const yesterdayCorrespondingUpstreamFlowValueDivideOneThousand = yesterdayCorrespondingUpstreamFlowValue / 1000;
+                // console.log("yesterdayCorrespondingUpstreamFlowValueDivideOneThousand = ", yesterdayCorrespondingUpstreamFlowValueDivideOneThousand);
+
+                const isYesterdayOpenRiver = yesterdayCorrespondingUpstreamFlowValueDivideOneThousand > 150.0;
+                const isYesterdayRegulatedPool = yesterdayCorrespondingUpstreamFlowValueDivideOneThousand <= 150.0;
+                // console.log("isYesterdayOpenRiver = ", isYesterdayOpenRiver);
+                // console.log("isYesterdayRegulatedPool = ", isYesterdayRegulatedPool);
+
+                const todayDownstreamNetmissValue = parseFloat(convertedNetmissDownstreamData.values[1][1]); // ************** change here
+                // console.log("todayDownstreamNetmissValue = ", todayDownstreamNetmissValue);
+
+                const yesterdayDownstreamStageRevValue = ((getLatest6AMValue(data9)).latest6AMValue).value;
+                // console.log("yesterdayDownstreamStageRevValue = ", yesterdayDownstreamStageRevValue);
+
+                const jsonFileName = "ratingMosierLdg.json";
+
+                if (isTodayOpenRiver) {
+                    const yesterdayCorrespondingUpstreamFlowValueToStageRev = findIndByDep(yesterdayCorrespondingUpstreamFlowValue, ratingTableCoe);
+                    // console.log("yesterdayCorrespondingUpstreamFlowValueToStageRev = ", yesterdayCorrespondingUpstreamFlowValueToStageRev);
+ 
+                    const todayCorrespondingUpstreamFlowValueToStageRev = findIndByDep(todayCorrespondingUpstreamFlowValue, ratingTableCoe);
+                    // console.log("todayCorrespondingUpstreamFlowValueToStageRev = ", todayCorrespondingUpstreamFlowValueToStageRev);
+
+                    if (isYesterdayOpenRiver) {
+                        const OpenRiverForecastAdjustment = yesterdayStageRevValue - yesterdayCorrespondingUpstreamFlowValueToStageRev;
+                        // console.log("OpenRiverForecastAdjustment = ", OpenRiverForecastAdjustment);
+
+                        const t = OpenRiverForecastAdjustment + todayCorrespondingUpstreamFlowValueToStageRev;
+                        // console.log("t = ", t);
+
+                        totalMosierLdgDay2 = 0 + OpenRiverForecastAdjustment + todayCorrespondingUpstreamFlowValueToStageRev; // ************** change here
+                    }
+                    
+                    if (isYesterdayRegulatedPool) {
+                        const OpenRiverForecastAdjustment = yesterdayStageRevValue - yesterdayCorrespondingUpstreamFlowValueToStageRev;
+                        // console.log("OpenRiverForecastAdjustment = ", OpenRiverForecastAdjustment);
+
+                        const stage = todayDownstreamNetmissValue;
+                        const flowRate = todayCorrespondingUpstreamFlowValueDivideOneThousand;
+                        let value = await readJSONTable2(stage, flowRate, jsonFileName);
+                        if (value !== null) {
+                            // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
+                        } else {
+                            // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
+                        }
+
+                        const t = OpenRiverForecastAdjustment + value;
+                        // console.log("t = ", t);
+
+                        totalMosierLdgDay2 = t; // ************** change here
+                    }
+                }
+
+                if (isTodayRegulatedPool) {
+                    if (isYesterdayOpenRiver) {
+                        totalMosierLdgDay2 = 909; // ************** change here
+                    }
+                    if (isYesterdayRegulatedPool) {
+                        const stage = yesterdayDownstreamStageRevValue;
+                        const flowRate = yesterdayCorrespondingUpstreamFlowValueDivideOneThousand;
+                        let value = await readJSONTable2(stage, flowRate, jsonFileName);
+                        if (value !== null) {
+                            // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
+                        } else {
+                            // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
+                        }
+
+                        const delta = yesterdayStageRevValue - value;
+                        // console.log("delta = ", delta);
+
+                        const stage2 = todayDownstreamNetmissValue;
+                        const flowRate2 = todayCorrespondingUpstreamFlowValueDivideOneThousand;
+                        let value2 = await readJSONTable2(stage2, flowRate2, jsonFileName);
+                        if (value2 !== null) {
+                            // console.log(`Interpolated reading for flow rate2 ${flowRate2} and stage2 ${stage2} at table ${jsonFileName}: ${value2}`);
+                        } else {
+                            // console.log(`No data found for flow rate2 ${flowRate2} and stage2 ${stage2}`);
+                        }
+
+                        totalMosierLdgDay2 = delta + value2; // ************** change here
+                    }
+                }
+
+                day2 = "<div title='" + totalMosierLdgDay2 + "'>" + totalMosierLdgDay2.toFixed(1) + "</div>"; // ************** change here
             } else if (location_id === "Grays Pt-Mississippi") {
                 const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[0][1]);
                 // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
@@ -2097,35 +2220,6 @@ async function processAllData(data) {
 
                 totalLD27TwDay2 = parseFloat(totalLD27TwDay1) + parseFloat(convertedNetmissDownstreamData.values[1][1]) - parseFloat(convertedNetmissDownstreamData.values[0][1]);
                 day2 = "<div title='" + "--" + "'>" + (tsid_forecast_location === true ? "<strong>" + totalLD27TwDay2.toFixed(1) : totalLD27TwDay2.toFixed(1)) + "</div>";
-            } else if (location_id === "LD 24 Pool-Mississippi") {
-                let isOpenRiver = null;
-
-                // Ensure that both convertedData and convertedNetmissDownstreamData are not null
-                if (convertedData !== null && convertedNetmissDownstreamData !== null) {
-                    // Calculate the downstream value by adding the elevation from data6, a fixed increment (0.5), and the value from convertedNetmissDownstreamData
-                    let downstreamValueToCompare = 421.81 + 0.5 + convertedNetmissDownstreamData.values[1][1];
-                    // console.log("downstreamValueToCompare: ", downstreamValueToCompare);
-
-                    // Retrieve today's netmiss forecast value
-                    let todayNetmissForecast = convertedData.values[1][1];
-                    // console.log("todayNetmissForecast: ", todayNetmissForecast);
-
-                    // Determine if the downstream value is greater than today's forecast to decide if it's an "Open River"
-                    isOpenRiver = downstreamValueToCompare > todayNetmissForecast;
-                    // console.log("isOpenRiver: ", isOpenRiver);
-
-                    // Construct HTML content based on whether it's an "Open River" or not
-                    if (isOpenRiver) {
-                        // If it's "Open River", display with "Open River" label, otherwise display an error message
-                        day2 = "<div title='" + "isOpenRiver = " + isOpenRiver + "'>" + (tsid_forecast_location === true ? "<strong>" + "Open River" : "-Error-") + "</div>";
-                    } else {
-                        // If it's not "Open River", display today's forecast value with or without strong formatting based on tsid_forecast_location
-                        day2 = "<div title='" + "isOpenRiver = " + isOpenRiver + "'>" + (tsid_forecast_location === true ? "<strong>" + (convertedData.values[1][1]).toFixed(1) : (convertedData.values[1][1]).toFixed(1)) + "</div>";
-                    }
-                } else {
-                    // If either convertedData or convertedNetmissDownstreamData is null, default to showing a placeholder value (909)
-                    day2 = "<div>" + 909 + "</div>";
-                }
             } else if (location_id === "LD 25 Pool-Mississippi") {
                 let isOpenRiver = null;
 
@@ -2150,160 +2244,6 @@ async function processAllData(data) {
                 } else {
                     day2 = "<div>" + "--" + "</div>";
                 }
-            } else if (location_id === "Mosier Ldg-Mississippi") {
-                // console.log("location_id = ", location_id);
-
-                // Get today and yesterday values
-                const yesterdayUpstreamStageRevValue = ((getLatest6AMValue(data7)).latest6AMValue).value;
-                const yesterdayStageRevValue = latest6AMValue.value;
-                const yesterdayDownstreamStageRevValue = ((getLatest6AMValue(data9)).latest6AMValue).value;
-                const todayUpstreamNetmissStageValue = parseFloat(convertedNetmissForecastingPointUpstreamData.values[1][1]);
-                const todayDownstreamNetmissValue = parseFloat(convertedNetmissDownstreamData.values[1][1])
-                // console.log("yesterdayUpstreamStageRevValue = ", yesterdayUpstreamStageRevValue);
-                // console.log("yesterdayStageRevValue = ", yesterdayStageRevValue);
-                // console.log("yesterdayDownstreamStageRevValue = ", yesterdayDownstreamStageRevValue);
-                // console.log("todayUpstreamNetmissStageValue = ", todayUpstreamNetmissStageValue);
-                // console.log("todayDownstreamNetmissValue = ", todayDownstreamNetmissValue);
-
-                // Process and get rating tables
-                const ratingTableCoe = data16["simple-rating"][0]["rating-points"].point;
-                const ratingTableCoeUpstream = data17["simple-rating"][0]["rating-points"].point;
-                // console.log("ratingTableCoe = ", ratingTableCoe);
-                // console.log("ratingTableCoeUpstream = ", ratingTableCoeUpstream);
-
-                // Add 0.001 to yesterdayUpstreamStageRevValue
-                const todayUpstreamStageRevValuePlusOneOverOneThousand = todayUpstreamNetmissStageValue + 0.001;
-                // console.log("todayUpstreamStageRevValuePlusOneOverOneThousand = ", todayUpstreamStageRevValuePlusOneOverOneThousand);
-
-                // Process and get today upstream corresponding flow values
-                const todayCorrespondingUpstreamFlowValue = findDepByInd(todayUpstreamStageRevValuePlusOneOverOneThousand, ratingTableCoeUpstream);
-                // console.log("todayCorrespondingUpstreamFlowValue = ", todayCorrespondingUpstreamFlowValue);
-
-                const todayCorrespondingUpstreamFlowValueDivideOneThousand = todayCorrespondingUpstreamFlowValue / 1000;
-                // console.log("todayCorrespondingUpstreamFlowValueDivideOneThousand = ", todayCorrespondingUpstreamFlowValueDivideOneThousand);
-
-                // Determine if today upstream is open river or regulated pool
-                const isTodayOpenRiver = todayCorrespondingUpstreamFlowValueDivideOneThousand > 140.0;
-                const isTodayRegulatedPool = todayCorrespondingUpstreamFlowValueDivideOneThousand <= 140.0;
-                // console.log("isTodayOpenRiver = ", isTodayOpenRiver);
-                // console.log("isTodayRegulatedPool = ", isTodayRegulatedPool);
-
-                // Add 0.001 to yesterdayUpstreamStageRevValue
-                const yesterdayUpstreamStageRevValuePlusOneOverOneThousand = yesterdayUpstreamStageRevValue + 0.001;
-                // console.log("yesterdayUpstreamStageRevValuePlusOneOverOneThousand = ", yesterdayUpstreamStageRevValuePlusOneOverOneThousand);
-
-                // Process and get yesterday corresponding stage values
-                const yesterdayCorrespondingUpstreamFlowValue = findDepByInd(yesterdayUpstreamStageRevValuePlusOneOverOneThousand, ratingTableCoeUpstream);
-                // console.log("yesterdayCorrespondingUpstreamFlowValue = ", yesterdayCorrespondingUpstreamFlowValue);
-
-                const yesterdayCorrespondingUpstreamFlowValueDivideOneThousand = yesterdayCorrespondingUpstreamFlowValue / 1000;
-                // console.log("yesterdayCorrespondingUpstreamFlowValueDivideOneThousand = ", yesterdayCorrespondingUpstreamFlowValueDivideOneThousand);
-
-                // Determine if yesterday upstream is open river or regulated pool
-                const isYesterdayOpenRiver = yesterdayCorrespondingUpstreamFlowValueDivideOneThousand > 150.0;
-                const isYesterdayRegulatedPool = yesterdayCorrespondingUpstreamFlowValueDivideOneThousand <= 150.0;
-                // console.log("isYesterdayOpenRiver = ", isYesterdayOpenRiver);
-                // console.log("isYesterdayRegulatedPool = ", isYesterdayRegulatedPool);
-
-                // Lookup yesterdayCorrespondingUpstreamFlowValue to Mosier Ldg-Mississippi Rating COE Table 
-                const yesterdayCorrespondingUpstreamFlowValueToStageRev = findIndByDep(yesterdayCorrespondingUpstreamFlowValue, ratingTableCoe);
-                // console.log("yesterdayCorrespondingUpstreamFlowValueToStageRev = ", yesterdayCorrespondingUpstreamFlowValueToStageRev);
-
-                // Lookup todayCorrespondingUpstreamFlowValue to Mosier Ldg-Mississippi Rating COE Table 
-                const todayCorrespondingUpstreamFlowValueToStageRev = findIndByDep(todayCorrespondingUpstreamFlowValue, ratingTableCoe);
-                // console.log("todayCorrespondingUpstreamFlowValueToStageRev = ", todayCorrespondingUpstreamFlowValueToStageRev);
-
-                const yesterdayStageRevValueMinusCorrespondingUpstreamFlowValueToStageRev = yesterdayStageRevValue - yesterdayCorrespondingUpstreamFlowValueToStageRev;
-                // console.log("yesterdayStageRevValueMinusCorrespondingUpstreamFlowValueToStageRev = ", yesterdayStageRevValueMinusCorrespondingUpstreamFlowValueToStageRev);
-
-                let jsonFileName = "ratingMosierLdg.json";
-                // Open River or Regulated Pool Calculations  
-                if (isTodayOpenRiver) {
-                    if (isYesterdayOpenRiver) {
-                        // console.log("**************** isTodayOpenRiver, isYesterdayOpenRiver");
-
-                        // Calculate Open River forecast adjustment
-                        const OpenRiverForecastAdjustment = yesterdayStageRevValue - yesterdayCorrespondingUpstreamFlowValueToStageRev;
-                        // console.log("OpenRiverForecastAdjustment = ", OpenRiverForecastAdjustment);
-
-                        const t = OpenRiverForecastAdjustment + todayCorrespondingUpstreamFlowValueToStageRev;
-                        // console.log("t = ", t);
-
-                        totalMosierLdgDay2 = 0 + OpenRiverForecastAdjustment + todayCorrespondingUpstreamFlowValueToStageRev;
-                    } else if (isYesterdayRegulatedPool) {
-                        // console.log("**************** isTodayOpenRiver, isYesterdayRegulatedPool");
-                        totalMosierLdgDay2 = 909;
-                    } else {
-                        // console.log("**************** isTodayOpenRiver, else");
-                        totalMosierLdgDay2 = 909;
-                    }
-                } else if (isTodayRegulatedPool) {
-                    if (isYesterdayOpenRiver) {
-                        // console.log("**************** isTodayRegulatedPool, isYesterdayOpenRiver");
-
-                        // Calculate Open River forecast adjustment
-                        const OpenRiverForecastAdjustment = yesterdayStageRevValue - yesterdayCorrespondingUpstreamFlowValueToStageRev;
-                        console.log("OpenRiverForecastAdjustment = ", OpenRiverForecastAdjustment);
-
-                        // BACKWATER RATING HARDIN
-                        let jsonFileName = "ratingMosierLdg.json";
-                        const stage = todayDownstreamNetmissValue;
-                        const flowRate = todayCorrespondingUpstreamFlowValueDivideOneThousand;
-                        let value = await readJSONTable2(stage, flowRate, jsonFileName);
-                        if (value !== null) {
-                            // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
-                        } else {
-                            // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
-                        }
-
-                        const t = OpenRiverForecastAdjustment + value;
-                        // console.log("t = ", t);
-
-                        totalMosierLdgDay2 = t;
-                    } else if (isYesterdayRegulatedPool) {
-                        if (isYesterdayOpenRiver) {
-                            // console.log("**************** isTodayRegulatedPool, isYesterdayOpenRiver");
-                            totalMosierLdgDay2 = 909;
-
-                        } else if (isYesterdayRegulatedPool) {
-                            // console.log("**************** isTodayRegulatedPool, isYesterdayRegulatedPool");
-
-                            // Rating Lookup
-                            const stage = todayDownstreamNetmissValue;
-                            const flowRate = yesterdayCorrespondingUpstreamFlowValueDivideOneThousand;
-                            let value = await readJSONTable2(stage, flowRate, jsonFileName);
-                            if (value !== null) {
-                                // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
-                            } else {
-                                // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
-                            }
-
-                            const delta = yesterdayStageRevValue - value;
-                            // console.log("delta = ", delta);
-
-                            // Rating Lookup 2
-                            const stage2 = todayDownstreamNetmissValue;
-                            const flowRate2 = todayCorrespondingUpstreamFlowValueDivideOneThousand;
-                            let value2 = await readJSONTable2(stage2, flowRate2, jsonFileName);
-                            if (value2 !== null) {
-                                // console.log(`Interpolated reading for flow rate ${flowRate2} and stage ${stage2} at table ${jsonFileName}: ${value2}`);
-                            } else {
-                                // console.log(`No data found for flow rate ${flowRate2} and stage ${stage2}`);
-                            }
-
-                            totalMosierLdgDay2 = delta + value2;
-                        }
-                    } else {
-                        // console.log("**************** isTodayRegulatedPool, else");
-                        totalMosierLdgDay2 = 909;
-                    }
-                } else {
-                    // console.log("**************** else");
-                    totalMosierLdgDay2 = 909;
-                }
-                // console.log("totalMosierLdgDay2 = ", totalMosierLdgDay2);
-
-                day2 = "<div title='" + "--" + "'>" + totalMosierLdgDay2.toFixed(1) + "</div>";
             } else if (location_id === "Grafton-Mississippi") {
                 // Grafton data process is in fetch.js
                 // console.log("totalGraftonForecastDay2: ", totalGraftonForecastDay2);
@@ -2615,7 +2555,7 @@ async function processAllData(data) {
                 // Get Rating Tables
                 const ratingTableCoe = data16["simple-rating"][0]["rating-points"].point;
                 // console.log("ratingTableCoe: ", ratingTableCoe);
-                
+
                 const sumYesterdayNetmissFlowPlusSpecialNetmissFlowValue = yesterdayNetmissFlowValue + yesterdaySpecialGage1NetmissFlowValue;
                 // console.log("sumYesterdayNetmissFlowPlusSpecialNetmissFlowValue: ", sumYesterdayNetmissFlowPlusSpecialNetmissFlowValue);
 
@@ -2623,7 +2563,7 @@ async function processAllData(data) {
                 // console.log("stageRevValue: ", stageRevValue);
 
                 let all = null;
-                if (isTodayOpenRiver) { 
+                if (isTodayOpenRiver) {
                     const yesterdayCorrespondingNetmissWithSpecialNetmissFlowValue = findIndByDep(sumYesterdayNetmissFlowPlusSpecialNetmissFlowValue, ratingTableCoe);
                     // console.log("yesterdayCorrespondingNetmissWithSpecialNetmissFlowValue: ", yesterdayCorrespondingNetmissWithSpecialNetmissFlowValue);
 
@@ -2717,6 +2657,154 @@ async function processAllData(data) {
                 totalLouisianaDay3 = all; // ************** change here
 
                 day3 = "<div title='" + "--" + "'>" + totalLouisianaDay3.toFixed(1) + "</div>"; // ************** change here
+            } else if (location_id === "LD 24 Pool-Mississippi") {
+                let isOpenRiver = null;
+
+                // Ensure that both convertedData and convertedNetmissDownstreamData are not null
+                if (convertedData !== null && convertedNetmissDownstreamData !== null) {
+                    // Calculate the downstream value by adding the elevation from data6, a fixed increment (0.5), and the value from convertedNetmissDownstreamData
+                    let downstreamValueToCompare = 421.81 + 0.5 + convertedNetmissDownstreamData.values[2][1];
+                    // console.log("downstreamValueToCompare: ", downstreamValueToCompare);
+
+                    // Retrieve today's netmiss forecast value
+                    let todayNetmissForecast = convertedData.values[2][1];
+                    // console.log("todayNetmissForecast: ", todayNetmissForecast);
+
+                    // Determine if the downstream value is greater than today's forecast to decide if it's an "Open River"
+                    isOpenRiver = downstreamValueToCompare > todayNetmissForecast;
+                    // console.log("isOpenRiver: ", isOpenRiver);
+
+                    // Construct HTML content based on whether it's an "Open River" or not
+                    if (isOpenRiver) {
+                        // If it's "Open River", display with "Open River" label, otherwise display an error message
+                        day3 = "<div title='" + "isOpenRiver = " + isOpenRiver + "'>" + (tsid_forecast_location === true ? "<strong>" + "Open River" : "-Error-") + "</div>";
+                    } else {
+                        // If it's not "Open River", display today's forecast value with or without strong formatting based on tsid_forecast_location
+                        day3 = "<div title='" + "isOpenRiver = " + isOpenRiver + "'>" + (tsid_forecast_location === true ? "<strong>" + (convertedData.values[2][1]).toFixed(1) : (convertedData.values[2][1]).toFixed(1)) + "</div>";
+                    }
+                } else {
+                    // If either convertedData or convertedNetmissDownstreamData is null, default to showing a placeholder value (909)
+                    day3 = "<div>" + 909 + "</div>";
+                }
+            } else if (location_id === "Mosier Ldg-Mississippi") {
+                const todayUpstreamNetmissStageValue = parseFloat(convertedNetmissForecastingPointUpstreamData.values[2][1]); // ************** change here
+                // console.log("todayUpstreamNetmissStageValue = ", todayUpstreamNetmissStageValue);
+
+                const ratingTableCoe = data16["simple-rating"][0]["rating-points"].point;
+                const ratingTableCoeUpstream = data17["simple-rating"][0]["rating-points"].point;
+                // console.log("ratingTableCoe = ", ratingTableCoe);
+                // console.log("ratingTableCoeUpstream = ", ratingTableCoeUpstream);
+
+                const todayUpstreamStageRevValuePlusOneOverOneThousand = todayUpstreamNetmissStageValue + 0.001;
+                // console.log("todayUpstreamStageRevValuePlusOneOverOneThousand = ", todayUpstreamStageRevValuePlusOneOverOneThousand);
+
+                const todayCorrespondingUpstreamFlowValue = findDepByInd(todayUpstreamStageRevValuePlusOneOverOneThousand, ratingTableCoeUpstream);
+                // console.log("todayCorrespondingUpstreamFlowValue = ", todayCorrespondingUpstreamFlowValue);
+
+                const todayCorrespondingUpstreamFlowValueDivideOneThousand = todayCorrespondingUpstreamFlowValue / 1000;
+                // console.log("todayCorrespondingUpstreamFlowValueDivideOneThousand = ", todayCorrespondingUpstreamFlowValueDivideOneThousand);
+
+                const isTodayOpenRiver = todayCorrespondingUpstreamFlowValueDivideOneThousand > 140.0;
+                const isTodayRegulatedPool = todayCorrespondingUpstreamFlowValueDivideOneThousand <= 140.0;
+                // console.log("isTodayOpenRiver = ", isTodayOpenRiver);
+                // console.log("isTodayRegulatedPool = ", isTodayRegulatedPool);
+
+                const yesterdayStageRevValue = latest6AMValue.value;
+                // console.log("yesterdayStageRevValue = ", yesterdayStageRevValue);
+
+                const yesterdayUpstreamStageRevValue = ((getLatest6AMValue(data7)).latest6AMValue).value;
+                // console.log("yesterdayUpstreamStageRevValue = ", yesterdayUpstreamStageRevValue);
+
+                const yesterdayUpstreamStageRevValuePlusOneOverOneThousand = yesterdayUpstreamStageRevValue + 0.001;
+                // console.log("yesterdayUpstreamStageRevValuePlusOneOverOneThousand = ", yesterdayUpstreamStageRevValuePlusOneOverOneThousand);
+
+                const yesterdayCorrespondingUpstreamFlowValue = findDepByInd(yesterdayUpstreamStageRevValuePlusOneOverOneThousand, ratingTableCoeUpstream);
+                // console.log("yesterdayCorrespondingUpstreamFlowValue = ", yesterdayCorrespondingUpstreamFlowValue);
+
+                const yesterdayCorrespondingUpstreamFlowValueDivideOneThousand = yesterdayCorrespondingUpstreamFlowValue / 1000;
+                // console.log("yesterdayCorrespondingUpstreamFlowValueDivideOneThousand = ", yesterdayCorrespondingUpstreamFlowValueDivideOneThousand);
+
+                const isYesterdayOpenRiver = yesterdayCorrespondingUpstreamFlowValueDivideOneThousand > 150.0;
+                const isYesterdayRegulatedPool = yesterdayCorrespondingUpstreamFlowValueDivideOneThousand <= 150.0;
+                // console.log("isYesterdayOpenRiver = ", isYesterdayOpenRiver);
+                // console.log("isYesterdayRegulatedPool = ", isYesterdayRegulatedPool);
+
+                const todayDownstreamNetmissValue = parseFloat(convertedNetmissDownstreamData.values[2][1]); // ************** change here
+                // console.log("todayDownstreamNetmissValue = ", todayDownstreamNetmissValue);
+
+                const yesterdayDownstreamStageRevValue = ((getLatest6AMValue(data9)).latest6AMValue).value;
+                // console.log("yesterdayDownstreamStageRevValue = ", yesterdayDownstreamStageRevValue);
+
+                const jsonFileName = "ratingMosierLdg.json";
+
+                if (isTodayOpenRiver) {
+                    const yesterdayCorrespondingUpstreamFlowValueToStageRev = findIndByDep(yesterdayCorrespondingUpstreamFlowValue, ratingTableCoe);
+                    // console.log("yesterdayCorrespondingUpstreamFlowValueToStageRev = ", yesterdayCorrespondingUpstreamFlowValueToStageRev);
+ 
+                    const todayCorrespondingUpstreamFlowValueToStageRev = findIndByDep(todayCorrespondingUpstreamFlowValue, ratingTableCoe);
+                    // console.log("todayCorrespondingUpstreamFlowValueToStageRev = ", todayCorrespondingUpstreamFlowValueToStageRev);
+
+                    if (isYesterdayOpenRiver) {
+                        const OpenRiverForecastAdjustment = yesterdayStageRevValue - yesterdayCorrespondingUpstreamFlowValueToStageRev;
+                        // console.log("OpenRiverForecastAdjustment = ", OpenRiverForecastAdjustment);
+
+                        const t = OpenRiverForecastAdjustment + todayCorrespondingUpstreamFlowValueToStageRev;
+                        // console.log("t = ", t);
+
+                        totalMosierLdgDay3 = 0 + OpenRiverForecastAdjustment + todayCorrespondingUpstreamFlowValueToStageRev; // ************** change here
+                    }
+                    
+                    if (isYesterdayRegulatedPool) {
+                        const OpenRiverForecastAdjustment = yesterdayStageRevValue - yesterdayCorrespondingUpstreamFlowValueToStageRev;
+                        // console.log("OpenRiverForecastAdjustment = ", OpenRiverForecastAdjustment);
+
+                        const stage = todayDownstreamNetmissValue;
+                        const flowRate = todayCorrespondingUpstreamFlowValueDivideOneThousand;
+                        let value = await readJSONTable2(stage, flowRate, jsonFileName);
+                        if (value !== null) {
+                            // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
+                        } else {
+                            // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
+                        }
+
+                        const t = OpenRiverForecastAdjustment + value;
+                        // console.log("t = ", t);
+
+                        totalMosierLdgDay3 = t; // ************** change here
+                    }
+                }
+
+                if (isTodayRegulatedPool) {
+                    if (isYesterdayOpenRiver) {
+                        totalMosierLdgDay3 = 909; // ************** change here
+                    }
+                    if (isYesterdayRegulatedPool) {
+                        const stage = yesterdayDownstreamStageRevValue;
+                        const flowRate = yesterdayCorrespondingUpstreamFlowValueDivideOneThousand;
+                        let value = await readJSONTable2(stage, flowRate, jsonFileName);
+                        if (value !== null) {
+                            // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
+                        } else {
+                            // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
+                        }
+
+                        const delta = yesterdayStageRevValue - value;
+                        // console.log("delta = ", delta);
+
+                        const stage2 = todayDownstreamNetmissValue;
+                        const flowRate2 = todayCorrespondingUpstreamFlowValueDivideOneThousand;
+                        let value2 = await readJSONTable2(stage2, flowRate2, jsonFileName);
+                        if (value2 !== null) {
+                            // console.log(`Interpolated reading for flow rate2 ${flowRate2} and stage2 ${stage2} at table ${jsonFileName}: ${value2}`);
+                        } else {
+                            // console.log(`No data found for flow rate2 ${flowRate2} and stage2 ${stage2}`);
+                        }
+
+                        totalMosierLdgDay3 = delta + value2; // ************** change here
+                    }
+                }
+
+                day3 = "<div title='" + totalMosierLdgDay3 + "'>" + totalMosierLdgDay3.toFixed(1) + "</div>"; // ************** change here
             } else if (location_id === "Grays Pt-Mississippi") {
                 const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[1][1]);
                 // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
@@ -3004,35 +3092,6 @@ async function processAllData(data) {
 
                 totalLD27TwDay3 = parseFloat(totalLD27TwDay2) + parseFloat(convertedNetmissDownstreamData.values[2][1]) - parseFloat(convertedNetmissDownstreamData.values[1][1]);
                 day3 = "<div title='" + "--" + "'>" + (tsid_forecast_location === true ? "<strong>" + totalLD27TwDay3.toFixed(1) : totalLD27TwDay3.toFixed(1)) + "</div>";
-            } else if (location_id === "LD 24 Pool-Mississippi") {
-                let isOpenRiver = null;
-
-                // Ensure that both convertedData and convertedNetmissDownstreamData are not null
-                if (convertedData !== null && convertedNetmissDownstreamData !== null) {
-                    // Calculate the downstream value by adding the elevation from data6, a fixed increment (0.5), and the value from convertedNetmissDownstreamData
-                    let downstreamValueToCompare = 421.81 + 0.5 + convertedNetmissDownstreamData.values[2][1];
-                    // console.log("downstreamValueToCompare: ", downstreamValueToCompare);
-
-                    // Retrieve today's netmiss forecast value
-                    let todayNetmissForecast = convertedData.values[2][1];
-                    // console.log("todayNetmissForecast: ", todayNetmissForecast);
-
-                    // Determine if the downstream value is greater than today's forecast to decide if it's an "Open River"
-                    isOpenRiver = downstreamValueToCompare > todayNetmissForecast;
-                    // console.log("isOpenRiver: ", isOpenRiver);
-
-                    // Construct HTML content based on whether it's an "Open River" or not
-                    if (isOpenRiver) {
-                        // If it's "Open River", display with "Open River" label, otherwise display an error message
-                        day3 = "<div title='" + "isOpenRiver = " + isOpenRiver + "'>" + (tsid_forecast_location === true ? "<strong>" + "Open River" : "-Error-") + "</div>";
-                    } else {
-                        // If it's not "Open River", display today's forecast value with or without strong formatting based on tsid_forecast_location
-                        day3 = "<div title='" + "isOpenRiver = " + isOpenRiver + "'>" + (tsid_forecast_location === true ? "<strong>" + (convertedData.values[2][1]).toFixed(1) : (convertedData.values[2][1]).toFixed(1)) + "</div>";
-                    }
-                } else {
-                    // If either convertedData or convertedNetmissDownstreamData is null, default to showing a placeholder value (909)
-                    day3 = "<div>" + 909 + "</div>";
-                }
             } else if (location_id === "LD 25 Pool-Mississippi") {
                 let isOpenRiver = null;
 
@@ -3448,6 +3507,8 @@ async function processAllData(data) {
             day4Cell.innerHTML = location_id.split('-')[0];
 
             let day4 = null;
+            let totalLD22TwDay4 = null;
+            let totalLouisianaDay4 = null;
             let totalGraysPtDay4 = null;
             let totalThebesDay4 = null;
             let totalCommerceDay4 = null;
@@ -3461,8 +3522,6 @@ async function processAllData(data) {
             let totalMoccasinSpringsDay4 = null;
             let totalLD27PoolDay4 = null;
             let totalLD27TwDay4 = null;
-            let totalLD22TwDay4 = null;
-            let totalLouisianaDay4 = null;
             let totalMosierLdgDay4 = null;
             let totalHardinDay4 = null;
             let totalValleyCityDay4 = null;
@@ -3528,7 +3587,7 @@ async function processAllData(data) {
                 // Get Rating Tables
                 const ratingTableCoe = data16["simple-rating"][0]["rating-points"].point;
                 // console.log("ratingTableCoe: ", ratingTableCoe);
-                
+
                 const sumYesterdayNetmissFlowPlusSpecialNetmissFlowValue = yesterdayNetmissFlowValue + yesterdaySpecialGage1NetmissFlowValue;
                 // console.log("sumYesterdayNetmissFlowPlusSpecialNetmissFlowValue: ", sumYesterdayNetmissFlowPlusSpecialNetmissFlowValue);
 
@@ -3536,7 +3595,7 @@ async function processAllData(data) {
                 // console.log("stageRevValue: ", stageRevValue);
 
                 let all = null;
-                if (isTodayOpenRiver) { 
+                if (isTodayOpenRiver) {
                     const yesterdayCorrespondingNetmissWithSpecialNetmissFlowValue = findIndByDep(sumYesterdayNetmissFlowPlusSpecialNetmissFlowValue, ratingTableCoe);
                     // console.log("yesterdayCorrespondingNetmissWithSpecialNetmissFlowValue: ", yesterdayCorrespondingNetmissWithSpecialNetmissFlowValue);
 
@@ -3629,7 +3688,155 @@ async function processAllData(data) {
 
                 totalLouisianaDay4 = all; // ************** change here
 
-                day4 = "<div title='" + "--" + "'>" + totalLouisianaDay4.toFixed(1) + "</div>"; // ************** change here
+                day4 = "<div title='" + totalLouisianaDay4 + "'>" + totalLouisianaDay4.toFixed(1) + "</div>"; // ************** change here
+            } else if (location_id === "LD 24 Pool-Mississippi") {
+                let isOpenRiver = null;
+
+                // Ensure that both convertedData and convertedNetmissDownstreamData are not null
+                if (convertedData !== null && convertedNetmissDownstreamData !== null) {
+                    // Calculate the downstream value by adding the elevation from data6, a fixed increment (0.5), and the value from convertedNetmissDownstreamData
+                    let downstreamValueToCompare = 421.81 + 0.5 + convertedNetmissDownstreamData.values[3][1];
+                    // console.log("downstreamValueToCompare: ", downstreamValueToCompare);
+
+                    // Retrieve today's netmiss forecast value
+                    let todayNetmissForecast = convertedData.values[3][1];
+                    // console.log("todayNetmissForecast: ", todayNetmissForecast);
+
+                    // Determine if the downstream value is greater than today's forecast to decide if it's an "Open River"
+                    isOpenRiver = downstreamValueToCompare > todayNetmissForecast;
+                    // console.log("isOpenRiver: ", isOpenRiver);
+
+                    // Construct HTML content based on whether it's an "Open River" or not
+                    if (isOpenRiver) {
+                        // If it's "Open River", display with "Open River" label, otherwise display an error message
+                        day4 = "<div title='" + "isOpenRiver = " + isOpenRiver + "'>" + (tsid_forecast_location === true ? "<strong>" + "Open River" : "-Error-") + "</div>";
+                    } else {
+                        // If it's not "Open River", display today's forecast value with or without strong formatting based on tsid_forecast_location
+                        day4 = "<div title='" + "isOpenRiver = " + isOpenRiver + "'>" + (tsid_forecast_location === true ? "<strong>" + (convertedData.values[3][1]).toFixed(1) : (convertedData.values[3][1]).toFixed(1)) + "</div>";
+                    }
+                } else {
+                    // If either convertedData or convertedNetmissDownstreamData is null, default to showing a placeholder value (909)
+                    day4 = "<div>" + 909 + "</div>";
+                }
+            } else if (location_id === "Mosier Ldg-Mississippi") {
+                const todayUpstreamNetmissStageValue = parseFloat(convertedNetmissForecastingPointUpstreamData.values[3][1]); // ************** change here
+                // console.log("todayUpstreamNetmissStageValue = ", todayUpstreamNetmissStageValue);
+
+                const ratingTableCoe = data16["simple-rating"][0]["rating-points"].point;
+                const ratingTableCoeUpstream = data17["simple-rating"][0]["rating-points"].point;
+                // console.log("ratingTableCoe = ", ratingTableCoe);
+                // console.log("ratingTableCoeUpstream = ", ratingTableCoeUpstream);
+
+                const todayUpstreamStageRevValuePlusOneOverOneThousand = todayUpstreamNetmissStageValue + 0.001;
+                // console.log("todayUpstreamStageRevValuePlusOneOverOneThousand = ", todayUpstreamStageRevValuePlusOneOverOneThousand);
+
+                const todayCorrespondingUpstreamFlowValue = findDepByInd(todayUpstreamStageRevValuePlusOneOverOneThousand, ratingTableCoeUpstream);
+                // console.log("todayCorrespondingUpstreamFlowValue = ", todayCorrespondingUpstreamFlowValue);
+
+                const todayCorrespondingUpstreamFlowValueDivideOneThousand = todayCorrespondingUpstreamFlowValue / 1000;
+                // console.log("todayCorrespondingUpstreamFlowValueDivideOneThousand = ", todayCorrespondingUpstreamFlowValueDivideOneThousand);
+
+                const isTodayOpenRiver = todayCorrespondingUpstreamFlowValueDivideOneThousand > 140.0;
+                const isTodayRegulatedPool = todayCorrespondingUpstreamFlowValueDivideOneThousand <= 140.0;
+                // console.log("isTodayOpenRiver = ", isTodayOpenRiver);
+                // console.log("isTodayRegulatedPool = ", isTodayRegulatedPool);
+
+                const yesterdayStageRevValue = latest6AMValue.value;
+                // console.log("yesterdayStageRevValue = ", yesterdayStageRevValue);
+
+                const yesterdayUpstreamStageRevValue = ((getLatest6AMValue(data7)).latest6AMValue).value;
+                // console.log("yesterdayUpstreamStageRevValue = ", yesterdayUpstreamStageRevValue);
+
+                const yesterdayUpstreamStageRevValuePlusOneOverOneThousand = yesterdayUpstreamStageRevValue + 0.001;
+                // console.log("yesterdayUpstreamStageRevValuePlusOneOverOneThousand = ", yesterdayUpstreamStageRevValuePlusOneOverOneThousand);
+
+                const yesterdayCorrespondingUpstreamFlowValue = findDepByInd(yesterdayUpstreamStageRevValuePlusOneOverOneThousand, ratingTableCoeUpstream);
+                // console.log("yesterdayCorrespondingUpstreamFlowValue = ", yesterdayCorrespondingUpstreamFlowValue);
+
+                const yesterdayCorrespondingUpstreamFlowValueDivideOneThousand = yesterdayCorrespondingUpstreamFlowValue / 1000;
+                // console.log("yesterdayCorrespondingUpstreamFlowValueDivideOneThousand = ", yesterdayCorrespondingUpstreamFlowValueDivideOneThousand);
+
+                const isYesterdayOpenRiver = yesterdayCorrespondingUpstreamFlowValueDivideOneThousand > 150.0;
+                const isYesterdayRegulatedPool = yesterdayCorrespondingUpstreamFlowValueDivideOneThousand <= 150.0;
+                // console.log("isYesterdayOpenRiver = ", isYesterdayOpenRiver);
+                // console.log("isYesterdayRegulatedPool = ", isYesterdayRegulatedPool);
+
+                const todayDownstreamNetmissValue = parseFloat(convertedNetmissDownstreamData.values[3][1]); // ************** change here
+                // console.log("todayDownstreamNetmissValue = ", todayDownstreamNetmissValue);
+
+                const yesterdayDownstreamStageRevValue = ((getLatest6AMValue(data9)).latest6AMValue).value;
+                // console.log("yesterdayDownstreamStageRevValue = ", yesterdayDownstreamStageRevValue);
+
+                const jsonFileName = "ratingMosierLdg.json";
+
+                if (isTodayOpenRiver) {
+                    const yesterdayCorrespondingUpstreamFlowValueToStageRev = findIndByDep(yesterdayCorrespondingUpstreamFlowValue, ratingTableCoe);
+                    // console.log("yesterdayCorrespondingUpstreamFlowValueToStageRev = ", yesterdayCorrespondingUpstreamFlowValueToStageRev);
+ 
+                    const todayCorrespondingUpstreamFlowValueToStageRev = findIndByDep(todayCorrespondingUpstreamFlowValue, ratingTableCoe);
+                    // console.log("todayCorrespondingUpstreamFlowValueToStageRev = ", todayCorrespondingUpstreamFlowValueToStageRev);
+
+                    if (isYesterdayOpenRiver) {
+                        const OpenRiverForecastAdjustment = yesterdayStageRevValue - yesterdayCorrespondingUpstreamFlowValueToStageRev;
+                        // console.log("OpenRiverForecastAdjustment = ", OpenRiverForecastAdjustment);
+
+                        const t = OpenRiverForecastAdjustment + todayCorrespondingUpstreamFlowValueToStageRev;
+                        // console.log("t = ", t);
+
+                        totalMosierLdgDay4 = 0 + OpenRiverForecastAdjustment + todayCorrespondingUpstreamFlowValueToStageRev; // ************** change here
+                    }
+                    
+                    if (isYesterdayRegulatedPool) {
+                        const OpenRiverForecastAdjustment = yesterdayStageRevValue - yesterdayCorrespondingUpstreamFlowValueToStageRev;
+                        // console.log("OpenRiverForecastAdjustment = ", OpenRiverForecastAdjustment);
+
+                        const stage = todayDownstreamNetmissValue;
+                        const flowRate = todayCorrespondingUpstreamFlowValueDivideOneThousand;
+                        let value = await readJSONTable2(stage, flowRate, jsonFileName);
+                        if (value !== null) {
+                            // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
+                        } else {
+                            // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
+                        }
+
+                        const t = OpenRiverForecastAdjustment + value;
+                        // console.log("t = ", t);
+
+                        totalMosierLdgDay4 = t; // ************** change here
+                    }
+                }
+
+                if (isTodayRegulatedPool) {
+                    if (isYesterdayOpenRiver) {
+                        totalMosierLdgDay4 = 909; // ************** change here
+                    }
+                    if (isYesterdayRegulatedPool) {
+                        const stage = yesterdayDownstreamStageRevValue;
+                        const flowRate = yesterdayCorrespondingUpstreamFlowValueDivideOneThousand;
+                        let value = await readJSONTable2(stage, flowRate, jsonFileName);
+                        if (value !== null) {
+                            // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
+                        } else {
+                            // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
+                        }
+
+                        const delta = yesterdayStageRevValue - value;
+                        // console.log("delta = ", delta);
+
+                        const stage2 = todayDownstreamNetmissValue;
+                        const flowRate2 = todayCorrespondingUpstreamFlowValueDivideOneThousand;
+                        let value2 = await readJSONTable2(stage2, flowRate2, jsonFileName);
+                        if (value2 !== null) {
+                            // console.log(`Interpolated reading for flow rate2 ${flowRate2} and stage2 ${stage2} at table ${jsonFileName}: ${value2}`);
+                        } else {
+                            // console.log(`No data found for flow rate2 ${flowRate2} and stage2 ${stage2}`);
+                        }
+
+                        totalMosierLdgDay4 = delta + value2; // ************** change here
+                    }
+                }
+
+                day4 = "<div title='" + totalMosierLdgDay4 + "'>" + totalMosierLdgDay4.toFixed(1) + "</div>"; // ************** change here
             } else if (location_id === "Grays Pt-Mississippi") {
                 const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[2][1]);
                 // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
@@ -3917,35 +4124,6 @@ async function processAllData(data) {
 
                 totalLD27TwDay4 = parseFloat(totalLD27TwDay3) + parseFloat(convertedNetmissDownstreamData.values[3][1]) - parseFloat(convertedNetmissDownstreamData.values[2][1]);
                 day4 = "<div title='" + "--" + "'>" + (tsid_forecast_location === true ? "<strong>" + totalLD27TwDay4.toFixed(1) : totalLD27TwDay4.toFixed(1)) + "</div>";
-            } else if (location_id === "LD 24 Pool-Mississippi") {
-                let isOpenRiver = null;
-
-                // Ensure that both convertedData and convertedNetmissDownstreamData are not null
-                if (convertedData !== null && convertedNetmissDownstreamData !== null) {
-                    // Calculate the downstream value by adding the elevation from data6, a fixed increment (0.5), and the value from convertedNetmissDownstreamData
-                    let downstreamValueToCompare = 421.81 + 0.5 + convertedNetmissDownstreamData.values[3][1];
-                    // console.log("downstreamValueToCompare: ", downstreamValueToCompare);
-
-                    // Retrieve today's netmiss forecast value
-                    let todayNetmissForecast = convertedData.values[3][1];
-                    // console.log("todayNetmissForecast: ", todayNetmissForecast);
-
-                    // Determine if the downstream value is greater than today's forecast to decide if it's an "Open River"
-                    isOpenRiver = downstreamValueToCompare > todayNetmissForecast;
-                    // console.log("isOpenRiver: ", isOpenRiver);
-
-                    // Construct HTML content based on whether it's an "Open River" or not
-                    if (isOpenRiver) {
-                        // If it's "Open River", display with "Open River" label, otherwise display an error message
-                        day4 = "<div title='" + "isOpenRiver = " + isOpenRiver + "'>" + (tsid_forecast_location === true ? "<strong>" + "Open River" : "-Error-") + "</div>";
-                    } else {
-                        // If it's not "Open River", display today's forecast value with or without strong formatting based on tsid_forecast_location
-                        day4 = "<div title='" + "isOpenRiver = " + isOpenRiver + "'>" + (tsid_forecast_location === true ? "<strong>" + (convertedData.values[3][1]).toFixed(1) : (convertedData.values[3][1]).toFixed(1)) + "</div>";
-                    }
-                } else {
-                    // If either convertedData or convertedNetmissDownstreamData is null, default to showing a placeholder value (909)
-                    day4 = "<div>" + 909 + "</div>";
-                }
             } else if (location_id === "LD 25 Pool-Mississippi") {
                 let isOpenRiver = null;
 
@@ -4443,7 +4621,7 @@ async function processAllData(data) {
                 // Get Rating Tables
                 const ratingTableCoe = data16["simple-rating"][0]["rating-points"].point;
                 // console.log("ratingTableCoe: ", ratingTableCoe);
-                
+
                 const sumYesterdayNetmissFlowPlusSpecialNetmissFlowValue = yesterdayNetmissFlowValue + yesterdaySpecialGage1NetmissFlowValue;
                 // console.log("sumYesterdayNetmissFlowPlusSpecialNetmissFlowValue: ", sumYesterdayNetmissFlowPlusSpecialNetmissFlowValue);
 
@@ -4451,7 +4629,7 @@ async function processAllData(data) {
                 // console.log("stageRevValue: ", stageRevValue);
 
                 let all = null;
-                if (isTodayOpenRiver) { 
+                if (isTodayOpenRiver) {
                     const yesterdayCorrespondingNetmissWithSpecialNetmissFlowValue = findIndByDep(sumYesterdayNetmissFlowPlusSpecialNetmissFlowValue, ratingTableCoe);
                     // console.log("yesterdayCorrespondingNetmissWithSpecialNetmissFlowValue: ", yesterdayCorrespondingNetmissWithSpecialNetmissFlowValue);
 
@@ -4544,7 +4722,155 @@ async function processAllData(data) {
 
                 totalLouisianaDay5 = all; // ************** change here
 
-                day5 = "<div title='" + "--" + "'>" + totalLouisianaDay5.toFixed(1) + "</div>"; // ************** change here
+                day5 = "<div title='" + totalLouisianaDay5 + "'>" + totalLouisianaDay5.toFixed(1) + "</div>"; // ************** change here
+            } else if (location_id === "LD 24 Pool-Mississippi") {
+                let isOpenRiver = null;
+
+                // Ensure that both convertedData and convertedNetmissDownstreamData are not null
+                if (convertedData !== null && convertedNetmissDownstreamData !== null) {
+                    // Calculate the downstream value by adding the elevation from data6, a fixed increment (0.5), and the value from convertedNetmissDownstreamData
+                    let downstreamValueToCompare = 421.81 + 0.5 + convertedNetmissDownstreamData.values[4][1];
+                    // console.log("downstreamValueToCompare: ", downstreamValueToCompare);
+
+                    // Retrieve today's netmiss forecast value
+                    let todayNetmissForecast = convertedData.values[4][1];
+                    // console.log("todayNetmissForecast: ", todayNetmissForecast);
+
+                    // Determine if the downstream value is greater than today's forecast to decide if it's an "Open River"
+                    isOpenRiver = downstreamValueToCompare > todayNetmissForecast;
+                    // console.log("isOpenRiver: ", isOpenRiver);
+
+                    // Construct HTML content based on whether it's an "Open River" or not
+                    if (isOpenRiver) {
+                        // If it's "Open River", display with "Open River" label, otherwise display an error message
+                        day5 = "<div title='" + "isOpenRiver = " + isOpenRiver + "'>" + (tsid_forecast_location === true ? "<strong>" + "Open River" : "-Error-") + "</div>";
+                    } else {
+                        // If it's not "Open River", display today's forecast value with or without strong formatting based on tsid_forecast_location
+                        day5 = "<div title='" + "isOpenRiver = " + isOpenRiver + "'>" + (tsid_forecast_location === true ? "<strong>" + (convertedData.values[4][1]).toFixed(1) : (convertedData.values[4][1]).toFixed(1)) + "</div>";
+                    }
+                } else {
+                    // If either convertedData or convertedNetmissDownstreamData is null, default to showing a placeholder value (909)
+                    day5 = "<div>" + 909 + "</div>";
+                }
+            } else if (location_id === "Mosier Ldg-Mississippi") {
+                const todayUpstreamNetmissStageValue = parseFloat(convertedNetmissForecastingPointUpstreamData.values[4][1]); // ************** change here
+                // console.log("todayUpstreamNetmissStageValue = ", todayUpstreamNetmissStageValue);
+
+                const ratingTableCoe = data16["simple-rating"][0]["rating-points"].point;
+                const ratingTableCoeUpstream = data17["simple-rating"][0]["rating-points"].point;
+                // console.log("ratingTableCoe = ", ratingTableCoe);
+                // console.log("ratingTableCoeUpstream = ", ratingTableCoeUpstream);
+
+                const todayUpstreamStageRevValuePlusOneOverOneThousand = todayUpstreamNetmissStageValue + 0.001;
+                // console.log("todayUpstreamStageRevValuePlusOneOverOneThousand = ", todayUpstreamStageRevValuePlusOneOverOneThousand);
+
+                const todayCorrespondingUpstreamFlowValue = findDepByInd(todayUpstreamStageRevValuePlusOneOverOneThousand, ratingTableCoeUpstream);
+                // console.log("todayCorrespondingUpstreamFlowValue = ", todayCorrespondingUpstreamFlowValue);
+
+                const todayCorrespondingUpstreamFlowValueDivideOneThousand = todayCorrespondingUpstreamFlowValue / 1000;
+                // console.log("todayCorrespondingUpstreamFlowValueDivideOneThousand = ", todayCorrespondingUpstreamFlowValueDivideOneThousand);
+
+                const isTodayOpenRiver = todayCorrespondingUpstreamFlowValueDivideOneThousand > 140.0;
+                const isTodayRegulatedPool = todayCorrespondingUpstreamFlowValueDivideOneThousand <= 140.0;
+                // console.log("isTodayOpenRiver = ", isTodayOpenRiver);
+                // console.log("isTodayRegulatedPool = ", isTodayRegulatedPool);
+
+                const yesterdayStageRevValue = latest6AMValue.value;
+                // console.log("yesterdayStageRevValue = ", yesterdayStageRevValue);
+
+                const yesterdayUpstreamStageRevValue = ((getLatest6AMValue(data7)).latest6AMValue).value;
+                // console.log("yesterdayUpstreamStageRevValue = ", yesterdayUpstreamStageRevValue);
+
+                const yesterdayUpstreamStageRevValuePlusOneOverOneThousand = yesterdayUpstreamStageRevValue + 0.001;
+                // console.log("yesterdayUpstreamStageRevValuePlusOneOverOneThousand = ", yesterdayUpstreamStageRevValuePlusOneOverOneThousand);
+
+                const yesterdayCorrespondingUpstreamFlowValue = findDepByInd(yesterdayUpstreamStageRevValuePlusOneOverOneThousand, ratingTableCoeUpstream);
+                // console.log("yesterdayCorrespondingUpstreamFlowValue = ", yesterdayCorrespondingUpstreamFlowValue);
+
+                const yesterdayCorrespondingUpstreamFlowValueDivideOneThousand = yesterdayCorrespondingUpstreamFlowValue / 1000;
+                // console.log("yesterdayCorrespondingUpstreamFlowValueDivideOneThousand = ", yesterdayCorrespondingUpstreamFlowValueDivideOneThousand);
+
+                const isYesterdayOpenRiver = yesterdayCorrespondingUpstreamFlowValueDivideOneThousand > 150.0;
+                const isYesterdayRegulatedPool = yesterdayCorrespondingUpstreamFlowValueDivideOneThousand <= 150.0;
+                // console.log("isYesterdayOpenRiver = ", isYesterdayOpenRiver);
+                // console.log("isYesterdayRegulatedPool = ", isYesterdayRegulatedPool);
+
+                const todayDownstreamNetmissValue = parseFloat(convertedNetmissDownstreamData.values[4][1]); // ************** change here
+                // console.log("todayDownstreamNetmissValue = ", todayDownstreamNetmissValue);
+
+                const yesterdayDownstreamStageRevValue = ((getLatest6AMValue(data9)).latest6AMValue).value;
+                // console.log("yesterdayDownstreamStageRevValue = ", yesterdayDownstreamStageRevValue);
+
+                const jsonFileName = "ratingMosierLdg.json";
+
+                if (isTodayOpenRiver) {
+                    const yesterdayCorrespondingUpstreamFlowValueToStageRev = findIndByDep(yesterdayCorrespondingUpstreamFlowValue, ratingTableCoe);
+                    // console.log("yesterdayCorrespondingUpstreamFlowValueToStageRev = ", yesterdayCorrespondingUpstreamFlowValueToStageRev);
+ 
+                    const todayCorrespondingUpstreamFlowValueToStageRev = findIndByDep(todayCorrespondingUpstreamFlowValue, ratingTableCoe);
+                    // console.log("todayCorrespondingUpstreamFlowValueToStageRev = ", todayCorrespondingUpstreamFlowValueToStageRev);
+
+                    if (isYesterdayOpenRiver) {
+                        const OpenRiverForecastAdjustment = yesterdayStageRevValue - yesterdayCorrespondingUpstreamFlowValueToStageRev;
+                        // console.log("OpenRiverForecastAdjustment = ", OpenRiverForecastAdjustment);
+
+                        const t = OpenRiverForecastAdjustment + todayCorrespondingUpstreamFlowValueToStageRev;
+                        // console.log("t = ", t);
+
+                        totalMosierLdgDay5 = 0 + OpenRiverForecastAdjustment + todayCorrespondingUpstreamFlowValueToStageRev; // ************** change here
+                    }
+                    
+                    if (isYesterdayRegulatedPool) {
+                        const OpenRiverForecastAdjustment = yesterdayStageRevValue - yesterdayCorrespondingUpstreamFlowValueToStageRev;
+                        // console.log("OpenRiverForecastAdjustment = ", OpenRiverForecastAdjustment);
+
+                        const stage = todayDownstreamNetmissValue;
+                        const flowRate = todayCorrespondingUpstreamFlowValueDivideOneThousand;
+                        let value = await readJSONTable2(stage, flowRate, jsonFileName);
+                        if (value !== null) {
+                            // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
+                        } else {
+                            // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
+                        }
+
+                        const t = OpenRiverForecastAdjustment + value;
+                        // console.log("t = ", t);
+
+                        totalMosierLdgDay5 = t; // ************** change here
+                    }
+                }
+
+                if (isTodayRegulatedPool) {
+                    if (isYesterdayOpenRiver) {
+                        totalMosierLdgDay5 = 909; // ************** change here
+                    }
+                    if (isYesterdayRegulatedPool) {
+                        const stage = yesterdayDownstreamStageRevValue;
+                        const flowRate = yesterdayCorrespondingUpstreamFlowValueDivideOneThousand;
+                        let value = await readJSONTable2(stage, flowRate, jsonFileName);
+                        if (value !== null) {
+                            // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
+                        } else {
+                            // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
+                        }
+
+                        const delta = yesterdayStageRevValue - value;
+                        // console.log("delta = ", delta);
+
+                        const stage2 = todayDownstreamNetmissValue;
+                        const flowRate2 = todayCorrespondingUpstreamFlowValueDivideOneThousand;
+                        let value2 = await readJSONTable2(stage2, flowRate2, jsonFileName);
+                        if (value2 !== null) {
+                            // console.log(`Interpolated reading for flow rate2 ${flowRate2} and stage2 ${stage2} at table ${jsonFileName}: ${value2}`);
+                        } else {
+                            // console.log(`No data found for flow rate2 ${flowRate2} and stage2 ${stage2}`);
+                        }
+
+                        totalMosierLdgDay5 = delta + value2; // ************** change here
+                    }
+                }
+
+                day5 = "<div title='" + totalMosierLdgDay5 + "'>" + totalMosierLdgDay5.toFixed(1) + "</div>"; // ************** change here
             } else if (location_id === "Grays Pt-Mississippi") {
                 const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[3][1]);
                 // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
@@ -4832,35 +5158,6 @@ async function processAllData(data) {
 
                 totalLD27TwDay5 = parseFloat(totalLD27TwDay4) + parseFloat(convertedNetmissDownstreamData.values[4][1]) - parseFloat(convertedNetmissDownstreamData.values[3][1]);
                 day5 = "<div title='" + "--" + "'>" + (tsid_forecast_location === true ? "<strong>" + totalLD27TwDay5.toFixed(1) : totalLD27TwDay5.toFixed(1)) + "</div>";
-            } else if (location_id === "LD 24 Pool-Mississippi") {
-                let isOpenRiver = null;
-
-                // Ensure that both convertedData and convertedNetmissDownstreamData are not null
-                if (convertedData !== null && convertedNetmissDownstreamData !== null) {
-                    // Calculate the downstream value by adding the elevation from data6, a fixed increment (0.5), and the value from convertedNetmissDownstreamData
-                    let downstreamValueToCompare = 421.81 + 0.5 + convertedNetmissDownstreamData.values[4][1];
-                    // console.log("downstreamValueToCompare: ", downstreamValueToCompare);
-
-                    // Retrieve today's netmiss forecast value
-                    let todayNetmissForecast = convertedData.values[4][1];
-                    // console.log("todayNetmissForecast: ", todayNetmissForecast);
-
-                    // Determine if the downstream value is greater than today's forecast to decide if it's an "Open River"
-                    isOpenRiver = downstreamValueToCompare > todayNetmissForecast;
-                    // console.log("isOpenRiver: ", isOpenRiver);
-
-                    // Construct HTML content based on whether it's an "Open River" or not
-                    if (isOpenRiver) {
-                        // If it's "Open River", display with "Open River" label, otherwise display an error message
-                        day5 = "<div title='" + "isOpenRiver = " + isOpenRiver + "'>" + (tsid_forecast_location === true ? "<strong>" + "Open River" : "-Error-") + "</div>";
-                    } else {
-                        // If it's not "Open River", display today's forecast value with or without strong formatting based on tsid_forecast_location
-                        day5 = "<div title='" + "isOpenRiver = " + isOpenRiver + "'>" + (tsid_forecast_location === true ? "<strong>" + (convertedData.values[4][1]).toFixed(1) : (convertedData.values[4][1]).toFixed(1)) + "</div>";
-                    }
-                } else {
-                    // If either convertedData or convertedNetmissDownstreamData is null, default to showing a placeholder value (909)
-                    day5 = "<div>" + 909 + "</div>";
-                }
             } else if (location_id === "LD 25 Pool-Mississippi") {
                 let isOpenRiver = null;
 
@@ -5358,7 +5655,7 @@ async function processAllData(data) {
                 // Get Rating Tables
                 const ratingTableCoe = data16["simple-rating"][0]["rating-points"].point;
                 // console.log("ratingTableCoe: ", ratingTableCoe);
-                
+
                 const sumYesterdayNetmissFlowPlusSpecialNetmissFlowValue = yesterdayNetmissFlowValue + yesterdaySpecialGage1NetmissFlowValue;
                 // console.log("sumYesterdayNetmissFlowPlusSpecialNetmissFlowValue: ", sumYesterdayNetmissFlowPlusSpecialNetmissFlowValue);
 
@@ -5366,7 +5663,7 @@ async function processAllData(data) {
                 // console.log("stageRevValue: ", stageRevValue);
 
                 let all = null;
-                if (isTodayOpenRiver) { 
+                if (isTodayOpenRiver) {
                     const yesterdayCorrespondingNetmissWithSpecialNetmissFlowValue = findIndByDep(sumYesterdayNetmissFlowPlusSpecialNetmissFlowValue, ratingTableCoe);
                     // console.log("yesterdayCorrespondingNetmissWithSpecialNetmissFlowValue: ", yesterdayCorrespondingNetmissWithSpecialNetmissFlowValue);
 
@@ -5459,7 +5756,155 @@ async function processAllData(data) {
 
                 totalLouisianaDay6 = all; // ************** change here
 
-                day6 = "<div title='" + "--" + "'>" + totalLouisianaDay6.toFixed(1) + "</div>"; // ************** change here
+                day6 = "<div title='" + totalLouisianaDay6 + "'>" + totalLouisianaDay6.toFixed(1) + "</div>"; // ************** change here
+            } else if (location_id === "LD 24 Pool-Mississippi") {
+                let isOpenRiver = null;
+
+                // Ensure that both convertedData and convertedNetmissDownstreamData are not null
+                if (convertedData !== null && convertedNetmissDownstreamData !== null) {
+                    // Calculate the downstream value by adding the elevation from data6, a fixed increment (0.5), and the value from convertedNetmissDownstreamData
+                    let downstreamValueToCompare = 421.81 + 0.5 + convertedNetmissDownstreamData.values[5][1];
+                    // console.log("downstreamValueToCompare: ", downstreamValueToCompare);
+
+                    // Retrieve today's netmiss forecast value
+                    let todayNetmissForecast = convertedData.values[5][1];
+                    // console.log("todayNetmissForecast: ", todayNetmissForecast);
+
+                    // Determine if the downstream value is greater than today's forecast to decide if it's an "Open River"
+                    isOpenRiver = downstreamValueToCompare > todayNetmissForecast;
+                    // console.log("isOpenRiver: ", isOpenRiver);
+
+                    // Construct HTML content based on whether it's an "Open River" or not
+                    if (isOpenRiver) {
+                        // If it's "Open River", display with "Open River" label, otherwise display an error message
+                        day6 = "<div title='" + "isOpenRiver = " + isOpenRiver + "'>" + (tsid_forecast_location === true ? "<strong>" + "Open River" : "-Error-") + "</div>";
+                    } else {
+                        // If it's not "Open River", display today's forecast value with or without strong formatting based on tsid_forecast_location
+                        day6 = "<div title='" + "isOpenRiver = " + isOpenRiver + "'>" + (tsid_forecast_location === true ? "<strong>" + (convertedData.values[5][1]).toFixed(1) : (convertedData.values[5][1]).toFixed(1)) + "</div>";
+                    }
+                } else {
+                    // If either convertedData or convertedNetmissDownstreamData is null, default to showing a placeholder value (909)
+                    day6 = "<div>" + 909 + "</div>";
+                }
+            } else if (location_id === "Mosier Ldg-Mississippi") {
+                const todayUpstreamNetmissStageValue = parseFloat(convertedNetmissForecastingPointUpstreamData.values[5][1]); // ************** change here
+                // console.log("todayUpstreamNetmissStageValue = ", todayUpstreamNetmissStageValue);
+
+                const ratingTableCoe = data16["simple-rating"][0]["rating-points"].point;
+                const ratingTableCoeUpstream = data17["simple-rating"][0]["rating-points"].point;
+                // console.log("ratingTableCoe = ", ratingTableCoe);
+                // console.log("ratingTableCoeUpstream = ", ratingTableCoeUpstream);
+
+                const todayUpstreamStageRevValuePlusOneOverOneThousand = todayUpstreamNetmissStageValue + 0.001;
+                // console.log("todayUpstreamStageRevValuePlusOneOverOneThousand = ", todayUpstreamStageRevValuePlusOneOverOneThousand);
+
+                const todayCorrespondingUpstreamFlowValue = findDepByInd(todayUpstreamStageRevValuePlusOneOverOneThousand, ratingTableCoeUpstream);
+                // console.log("todayCorrespondingUpstreamFlowValue = ", todayCorrespondingUpstreamFlowValue);
+
+                const todayCorrespondingUpstreamFlowValueDivideOneThousand = todayCorrespondingUpstreamFlowValue / 1000;
+                // console.log("todayCorrespondingUpstreamFlowValueDivideOneThousand = ", todayCorrespondingUpstreamFlowValueDivideOneThousand);
+
+                const isTodayOpenRiver = todayCorrespondingUpstreamFlowValueDivideOneThousand > 140.0;
+                const isTodayRegulatedPool = todayCorrespondingUpstreamFlowValueDivideOneThousand <= 140.0;
+                // console.log("isTodayOpenRiver = ", isTodayOpenRiver);
+                // console.log("isTodayRegulatedPool = ", isTodayRegulatedPool);
+
+                const yesterdayStageRevValue = latest6AMValue.value;
+                // console.log("yesterdayStageRevValue = ", yesterdayStageRevValue);
+
+                const yesterdayUpstreamStageRevValue = ((getLatest6AMValue(data7)).latest6AMValue).value;
+                // console.log("yesterdayUpstreamStageRevValue = ", yesterdayUpstreamStageRevValue);
+
+                const yesterdayUpstreamStageRevValuePlusOneOverOneThousand = yesterdayUpstreamStageRevValue + 0.001;
+                // console.log("yesterdayUpstreamStageRevValuePlusOneOverOneThousand = ", yesterdayUpstreamStageRevValuePlusOneOverOneThousand);
+
+                const yesterdayCorrespondingUpstreamFlowValue = findDepByInd(yesterdayUpstreamStageRevValuePlusOneOverOneThousand, ratingTableCoeUpstream);
+                // console.log("yesterdayCorrespondingUpstreamFlowValue = ", yesterdayCorrespondingUpstreamFlowValue);
+
+                const yesterdayCorrespondingUpstreamFlowValueDivideOneThousand = yesterdayCorrespondingUpstreamFlowValue / 1000;
+                // console.log("yesterdayCorrespondingUpstreamFlowValueDivideOneThousand = ", yesterdayCorrespondingUpstreamFlowValueDivideOneThousand);
+
+                const isYesterdayOpenRiver = yesterdayCorrespondingUpstreamFlowValueDivideOneThousand > 150.0;
+                const isYesterdayRegulatedPool = yesterdayCorrespondingUpstreamFlowValueDivideOneThousand <= 150.0;
+                // console.log("isYesterdayOpenRiver = ", isYesterdayOpenRiver);
+                // console.log("isYesterdayRegulatedPool = ", isYesterdayRegulatedPool);
+
+                const todayDownstreamNetmissValue = parseFloat(convertedNetmissDownstreamData.values[5][1]); // ************** change here
+                // console.log("todayDownstreamNetmissValue = ", todayDownstreamNetmissValue);
+
+                const yesterdayDownstreamStageRevValue = ((getLatest6AMValue(data9)).latest6AMValue).value;
+                // console.log("yesterdayDownstreamStageRevValue = ", yesterdayDownstreamStageRevValue);
+
+                const jsonFileName = "ratingMosierLdg.json";
+
+                if (isTodayOpenRiver) {
+                    const yesterdayCorrespondingUpstreamFlowValueToStageRev = findIndByDep(yesterdayCorrespondingUpstreamFlowValue, ratingTableCoe);
+                    // console.log("yesterdayCorrespondingUpstreamFlowValueToStageRev = ", yesterdayCorrespondingUpstreamFlowValueToStageRev);
+ 
+                    const todayCorrespondingUpstreamFlowValueToStageRev = findIndByDep(todayCorrespondingUpstreamFlowValue, ratingTableCoe);
+                    // console.log("todayCorrespondingUpstreamFlowValueToStageRev = ", todayCorrespondingUpstreamFlowValueToStageRev);
+
+                    if (isYesterdayOpenRiver) {
+                        const OpenRiverForecastAdjustment = yesterdayStageRevValue - yesterdayCorrespondingUpstreamFlowValueToStageRev;
+                        // console.log("OpenRiverForecastAdjustment = ", OpenRiverForecastAdjustment);
+
+                        const t = OpenRiverForecastAdjustment + todayCorrespondingUpstreamFlowValueToStageRev;
+                        // console.log("t = ", t);
+
+                        totalMosierLdgDay6 = 0 + OpenRiverForecastAdjustment + todayCorrespondingUpstreamFlowValueToStageRev; // ************** change here
+                    }
+                    
+                    if (isYesterdayRegulatedPool) {
+                        const OpenRiverForecastAdjustment = yesterdayStageRevValue - yesterdayCorrespondingUpstreamFlowValueToStageRev;
+                        // console.log("OpenRiverForecastAdjustment = ", OpenRiverForecastAdjustment);
+
+                        const stage = todayDownstreamNetmissValue;
+                        const flowRate = todayCorrespondingUpstreamFlowValueDivideOneThousand;
+                        let value = await readJSONTable2(stage, flowRate, jsonFileName);
+                        if (value !== null) {
+                            // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
+                        } else {
+                            // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
+                        }
+
+                        const t = OpenRiverForecastAdjustment + value;
+                        // console.log("t = ", t);
+
+                        totalMosierLdgDay6 = t; // ************** change here
+                    }
+                }
+
+                if (isTodayRegulatedPool) {
+                    if (isYesterdayOpenRiver) {
+                        totalMosierLdgDay6 = 909; // ************** change here
+                    }
+                    if (isYesterdayRegulatedPool) {
+                        const stage = yesterdayDownstreamStageRevValue;
+                        const flowRate = yesterdayCorrespondingUpstreamFlowValueDivideOneThousand;
+                        let value = await readJSONTable2(stage, flowRate, jsonFileName);
+                        if (value !== null) {
+                            // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
+                        } else {
+                            // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
+                        }
+
+                        const delta = yesterdayStageRevValue - value;
+                        // console.log("delta = ", delta);
+
+                        const stage2 = todayDownstreamNetmissValue;
+                        const flowRate2 = todayCorrespondingUpstreamFlowValueDivideOneThousand;
+                        let value2 = await readJSONTable2(stage2, flowRate2, jsonFileName);
+                        if (value2 !== null) {
+                            // console.log(`Interpolated reading for flow rate2 ${flowRate2} and stage2 ${stage2} at table ${jsonFileName}: ${value2}`);
+                        } else {
+                            // console.log(`No data found for flow rate2 ${flowRate2} and stage2 ${stage2}`);
+                        }
+
+                        totalMosierLdgDay6 = delta + value2; // ************** change here
+                    }
+                }
+
+                day6 = "<div title='" + totalMosierLdgDay6 + "'>" + totalMosierLdgDay6.toFixed(1) + "</div>"; // ************** change here
             } else if (location_id === "Grays Pt-Mississippi") {
                 const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[4][1]);
                 // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
@@ -5747,35 +6192,6 @@ async function processAllData(data) {
 
                 totalLD27TwDay6 = parseFloat(totalLD27TwDay5) + parseFloat(convertedNetmissDownstreamData.values[5][1]) - parseFloat(convertedNetmissDownstreamData.values[4][1]);
                 day6 = "<div title='" + "--" + "'>" + (tsid_forecast_location === true ? "<strong>" + totalLD27TwDay6.toFixed(1) : totalLD27TwDay6.toFixed(1)) + "</div>";
-            } else if (location_id === "LD 24 Pool-Mississippi") {
-                let isOpenRiver = null;
-
-                // Ensure that both convertedData and convertedNetmissDownstreamData are not null
-                if (convertedData !== null && convertedNetmissDownstreamData !== null) {
-                    // Calculate the downstream value by adding the elevation from data6, a fixed increment (0.5), and the value from convertedNetmissDownstreamData
-                    let downstreamValueToCompare = 421.81 + 0.5 + convertedNetmissDownstreamData.values[5][1];
-                    // console.log("downstreamValueToCompare: ", downstreamValueToCompare);
-
-                    // Retrieve today's netmiss forecast value
-                    let todayNetmissForecast = convertedData.values[5][1];
-                    // console.log("todayNetmissForecast: ", todayNetmissForecast);
-
-                    // Determine if the downstream value is greater than today's forecast to decide if it's an "Open River"
-                    isOpenRiver = downstreamValueToCompare > todayNetmissForecast;
-                    // console.log("isOpenRiver: ", isOpenRiver);
-
-                    // Construct HTML content based on whether it's an "Open River" or not
-                    if (isOpenRiver) {
-                        // If it's "Open River", display with "Open River" label, otherwise display an error message
-                        day6 = "<div title='" + "isOpenRiver = " + isOpenRiver + "'>" + (tsid_forecast_location === true ? "<strong>" + "Open River" : "-Error-") + "</div>";
-                    } else {
-                        // If it's not "Open River", display today's forecast value with or without strong formatting based on tsid_forecast_location
-                        day6 = "<div title='" + "isOpenRiver = " + isOpenRiver + "'>" + (tsid_forecast_location === true ? "<strong>" + (convertedData.values[5][1]).toFixed(1) : (convertedData.values[5][1]).toFixed(1)) + "</div>";
-                    }
-                } else {
-                    // If either convertedData or convertedNetmissDownstreamData is null, default to showing a placeholder value (909)
-                    day6 = "<div>" + 909 + "</div>";
-                }
             } else if (location_id === "LD 25 Pool-Mississippi") {
                 let isOpenRiver = null;
 
@@ -5800,166 +6216,6 @@ async function processAllData(data) {
                 } else {
                     day6 = "<div>" + "--" + "</div>";
                 }
-            } else if (location_id === "Mosier Ldg-Mississippi") {
-                // console.log("location_id = ", location_id);
-
-                // Get today and yesterday values
-                const yesterdayUpstreamStageRevValue = ((getLatest6AMValue(data7)).latest6AMValue).value;
-                const yesterdayStageRevValue = latest6AMValue.value;
-                const yesterdayDownstreamStageRevValue = ((getLatest6AMValue(data9)).latest6AMValue).value;
-                const todayUpstreamNetmissStageValue = parseFloat(convertedNetmissForecastingPointUpstreamData.values[5][1]);
-                const todayDownstreamNetmissValue = parseFloat(convertedNetmissDownstreamData.values[5][1])
-                // console.log("yesterdayUpstreamStageRevValue = ", yesterdayUpstreamStageRevValue);
-                // console.log("yesterdayStageRevValue = ", yesterdayStageRevValue);
-                // console.log("yesterdayDownstreamStageRevValue = ", yesterdayDownstreamStageRevValue);
-                // console.log("todayUpstreamNetmissStageValue = ", todayUpstreamNetmissStageValue);
-                // console.log("todayDownstreamNetmissValue = ", todayDownstreamNetmissValue);
-
-                // Process and get rating tables
-                const ratingTableCoe = data16["simple-rating"][0]["rating-points"].point;
-                const ratingTableCoeUpstream = data17["simple-rating"][0]["rating-points"].point;
-                // console.log("ratingTableCoe = ", ratingTableCoe);
-                // console.log("ratingTableCoeUpstream = ", ratingTableCoeUpstream);
-
-                // Add 0.001 to yesterdayUpstreamStageRevValue
-                const todayUpstreamStageRevValuePlusOneOverOneThousand = todayUpstreamNetmissStageValue + 0.001;
-                // console.log("todayUpstreamStageRevValuePlusOneOverOneThousand = ", todayUpstreamStageRevValuePlusOneOverOneThousand);
-
-                // Process and get today upstream corresponding flow values
-                const todayCorrespondingUpstreamFlowValue = findDepByInd(todayUpstreamStageRevValuePlusOneOverOneThousand, ratingTableCoeUpstream);
-                // console.log("todayCorrespondingUpstreamFlowValue = ", todayCorrespondingUpstreamFlowValue);
-
-                const todayCorrespondingUpstreamFlowValueDivideOneThousand = todayCorrespondingUpstreamFlowValue / 1000;
-                // console.log("todayCorrespondingUpstreamFlowValueDivideOneThousand = ", todayCorrespondingUpstreamFlowValueDivideOneThousand);
-
-                // Determine if today upstream is open river or regulated pool
-                const isTodayOpenRiver = todayCorrespondingUpstreamFlowValueDivideOneThousand > 140.0;
-                const isTodayRegulatedPool = todayCorrespondingUpstreamFlowValueDivideOneThousand <= 140.0;
-                // console.log("isTodayOpenRiver = ", isTodayOpenRiver);
-                // console.log("isTodayRegulatedPool = ", isTodayRegulatedPool);
-
-                // Add 0.001 to yesterdayUpstreamStageRevValue
-                const yesterdayUpstreamStageRevValuePlusOneOverOneThousand = yesterdayUpstreamStageRevValue + 0.001;
-                // console.log("yesterdayUpstreamStageRevValuePlusOneOverOneThousand = ", yesterdayUpstreamStageRevValuePlusOneOverOneThousand);
-
-                // Process and get yesterday corresponding stage values
-                const yesterdayCorrespondingUpstreamFlowValue = findDepByInd(yesterdayUpstreamStageRevValuePlusOneOverOneThousand, ratingTableCoeUpstream);
-                // console.log("yesterdayCorrespondingUpstreamFlowValue = ", yesterdayCorrespondingUpstreamFlowValue);
-
-                const yesterdayCorrespondingUpstreamFlowValueDivideOneThousand = yesterdayCorrespondingUpstreamFlowValue / 1000;
-                // console.log("yesterdayCorrespondingUpstreamFlowValueDivideOneThousand = ", yesterdayCorrespondingUpstreamFlowValueDivideOneThousand);
-
-                // Determine if yesterday upstream is open river or regulated pool
-                const isYesterdayOpenRiver = yesterdayCorrespondingUpstreamFlowValueDivideOneThousand > 150.0;
-                const isYesterdayRegulatedPool = yesterdayCorrespondingUpstreamFlowValueDivideOneThousand <= 150.0;
-                // console.log("isYesterdayOpenRiver = ", isYesterdayOpenRiver);
-                // console.log("isYesterdayRegulatedPool = ", isYesterdayRegulatedPool);
-
-                // Lookup yesterdayCorrespondingUpstreamFlowValue to Mosier Ldg-Mississippi Rating COE Table 
-                const yesterdayCorrespondingUpstreamFlowValueToStageRev = findIndByDep(yesterdayCorrespondingUpstreamFlowValue, ratingTableCoe);
-                // console.log("yesterdayCorrespondingUpstreamFlowValueToStageRev = ", yesterdayCorrespondingUpstreamFlowValueToStageRev);
-
-                // Calculate Open River forecast adjustment
-                const OpenRiverForecastAdjustment = yesterdayStageRevValue - yesterdayCorrespondingUpstreamFlowValueToStageRev;
-                // console.log("OpenRiverForecastAdjustment = ", OpenRiverForecastAdjustment);
-
-                // Lookup todayCorrespondingUpstreamFlowValue to Mosier Ldg-Mississippi Rating COE Table 
-                const todayCorrespondingUpstreamFlowValueToStageRev = findIndByDep(todayCorrespondingUpstreamFlowValue, ratingTableCoe);
-                // console.log("todayCorrespondingUpstreamFlowValueToStageRev = ", todayCorrespondingUpstreamFlowValueToStageRev);
-
-                const yesterdayStageRevValueMinusCorrespondingUpstreamFlowValueToStageRev = yesterdayStageRevValue - yesterdayCorrespondingUpstreamFlowValueToStageRev;
-                // console.log("yesterdayStageRevValueMinusCorrespondingUpstreamFlowValueToStageRev = ", yesterdayStageRevValueMinusCorrespondingUpstreamFlowValueToStageRev);
-
-                const t = OpenRiverForecastAdjustment + todayCorrespondingUpstreamFlowValueToStageRev;
-                // console.log("t = ", t);
-
-                let jsonFileName = "ratingMosierLdg.json";
-                // Open River or Regulated Pool Calculations  
-                if (isTodayOpenRiver) {
-                    if (isYesterdayOpenRiver) {
-                        // console.log("**************** isTodayOpenRiver, isYesterdayOpenRiver");
-
-                        // Calculate Open River forecast adjustment
-                        const OpenRiverForecastAdjustment = yesterdayStageRevValue - yesterdayCorrespondingUpstreamFlowValueToStageRev;
-                        // console.log("OpenRiverForecastAdjustment = ", OpenRiverForecastAdjustment);
-
-                        const t = OpenRiverForecastAdjustment + todayCorrespondingUpstreamFlowValueToStageRev;
-                        // console.log("t = ", t);
-
-                        totalMosierLdgDay6 = 0 + OpenRiverForecastAdjustment + todayCorrespondingUpstreamFlowValueToStageRev;
-                    } else if (isYesterdayRegulatedPool) {
-                        // console.log("**************** isTodayOpenRiver, isYesterdayRegulatedPool");
-                        totalMosierLdgDay6 = 909;
-                    } else {
-                        // console.log("**************** isTodayOpenRiver, else");
-                        totalMosierLdgDay6 = 909;
-                    }
-                } else if (isTodayRegulatedPool) {
-                    if (isYesterdayOpenRiver) {
-                        // console.log("**************** isTodayRegulatedPool, isYesterdayOpenRiver");
-
-                        // Calculate Open River forecast adjustment
-                        const OpenRiverForecastAdjustment = yesterdayStageRevValue - yesterdayCorrespondingUpstreamFlowValueToStageRev;
-                        console.log("OpenRiverForecastAdjustment = ", OpenRiverForecastAdjustment);
-
-                        // BACKWATER RATING HARDIN
-                        let jsonFileName = "ratingMosierLdg.json";
-                        const stage = todayDownstreamNetmissValue;
-                        const flowRate = todayCorrespondingUpstreamFlowValueDivideOneThousand;
-                        let value = await readJSONTable2(stage, flowRate, jsonFileName);
-                        if (value !== null) {
-                            // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
-                        } else {
-                            // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
-                        }
-
-                        const t = OpenRiverForecastAdjustment + value;
-                        // console.log("t = ", t);
-
-                        totalMosierLdgDay6 = t;
-                    } else if (isYesterdayRegulatedPool) {
-                        if (isYesterdayOpenRiver) {
-                            // console.log("**************** isTodayRegulatedPool, isYesterdayOpenRiver");
-                            totalMosierLdgDay6 = 909;
-
-                        } else if (isYesterdayRegulatedPool) {
-                            // console.log("**************** isTodayRegulatedPool, isYesterdayRegulatedPool");
-
-                            // Rating Lookup
-                            const stage = todayDownstreamNetmissValue;
-                            const flowRate = yesterdayCorrespondingUpstreamFlowValueDivideOneThousand;
-                            let value = await readJSONTable2(stage, flowRate, jsonFileName);
-                            if (value !== null) {
-                                // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
-                            } else {
-                                // console.log(`No data found for flow rate ${flowRate} and stage ${stage}`);
-                            }
-
-                            const delta = yesterdayStageRevValue - value;
-                            // console.log("delta = ", delta);
-
-                            // Rating Lookup 2
-                            const stage2 = todayDownstreamNetmissValue;
-                            const flowRate2 = todayCorrespondingUpstreamFlowValueDivideOneThousand;
-                            let value2 = await readJSONTable2(stage2, flowRate2, jsonFileName);
-                            if (value2 !== null) {
-                                // console.log(`Interpolated reading for flow rate ${flowRate2} and stage ${stage2} at table ${jsonFileName}: ${value2}`);
-                            } else {
-                                // console.log(`No data found for flow rate ${flowRate2} and stage ${stage2}`);
-                            }
-
-                            totalMosierLdgDay6 = delta + value2;
-                        }
-                    } else {
-                        // console.log("**************** isTodayRegulatedPool, else");
-                        totalMosierLdgDay6 = 909;
-                    }
-                } else {
-                    totalMosierLdgDay6 = 909;
-                }
-                // console.log("totalMosierLdgDay6 = ", totalMosierLdgDay6);
-
-                day6 = "<div title='" + "--" + "'>" + totalMosierLdgDay6.toFixed(1) + "</div>";
             } else if (location_id === "Grafton-Mississippi") {
                 // Grafton data process is in fetch.js
                 // console.log("totalGraftonForecastDay6: ", totalGraftonForecastDay6);
@@ -6193,174 +6449,60 @@ async function processAllData(data) {
             day7Cell.innerHTML = location_id.split('-')[0];
 
             let day7 = null;
+            let totalLD22TwDay7 = null;
+            let totalLouisianaDay7 = null;
+            let totalMosierLdgDay7 = null;
+            let totalLD27PoolDay7 = null;
+            let totalLD27TwDay7 = null;
+            let totalEngineersDepotDay7 = null;
+            let totalHerculaneumDay7 = null;
+            let totalNavTWDay7 = null;
+            let totalRedRockLdgDay7 = null;
+            let totalGrandTowerDay7 = null;
+            let totalMoccasinSpringsDay7 = null;
             let totalGraysPtDay7 = null;
             let totalThebesDay7 = null;
             let totalCommerceDay7 = null;
             let totalPriceLdgDay7 = null;
             let totalThompsonLdgDay7 = null;
-            let totalHerculaneumDay7 = null;
-            let totalEngineersDepotDay7 = null;
-            let totalNavTWDay7 = null;
-            let totalRedRockLdgDay7 = null;
-            let totalGrandTowerDay7 = null;
-            let totalMoccasinSpringsDay7 = null;
-            let totalLD27PoolDay7 = null;
-            let totalLD27TwDay7 = null;
-            let totalLD22TwDay7 = null;
-            let totalLouisianaDay7 = null;
-            let totalMosierLdgDay7 = null;
             if (location_id === "LD 22 TW-Mississippi") {
                 day7 = "<div title='" + "No Day7 Forecast" + "'>" + "--" + "</div>";
             } else if (location_id === "Louisiana-Mississippi") {
                 day7 = "<div title='" + "No Day7 Forecast" + "'>" + "--" + "</div>";
-            } else if (location_id === "Grays Pt-Mississippi") {
-                const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[5][1]);
-                // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
+            } else if (location_id === "LD 24 Pool-Mississippi") {
+                day7 = "<div title='" + "No Day7 Forecast" + "'>" + "--" + "</div>";
+            } else if (location_id === "LD 24 TW-Mississippi") {
+                day7 = "<div title='" + "No Day7 Forecast" + "'>" + "--" + "</div>";
+            } else if (location_id === "Mosier Ldg-Mississippi") {
+                day7 = "<div title='" + "No Day7 Forecast" + "'>" + "--" + "</div>";
+            } else if (location_id === "LD 25 Pool-Mississippi") {
+                day7 = "<div title='" + "No Day7 Forecast" + "'>" + "--" + "</div>";
+            } else if (location_id === "LD 25 TW-Mississippi") {
+                day7 = "<div title='" + "No Day7 Forecast" + "'>" + "--" + "</div>";
+            } else if (location_id === "Meredosia-Illinois") {
+                day7 = "<div title='" + "No Day7 Forecast" + "'>" + "--" + "</div>";
+            } else if (location_id === "Valley City-Illinois") {
+                day7 = "<div title='" + "No Day7 Forecast" + "'>" + "--" + "</div>";
+            } else if (location_id === "Hardin-Illinois") {
+                day7 = "<div title='" + "No Day7 Forecast" + "'>" + "--" + "</div>";
+            } else if (location_id === "Grafton-Mississippi") {
+                day7 = "<div title='" + "No Day7 Forecast" + "'>" + "--" + "</div>";
+            } else if (location_id === "LD 27 Pool-Mississippi") {
+                // Process data
+                // console.log("totalLD27PoolDay6: ", totalLD27PoolDay6);
+                // console.log("convertedNetmissUpstreamData.values[6][1] = ", convertedNetmissUpstreamData.values[6][1]);
+                // console.log("convertedNetmissUpstreamData.values[5][1] = ", convertedNetmissUpstreamData.values[5][1]);
 
-                const todayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[6][1]);
-                // console.log("todayUpstreamNetmiss = ", todayUpstreamNetmiss);
+                totalLD27PoolDay7 = parseFloat(totalLD27PoolDay6) + parseFloat(convertedNetmissUpstreamData.values[6][1]) - parseFloat(convertedNetmissUpstreamData.values[5][1]);
+                day7 = "<div title='" + "--" + "'>" + (tsid_forecast_location === true ? "<strong>" + totalLD27PoolDay7.toFixed(1) : totalLD27PoolDay7.toFixed(1)) + "</div>";
+            } else if (location_id === "LD 27 TW-Mississippi") {
+                // Process data
+                // console.log("totalLD27TwDay6: ", totalLD27TwDay6);
+                // console.log("convertedNetmissDownstreamData.values[6][1] = ", convertedNetmissDownstreamData.values[6][1]);
+                // console.log("convertedNetmissDownstreamData.values[5][1] = ", convertedNetmissDownstreamData.values[5][1]);
 
-                const todayDownstreamNetmiss = ForecastValues["Birds Point-Mississippi"][6].value;
-                // console.log("todayDownstreamNetmiss = ", todayDownstreamNetmiss);
-
-                const yesterdayDownstreamNetmiss = ForecastValues["Birds Point-Mississippi"][5].value;
-                // console.log("yesterdayDownstreamNetmiss = ", yesterdayDownstreamNetmiss);
-
-                const riverMile = river_mile_hard_coded;
-                const riverMileUpstream = netmiss_river_mile_hard_coded_upstream;
-                const riverMileDownstream = netmiss_river_mile_hard_coded_downstream;
-                // console.log("riverMile = ", riverMile);
-                // console.log("riverMileUpstream = ", riverMileUpstream);
-                // console.log("riverMileDownstream = ", riverMileDownstream);
-
-                totalGraysPtDay7 = totalGraysPtDay6 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
-
-                day7 = "<div>" + totalGraysPtDay7.toFixed(1) + "</div>";
-            } else if (location_id === "LD 24 Pool-Mississippi" || location_id === "LD 24 TW-Mississippi" || location_id === "LD 25 Pool-Mississippi" || location_id === "LD 25 TW-Mississippi") {
-                day7 = "<div>" + "-" + "</div>";
-            } else if (location_id === "Cairo-Ohio") {
-                if (latest7AMRvfValue[6] !== null) {
-                    day7 = "<div title='" + latest7AMRvfValue[6].value + "'>" +
-                        (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[6].value).toFixed(1) + "</strong>" : (latest7AMRvfValue[6].value).toFixed(1)) +
-                        "</div>";
-                }
-            } else if (location_id === "Thebes-Mississippi") {
-                const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[5][1]);
-                // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
-
-                const todayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[6][1]);
-                // console.log("todayUpstreamNetmiss = ", todayUpstreamNetmiss);
-
-                const todayDownstreamNetmiss = ForecastValues["Birds Point-Mississippi"][6].value;
-                // console.log("todayDownstreamNetmiss = ", todayDownstreamNetmiss);
-
-                const yesterdayDownstreamNetmiss = ForecastValues["Birds Point-Mississippi"][5].value;
-                // console.log("yesterdayDownstreamNetmiss = ", yesterdayDownstreamNetmiss);
-
-                const riverMile = river_mile_hard_coded;
-                const riverMileUpstream = netmiss_river_mile_hard_coded_upstream;
-                const riverMileDownstream = netmiss_river_mile_hard_coded_downstream;
-                // console.log("riverMile = ", riverMile);
-                // console.log("riverMileUpstream = ", riverMileUpstream);
-                // console.log("riverMileDownstream = ", riverMileDownstream);
-
-                totalThebesDay7 = totalThebesDay6 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
-
-                day7 = "<div>" + totalThebesDay7.toFixed(1) + "</div>";
-            } else if (location_id === "Commerce-Mississippi") {
-                const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[5][1]);
-                // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
-
-                const todayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[6][1]);
-                // console.log("todayUpstreamNetmiss = ", todayUpstreamNetmiss);
-
-                const todayDownstreamNetmiss = ForecastValues["Birds Point-Mississippi"][6].value;
-                // console.log("todayDownstreamNetmiss = ", todayDownstreamNetmiss);
-
-                const yesterdayDownstreamNetmiss = ForecastValues["Birds Point-Mississippi"][5].value;
-                // console.log("yesterdayDownstreamNetmiss = ", yesterdayDownstreamNetmiss);
-
-                const riverMile = river_mile_hard_coded;
-                const riverMileUpstream = netmiss_river_mile_hard_coded_upstream;
-                const riverMileDownstream = netmiss_river_mile_hard_coded_downstream;
-                // console.log("riverMile = ", riverMile);
-                // console.log("riverMileUpstream = ", riverMileUpstream);
-                // console.log("riverMileDownstream = ", riverMileDownstream);
-
-                totalCommerceDay7 = totalCommerceDay6 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
-
-                day7 = "<div>" + totalCommerceDay7.toFixed(1) + "</div>";
-            } else if (location_id === "Price Ldg-Mississippi") {
-                const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[5][1]);
-                // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
-
-                const todayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[6][1]);
-                // console.log("todayUpstreamNetmiss = ", todayUpstreamNetmiss);
-
-                const todayDownstreamNetmiss = ForecastValues["Birds Point-Mississippi"][6].value;
-                // console.log("todayDownstreamNetmiss = ", todayDownstreamNetmiss);
-
-                const yesterdayDownstreamNetmiss = ForecastValues["Birds Point-Mississippi"][5].value;
-                // console.log("yesterdayDownstreamNetmiss = ", yesterdayDownstreamNetmiss);
-
-                const riverMile = river_mile_hard_coded;
-                const riverMileUpstream = netmiss_river_mile_hard_coded_upstream;
-                const riverMileDownstream = netmiss_river_mile_hard_coded_downstream;
-                // console.log("riverMile = ", riverMile);
-                // console.log("riverMileUpstream = ", riverMileUpstream);
-                // console.log("riverMileDownstream = ", riverMileDownstream);
-
-                totalPriceLdgDay7 = totalPriceLdgDay6 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
-
-                day7 = "<div>" + totalPriceLdgDay7.toFixed(1) + "</div>";
-            } else if (location_id === "Thompson Ldg-Mississippi") {
-                const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[5][1]);
-                // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
-
-                const todayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[6][1]);
-                // console.log("todayUpstreamNetmiss = ", todayUpstreamNetmiss);
-
-                const todayDownstreamNetmiss = ForecastValues["Birds Point-Mississippi"][6].value;
-                // console.log("todayDownstreamNetmiss = ", todayDownstreamNetmiss);
-
-                const yesterdayDownstreamNetmiss = ForecastValues["Birds Point-Mississippi"][5].value;
-                // console.log("yesterdayDownstreamNetmiss = ", yesterdayDownstreamNetmiss);
-
-                const riverMile = river_mile_hard_coded;
-                const riverMileUpstream = netmiss_river_mile_hard_coded_upstream;
-                const riverMileDownstream = netmiss_river_mile_hard_coded_downstream;
-                // console.log("riverMile = ", riverMile);
-                // console.log("riverMileUpstream = ", riverMileUpstream);
-                // console.log("riverMileDownstream = ", riverMileDownstream);
-
-                totalThompsonLdgDay7 = totalThompsonLdgDay6 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
-
-                day7 = "<div>" + totalThompsonLdgDay7.toFixed(1) + "</div>";
-            } else if (location_id === "Herculaneum-Mississippi") {
-                // console.log("totalHerculaneumDay6 = ", totalHerculaneumDay6);
-
-                const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[5][1]);
-                // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
-
-                const todayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[6][1]); 6
-                // console.log("todayUpstreamNetmiss = ", todayUpstreamNetmiss);
-
-                const todayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[6][1]);
-                // console.log("todayDownstreamNetmiss = ", todayDownstreamNetmiss);
-
-                const yesterdayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[5][1]);
-                // console.log("yesterdayDownstreamNetmiss = ", yesterdayDownstreamNetmiss);
-
-                const riverMile = river_mile_hard_coded;
-                const riverMileUpstream = netmiss_river_mile_hard_coded_upstream;
-                const riverMileDownstream = netmiss_river_mile_hard_coded_downstream;
-                // console.log("riverMile = ", riverMile);
-                // console.log("riverMileUpstream = ", riverMileUpstream);
-                // console.log("riverMileDownstream = ", riverMileDownstream);
-
-                totalHerculaneumDay7 = totalHerculaneumDay6 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
-
-                day7 = "<div>" + totalHerculaneumDay7.toFixed(1) + "</div>";
+                totalLD27TwDay7 = parseFloat(totalLD27TwDay6) + parseFloat(convertedNetmissDownstreamData.values[6][1]) - parseFloat(convertedNetmissDownstreamData.values[5][1]);
+                day7 = "<div title='" + "--" + "'>" + (tsid_forecast_location === true ? "<strong>" + totalLD27TwDay7.toFixed(1) : totalLD27TwDay7.toFixed(1)) + "</div>";
             } else if (location_id === "Engineers Depot-Mississippi") {
                 // console.log("totalEngineersDepotDay6 = ", totalEngineersDepotDay6);
 
@@ -6386,6 +6528,31 @@ async function processAllData(data) {
                 totalEngineersDepotDay7 = totalEngineersDepotDay6 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
 
                 day7 = "<div>" + totalEngineersDepotDay7.toFixed(1) + "</div>";
+            } else if (location_id === "Herculaneum-Mississippi") {
+                // console.log("totalHerculaneumDay6 = ", totalHerculaneumDay6);
+
+                const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[5][1]);
+                // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
+
+                const todayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[6][1]); 6
+                // console.log("todayUpstreamNetmiss = ", todayUpstreamNetmiss);
+
+                const todayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[6][1]);
+                // console.log("todayDownstreamNetmiss = ", todayDownstreamNetmiss);
+
+                const yesterdayDownstreamNetmiss = parseFloat(convertedNetmissForecastingPointDownstreamData.values[5][1]);
+                // console.log("yesterdayDownstreamNetmiss = ", yesterdayDownstreamNetmiss);
+
+                const riverMile = river_mile_hard_coded;
+                const riverMileUpstream = netmiss_river_mile_hard_coded_upstream;
+                const riverMileDownstream = netmiss_river_mile_hard_coded_downstream;
+                // console.log("riverMile = ", riverMile);
+                // console.log("riverMileUpstream = ", riverMileUpstream);
+                // console.log("riverMileDownstream = ", riverMileDownstream);
+
+                totalHerculaneumDay7 = totalHerculaneumDay6 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
+
+                day7 = "<div>" + totalHerculaneumDay7.toFixed(1) + "</div>";
             } else if (location_id === "Nav TW-Kaskaskia") {
                 // console.log("totalNavTWDay6 = ", totalNavTWDay6);
 
@@ -6486,34 +6653,127 @@ async function processAllData(data) {
                 totalMoccasinSpringsDay7 = totalMoccasinSpringsDay6 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
 
                 day7 = "<div>" + totalMoccasinSpringsDay7.toFixed(1) + "</div>";
-            } else if (location_id === "LD 27 Pool-Mississippi") {
-                // Process data
-                // console.log("totalLD27PoolDay6: ", totalLD27PoolDay6);
-                // console.log("convertedNetmissUpstreamData.values[6][1] = ", convertedNetmissUpstreamData.values[6][1]);
-                // console.log("convertedNetmissUpstreamData.values[5][1] = ", convertedNetmissUpstreamData.values[5][1]);
+            } else if (location_id === "Grays Pt-Mississippi") {
+                const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[5][1]);
+                // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
 
-                totalLD27PoolDay7 = parseFloat(totalLD27PoolDay6) + parseFloat(convertedNetmissUpstreamData.values[6][1]) - parseFloat(convertedNetmissUpstreamData.values[5][1]);
-                day7 = "<div title='" + "--" + "'>" + (tsid_forecast_location === true ? "<strong>" + totalLD27PoolDay7.toFixed(1) : totalLD27PoolDay7.toFixed(1)) + "</div>";
-            } else if (location_id === "LD 27 TW-Mississippi") {
-                // Process data
-                // console.log("totalLD27TwDay6: ", totalLD27TwDay6);
-                // console.log("convertedNetmissDownstreamData.values[6][1] = ", convertedNetmissDownstreamData.values[6][1]);
-                // console.log("convertedNetmissDownstreamData.values[5][1] = ", convertedNetmissDownstreamData.values[5][1]);
+                const todayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[6][1]);
+                // console.log("todayUpstreamNetmiss = ", todayUpstreamNetmiss);
 
-                totalLD27TwDay7 = parseFloat(totalLD27TwDay6) + parseFloat(convertedNetmissDownstreamData.values[6][1]) - parseFloat(convertedNetmissDownstreamData.values[5][1]);
-                day7 = "<div title='" + "--" + "'>" + (tsid_forecast_location === true ? "<strong>" + totalLD27TwDay7.toFixed(1) : totalLD27TwDay7.toFixed(1)) + "</div>";
-            } else if (location_id === "LD 24 Pool-Mississippi") {
-                day7 = "<div title='" + "--" + "'>" + "" + "</div>";
-            } else if (location_id === "LD 25 Pool-Mississippi") {
-                day7 = "<div title='" + "--" + "'>" + "" + "</div>";
-            } else if (location_id === "Mosier Ldg-Mississippi") {
-                day7 = "<div title='" + "--" + "'>" + "" + "</div>";
-            } else if (location_id === "Grafton-Mississippi") {
-                day7 = "<div title='" + "--" + "'>" + "" + "</div>";
-            } else if (location_id === "Hardin-Illinois") {
-                day7 = "<div title='" + "--" + "'>" + "" + "</div>";
-            } else if (location_id === "Valley City-Illinois") {
-                day7 = "<div title='" + "--" + "'>" + "" + "</div>";
+                const todayDownstreamNetmiss = ForecastValues["Birds Point-Mississippi"][6].value;
+                // console.log("todayDownstreamNetmiss = ", todayDownstreamNetmiss);
+
+                const yesterdayDownstreamNetmiss = ForecastValues["Birds Point-Mississippi"][5].value;
+                // console.log("yesterdayDownstreamNetmiss = ", yesterdayDownstreamNetmiss);
+
+                const riverMile = river_mile_hard_coded;
+                const riverMileUpstream = netmiss_river_mile_hard_coded_upstream;
+                const riverMileDownstream = netmiss_river_mile_hard_coded_downstream;
+                // console.log("riverMile = ", riverMile);
+                // console.log("riverMileUpstream = ", riverMileUpstream);
+                // console.log("riverMileDownstream = ", riverMileDownstream);
+
+                totalGraysPtDay7 = totalGraysPtDay6 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
+
+                day7 = "<div>" + totalGraysPtDay7.toFixed(1) + "</div>";
+            } else if (location_id === "Thebes-Mississippi") {
+                const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[5][1]);
+                // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
+
+                const todayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[6][1]);
+                // console.log("todayUpstreamNetmiss = ", todayUpstreamNetmiss);
+
+                const todayDownstreamNetmiss = ForecastValues["Birds Point-Mississippi"][6].value;
+                // console.log("todayDownstreamNetmiss = ", todayDownstreamNetmiss);
+
+                const yesterdayDownstreamNetmiss = ForecastValues["Birds Point-Mississippi"][5].value;
+                // console.log("yesterdayDownstreamNetmiss = ", yesterdayDownstreamNetmiss);
+
+                const riverMile = river_mile_hard_coded;
+                const riverMileUpstream = netmiss_river_mile_hard_coded_upstream;
+                const riverMileDownstream = netmiss_river_mile_hard_coded_downstream;
+                // console.log("riverMile = ", riverMile);
+                // console.log("riverMileUpstream = ", riverMileUpstream);
+                // console.log("riverMileDownstream = ", riverMileDownstream);
+
+                totalThebesDay7 = totalThebesDay6 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
+
+                day7 = "<div>" + totalThebesDay7.toFixed(1) + "</div>";
+            } else if (location_id === "Commerce-Mississippi") {
+                const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[5][1]);
+                // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
+
+                const todayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[6][1]);
+                // console.log("todayUpstreamNetmiss = ", todayUpstreamNetmiss);
+
+                const todayDownstreamNetmiss = ForecastValues["Birds Point-Mississippi"][6].value;
+                // console.log("todayDownstreamNetmiss = ", todayDownstreamNetmiss);
+
+                const yesterdayDownstreamNetmiss = ForecastValues["Birds Point-Mississippi"][5].value;
+                // console.log("yesterdayDownstreamNetmiss = ", yesterdayDownstreamNetmiss);
+
+                const riverMile = river_mile_hard_coded;
+                const riverMileUpstream = netmiss_river_mile_hard_coded_upstream;
+                const riverMileDownstream = netmiss_river_mile_hard_coded_downstream;
+                // console.log("riverMile = ", riverMile);
+                // console.log("riverMileUpstream = ", riverMileUpstream);
+                // console.log("riverMileDownstream = ", riverMileDownstream);
+
+                totalCommerceDay7 = totalCommerceDay6 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
+
+                day7 = "<div>" + totalCommerceDay7.toFixed(1) + "</div>";
+            } else if (location_id === "Price Ldg-Mississippi") {
+                const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[5][1]);
+                // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
+
+                const todayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[6][1]);
+                // console.log("todayUpstreamNetmiss = ", todayUpstreamNetmiss);
+
+                const todayDownstreamNetmiss = ForecastValues["Birds Point-Mississippi"][6].value;
+                // console.log("todayDownstreamNetmiss = ", todayDownstreamNetmiss);
+
+                const yesterdayDownstreamNetmiss = ForecastValues["Birds Point-Mississippi"][5].value;
+                // console.log("yesterdayDownstreamNetmiss = ", yesterdayDownstreamNetmiss);
+
+                const riverMile = river_mile_hard_coded;
+                const riverMileUpstream = netmiss_river_mile_hard_coded_upstream;
+                const riverMileDownstream = netmiss_river_mile_hard_coded_downstream;
+                // console.log("riverMile = ", riverMile);
+                // console.log("riverMileUpstream = ", riverMileUpstream);
+                // console.log("riverMileDownstream = ", riverMileDownstream);
+
+                totalPriceLdgDay7 = totalPriceLdgDay6 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
+
+                day7 = "<div>" + totalPriceLdgDay7.toFixed(1) + "</div>";
+            } else if (location_id === "Thompson Ldg-Mississippi") {
+                const yesterdayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[5][1]);
+                // console.log("yesterdayUpstreamNetmiss = ", yesterdayUpstreamNetmiss);
+
+                const todayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[6][1]);
+                // console.log("todayUpstreamNetmiss = ", todayUpstreamNetmiss);
+
+                const todayDownstreamNetmiss = ForecastValues["Birds Point-Mississippi"][6].value;
+                // console.log("todayDownstreamNetmiss = ", todayDownstreamNetmiss);
+
+                const yesterdayDownstreamNetmiss = ForecastValues["Birds Point-Mississippi"][5].value;
+                // console.log("yesterdayDownstreamNetmiss = ", yesterdayDownstreamNetmiss);
+
+                const riverMile = river_mile_hard_coded;
+                const riverMileUpstream = netmiss_river_mile_hard_coded_upstream;
+                const riverMileDownstream = netmiss_river_mile_hard_coded_downstream;
+                // console.log("riverMile = ", riverMile);
+                // console.log("riverMileUpstream = ", riverMileUpstream);
+                // console.log("riverMileDownstream = ", riverMileDownstream);
+
+                totalThompsonLdgDay7 = totalThompsonLdgDay6 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
+
+                day7 = "<div>" + totalThompsonLdgDay7.toFixed(1) + "</div>";
+            } else if (location_id === "Cairo-Ohio") {
+                if (latest7AMRvfValue[6] !== null) {
+                    day7 = "<div title='" + latest7AMRvfValue[6].value + "'>" +
+                        (tsid_forecast_location === true ? "<strong>" + (latest7AMRvfValue[6].value).toFixed(1) + "</strong>" : (latest7AMRvfValue[6].value).toFixed(1)) +
+                        "</div>";
+                }
             } else {
                 if (convertedData !== null && convertedData.values[6] !== null) {
                     day7 = "<div title='" + convertedData.values[6] + "'>" +
@@ -6526,7 +6786,7 @@ async function processAllData(data) {
                         (tsid_forecast_location === true ? "<strong>" + roundedValueOnePlace.toFixed(1) + "</strong>" : roundedValueOnePlace.toFixed(1)) +
                         "</div>";
                 } else {
-                    day7 = "<div>" + "-" + "</div>";
+                    day7 = "<div>" + "--" + "</div>";
                 }
             }
             day7Cell.innerHTML = day7;
