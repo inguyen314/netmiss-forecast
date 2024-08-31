@@ -86,7 +86,6 @@
             <div class="container-fluid">
                 <div id="breadcrumbs">
                 </div>
-                <!--APP STARTS-->
                 <div class="page-content">
                     <div id="topPane" class="col-md backend-cp-collapsible">
                         <div class="box-usace">
@@ -133,7 +132,7 @@
                 <button id="cda-btn" disabled>Login</button>
                 <br>
                 <br>
-
+                <!-- interpolate data -->
                 <div id="loading_forecast" style="display: none;"><img src="../../images/loading4.gif"
                         style='height: 50px; width: 50px;' alt="Loading..." /></div>
                 <div id="table_container_forecast"></div>
@@ -151,9 +150,10 @@
                         style="width: 50%; padding-left: 10px; border: 1px solid black;">
                 </div>
 
-                <!-- email buttons -->
+                <!-- email forecast button -->
                 <button id="sendEmailBtn">Send Internal River Forecast Email</button>
-
+                <br>
+                <br>
                 <!-- send email -->
                 <script>
                     document.getElementById("sendEmailBtn").addEventListener("click", function () {
@@ -183,11 +183,40 @@
                         xhr.send("tableHTML=" + encodeURIComponent(tableHTML));
                     }
                 </script>
-                <br>
-                <br>
-                <br>
-                <br>
-                <!--APP ENDS-->
+                <div class="page-content">
+                    <sidebar id="sidebar">
+                        <!--Side bar content populated here by JavaScript Tag at end of body -->
+                    </sidebar>
+                    <div id="topPane" class="col-md backend-cp-collapsible">
+                        <!-- Page Content Here -->
+                        <div class="box-usace">
+                            <h2 class="box-header-striped">
+                                <span class="titleLabel title">LD Pool Instructions</span>
+                                <span class="rss"></span>
+                            </h2>
+                            <div class="box-content" style="background-color:white;margin:auto">
+                                <div class="content">
+                                    <!-- Box Content Here -->
+                                    <p>Note - Additional instructions may be issued as conditions change and will be
+                                        issued via phone. If there are any questions, please call the water control
+                                        office at (314)331-8342 and ask for Joan, Davor, Liam, or Rob. If there is no
+                                        answer or for after-hours, below are the water managers' duty cell phones.
+                                        Joan: (314)630-6292
+                                        Davor: (314)675-8193
+                                        Liam: (314)857-8393
+                                        Rob: (314)928-7722
+                                    </p>
+                                    <!-- interpolate data -->
+                                    <div id="loading_forecast_instructions" style="display: none;"><img
+                                            src="../../images/loading4.gif" style='height: 50px; width: 50px;'
+                                            alt="Loading..." /></div>
+                                    <div id="table_container_forecast_instructions"></div>
+                                    <script type="text/javascript" src="forecast_instructions_cda.js"></script>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="page-content">
                     <sidebar id="sidebar">
                         <!--Side bar content populated here by JavaScript Tag at end of body -->
@@ -202,7 +231,8 @@
                             <div class="box-content" style="background-color:white;margin:auto">
                                 <div class="content">
                                     <!-- Box Content Here -->
-                                    <p>Please note that after midnight cst, this report is not available and you will see the
+                                    <p>Please note that after midnight cst, this report is not available and you will
+                                        see the
                                         message: <strong>"Run the netmiss forecasts first"</strong>
                                         To load the data, please run the NetMiss forecast.
                                     </p>
