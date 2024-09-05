@@ -157,6 +157,17 @@ function todayAverageOfValues(data) {
     return average;
 }
 
+function customRound(value) {
+    // Define the rounding rules
+    if (value % 10 >= 5) {
+        // If the remainder is 5 or more, round up
+        return Math.ceil(value / 10) * 10;
+    } else {
+        // If the remainder is less than 5, round down
+        return Math.floor(value / 10) * 10;
+    }
+}
+
 // Function to get lastest 7am value
 function get7AMValueForDate(data, date) {
     // Extract the values array from the data

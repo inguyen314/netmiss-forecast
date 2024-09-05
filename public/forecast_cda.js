@@ -727,7 +727,7 @@ async function processAllData(data) {
 
                     level6AmCell.innerHTML = "<div title='" + latest6AMValue.date + " " + latest6AMValue.value + "'>" +
                         "<a href='https://wm.mvs.ds.usace.army.mil/district_templates/chart/public/chart.html?cwms_ts_id=" + tsid + "' target='_blank'>" +
-                        (tsid_forecast_location === true ? "<strong>" + (Math.round((latest6AMValue.value) * 100) / 100).toFixed(2) + "</strong>" : (Math.round((latest6AMValue.value) * 100) / 100).toFixed(2)) + "</a>" + "<br>" + totalNavTWInflowDay0.toFixed(0) +
+                        (tsid_forecast_location === true ? "<strong>" + (Math.round((latest6AMValue.value) * 100) / 100).toFixed(2) + "</strong>" : (Math.round((latest6AMValue.value) * 100) / 100).toFixed(2)) + "</a>" + "<br>" + customRound(totalNavTWInflowDay0) +
                         "</div>";
                 } else {
                     level6AmCell.innerHTML = "<div title='" + latest6AMValue.date + " " + latest6AMValue.value + "'>" +
@@ -1437,7 +1437,7 @@ async function processAllData(data) {
                 totalNavTWInflowDay1 = VenedySmoothed + FreeburgSmoothed + HeckerSmoothed; // ******* Change Here
                 // console.log("totalNavTWInflowDay1 = ", totalNavTWInflowDay1);
 
-                day1 = "<div title='" + "--" + "'>" + totalNavTWDay1.toFixed(1) + "<br>" + totalNavTWInflowDay1.toFixed(0) + "</div>";
+                day1 = "<div title='" + "--" + "'>" + totalNavTWDay1.toFixed(1) + "<br>" + customRound(totalNavTWInflowDay1) + "</div>";
             } else if (location_id === "Red Rock Ldg-Mississippi") {
                 // Get all variables to do calculation
                 const yesterday6AMValue = ((getLatest6AMValue(data2)).latest6AMValue).value;
