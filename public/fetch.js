@@ -98,6 +98,9 @@ async function fetchData(location_id
     , tsid_netmiss_special_gage_2 // url20
     , tsid_rating_id_special_1 // url21
     , tsid_netmiss_downstream_stage_rev_2 // url22
+    , tsid_special_gage_1 // url23
+    , tsid_special_gage_2 // url24
+    , tsid_special_gage_3 // url25
 ) {
     // console.log("location_id =",  location_id);
 
@@ -347,8 +350,41 @@ async function fetchData(location_id
     }
     // console.log("url22 = ", url22);
 
-    return fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9, url10, url11, url12, url13, url14, url15, url16, url17, url18, url19, url20, url21, url22)
-        .then(({ data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17, data18, data19, data20, data21, data22 }) => {
+    // Get Special Gage 1
+    let url23 = null;
+    if (tsid_special_gage_1 !== null) {
+        if (cda === "internal") {
+            url23 = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/timeseries?name=${tsid_special_gage_1}&begin=${end2.toISOString()}&end=${begin.toISOString()}&office=MVS&timezone=CST6CDT`;
+        } else if (cda === "public") {
+            url23 = `https://cwms-data.usace.army.mil/cwms-data/timeseries?name=${tsid_special_gage_1}&begin=${end2.toISOString()}&end=${begin.toISOString()}&office=MVS&timezone=CST6CDT`;
+        }
+    }
+    // console.log("url23 = ", url23);
+
+    // Get Special Gage 2
+    let url24 = null;
+    if (tsid_special_gage_2 !== null) {
+        if (cda === "internal") {
+            url24 = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/timeseries?name=${tsid_special_gage_2}&begin=${end2.toISOString()}&end=${begin.toISOString()}&office=MVS&timezone=CST6CDT`;
+        } else if (cda === "public") {
+            url24 = `https://cwms-data.usace.army.mil/cwms-data/timeseries?name=${tsid_special_gage_2}&begin=${end2.toISOString()}&end=${begin.toISOString()}&office=MVS&timezone=CST6CDT`;
+        }
+    }
+    // console.log("url24 = ", url24);
+
+    // Get Special Gage 3
+    let url25 = null;
+    if (tsid_special_gage_3 !== null) {
+        if (cda === "internal") {
+            url25 = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/timeseries?name=${tsid_special_gage_3}&begin=${end2.toISOString()}&end=${begin.toISOString()}&office=MVS&timezone=CST6CDT`;
+        } else if (cda === "public") {
+            url25 = `https://cwms-data.usace.army.mil/cwms-data/timeseries?name=${tsid_special_gage_3}&begin=${end2.toISOString()}&end=${begin.toISOString()}&office=MVS&timezone=CST6CDT`;
+        }
+    }
+    // console.log("url25 = ", url25);
+
+    return fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9, url10, url11, url12, url13, url14, url15, url16, url17, url18, url19, url20, url21, url22, url23, url24, url25)
+        .then(({ data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17, data18, data19, data20, data21, data22, data23, data24, data25 }) => {
             // console.log("location_id =",  location_id);
             // Do something with the fetched data
             // console.log("data1 = ", data1);
@@ -373,6 +409,9 @@ async function fetchData(location_id
             // console.log("data20 = ", data20);
             // console.log("data21 = ", data21);
             // console.log("data22 = ", data22);
+            // console.log("data23 = ", data23);
+            // console.log("data24 = ", data24);
+            // console.log("data25 = ", data25);
 
             // PROCESS data1 - netmiss forecast data
             const convertedData = convertUTCtoCentralTime(data1);
@@ -5135,6 +5174,9 @@ async function fetchData(location_id
                 data20,
                 data21,
                 data22,
+                data23,
+                data24,
+                data25,
                 totalGraftonForecastDay1,
                 totalGraftonForecastDay2,
                 totalGraftonForecastDay3,
@@ -5149,7 +5191,7 @@ async function fetchData(location_id
         });
 }
 
-async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9, url10, url11, url12, url13, url14, url15, url16, url17, url18, url19, url20, url21, url22) {
+async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9, url10, url11, url12, url13, url14, url15, url16, url17, url18, url19, url20, url21, url22, url23, url24, url25) {
     const fetchOptions = {
         method: 'GET',
         headers: {
@@ -5180,7 +5222,10 @@ async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9
             url19 ? fetch(url19, fetchOptions) : Promise.resolve(null),
             url20 ? fetch(url20, fetchOptions) : Promise.resolve(null),
             url21 ? fetch(url21, fetchOptions) : Promise.resolve(null),
-            url22 ? fetch(url22, fetchOptions) : Promise.resolve(null)
+            url22 ? fetch(url22, fetchOptions) : Promise.resolve(null),
+            url23 ? fetch(url23, fetchOptions) : Promise.resolve(null),
+            url24 ? fetch(url24, fetchOptions) : Promise.resolve(null),
+            url25 ? fetch(url25, fetchOptions) : Promise.resolve(null)
         ];
 
         const responses = await Promise.all(responsePromises);
@@ -5216,7 +5261,10 @@ async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9
             data19: data[18],
             data20: data[19],
             data21: data[20],
-            data22: data[21]
+            data22: data[21],
+            data23: data[22],
+            data24: data[23],
+            data25: data[24]
         };
     } catch (error) {
         console.error('Error fetching the URLs:', error.message);
@@ -5242,7 +5290,10 @@ async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9
             data19: null,
             data20: null,
             data21: null,
-            data22: null
+            data22: null,
+            data23: null,
+            data24: null,
+            data25: null
         }; // return null data if any error occurs
     }
 }

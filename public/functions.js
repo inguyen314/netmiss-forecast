@@ -85,6 +85,78 @@ function getLatest6AMValue(data) {
     };
 }
 
+function yesterdayAverageOfValues(data) {
+    const centralOffset = -5; // Central Time is UTC-6
+
+    // Helper function to convert UTC timestamp to Central Time and get the hour
+    function getCentralTimeHour(timestamp) {
+        const date = new Date(timestamp);
+        const utcHours = date.getUTCHours();
+        const centralHours = (utcHours + centralOffset + 24) % 24;
+        return centralHours;
+    }
+
+    // Extract values at 5 AM, 6 AM, and 7 AM Central Time
+    const targetHours = [5, 6, 7];
+    let valuesAtSpecificHours = [];
+
+    data.values.forEach(([timestamp, value]) => {
+        if (value !== null) {
+            const centralHour = getCentralTimeHour(timestamp);
+            if (targetHours.includes(centralHour)) {
+                valuesAtSpecificHours.push(value);
+            }
+        }
+    });
+
+    console.log("valuesAtSpecificHours", valuesAtSpecificHours);
+
+    const yesterday = valuesAtSpecificHours.slice(0, 12);
+    console.log("yesterday", yesterday);
+
+    // Calculate the average of the extracted values
+    const sum = yesterday.reduce((acc, val) => acc + val, 0);
+    const average = yesterday.length > 0 ? sum / yesterday.length : null;
+
+    return average;
+}
+
+function todayAverageOfValues(data) {
+    const centralOffset = -5; // Central Time is UTC-6
+
+    // Helper function to convert UTC timestamp to Central Time and get the hour
+    function getCentralTimeHour(timestamp) {
+        const date = new Date(timestamp);
+        const utcHours = date.getUTCHours();
+        const centralHours = (utcHours + centralOffset + 24) % 24;
+        return centralHours;
+    }
+
+    // Extract values at 5 AM, 6 AM, and 7 AM Central Time
+    const targetHours = [5, 6, 7];
+    let valuesAtSpecificHours = [];
+
+    data.values.forEach(([timestamp, value]) => {
+        if (value !== null) {
+            const centralHour = getCentralTimeHour(timestamp);
+            if (targetHours.includes(centralHour)) {
+                valuesAtSpecificHours.push(value);
+            }
+        }
+    });
+
+    console.log("valuesAtSpecificHours", valuesAtSpecificHours);
+
+    const yesterday = valuesAtSpecificHours.slice(12, 24);
+    console.log("yesterday", yesterday);
+
+    // Calculate the average of the extracted values
+    const sum = yesterday.reduce((acc, val) => acc + val, 0);
+    const average = yesterday.length > 0 ? sum / yesterday.length : null;
+
+    return average;
+}
+
 // Function to get lastest 7am value
 function get7AMValueForDate(data, date) {
     // Extract the values array from the data

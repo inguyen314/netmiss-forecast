@@ -400,7 +400,7 @@ async function populateTableCells(jsonDataFiltered, table, nws_day1_date) {
         // setup date time before calling function
         const currentDateTime = new Date();
         const currentDateTimePlus7Days = plusHoursFromDate(currentDateTime, 168);
-        const currentDateMinus30Hours = subtractHoursFromDate(currentDateTime, 30);
+        const currentDateMinus30Hours = subtractHoursFromDate(currentDateTime, 48);
 
         promises.push(fetchData(
             location.location_id
@@ -436,6 +436,9 @@ async function populateTableCells(jsonDataFiltered, table, nws_day1_date) {
             , location.tsid_netmiss_special_gage_2
             , location.tsid_rating_id_special_1
             , location.tsid_netmiss_downstream_stage_rev_2
+            , location.tsid_special_gage_1
+            , location.tsid_special_gage_2
+            , location.tsid_special_gage_3
         ))
     });
     Promise.all(promises).then(async (d) => {
@@ -492,6 +495,9 @@ async function processAllData(data) {
         data20,
         data21,
         data22,
+        data23,
+        data24,
+        data25,
         totalGraftonForecastDay1,
         totalGraftonForecastDay2,
         totalGraftonForecastDay3,
@@ -522,6 +528,9 @@ async function processAllData(data) {
         // console.log("isCairoRvfForecastValuesGreaterThanSeven: ", isCairoRvfForecastValuesGreaterThanSeven);
         // console.log("BirdsPointForecastValue: ", BirdsPointForecastValue);
         // console.log("latest7AMRvfValue: ", latest7AMRvfValue);
+        // console.log("data23: ", data23);
+        // console.log("data24: ", data24);
+        // console.log("data25: ", data25);
 
         // PREPARE GRAFTON PAYLOAD
         if (location_id === "Grafton-Mississippi") {
@@ -673,10 +682,20 @@ async function processAllData(data) {
             } else {
                 isProjectGage = false;
             }
+
+            let isNavInflow = null;
+            if (location_id.split('-')[0] === "Nav TW") {
+                isNavInflow = true;
+            } else {
+                isNavInflow = false;
+            }
+
             locationIdCell.style.textAlign = 'center';
             locationIdCell.style.border = '1px solid gray';
             if (isProjectGage) {
                 locationIdCell.innerHTML = "<a href='" + "https://wm.mvs.ds.usace.army.mil/web_apps/plot_macro/public/plot_macro.php?cwms_ts_id=" + location_id + ".Elev.Inst.~1Day.0.netmiss-fcst" + "&start_day=0&end_day=7" + "' target='_blank'>" + location_id.split('-')[0] + "</a>";
+            } else if (isNavInflow) {
+                locationIdCell.innerHTML = "<a href='" + "https://wm.mvs.ds.usace.army.mil/web_apps/plot_macro/public/plot_macro.php?cwms_ts_id=" + location_id + ".Elev.Inst.~1Day.0.netmiss-fcst" + "&start_day=0&end_day=7" + "' target='_blank'>" + location_id.split('-')[0] + "</a>" + "<br>" + "Inflow";
             } else {
                 locationIdCell.innerHTML = "<a href='" + "https://wm.mvs.ds.usace.army.mil/web_apps/plot_macro/public/plot_macro.php?cwms_ts_id=" + location_id + ".Stage.Inst.~1Day.0.netmiss-fcst" + "&start_day=0&end_day=7" + "' target='_blank'>" + location_id.split('-')[0] + "</a>";
             }
@@ -686,12 +705,36 @@ async function processAllData(data) {
             level6AmCell.style.textAlign = 'center';
             level6AmCell.style.border = '1px solid gray'; // Add border
             level6AmCell.innerHTML = location_id.split('-')[0];
+            let totalNavTWInflowDay0 = 909;
 
             if (latest6AMValue.value) {
-                level6AmCell.innerHTML = "<div title='" + latest6AMValue.date + " " + latest6AMValue.value + "'>" +
-                    "<a href='https://wm.mvs.ds.usace.army.mil/district_templates/chart/public/chart.html?cwms_ts_id=" + tsid + "' target='_blank'>" +
-                    (tsid_forecast_location === true ? "<strong>" + (Math.round((latest6AMValue.value) * 100) / 100).toFixed(2) + "</strong>" : (Math.round((latest6AMValue.value) * 100) / 100).toFixed(2)) + "</a>" +
-                    "</div>";
+                if (isNavInflow) {
+                    // Get totalNavTWInflowDay1 (Venedy total flow)
+                    const VenedySmoothed = yesterdayAverageOfValues(data23);
+                    // console.log("VenedySmoothed = ", VenedySmoothed);
+
+                    // Get totalNavTWInflowDay1 (Freeburg total flow)
+                    const FreeburgSmoothed = yesterdayAverageOfValues(data24); // ******* Change Here
+                    // console.log("FreeburgSmoothed = ", FreeburgSmoothed);
+
+                    // Get totalNavTWInflowDay1 (Hecker total flow)
+                    const HeckerSmoothed = yesterdayAverageOfValues(data25); // ******* Change Here
+                    // console.log("HeckerSmoothed = ", HeckerSmoothed);
+
+                    // Total Inflow
+                    totalNavTWInflowDay0 = VenedySmoothed + FreeburgSmoothed + HeckerSmoothed; // ******* Change Here
+                    // console.log("totalNavTWInflowDay0 = ", totalNavTWInflowDay0);
+
+                    level6AmCell.innerHTML = "<div title='" + latest6AMValue.date + " " + latest6AMValue.value + "'>" +
+                        "<a href='https://wm.mvs.ds.usace.army.mil/district_templates/chart/public/chart.html?cwms_ts_id=" + tsid + "' target='_blank'>" +
+                        (tsid_forecast_location === true ? "<strong>" + (Math.round((latest6AMValue.value) * 100) / 100).toFixed(2) + "</strong>" : (Math.round((latest6AMValue.value) * 100) / 100).toFixed(2)) + "</a>" + "<br>" + totalNavTWInflowDay0.toFixed(0) +
+                        "</div>";
+                } else {
+                    level6AmCell.innerHTML = "<div title='" + latest6AMValue.date + " " + latest6AMValue.value + "'>" +
+                        "<a href='https://wm.mvs.ds.usace.army.mil/district_templates/chart/public/chart.html?cwms_ts_id=" + tsid + "' target='_blank'>" +
+                        (tsid_forecast_location === true ? "<strong>" + (Math.round((latest6AMValue.value) * 100) / 100).toFixed(2) + "</strong>" : (Math.round((latest6AMValue.value) * 100) / 100).toFixed(2)) + "</a>" +
+                        "</div>";
+                }
             } else {
                 level6AmCell.innerHTML = "<div title='" + latest6AMValue.date + " " + latest6AMValue.value + "'>" +
                     "<a href='https://wm.mvs.ds.usace.army.mil/district_templates/chart/public/chart.html?cwms_ts_id=" + tsid + "' target='_blank'>" +
@@ -717,6 +760,7 @@ async function processAllData(data) {
             let totalEngineersDepotDay1 = null;
             let totalHerculaneumDay1 = null;
             let totalNavTWDay1 = null;
+            let totalNavTWInflowDay1 = 909;
             let totalRedRockLdgDay1 = null;
             let totalGrandTowerDay1 = null;
             let totalMoccasinSpringsDay1 = null;
@@ -835,7 +879,7 @@ async function processAllData(data) {
                         const stage = todayDownstreamNetmiss;
                         const flowRate = sumTodayNetmissFlowPlusSpecialNetmissFlowValueDividedOneThousand;
                         // console.log(stage, flowRate, jsonFileName);
-                        let value = await readJSONTable(stage, flowRate, jsonFileName);
+                        let value = await readJSONTable2(stage, flowRate, jsonFileName);
                         if (value !== null) {
                             // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
                         } else {
@@ -862,7 +906,7 @@ async function processAllData(data) {
                         const stage = downstreamStageRevValue;
                         const flowRate = sumYesterdayNetmissFlowValuePlusSpecialNetmissFlowValueDividedOneThousand;
                         // console.log(stage, flowRate, jsonFileName);
-                        let value = await readJSONTable(stage, flowRate, jsonFileName);
+                        let value = await readJSONTable2(stage, flowRate, jsonFileName);
                         if (value !== null) {
                             // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
                         } else {
@@ -875,7 +919,7 @@ async function processAllData(data) {
                         const stage2 = currentDownstreamNetmiss;
                         const flowRate2 = sumTodayNetmissFlowPlusSpecialNetmissFlowValueDividedOneThousand;
                         // console.log(stage2, flowRate2, jsonFileName);
-                        let value2 = await readJSONTable(stage2, flowRate2, jsonFileName);
+                        let value2 = await readJSONTable2(stage2, flowRate2, jsonFileName);
                         if (value !== null) {
                             // console.log(`Interpolated reading for flow rate ${flowRate2} and stage ${stage2} at table ${jsonFileName}: ${value2}`);
                         } else {
@@ -972,7 +1016,7 @@ async function processAllData(data) {
                 if (isTodayOpenRiver) {
                     const yesterdayCorrespondingUpstreamFlowValueToStageRev = findIndByDep(yesterdayCorrespondingUpstreamFlowValue, ratingTableCoe);
                     // console.log("yesterdayCorrespondingUpstreamFlowValueToStageRev = ", yesterdayCorrespondingUpstreamFlowValueToStageRev);
- 
+
                     const todayCorrespondingUpstreamFlowValueToStageRev = findIndByDep(todayCorrespondingUpstreamFlowValue, ratingTableCoe);
                     // console.log("todayCorrespondingUpstreamFlowValueToStageRev = ", todayCorrespondingUpstreamFlowValueToStageRev);
 
@@ -985,7 +1029,7 @@ async function processAllData(data) {
 
                         totalMosierLdgDay1 = 0 + OpenRiverForecastAdjustment + todayCorrespondingUpstreamFlowValueToStageRev; // ************** change here
                     }
-                    
+
                     if (isYesterdayRegulatedPool) {
                         const OpenRiverForecastAdjustment = yesterdayStageRevValue - yesterdayCorrespondingUpstreamFlowValueToStageRev;
                         // console.log("OpenRiverForecastAdjustment = ", OpenRiverForecastAdjustment);
@@ -1377,7 +1421,23 @@ async function processAllData(data) {
                 totalNavTWDay1 = yesterday6AMValue + (((((todayUpstreamNetmiss - yesterday6AMValueUpstream) - (todayDownstreamNetmiss - yesterday6AMValueDownstream)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterday6AMValueDownstream));
                 // console.log("totalNavTWDay1 = ", totalNavTWDay1);
 
-                day1 = "<div title='" + "--" + "'>" + totalNavTWDay1.toFixed(1) + "</div>";
+                // Get totalNavTWInflowDay1 (Venedy total flow)
+                const VenedySmoothed = todayAverageOfValues(data23); // ******* Change Here
+                // console.log("VenedySmoothed = ", VenedySmoothed);
+
+                // Get totalNavTWInflowDay1 (Freeburg total flow)
+                const FreeburgSmoothed = todayAverageOfValues(data24); // ******* Change Here
+                // console.log("FreeburgSmoothed = ", FreeburgSmoothed);
+
+                // Get totalNavTWInflowDay1 (Hecker total flow)
+                const HeckerSmoothed = todayAverageOfValues(data25); // ******* Change Here
+                // console.log("HeckerSmoothed = ", HeckerSmoothed);
+
+                // Total Inflow
+                totalNavTWInflowDay1 = VenedySmoothed + FreeburgSmoothed + HeckerSmoothed; // ******* Change Here
+                // console.log("totalNavTWInflowDay1 = ", totalNavTWInflowDay1);
+
+                day1 = "<div title='" + "--" + "'>" + totalNavTWDay1.toFixed(1) + "<br>" + totalNavTWInflowDay1.toFixed(0) + "</div>";
             } else if (location_id === "Red Rock Ldg-Mississippi") {
                 // Get all variables to do calculation
                 const yesterday6AMValue = ((getLatest6AMValue(data2)).latest6AMValue).value;
@@ -1555,7 +1615,7 @@ async function processAllData(data) {
 
                 const todayUpstreamNetmiss = parseFloat(convertedNetmissForecastingPointUpstreamData.values[0][1]); // ************** change here
                 // console.log("todayUpstreamNetmiss = ", todayUpstreamNetmiss);
-                
+
                 const yesterdayUpstream6AMStageRevValue = ((getLatest6AMValue(data7)).latest6AMValue).value;
                 // console.log("yesterdayUpstream6AMStageRevValue = ", yesterdayUpstream6AMStageRevValue);
 
@@ -1737,7 +1797,7 @@ async function processAllData(data) {
                         const stage = todayDownstreamNetmiss;
                         const flowRate = sumTodayNetmissFlowPlusSpecialNetmissFlowValueDividedOneThousand;
                         // console.log(stage, flowRate, jsonFileName);
-                        let value = await readJSONTable(stage, flowRate, jsonFileName);
+                        let value = await readJSONTable2(stage, flowRate, jsonFileName);
                         if (value !== null) {
                             // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
                         } else {
@@ -1764,7 +1824,7 @@ async function processAllData(data) {
                         const stage = downstreamStageRevValue;
                         const flowRate = sumYesterdayNetmissFlowValuePlusSpecialNetmissFlowValueDividedOneThousand;
                         // console.log(stage, flowRate, jsonFileName);
-                        let value = await readJSONTable(stage, flowRate, jsonFileName);
+                        let value = await readJSONTable2(stage, flowRate, jsonFileName);
                         if (value !== null) {
                             // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
                         } else {
@@ -1777,7 +1837,7 @@ async function processAllData(data) {
                         const stage2 = currentDownstreamNetmiss;
                         const flowRate2 = sumTodayNetmissFlowPlusSpecialNetmissFlowValueDividedOneThousand;
                         // console.log(stage2, flowRate2, jsonFileName);
-                        let value2 = await readJSONTable(stage2, flowRate2, jsonFileName);
+                        let value2 = await readJSONTable2(stage2, flowRate2, jsonFileName);
                         if (value !== null) {
                             // console.log(`Interpolated reading for flow rate ${flowRate2} and stage ${stage2} at table ${jsonFileName}: ${value2}`);
                         } else {
@@ -1874,7 +1934,7 @@ async function processAllData(data) {
                 if (isTodayOpenRiver) {
                     const yesterdayCorrespondingUpstreamFlowValueToStageRev = findIndByDep(yesterdayCorrespondingUpstreamFlowValue, ratingTableCoe);
                     // console.log("yesterdayCorrespondingUpstreamFlowValueToStageRev = ", yesterdayCorrespondingUpstreamFlowValueToStageRev);
- 
+
                     const todayCorrespondingUpstreamFlowValueToStageRev = findIndByDep(todayCorrespondingUpstreamFlowValue, ratingTableCoe);
                     // console.log("todayCorrespondingUpstreamFlowValueToStageRev = ", todayCorrespondingUpstreamFlowValueToStageRev);
 
@@ -1887,7 +1947,7 @@ async function processAllData(data) {
 
                         totalMosierLdgDay2 = 0 + OpenRiverForecastAdjustment + todayCorrespondingUpstreamFlowValueToStageRev; // ************** change here
                     }
-                    
+
                     if (isYesterdayRegulatedPool) {
                         const OpenRiverForecastAdjustment = yesterdayStageRevValue - yesterdayCorrespondingUpstreamFlowValueToStageRev;
                         // console.log("OpenRiverForecastAdjustment = ", OpenRiverForecastAdjustment);
@@ -2260,7 +2320,7 @@ async function processAllData(data) {
 
                 totalNavTWDay2 = totalNavTWDay1 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
 
-                day2 = "<div>" + totalNavTWDay2.toFixed(1) + "</div>";
+                day2 = "<div>" + totalNavTWDay2.toFixed(1) + "<br>" + "&nbsp;" + "</div>";
             } else if (location_id === "Red Rock Ldg-Mississippi") {
                 // console.log("totalRedRockLdgDay1 = ", totalRedRockLdgDay1);
 
@@ -2620,7 +2680,7 @@ async function processAllData(data) {
                         const stage = todayDownstreamNetmiss;
                         const flowRate = sumTodayNetmissFlowPlusSpecialNetmissFlowValueDividedOneThousand;
                         // console.log(stage, flowRate, jsonFileName);
-                        let value = await readJSONTable(stage, flowRate, jsonFileName);
+                        let value = await readJSONTable2(stage, flowRate, jsonFileName);
                         if (value !== null) {
                             // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
                         } else {
@@ -2647,7 +2707,7 @@ async function processAllData(data) {
                         const stage = downstreamStageRevValue;
                         const flowRate = sumYesterdayNetmissFlowValuePlusSpecialNetmissFlowValueDividedOneThousand;
                         // console.log(stage, flowRate, jsonFileName);
-                        let value = await readJSONTable(stage, flowRate, jsonFileName);
+                        let value = await readJSONTable2(stage, flowRate, jsonFileName);
                         if (value !== null) {
                             // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
                         } else {
@@ -2660,7 +2720,7 @@ async function processAllData(data) {
                         const stage2 = currentDownstreamNetmiss;
                         const flowRate2 = sumTodayNetmissFlowPlusSpecialNetmissFlowValueDividedOneThousand;
                         // console.log(stage2, flowRate2, jsonFileName);
-                        let value2 = await readJSONTable(stage2, flowRate2, jsonFileName);
+                        let value2 = await readJSONTable2(stage2, flowRate2, jsonFileName);
                         if (value !== null) {
                             // console.log(`Interpolated reading for flow rate ${flowRate2} and stage ${stage2} at table ${jsonFileName}: ${value2}`);
                         } else {
@@ -2757,7 +2817,7 @@ async function processAllData(data) {
                 if (isTodayOpenRiver) {
                     const yesterdayCorrespondingUpstreamFlowValueToStageRev = findIndByDep(yesterdayCorrespondingUpstreamFlowValue, ratingTableCoe);
                     // console.log("yesterdayCorrespondingUpstreamFlowValueToStageRev = ", yesterdayCorrespondingUpstreamFlowValueToStageRev);
- 
+
                     const todayCorrespondingUpstreamFlowValueToStageRev = findIndByDep(todayCorrespondingUpstreamFlowValue, ratingTableCoe);
                     // console.log("todayCorrespondingUpstreamFlowValueToStageRev = ", todayCorrespondingUpstreamFlowValueToStageRev);
 
@@ -2770,7 +2830,7 @@ async function processAllData(data) {
 
                         totalMosierLdgDay3 = 0 + OpenRiverForecastAdjustment + todayCorrespondingUpstreamFlowValueToStageRev; // ************** change here
                     }
-                    
+
                     if (isYesterdayRegulatedPool) {
                         const OpenRiverForecastAdjustment = yesterdayStageRevValue - yesterdayCorrespondingUpstreamFlowValueToStageRev;
                         // console.log("OpenRiverForecastAdjustment = ", OpenRiverForecastAdjustment);
@@ -3143,7 +3203,7 @@ async function processAllData(data) {
 
                 totalNavTWDay3 = totalNavTWDay2 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
 
-                day3 = "<div>" + totalNavTWDay3.toFixed(1) + "</div>";
+                day3 = "<div>" + totalNavTWDay3.toFixed(1) + "<br>" + "&nbsp;" + "</div>";
             } else if (location_id === "Red Rock Ldg-Mississippi") {
                 // console.log("totalRedRockLdgDay2 = ", totalRedRockLdgDay2);
 
@@ -3495,7 +3555,7 @@ async function processAllData(data) {
                         const stage = todayDownstreamNetmiss;
                         const flowRate = sumTodayNetmissFlowPlusSpecialNetmissFlowValueDividedOneThousand;
                         // console.log(stage, flowRate, jsonFileName);
-                        let value = await readJSONTable(stage, flowRate, jsonFileName);
+                        let value = await readJSONTable2(stage, flowRate, jsonFileName);
                         if (value !== null) {
                             // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
                         } else {
@@ -3522,7 +3582,7 @@ async function processAllData(data) {
                         const stage = downstreamStageRevValue;
                         const flowRate = sumYesterdayNetmissFlowValuePlusSpecialNetmissFlowValueDividedOneThousand;
                         // console.log(stage, flowRate, jsonFileName);
-                        let value = await readJSONTable(stage, flowRate, jsonFileName);
+                        let value = await readJSONTable2(stage, flowRate, jsonFileName);
                         if (value !== null) {
                             // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
                         } else {
@@ -3535,7 +3595,7 @@ async function processAllData(data) {
                         const stage2 = currentDownstreamNetmiss;
                         const flowRate2 = sumTodayNetmissFlowPlusSpecialNetmissFlowValueDividedOneThousand;
                         // console.log(stage2, flowRate2, jsonFileName);
-                        let value2 = await readJSONTable(stage2, flowRate2, jsonFileName);
+                        let value2 = await readJSONTable2(stage2, flowRate2, jsonFileName);
                         if (value !== null) {
                             // console.log(`Interpolated reading for flow rate ${flowRate2} and stage ${stage2} at table ${jsonFileName}: ${value2}`);
                         } else {
@@ -3632,7 +3692,7 @@ async function processAllData(data) {
                 if (isTodayOpenRiver) {
                     const yesterdayCorrespondingUpstreamFlowValueToStageRev = findIndByDep(yesterdayCorrespondingUpstreamFlowValue, ratingTableCoe);
                     // console.log("yesterdayCorrespondingUpstreamFlowValueToStageRev = ", yesterdayCorrespondingUpstreamFlowValueToStageRev);
- 
+
                     const todayCorrespondingUpstreamFlowValueToStageRev = findIndByDep(todayCorrespondingUpstreamFlowValue, ratingTableCoe);
                     // console.log("todayCorrespondingUpstreamFlowValueToStageRev = ", todayCorrespondingUpstreamFlowValueToStageRev);
 
@@ -3645,7 +3705,7 @@ async function processAllData(data) {
 
                         totalMosierLdgDay4 = 0 + OpenRiverForecastAdjustment + todayCorrespondingUpstreamFlowValueToStageRev; // ************** change here
                     }
-                    
+
                     if (isYesterdayRegulatedPool) {
                         const OpenRiverForecastAdjustment = yesterdayStageRevValue - yesterdayCorrespondingUpstreamFlowValueToStageRev;
                         // console.log("OpenRiverForecastAdjustment = ", OpenRiverForecastAdjustment);
@@ -4020,7 +4080,7 @@ async function processAllData(data) {
 
                 totalNavTWDay4 = totalNavTWDay3 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
 
-                day4 = "<div>" + totalNavTWDay4.toFixed(1) + "</div>";
+                day4 = "<div>" + totalNavTWDay4.toFixed(1) + "<br>" + "&nbsp;" + "</div>";
             } else if (location_id === "Red Rock Ldg-Mississippi") {
                 // console.log("totalRedRockLdgDay3 = ", totalRedRockLdgDay3);
 
@@ -4372,7 +4432,7 @@ async function processAllData(data) {
                         const stage = todayDownstreamNetmiss;
                         const flowRate = sumTodayNetmissFlowPlusSpecialNetmissFlowValueDividedOneThousand;
                         // console.log(stage, flowRate, jsonFileName);
-                        let value = await readJSONTable(stage, flowRate, jsonFileName);
+                        let value = await readJSONTable2(stage, flowRate, jsonFileName);
                         if (value !== null) {
                             // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
                         } else {
@@ -4399,7 +4459,7 @@ async function processAllData(data) {
                         const stage = downstreamStageRevValue;
                         const flowRate = sumYesterdayNetmissFlowValuePlusSpecialNetmissFlowValueDividedOneThousand;
                         // console.log(stage, flowRate, jsonFileName);
-                        let value = await readJSONTable(stage, flowRate, jsonFileName);
+                        let value = await readJSONTable2(stage, flowRate, jsonFileName);
                         if (value !== null) {
                             // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
                         } else {
@@ -4412,7 +4472,7 @@ async function processAllData(data) {
                         const stage2 = currentDownstreamNetmiss;
                         const flowRate2 = sumTodayNetmissFlowPlusSpecialNetmissFlowValueDividedOneThousand;
                         // console.log(stage2, flowRate2, jsonFileName);
-                        let value2 = await readJSONTable(stage2, flowRate2, jsonFileName);
+                        let value2 = await readJSONTable2(stage2, flowRate2, jsonFileName);
                         if (value !== null) {
                             // console.log(`Interpolated reading for flow rate ${flowRate2} and stage ${stage2} at table ${jsonFileName}: ${value2}`);
                         } else {
@@ -4509,7 +4569,7 @@ async function processAllData(data) {
                 if (isTodayOpenRiver) {
                     const yesterdayCorrespondingUpstreamFlowValueToStageRev = findIndByDep(yesterdayCorrespondingUpstreamFlowValue, ratingTableCoe);
                     // console.log("yesterdayCorrespondingUpstreamFlowValueToStageRev = ", yesterdayCorrespondingUpstreamFlowValueToStageRev);
- 
+
                     const todayCorrespondingUpstreamFlowValueToStageRev = findIndByDep(todayCorrespondingUpstreamFlowValue, ratingTableCoe);
                     // console.log("todayCorrespondingUpstreamFlowValueToStageRev = ", todayCorrespondingUpstreamFlowValueToStageRev);
 
@@ -4522,7 +4582,7 @@ async function processAllData(data) {
 
                         totalMosierLdgDay5 = 0 + OpenRiverForecastAdjustment + todayCorrespondingUpstreamFlowValueToStageRev; // ************** change here
                     }
-                    
+
                     if (isYesterdayRegulatedPool) {
                         const OpenRiverForecastAdjustment = yesterdayStageRevValue - yesterdayCorrespondingUpstreamFlowValueToStageRev;
                         // console.log("OpenRiverForecastAdjustment = ", OpenRiverForecastAdjustment);
@@ -5057,7 +5117,7 @@ async function processAllData(data) {
 
                 totalNavTWDay5 = totalNavTWDay4 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
 
-                day5 = "<div>" + totalNavTWDay5.toFixed(1) + "</div>";
+                day5 = "<div>" + totalNavTWDay5.toFixed(1) + "<br>" + "&nbsp;" + "</div>";
             } else if (location_id === "Red Rock Ldg-Mississippi") {
                 // console.log("totalRedRockLdgDay4 = ", totalRedRockLdgDay4);
 
@@ -5409,7 +5469,7 @@ async function processAllData(data) {
                         const stage = todayDownstreamNetmiss;
                         const flowRate = sumTodayNetmissFlowPlusSpecialNetmissFlowValueDividedOneThousand;
                         // console.log(stage, flowRate, jsonFileName);
-                        let value = await readJSONTable(stage, flowRate, jsonFileName);
+                        let value = await readJSONTable2(stage, flowRate, jsonFileName);
                         if (value !== null) {
                             // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
                         } else {
@@ -5436,7 +5496,7 @@ async function processAllData(data) {
                         const stage = downstreamStageRevValue;
                         const flowRate = sumYesterdayNetmissFlowValuePlusSpecialNetmissFlowValueDividedOneThousand;
                         // console.log(stage, flowRate, jsonFileName);
-                        let value = await readJSONTable(stage, flowRate, jsonFileName);
+                        let value = await readJSONTable2(stage, flowRate, jsonFileName);
                         if (value !== null) {
                             // console.log(`Interpolated reading for flow rate ${flowRate} and stage ${stage} at table ${jsonFileName}: ${value}`);
                         } else {
@@ -5449,7 +5509,7 @@ async function processAllData(data) {
                         const stage2 = currentDownstreamNetmiss;
                         const flowRate2 = sumTodayNetmissFlowPlusSpecialNetmissFlowValueDividedOneThousand;
                         // console.log(stage2, flowRate2, jsonFileName);
-                        let value2 = await readJSONTable(stage2, flowRate2, jsonFileName);
+                        let value2 = await readJSONTable2(stage2, flowRate2, jsonFileName);
                         if (value !== null) {
                             // console.log(`Interpolated reading for flow rate ${flowRate2} and stage ${stage2} at table ${jsonFileName}: ${value2}`);
                         } else {
@@ -5546,7 +5606,7 @@ async function processAllData(data) {
                 if (isTodayOpenRiver) {
                     const yesterdayCorrespondingUpstreamFlowValueToStageRev = findIndByDep(yesterdayCorrespondingUpstreamFlowValue, ratingTableCoe);
                     // console.log("yesterdayCorrespondingUpstreamFlowValueToStageRev = ", yesterdayCorrespondingUpstreamFlowValueToStageRev);
- 
+
                     const todayCorrespondingUpstreamFlowValueToStageRev = findIndByDep(todayCorrespondingUpstreamFlowValue, ratingTableCoe);
                     // console.log("todayCorrespondingUpstreamFlowValueToStageRev = ", todayCorrespondingUpstreamFlowValueToStageRev);
 
@@ -5559,7 +5619,7 @@ async function processAllData(data) {
 
                         totalMosierLdgDay6 = 0 + OpenRiverForecastAdjustment + todayCorrespondingUpstreamFlowValueToStageRev; // ************** change here
                     }
-                    
+
                     if (isYesterdayRegulatedPool) {
                         const OpenRiverForecastAdjustment = yesterdayStageRevValue - yesterdayCorrespondingUpstreamFlowValueToStageRev;
                         // console.log("OpenRiverForecastAdjustment = ", OpenRiverForecastAdjustment);
@@ -5934,7 +5994,7 @@ async function processAllData(data) {
 
                 totalNavTWDay6 = totalNavTWDay5 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
 
-                day6 = "<div>" + totalNavTWDay6.toFixed(1) + "</div>";
+                day6 = "<div>" + totalNavTWDay6.toFixed(1) + "<br>" + "&nbsp;" + "</div>";
             } else if (location_id === "Red Rock Ldg-Mississippi") {
                 // console.log("totalRedRockLdgDay5 = ", totalRedRockLdgDay5);
 
@@ -6295,7 +6355,7 @@ async function processAllData(data) {
 
                 totalNavTWDay7 = totalNavTWDay6 + (((((todayUpstreamNetmiss - yesterdayUpstreamNetmiss) - (todayDownstreamNetmiss - yesterdayDownstreamNetmiss)) / (riverMileUpstream - riverMileDownstream)) * (riverMile - riverMileDownstream)) + (todayDownstreamNetmiss - yesterdayDownstreamNetmiss));
 
-                day7 = "<div>" + totalNavTWDay7.toFixed(1) + "</div>";
+                day7 = "<div>" + totalNavTWDay7.toFixed(1) + "<br>" + "&nbsp;" + "</div>";
             } else if (location_id === "Red Rock Ldg-Mississippi") {
                 // console.log("totalRedRockLdgDay6 = ", totalRedRockLdgDay6);
 
