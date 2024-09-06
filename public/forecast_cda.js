@@ -695,7 +695,7 @@ async function processAllData(data) {
             if (isProjectGage) {
                 locationIdCell.innerHTML = "<a href='" + "https://wm.mvs.ds.usace.army.mil/web_apps/plot_macro/public/plot_macro.php?cwms_ts_id=" + location_id + ".Elev.Inst.~1Day.0.netmiss-fcst" + "&start_day=0&end_day=7" + "' target='_blank'>" + location_id.split('-')[0] + "</a>";
             } else if (isNavInflow) {
-                locationIdCell.innerHTML = "<a href='" + "https://wm.mvs.ds.usace.army.mil/web_apps/plot_macro/public/plot_macro.php?cwms_ts_id=" + location_id + ".Elev.Inst.~1Day.0.netmiss-fcst" + "&start_day=0&end_day=7" + "' target='_blank'>" + location_id.split('-')[0] + "</a>" + "<br>" + "Inflow";
+                locationIdCell.innerHTML = "<a href='" + "https://wm.mvs.ds.usace.army.mil/web_apps/plot_macro/public/plot_macro.php?cwms_ts_id=" + location_id + ".Elev.Inst.~1Day.0.netmiss-fcst" + "&start_day=0&end_day=7" + "' target='_blank'>" + location_id.split('-')[0] + "</a>" + "<br>" + "<a href='" + "https://wm.mvs.ds.usace.army.mil/web_apps/plot_macro/public/plot_macro.php?cwms_ts_id=Nav TW-Kaskaskia.Flow-In.Ave.~1Day.1Day.netmiss-fcst" + "&start_day=0&end_day=7" + "' target='_blank'>" + "Inflow" + "</a>";
             } else {
                 locationIdCell.innerHTML = "<a href='" + "https://wm.mvs.ds.usace.army.mil/web_apps/plot_macro/public/plot_macro.php?cwms_ts_id=" + location_id + ".Stage.Inst.~1Day.0.netmiss-fcst" + "&start_day=0&end_day=7" + "' target='_blank'>" + location_id.split('-')[0] + "</a>";
             }
@@ -7099,6 +7099,26 @@ async function processAllData(data) {
                 };
                 // console.log("payloadNavTw: ", payloadNavTw);
                 timeseriesPayload.push(payloadNavTw);
+
+                const payloadNavTwInflow = {
+                    "name": "Nav TW-Kaskaskia.Flow-In.Ave.~1Day.1Day.netmiss-fcst",
+                    "office-id": "MVS",
+                    "units": "cfs",
+                    "values": [
+                        [
+                            getDateWithTimeSet(1, 6, 0),
+                            totalNavTWInflowDay0,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(2, 6, 0),
+                            totalNavTWInflowDay1,
+                            0
+                        ],
+                    ]
+                };
+                // console.log("payloadNavTwInflow: ", payloadNavTwInflow);
+                timeseriesPayload.push(payloadNavTwInflow);
             }
 
             if (location_id === "Red Rock Ldg-Mississippi") {

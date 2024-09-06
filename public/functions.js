@@ -109,10 +109,10 @@ function yesterdayAverageOfValues(data) {
         }
     });
 
-    console.log("valuesAtSpecificHours", valuesAtSpecificHours);
+    // console.log("valuesAtSpecificHours", valuesAtSpecificHours);
 
     const yesterday = valuesAtSpecificHours.slice(0, 12);
-    console.log("yesterday", yesterday);
+    // console.log("yesterday", yesterday);
 
     // Calculate the average of the extracted values
     const sum = yesterday.reduce((acc, val) => acc + val, 0);
@@ -145,10 +145,10 @@ function todayAverageOfValues(data) {
         }
     });
 
-    console.log("valuesAtSpecificHours", valuesAtSpecificHours);
+    // console.log("valuesAtSpecificHours", valuesAtSpecificHours);
 
     const yesterday = valuesAtSpecificHours.slice(12, 24);
-    console.log("yesterday", yesterday);
+    // console.log("yesterday", yesterday);
 
     // Calculate the average of the extracted values
     const sum = yesterday.reduce((acc, val) => acc + val, 0);
