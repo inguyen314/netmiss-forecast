@@ -400,7 +400,8 @@ async function populateTableCells(jsonDataFiltered, table, nws_day1_date) {
         // setup date time before calling function
         const currentDateTime = new Date();
         const currentDateTimePlus7Days = plusHoursFromDate(currentDateTime, 168);
-        const currentDateMinus30Hours = subtractHoursFromDate(currentDateTime, 48);
+        const currentDateMinus30Hours = subtractHoursFromDate(currentDateTime, 30);
+        const currentDateMinus18Hours = subtractHoursFromDate(currentDateTime, 18);
 
         promises.push(fetchData(
             location.location_id
@@ -439,6 +440,7 @@ async function populateTableCells(jsonDataFiltered, table, nws_day1_date) {
             , location.tsid_special_gage_1
             , location.tsid_special_gage_2
             , location.tsid_special_gage_3
+            , currentDateMinus18Hours
         ))
     });
     Promise.all(promises).then(async (d) => {
@@ -695,7 +697,7 @@ async function processAllData(data) {
             if (isProjectGage) {
                 locationIdCell.innerHTML = "<a href='" + "https://wm.mvs.ds.usace.army.mil/web_apps/plot_macro/public/plot_macro.php?cwms_ts_id=" + location_id + ".Elev.Inst.~1Day.0.netmiss-fcst" + "&start_day=0&end_day=7" + "' target='_blank'>" + location_id.split('-')[0] + "</a>";
             } else if (isNavInflow) {
-                locationIdCell.innerHTML = "<a href='" + "https://wm.mvs.ds.usace.army.mil/web_apps/plot_macro/public/plot_macro.php?cwms_ts_id=" + location_id + ".Elev.Inst.~1Day.0.netmiss-fcst" + "&start_day=0&end_day=7" + "' target='_blank'>" + location_id.split('-')[0] + "</a>" + "<br>" + "<a href='" + "https://wm.mvs.ds.usace.army.mil/web_apps/plot_macro/public/plot_macro.php?cwms_ts_id=Nav TW-Kaskaskia.Flow-In.Ave.~1Day.1Day.netmiss-fcst" + "&start_day=0&end_day=7" + "' target='_blank'>" + "Inflow" + "</a>";
+                locationIdCell.innerHTML = "<a href='" + "https://wm.mvs.ds.usace.army.mil/web_apps/plot_macro/public/plot_macro.php?cwms_ts_id=" + location_id + ".Elev.Inst.~1Day.0.netmiss-fcst" + "&start_day=0&end_day=7" + "' target='_blank'>" + location_id.split('-')[0] + "</a>" + "<br>" + "<a href='" + "https://wm.mvs.ds.usace.army.mil/web_apps/plot_macro/public/plot_macro.php?cwms_ts_id=Nav TW-Kaskaskia.Flow-In.Ave.~1Day.1Day.netmiss-fcst" + "&start_day=0&end_day=7" + "' target='_blank'>" + "Inflow (-1day)" + "</a>";
             } else {
                 locationIdCell.innerHTML = "<a href='" + "https://wm.mvs.ds.usace.army.mil/web_apps/plot_macro/public/plot_macro.php?cwms_ts_id=" + location_id + ".Stage.Inst.~1Day.0.netmiss-fcst" + "&start_day=0&end_day=7" + "' target='_blank'>" + location_id.split('-')[0] + "</a>";
             }
