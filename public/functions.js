@@ -783,6 +783,49 @@ async function writeTS(payload) {
     return has_errors;
 }
 
+// Function to delete timeseries data
+async function deleteTS(payloadDelete) {
+    // Log the input payloadDelete and check if it's an array
+    console.log("payloadDelete =", payloadDelete);
+    console.log("isPayloadAnArray =", Array.isArray(payloadDelete));
+    
+    // Throw an error if payloadDelete is not specified
+    if (!payloadDelete) throw new Error("You must specify a payloadDelete!");
+
+    // If the payloadDelete is not an array, convert it to an array
+    if (!Array.isArray(payloadDelete)) {
+        payloadDelete = [payloadDelete];
+    }
+
+    // Create an array of promises to handle multiple payloads
+    let promises = payloadDelete.map(ts_payload => {
+        return fetch("https://wm.mvs.ds.usace.army.mil/mvs-data/timeseries?store-rule=REPLACE%20ALL", {
+            method: "POST",
+            headers: {
+                "accept": "*/*",
+                "Content-Type": "application/json;version=2",
+            },
+            body: JSON.stringify(ts_payload)
+        }).then(async r => {
+            // Get the response message and status
+            const message = await r.text();
+            const status = r.status;
+            return { 'message': message, 'status': status };
+        }).catch(error => {
+            // Handle fetch errors
+            return { 'message': error.message, 'status': 'fetch_error' };
+        });
+    });
+
+    // Wait for all promises to resolve
+    const return_values = await Promise.all(promises);
+    console.log("Return values from deleteTS:", return_values);
+
+    // Check for errors based on status and message content
+    const has_errors = return_values.some(v => v.status !== 200 || v.message.includes("error") || v.message.includes("fail"));
+    return has_errors;
+}
+
 // Function to check if the user is logged in
 async function isLoggedIn() {
     try {
@@ -826,9 +869,23 @@ async function loginStateController(cdaBtn) {
         // If logged in, set the button text to "Submit"
         // TODO: look into other ways to handle state management in JS
         // Using variables or attributes of the element/dom for state management
-        cdaBtn.innerText = "Submit";
+        cdaBtn.innerText = "Save";
     } else {
         // If not logged in, set the button text to "Login"
         cdaBtn.innerText = "Login";
+    }
+}
+
+// Function to control the login state and update the button text accordingly
+async function loginDeleteStateController(cdaBtnDelete) {
+    // Check if the user is already logged in
+    if (await isLoggedIn()) {
+        // If logged in, set the button text to "Submit"
+        // TODO: look into other ways to handle state management in JS
+        // Using variables or attributes of the element/dom for state management
+        cdaBtnDelete.innerText = "Delete";
+    } else {
+        // If not logged in, set the button text to "Login"
+        cdaBtnDelete.innerText = "Login";
     }
 }

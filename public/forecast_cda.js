@@ -6,12 +6,16 @@ let ForecastValues = {
 let GraftonForecast = {
 };
 
-let timeseriesPayload = []
+let timeseriesPayload = [];
+
+let timeseriesDeletePayload = [];
 
 let isLoading = true;
 
 const statusBtn = document.querySelector(".status");
+const statusBtnDelete = document.querySelector(".status_delete");
 const cdaBtn = document.getElementById("cda-btn");
+const cdaBtnDelete = document.getElementById("cda-btn-delete");
 
 const loadingIndicator = document.getElementById('loading_forecast');
 const tableContainer = document.getElementById('table_container_forecast');
@@ -19,6 +23,7 @@ const tableContainer = document.getElementById('table_container_forecast');
 document.addEventListener('DOMContentLoaded', function () {
     console.log("start")
     cdaBtn.disabled = isLoading;
+    cdaBtnDelete.disabled = isLoading;
 
     // Display the loading_alarm_mvs indicator
     loadingIndicator.style.display = 'block';
@@ -78,6 +83,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // Call the function to create and populate the table
             createTable(jsonDataFiltered);
 
+            // *********************************************************************** SAVE BUTTON
             // Event handler for the cdaBtn click event
             cdaBtn.onclick = async () => {
                 // Check if the button's text is "Login"
@@ -124,6 +130,55 @@ document.addEventListener('DOMContentLoaded', function () {
             setInterval(async () => {
                 // Periodically update the button state based on login status
                 loginStateController(cdaBtn);
+            }, 10000); // Time is in milliseconds (10 seconds)
+
+            // *********************************************************************** DELETE BUTTON
+            // Event handler for the cdaBtnDelete click event
+            cdaBtnDelete.onclick = async () => {
+                // Check if the button's text is "Login"
+                if (cdaBtnDelete.innerText === "Login") {
+                    // Attempt to log in to CDA
+                    const loginResult = await loginCDA();
+                    console.log({ loginResult });
+
+                    // If login is successful, change button text to "Submit"
+                    if (loginResult) {
+                        cdaBtnDelete.innerText = "Submit";
+                    } else {
+                        // If login fails, update the status button text
+                        statusBtnDelete.innerText = "Failed to Login!";
+                    }
+                } else {
+                    // If the button's text is not "Login", attempt to write timeseries data
+                    try {
+                        console.log("Write!");
+
+                        // Write timeseries to CDA
+                        const deleteResult = await deleteTS(timeseriesDeletePayload);
+
+                        // If writing is successful, update the status button text
+                        if (!deleteResult) {
+                            statusBtnDelete.innerText = "Delete successful!";
+                            alert("Delete successful!");
+                        } else {
+                            // If writing fails, update the status button text
+                            statusBtnDelete.innerText = "Failed to delete Timeseries. Check logs";
+                        }
+                    } catch (error) {
+                        // Log any errors that occur and update the status button text
+                        console.error("Error writing data:", error);
+                        statusBtnDelete.innerText = "Failed to write data!";
+                    }
+                }
+            };
+
+            // Initialize the button state based on current login status
+            loginDeleteStateController(cdaBtnDelete);
+
+            // Setup a timer to periodically check and update the button state
+            setInterval(async () => {
+                // Periodically update the button state based on login status
+                loginDeleteStateController(cdaBtnDelete);
             }, 10000); // Time is in milliseconds (10 seconds)
 
             // Hide the loading indicator when it's no longer needed
@@ -440,6 +495,7 @@ async function populateTableCells(jsonDataFiltered, table, nws_day1_date) {
             , location.tsid_special_gage_1
             , location.tsid_special_gage_2
             , location.tsid_special_gage_3
+            , location.tsid_netmiss_instructions
             , currentDateMinus18Hours
         ))
     });
@@ -450,6 +506,7 @@ async function populateTableCells(jsonDataFiltered, table, nws_day1_date) {
 
         isLoading = false;
         cdaBtn.disabled = isLoading;
+        cdaBtnDelete.disabled = isLoading;
         console.log("done!")
     })
     loadingIndicator.style.display = 'none';
@@ -6573,48 +6630,9 @@ async function processAllData(data) {
             }
             day7Cell.innerHTML = day7;
 
+            // ================================================================
             // PREPARE PAYLOAD FOR ALL GAGES
-            if (location_id === "Grays Pt-Mississippi") {
-                const payloadGraysPt = {
-                    "name": "Grays Pt-Mississippi.Stage.Inst.~1Day.0.netmiss-fcst",
-                    "office-id": "MVS",
-                    "units": "ft",
-                    "values": [
-                        [
-                            getDateWithTimeSet(1, 6, 0),
-                            totalGraysPtDay1,
-                            0
-                        ],
-                        [
-                            getDateWithTimeSet(2, 6, 0),
-                            totalGraysPtDay2,
-                            0
-                        ],
-                        [
-                            getDateWithTimeSet(3, 6, 0),
-                            totalGraysPtDay3,
-                            0
-                        ],
-                        [
-                            getDateWithTimeSet(4, 6, 0),
-                            totalGraysPtDay4,
-                            0
-                        ],
-                        [
-                            getDateWithTimeSet(5, 6, 0),
-                            totalGraysPtDay5,
-                            0
-                        ],
-                        [
-                            getDateWithTimeSet(6, 6, 0),
-                            totalGraysPtDay6,
-                            0
-                        ],
-                    ]
-                };
-                // console.log("payloadGraysPt: ", payloadGraysPt);
-                timeseriesPayload.push(payloadGraysPt);
-            }
+            // ================================================================
 
             if (location_id === "LD 22 TW-Mississippi") {
                 const payloadLd22Tw = {
@@ -7450,6 +7468,51 @@ async function processAllData(data) {
                 };
                 // console.log("payloadPriceLdg: ", payloadPriceLdg);
                 timeseriesPayload.push(payloadPriceLdg);
+            }
+
+            // ================================================================
+            // PREPARE DELETE PAYLOAD FOR ALL GAGES
+            // ================================================================
+            if (location_id === "Grays Pt-Mississippi") {
+                const payloadDeleteGraysPt = {
+                    "name": "Grays Pt-Mississippi.Stage.Inst.~1Day.0.netmiss-fcst",
+                    "office-id": "MVS",
+                    "units": "ft",
+                    "values": [
+                        [
+                            getDateWithTimeSet(1, 6, 0),
+                            -3.40282346639e+38,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(2, 6, 0),
+                            -3.40282346639e+38,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(3, 6, 0),
+                            -3.40282346639e+38,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(4, 6, 0),
+                            -3.40282346639e+38,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(5, 6, 0),
+                            -3.40282346639e+38,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(6, 6, 0),
+                            -3.40282346639e+38,
+                            0
+                        ],
+                    ]
+                };
+                // console.log("payloadDeleteGraysPt: ", payloadDeleteGraysPt);
+                timeseriesDeletePayload.push(payloadDeleteGraysPt);
             }
         }
     });

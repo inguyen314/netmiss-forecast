@@ -120,7 +120,7 @@ function createTableInstructionsLD24(jsonDataFiltered) {
 
     // Extract only the date (without time)
     var todaysDataOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-    console.log('todaysDataOnly: ', todaysDataOnly);
+    // console.log('todaysDataOnly: ', todaysDataOnly);
 
     // Day -1
     var dayMinus1 = new Date(date);
@@ -437,17 +437,17 @@ async function processAllDataInstructionsLD24(data) {
 
         // Starting Processing All Gages
         if (location_id === "LD 22 TW-Mississippi") {
-            console.log("data26: ", data26);
+            // console.log("data26: ", data26);
 
             // PROCESS data26 - netmiss instructions forecast data
             const convertedDataInstructions = convertUTCtoCentralTime(data26);
-            console.log("convertedDataInstructions = ", convertedDataInstructions);
+            // console.log("convertedDataInstructions = ", convertedDataInstructions);
 
             // OBSERVED 6AM
             const level6AmCell = row.insertCell();
             level6AmCell.style.textAlign = 'center';
             level6AmCell.style.border = '1px solid gray'; // Add border
-            level6AmCell.innerHTML = location_id.split('-')[0];
+            level6AmCell.innerHTML = location_id.split('-')[0] + " (Flow)";
 
 
             // DAY1
@@ -778,7 +778,7 @@ function createTableInstructionsLDMP(jsonDataFiltered) {
 
     // Extract only the date (without time)
     var todaysDataOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-    console.log('todaysDataOnly: ', todaysDataOnly);
+    // console.log('todaysDataOnly: ', todaysDataOnly);
 
     // Day -1
     var dayMinus1 = new Date(date);
@@ -956,7 +956,7 @@ function createTableInstructionsLDNP(jsonDataFiltered) {
 
     // Extract only the date (without time)
     var todaysDataOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-    console.log('todaysDataOnly: ', todaysDataOnly);
+    // console.log('todaysDataOnly: ', todaysDataOnly);
 
     // Day -1
     var dayMinus1 = new Date(date);

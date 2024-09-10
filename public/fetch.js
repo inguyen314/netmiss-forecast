@@ -104,7 +104,6 @@ async function fetchData(location_id
     , tsid_netmiss_instructions // url26
     , currentDateMinus18Hours
 ) {
-    console.log("currentDateMinus18Hours =",  currentDateMinus18Hours);
 
     // Get Netmiss Forecast
     let url1 = null;
