@@ -55,3 +55,43 @@ hr {
 	margin-top: 20px;
 	margin-bottom: 20px;
 }
+
+/* Button Styles */
+#sendEmailBtn {
+	background-color: darkblue;
+	/* blue */
+	border: none;
+	color: white;
+	padding: 15px 32px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	margin: 4px 2px;
+	margin-top: 20px;
+	transition-duration: 0.4s;
+	cursor: pointer;
+	border-radius: 8px;
+}
+
+#sendEmailBtn:hover {
+	background-color: darkblue;
+	/* Darker Green */
+}
+
+#enterNavPoolForecast {
+	background-color: darkblue;
+	/* blue */
+	border: none;
+	color: white;
+	padding: 15px 32px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	margin: 4px 2px;
+	margin-top: 20px;
+	transition-duration: 0.4s;
+	cursor: pointer;
+	border-radius: 8px;
+}

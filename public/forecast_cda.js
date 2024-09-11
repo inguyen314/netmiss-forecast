@@ -10,6 +10,8 @@ let timeseriesPayload = [];
 
 let timeseriesDeletePayload = [];
 
+let timeseriesNavPoolPayload = [];
+
 let isLoading = true;
 
 const statusBtn = document.querySelector(".status");
@@ -759,11 +761,11 @@ async function processAllData(data) {
             locationIdCell.style.textAlign = 'center';
             locationIdCell.style.border = '1px solid gray';
             if (isProjectGage) {
-                locationIdCell.innerHTML = "<a href='" + "https://wm.mvs.ds.usace.army.mil/web_apps/plot_macro/public/plot_macro.php?cwms_ts_id=" + location_id + ".Elev.Inst.~1Day.0.netmiss-fcst" + "&start_day=0&end_day=7" + "' target='_blank'>" + location_id.split('-')[0] + "</a>";
+                locationIdCell.innerHTML = "<a href='" + "https://wm.mvs.ds.usace.army.mil/district_templates/chart/public/chart.html?office=MVS&cwms_ts_id=" + location_id + ".Elev.Inst.~1Day.0.netmiss-fcst" + "&lookback=0&lookforward=192" + "' target='_blank'>" + location_id.split('-')[0] + "</a>";
             } else if (isNavInflow) {
-                locationIdCell.innerHTML = "<a href='" + "https://wm.mvs.ds.usace.army.mil/web_apps/plot_macro/public/plot_macro.php?cwms_ts_id=" + location_id + ".Elev.Inst.~1Day.0.netmiss-fcst" + "&start_day=0&end_day=7" + "' target='_blank'>" + location_id.split('-')[0] + "</a>" + "<br>" + "<a href='" + "https://wm.mvs.ds.usace.army.mil/web_apps/plot_macro/public/plot_macro.php?cwms_ts_id=Nav TW-Kaskaskia.Flow-In.Ave.~1Day.1Day.netmiss-fcst" + "&start_day=0&end_day=7" + "' target='_blank'>" + "Inflow (-1day)" + "</a>";
+                locationIdCell.innerHTML = "<a href='" + "https://wm.mvs.ds.usace.army.mil/district_templates/chart/public/chart.html?office=MVS&cwms_ts_id=" + location_id + ".Elev.Inst.~1Day.0.netmiss-fcst" + "&lookback=0&lookforward=192" + "' target='_blank'>" + location_id.split('-')[0] + "</a>" + "<br>" + "<a href='" + "https://wm.mvs.ds.usace.army.mil/district_templates/chart/public/chart.html?office=MVS&cwms_ts_id=Nav TW-Kaskaskia.Flow-In.Ave.~1Day.1Day.netmiss-fcst" + "&lookback=96&lookforward=96" + "' target='_blank'>" + "Inflow (-1day)" + "</a>";
             } else {
-                locationIdCell.innerHTML = "<a href='" + "https://wm.mvs.ds.usace.army.mil/web_apps/plot_macro/public/plot_macro.php?cwms_ts_id=" + location_id + ".Stage.Inst.~1Day.0.netmiss-fcst" + "&start_day=0&end_day=7" + "' target='_blank'>" + location_id.split('-')[0] + "</a>";
+                locationIdCell.innerHTML = "<a href='" + "https://wm.mvs.ds.usace.army.mil/district_templates/chart/public/chart.html?office=MVS&cwms_ts_id=" + location_id + ".Stage.Inst.~1Day.0.netmiss-fcst" + "&lookback=0&lookforward=192" + "' target='_blank'>" + location_id.split('-')[0] + "</a>";
             }
 
             // OBSERVED 6AM
@@ -792,18 +794,18 @@ async function processAllData(data) {
                     // console.log("totalNavTWInflowDay0 = ", totalNavTWInflowDay0);
 
                     level6AmCell.innerHTML = "<div title='" + latest6AMValue.date + " " + latest6AMValue.value + "'>" +
-                        "<a href='https://wm.mvs.ds.usace.army.mil/district_templates/chart/public/chart.html?cwms_ts_id=" + tsid + "' target='_blank'>" +
+                        "<a href='https://wm.mvs.ds.usace.army.mil/district_templates/chart/public/chart.html?office=MVS&cwms_ts_id=" + tsid + "' target='_blank'>" +
                         (tsid_forecast_location === true ? "<strong>" + (Math.round((latest6AMValue.value) * 100) / 100).toFixed(2) + "</strong>" : (Math.round((latest6AMValue.value) * 100) / 100).toFixed(2)) + "</a>" + "<br>" + customRound(totalNavTWInflowDay0) +
                         "</div>";
                 } else {
                     level6AmCell.innerHTML = "<div title='" + latest6AMValue.date + " " + latest6AMValue.value + "'>" +
-                        "<a href='https://wm.mvs.ds.usace.army.mil/district_templates/chart/public/chart.html?cwms_ts_id=" + tsid + "' target='_blank'>" +
+                        "<a href='https://wm.mvs.ds.usace.army.mil/district_templates/chart/public/chart.html?office=MVS&cwms_ts_id=" + tsid + "' target='_blank'>" +
                         (tsid_forecast_location === true ? "<strong>" + (Math.round((latest6AMValue.value) * 100) / 100).toFixed(2) + "</strong>" : (Math.round((latest6AMValue.value) * 100) / 100).toFixed(2)) + "</a>" +
                         "</div>";
                 }
             } else {
                 level6AmCell.innerHTML = "<div title='" + latest6AMValue.date + " " + latest6AMValue.value + "'>" +
-                    "<a href='https://wm.mvs.ds.usace.army.mil/district_templates/chart/public/chart.html?cwms_ts_id=" + tsid + "' target='_blank'>" +
+                    "<a href='https://wm.mvs.ds.usace.army.mil/district_templates/chart/public/chart.html?office=MVS&cwms_ts_id=" + tsid + "' target='_blank'>" +
                     (tsid_forecast_location === true ? "<strong>" + "No Data" + "</strong>" : "No Data") + "</a>" +
                     "</div>";
             }
@@ -7527,6 +7529,32 @@ async function processAllData(data) {
                 // console.log("payloadDeleteGraysPt: ", payloadDeleteGraysPt);
                 timeseriesDeletePayload.push(payloadDeleteGraysPt);
             }
+
+            // ================================================================
+            // PREPARE SAVE PAYLOAD FOR NAV POOL
+            // ================================================================
+            // let navPoolFcst = null;
+            // if (isChecked === true) {
+            //     navPoolFcst = 68.8;
+            // } else {
+            //     navPoolFcst = 68.5; 
+            // }
+            // if (location_id === "Nav Pool-Kaskaskia") {
+            //     const payloadNavPool = {
+            //         "name": "Nav Pool-Kaskaskia.Stage.Inst.~1Day.0.netmiss-fcst",
+            //         "office-id": "MVS",
+            //         "units": "ft",
+            //         "values": [
+            //             [
+            //                 getDateWithTimeSet(1, 6, 0),
+            //                 navPoolFcst,
+            //                 0
+            //             ],
+            //         ]
+            //     };
+            //     // console.log("payloadNavPool: ", payloadNavPool);
+            //     timeseriesNavPoolPayload.push(payloadNavPool);
+            // }
         }
     });
 }

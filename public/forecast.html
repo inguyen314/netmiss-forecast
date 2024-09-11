@@ -33,48 +33,6 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Include the Moment.js adapter for Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@1.0.0"></script>
-
-    <style>
-        /* Button Styles */
-        #sendEmailBtn {
-            background-color: darkblue;
-            /* blue */
-            border: none;
-            color: white;
-            padding: 15px 32px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            margin-top: 20px;
-            transition-duration: 0.4s;
-            cursor: pointer;
-            border-radius: 8px;
-        }
-
-        #sendEmailBtn:hover {
-            background-color: darkblue;
-            /* Darker Green */
-        }
-
-        #interpolateGagesButton {
-            background-color: darkblue;
-            /* blue */
-            border: none;
-            color: white;
-            padding: 15px 32px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            margin-top: 20px;
-            transition-duration: 0.4s;
-            cursor: pointer;
-            border-radius: 8px;
-        }
-    </style>
 </head>
 
 <body>
@@ -145,6 +103,13 @@
                 <script type="text/javascript" src="fetch.js"></script>
                 <script type="text/javascript" src="forecast_cda.js"></script>
 
+                <!-- nav pool forecast button -->
+                <button id="enterNavPoolForecast">Enter Nav Pool Forecast</button>
+                <script>
+                    document.getElementById('enterNavPoolForecast').addEventListener('click', function() {
+                        window.open('forecast_nav_pool.html', '_blank'); // Adjust the file path if needed
+                    });
+                </script>
                 <!-- images -->
                 <div
                     style="display: flex; justify-content: center; align-items: center; width: 100%; background-color: darkgray; margin-top: 50px">
