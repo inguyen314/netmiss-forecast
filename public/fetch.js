@@ -69,9 +69,9 @@ async function fetchData(location_id
     , tsid_netmiss // url01
     , tsid_netmiss_observe // url02
     , row
-    , begin
-    , end1
-    , end2
+    , begin // currentDateTime
+    , end1 // currentDateTimePlus7Days
+    , end2 // currentDateMinus30Hours
     , level_id_flood // url03
     , level_id_effective_date_flood
     , level_id_unit_id_flood
@@ -103,6 +103,8 @@ async function fetchData(location_id
     , tsid_special_gage_3 // url25
     , tsid_netmiss_instructions // url26
     , currentDateMinus18Hours
+    , currentDateMinus48Hours
+    , netmiss_instructions_support_gage1
 ) {
 
     // Get Netmiss Forecast
@@ -355,9 +357,9 @@ async function fetchData(location_id
     let url23 = null;
     if (tsid_special_gage_1 !== null) {
         if (cda === "internal") {
-            url23 = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/timeseries?name=${tsid_special_gage_1}&begin=${end2.toISOString()}&end=${begin.toISOString()}&office=MVS&timezone=CST6CDT`;
+            url23 = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/timeseries?name=${tsid_special_gage_1}&begin=${currentDateMinus48Hours.toISOString()}&end=${begin.toISOString()}&office=MVS&timezone=CST6CDT`;
         } else if (cda === "public") {
-            url23 = `https://cwms-data.usace.army.mil/cwms-data/timeseries?name=${tsid_special_gage_1}&begin=${end2.toISOString()}&end=${begin.toISOString()}&office=MVS&timezone=CST6CDT`;
+            url23 = `https://cwms-data.usace.army.mil/cwms-data/timeseries?name=${tsid_special_gage_1}&begin=${currentDateMinus48Hours.toISOString()}&end=${begin.toISOString()}&office=MVS&timezone=CST6CDT`;
         }
     }
     // console.log("url23 = ", url23);
@@ -366,9 +368,9 @@ async function fetchData(location_id
     let url24 = null;
     if (tsid_special_gage_2 !== null) {
         if (cda === "internal") {
-            url24 = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/timeseries?name=${tsid_special_gage_2}&begin=${end2.toISOString()}&end=${begin.toISOString()}&office=MVS&timezone=CST6CDT`;
+            url24 = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/timeseries?name=${tsid_special_gage_2}&begin=${currentDateMinus48Hours.toISOString()}&end=${begin.toISOString()}&office=MVS&timezone=CST6CDT`;
         } else if (cda === "public") {
-            url24 = `https://cwms-data.usace.army.mil/cwms-data/timeseries?name=${tsid_special_gage_2}&begin=${end2.toISOString()}&end=${begin.toISOString()}&office=MVS&timezone=CST6CDT`;
+            url24 = `https://cwms-data.usace.army.mil/cwms-data/timeseries?name=${tsid_special_gage_2}&begin=${currentDateMinus48Hours.toISOString()}&end=${begin.toISOString()}&office=MVS&timezone=CST6CDT`;
         }
     }
     // console.log("url24 = ", url24);
@@ -377,9 +379,9 @@ async function fetchData(location_id
     let url25 = null;
     if (tsid_special_gage_3 !== null) {
         if (cda === "internal") {
-            url25 = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/timeseries?name=${tsid_special_gage_3}&begin=${end2.toISOString()}&end=${begin.toISOString()}&office=MVS&timezone=CST6CDT`;
+            url25 = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/timeseries?name=${tsid_special_gage_3}&begin=${currentDateMinus48Hours.toISOString()}&end=${begin.toISOString()}&office=MVS&timezone=CST6CDT`;
         } else if (cda === "public") {
-            url25 = `https://cwms-data.usace.army.mil/cwms-data/timeseries?name=${tsid_special_gage_3}&begin=${end2.toISOString()}&end=${begin.toISOString()}&office=MVS&timezone=CST6CDT`;
+            url25 = `https://cwms-data.usace.army.mil/cwms-data/timeseries?name=${tsid_special_gage_3}&begin=${currentDateMinus48Hours.toISOString()}&end=${begin.toISOString()}&office=MVS&timezone=CST6CDT`;
         }
     }
     // console.log("url25 = ", url25);
@@ -395,8 +397,19 @@ async function fetchData(location_id
     }
     // console.log("url26 = ", url26);
 
-    return fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9, url10, url11, url12, url13, url14, url15, url16, url17, url18, url19, url20, url21, url22, url23, url24, url25, url26)
-        .then(({ data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17, data18, data19, data20, data21, data22, data23, data24, data25, data26 }) => {
+    // Get Netmiss Instruction Support Gage1
+    let url27 = null;
+    if (netmiss_instructions_support_gage1 !== null) {
+        if (cda === "internal") {
+            url27 = `https://coe-mvsuwa04mvs.mvs.usace.army.mil:8243/mvs-data/timeseries?name=${netmiss_instructions_support_gage1}&begin=${currentDateMinus48Hours.toISOString()}&end=${end1.toISOString()}&office=MVS&timezone=CST6CDT`;
+        } else if (cda === "public") {
+            url27 = `https://cwms-data.usace.army.mil/cwms-data/timeseries?name=${netmiss_instructions_support_gage1}&begin=${currentDateMinus48Hours.toISOString()}&end=${end1.toISOString()}&office=MVS&timezone=CST6CDT`;
+        }
+    }
+    // console.log("url27 = ", url27);
+
+    return fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9, url10, url11, url12, url13, url14, url15, url16, url17, url18, url19, url20, url21, url22, url23, url24, url25, url26, url27)
+        .then(({data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17, data18, data19, data20, data21, data22, data23, data24, data25, data26, data27}) => {
             // console.log("location_id =",  location_id);
             // Do something with the fetched data
             // console.log("data1 = ", data1);
@@ -425,6 +438,7 @@ async function fetchData(location_id
             // console.log("data24 = ", data24);
             // console.log("data25 = ", data25);
             // console.log("data26 = ", data26);
+            // console.log("data27 = ", data27);
 
             // PROCESS data1 - netmiss forecast data
             const convertedData = convertUTCtoCentralTime(data1);
@@ -5191,6 +5205,7 @@ async function fetchData(location_id
                 data24,
                 data25,
                 data26,
+                data27,
                 totalGraftonForecastDay1,
                 totalGraftonForecastDay2,
                 totalGraftonForecastDay3,
@@ -5205,7 +5220,7 @@ async function fetchData(location_id
         });
 }
 
-async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9, url10, url11, url12, url13, url14, url15, url16, url17, url18, url19, url20, url21, url22, url23, url24, url25, url26) {
+async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9, url10, url11, url12, url13, url14, url15, url16, url17, url18, url19, url20, url21, url22, url23, url24, url25, url26, url27) {
     const fetchOptions = {
         method: 'GET',
         headers: {
@@ -5240,7 +5255,8 @@ async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9
             url23 ? fetch(url23, fetchOptions) : Promise.resolve(null),
             url24 ? fetch(url24, fetchOptions) : Promise.resolve(null),
             url25 ? fetch(url25, fetchOptions) : Promise.resolve(null),
-            url26 ? fetch(url26, fetchOptions) : Promise.resolve(null)
+            url26 ? fetch(url26, fetchOptions) : Promise.resolve(null),
+            url27 ? fetch(url27, fetchOptions) : Promise.resolve(null)
         ];
 
         const responses = await Promise.all(responsePromises);
@@ -5280,7 +5296,8 @@ async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9
             data23: data[22],
             data24: data[23],
             data25: data[24],
-            data26: data[25]
+            data26: data[25],
+            data27: data[26]
         };
     } catch (error) {
         console.error('Error fetching the URLs:', error.message);
@@ -5310,7 +5327,8 @@ async function fetchAllUrls(url1, url2, url3, url4, url5, url6, url7, url8, url9
             data23: null,
             data24: null,
             data25: null,
-            data26: null
+            data26: null,
+            data27: null
         }; // return null data if any error occurs
     }
 }

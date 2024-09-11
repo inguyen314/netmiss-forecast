@@ -457,6 +457,7 @@ async function populateTableCells(jsonDataFiltered, table, nws_day1_date) {
         const currentDateTimePlus7Days = plusHoursFromDate(currentDateTime, 168);
         const currentDateMinus30Hours = subtractHoursFromDate(currentDateTime, 30);
         const currentDateMinus18Hours = subtractHoursFromDate(currentDateTime, 18);
+        const currentDateMinus48Hours = subtractHoursFromDate(currentDateTime, 48);
 
         promises.push(fetchData(
             location.location_id
@@ -497,6 +498,8 @@ async function populateTableCells(jsonDataFiltered, table, nws_day1_date) {
             , location.tsid_special_gage_3
             , location.tsid_netmiss_instructions
             , currentDateMinus18Hours
+            , currentDateMinus48Hours
+            , location.netmiss_instructions_support_gage1
         ))
     });
     Promise.all(promises).then(async (d) => {
@@ -557,6 +560,8 @@ async function processAllData(data) {
         data23,
         data24,
         data25,
+        data26,
+        data27,
         totalGraftonForecastDay1,
         totalGraftonForecastDay2,
         totalGraftonForecastDay3,
@@ -590,6 +595,8 @@ async function processAllData(data) {
         // console.log("data23: ", data23);
         // console.log("data24: ", data24);
         // console.log("data25: ", data25);
+        // console.log("data26: ", data26);
+        // console.log("data27: ", data27);
 
         // PREPARE GRAFTON PAYLOAD
         if (location_id === "Grafton-Mississippi") {
@@ -1483,6 +1490,7 @@ async function processAllData(data) {
                 // Get totalNavTWInflowDay1 (Venedy total flow)
                 const VenedySmoothed = todayAverageOfValues(data23); // ******* Change Here
                 // console.log("VenedySmoothed = ", VenedySmoothed);
+                // console.log("data23 = ", data23);
 
                 // Get totalNavTWInflowDay1 (Freeburg total flow)
                 const FreeburgSmoothed = todayAverageOfValues(data24); // ******* Change Here
@@ -6631,7 +6639,7 @@ async function processAllData(data) {
             day7Cell.innerHTML = day7;
 
             // ================================================================
-            // PREPARE PAYLOAD FOR ALL GAGES
+            // PREPARE PAYLOAD TO SAVE DATA
             // ================================================================
 
             if (location_id === "LD 22 TW-Mississippi") {
@@ -7479,6 +7487,11 @@ async function processAllData(data) {
                     "office-id": "MVS",
                     "units": "ft",
                     "values": [
+                        [
+                            getDateWithTimeSet(0, 6, 0),
+                            -3.40282346639e+38,
+                            0
+                        ],
                         [
                             getDateWithTimeSet(1, 6, 0),
                             -3.40282346639e+38,
