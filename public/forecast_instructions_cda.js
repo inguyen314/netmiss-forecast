@@ -524,11 +524,11 @@ async function processAllDataInstructionsLD24(data) {
             day7Cell.innerHTML = day7;
         }
         if (location_id === "Mark Twain Lk-Salt") {
-            console.log("data27: ", data27);
+            // console.log("data27: ", data27);
 
             // PROCESS data26 - netmiss instructions forecast data
             const convertedDataInstructionsSaltDailyAvg = convertUTCtoCentralTime(data27);
-            console.log("convertedDataInstructionsSaltDailyAvg = ", convertedDataInstructionsSaltDailyAvg);
+            // console.log("convertedDataInstructionsSaltDailyAvg = ", convertedDataInstructionsSaltDailyAvg);
 
             // OBSERVED 6AM
             const level6AmCell = row.insertCell();
@@ -854,7 +854,7 @@ async function populateTableCellsInstructionsLD25(jsonDataFiltered, table, nws_d
         ))
     });
     Promise.all(promises).then(async (d) => {
-        console.log("got all my ld24 instructions data!", d)
+        console.log("got all my ld25 instructions data!", d)
         // do all drawing my combined data
         await processAllDataInstructionsLD25(d);
     })
@@ -1242,7 +1242,7 @@ async function populateTableCellsInstructionsLDMP(jsonDataFiltered, table, nws_d
         ))
     });
     Promise.all(promises).then(async (d) => {
-        console.log("got all my ld24 instructions data!", d)
+        console.log("got all my ld mp instructions data!", d)
         // do all drawing my combined data
         await processAllDataInstructionsLDMP(d);
     })
@@ -1344,7 +1344,6 @@ async function processAllDataInstructionsLDMP(data) {
             const day1Cell = row.insertCell();
             day1Cell.style.textAlign = 'center';
             day1Cell.style.border = '1px solid gray'; // Add border
-            day1Cell.innerHTML = location_id.split('-')[0];
             let day1 = null;
             // Process netmiss interpolation for each gage here
             day1 = "<div title='" + latest6AMValue + "'>" + (latest6AMValue.value).toFixed(2) + "</div>";
@@ -1361,7 +1360,6 @@ async function processAllDataInstructionsLDMP(data) {
             const day1Cell = row.insertCell();
             day1Cell.style.textAlign = 'center';
             day1Cell.style.border = '1px solid gray'; // Add border
-            day1Cell.innerHTML = location_id.split('-')[0];
             let day1 = null;
             // Process netmiss interpolation for each gage here
             day1 = "<div title='" + latest6AMValue + "'>" + (latest6AMValue.value).toFixed(2) + "</div>";
@@ -1665,7 +1663,7 @@ async function populateTableCellsInstructionsKASKYNAV(jsonDataFiltered, table, n
         ))
     });
     Promise.all(promises).then(async (d) => {
-        console.log("got all my ld24 instructions data!", d)
+        console.log("got all my nav pool instructions data!", d)
         // do all drawing my combined data
         await processAllDataInstructionsKASKYNAV(d);
     })
@@ -1756,6 +1754,38 @@ async function processAllDataInstructionsKASKYNAV(data) {
         // console.log("data27: ", data27);
 
         // Starting Processing All Gages
+        if (location_id === "Red Bud-Kaskaskia") {
+            // OBSERVED 6AM
+            const level6AmCell = row.insertCell();
+            level6AmCell.style.textAlign = 'center';
+            level6AmCell.style.border = '1px solid gray'; // Add border
+            level6AmCell.innerHTML = location_id.split('-')[0] + " (06:00)";
+
+            // DAY1
+            const day1Cell = row.insertCell();
+            day1Cell.style.textAlign = 'center';
+            day1Cell.style.border = '1px solid gray'; // Add border
+            let day1 = null;
+            // Process netmiss interpolation for each gage here
+            day1 = "<div title='" + latest6AMValue + "'>" + (latest6AMValue.value).toFixed(2) + "</div>";
+            day1Cell.innerHTML = day1;
+        }
+        if (location_id === "Fayetteville-Kaskaskia") {
+            // OBSERVED 6AM
+            const level6AmCell = row.insertCell();
+            level6AmCell.style.textAlign = 'center';
+            level6AmCell.style.border = '1px solid gray'; // Add border
+            level6AmCell.innerHTML = location_id.split('-')[0] + " (06:00)";
+
+            // DAY1
+            const day1Cell = row.insertCell();
+            day1Cell.style.textAlign = 'center';
+            day1Cell.style.border = '1px solid gray'; // Add border
+            let day1 = null;
+            // Process netmiss interpolation for each gage here
+            day1 = "<div title='" + latest6AMValue + "'>" + (latest6AMValue.value).toFixed(2) + "</div>";
+            day1Cell.innerHTML = day1;
+        }
         if (location_id === "Nav Pool-Kaskaskia") {
             // Retrieve today's netmiss forecast value
             let todayNetmissForecast = convertedData.values[0][1];
@@ -1775,6 +1805,87 @@ async function processAllDataInstructionsKASKYNAV(data) {
             // Process netmiss interpolation for each gage here
             day1 = "<div>" + "<b>" + todayNetmissForecast + " (+/-0.2)" + "</b>" + "</div>";
             day1Cell.innerHTML = day1;
+        }
+        if (location_id === "Nav TW-Kaskaskia") {
+            // console.log("data26: ", data26);
+            // console.log("data27: ", data27);
+
+            // PROCESS data26 - netmiss instructions forecast data
+            const convertedDataInstructions = convertUTCtoCentralTime(data26);
+            // console.log("convertedDataInstructions = ", convertedDataInstructions);
+
+            // OBSERVED 6AM
+            const level6AmCell = row.insertCell();
+            level6AmCell.style.textAlign = 'center';
+            level6AmCell.style.border = '1px solid gray'; // Add border
+            level6AmCell.innerHTML = location_id.split('-')[0];
+
+
+            // DAY1
+            const day1Cell = row.insertCell();
+            day1Cell.style.textAlign = 'center';
+            day1Cell.style.border = '1px solid gray'; // Add border
+            let day1 = null;
+            // Process netmiss interpolation for each gage here
+            day1 = "<div>" + (convertedDataInstructions.values[0][1]).toFixed(1) + "</div>";
+            day1Cell.innerHTML = day1;
+
+            // DAY2
+            const day2Cell = row.insertCell();
+            day2Cell.style.textAlign = 'center';
+            day2Cell.style.border = '1px solid gray'; // Add border
+            day2Cell.innerHTML = location_id.split('-')[0];
+            let day2 = null;
+            // Process netmiss interpolation for each gage here
+            day2 = "<div>" + (convertedDataInstructions.values[1][1]).toFixed(1) + "</div>";
+            day2Cell.innerHTML = day2;
+
+            // DAY3
+            const day3Cell = row.insertCell();
+            day3Cell.style.textAlign = 'center';
+            day3Cell.style.border = '1px solid gray'; // Add border
+            day3Cell.innerHTML = location_id.split('-')[0];
+            let day3 = null;
+            // Process netmiss interpolation for each gage here
+            day3 = "<div>" + (convertedDataInstructions.values[2][1]).toFixed(1) + "</div>";
+            day3Cell.innerHTML = day3;
+
+            // DAY4
+            const day4Cell = row.insertCell();
+            day4Cell.style.textAlign = 'center';
+            day4Cell.style.border = '1px solid gray'; // Add border
+            day4Cell.innerHTML = location_id.split('-')[0];
+            let day4 = null;
+            // Process netmiss interpolation for each gage here
+            day4 = "<div>" + (convertedDataInstructions.values[3][1]).toFixed(1) + "</div>";
+            day4Cell.innerHTML = day4;
+
+            // DAY5
+            const day5Cell = row.insertCell();
+            day5Cell.style.textAlign = 'center';
+            day5Cell.style.border = '1px solid gray'; // Add border
+            let day5 = null;
+            // Process netmiss interpolation for each gage here
+            day5 = "<div>" + (convertedDataInstructions.values[4][1]).toFixed(1) + "</div>";
+            day5Cell.innerHTML = day5;
+
+            // DAY6
+            const day6Cell = row.insertCell();
+            day6Cell.style.textAlign = 'center';
+            day6Cell.style.border = '1px solid gray'; // Add border
+            let day6 = null;
+            // Process netmiss interpolation for each gage here
+            day6 = "<div>" + (convertedDataInstructions.values[5][1]).toFixed(1) + "</div>";
+            day6Cell.innerHTML = day6;
+
+            // DAY7
+            const day7Cell = row.insertCell();
+            day7Cell.style.textAlign = 'center';
+            day7Cell.style.border = '1px solid gray'; // Add border
+            let day7 = null;
+            // Process netmiss interpolation for each gage here
+            day7 = "<div>" + (convertedDataInstructions.values[6][1]).toFixed(1) + "</div>";
+            day7Cell.innerHTML = day7;
         }
     });
 }
