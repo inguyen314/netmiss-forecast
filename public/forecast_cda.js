@@ -22,6 +22,18 @@ const cdaBtnDelete = document.getElementById("cda-btn-delete");
 const loadingIndicator = document.getElementById('loading_forecast');
 const tableContainer = document.getElementById('table_container_forecast');
 
+// Get current date and time
+const currentDateTime = new Date();
+// console.log('currentDateTime:', currentDateTime);
+
+// Subtract thirty hours from current date and time
+const beginDeleteDate = subtractHoursFromDate(currentDateTime, 192);
+console.log('beginDeleteDate :', beginDeleteDate);
+
+// Add thirty hours to current date and time
+const endDeleteDate = plusHoursFromDate(currentDateTime, 192);
+console.log('endDeleteDate :', endDeleteDate);
+
 document.addEventListener('DOMContentLoaded', function () {
     console.log("start")
     cdaBtn.disabled = isLoading;
@@ -270,7 +282,7 @@ function createTable(jsonDataFiltered) {
 
     // Extract only the date (without time)
     var todaysDataOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-    console.log('todaysDataOnly: ', todaysDataOnly);
+    // console.log('todaysDataOnly: ', todaysDataOnly);
 
     // Day -1
     var dayMinus1 = new Date(date);
@@ -761,11 +773,11 @@ async function processAllData(data) {
             locationIdCell.style.textAlign = 'center';
             locationIdCell.style.border = '1px solid gray';
             if (isProjectGage) {
-                locationIdCell.innerHTML = "<a href='" + "https://wm.mvs.ds.usace.army.mil/district_templates/chart/public/chart.html?office=MVS&cwms_ts_id=" + location_id + ".Elev.Inst.~1Day.0.netmiss-fcst&cwms_ts_id_2=" + tsid + "&lookback=96&lookforward=192" + "' target='_blank'>" + location_id.split('-')[0] + "</a>";
+                locationIdCell.innerHTML = "<a href='" + "https://wm.mvs.ds.usace.army.mil/district_templates/chart/index.html?office=MVS&cwms_ts_id=" + tsid + "&cwms_ts_id_2=" + location_id + ".Elev.Inst.~1Day.0.netmiss-fcst" + "&lookback=96&lookforward=192" + "' target='_blank'>" + location_id.split('-')[0] + "</a>";
             } else if (isNavInflow) {
-                locationIdCell.innerHTML = "<a href='" + "https://wm.mvs.ds.usace.army.mil/district_templates/chart/public/chart.html?office=MVS&cwms_ts_id=" + location_id + ".Elev.Inst.~1Day.0.netmiss-fcst" + "&lookback=0&lookforward=192" + "' target='_blank'>" + location_id.split('-')[0] + "</a>" + "<br>" + "<a href='" + "https://wm.mvs.ds.usace.army.mil/district_templates/chart/public/chart.html?office=MVS&cwms_ts_id=Nav TW-Kaskaskia.Flow-In.Ave.~1Day.1Day.netmiss-fcst" + "&lookback=96&lookforward=96" + "' target='_blank'>" + "Inflow (-1day)" + "</a>";
+                locationIdCell.innerHTML = "<a href='" + "https://wm.mvs.ds.usace.army.mil/district_templates/chart/index.html?office=MVS&cwms_ts_id=" + tsid + "&cwms_ts_id_2=" + location_id + ".Stage.Inst.~1Day.0.netmiss-fcst" + "&lookback=96&lookforward=192" + "' target='_blank'>" + location_id.split('-')[0] + "</a>" + "<br>" + "<a href='" + "https://wm.mvs.ds.usace.army.mil/district_templates/chart/index.html?office=MVS&cwms_ts_id=Nav TW-Kaskaskia.Flow-In.Ave.~1Day.1Day.netmiss-fcst" + "&lookback=96&lookforward=96" + "' target='_blank'>" + "Inflow (-1day)" + "</a>";
             } else {
-                locationIdCell.innerHTML = "<a href='" + "https://wm.mvs.ds.usace.army.mil/district_templates/chart/public/chart.html?office=MVS&cwms_ts_id=" + location_id + ".Stage.Inst.~1Day.0.netmiss-fcst&cwms_ts_id_2=" + tsid  + "&lookback=96&lookforward=192" + "' target='_blank'>" + location_id.split('-')[0] + "</a>";
+                locationIdCell.innerHTML = "<a href='" + "https://wm.mvs.ds.usace.army.mil/district_templates/chart/index.html?office=MVS&cwms_ts_id=" + tsid + "&cwms_ts_id_2=" + location_id + ".Stage.Inst.~1Day.0.netmiss-fcst" + "&lookback=96&lookforward=192" + "' target='_blank'>" + location_id.split('-')[0] + "</a>";
             }
 
             // OBSERVED 6AM
@@ -794,18 +806,18 @@ async function processAllData(data) {
                     // console.log("totalNavTWInflowDay0 = ", totalNavTWInflowDay0);
 
                     level6AmCell.innerHTML = "<div title='" + latest6AMValue.date + " " + latest6AMValue.value + "'>" +
-                        "<a href='https://wm.mvs.ds.usace.army.mil/district_templates/chart/public/chart.html?office=MVS&cwms_ts_id=" + tsid + "' target='_blank'>" +
+                        "<a href='https://wm.mvs.ds.usace.army.mil/district_templates/chart/index.html?office=MVS&cwms_ts_id=" + tsid + "' target='_blank'>" +
                         (tsid_forecast_location === true ? "<strong>" + (Math.round((latest6AMValue.value) * 100) / 100).toFixed(2) + "</strong>" : (Math.round((latest6AMValue.value) * 100) / 100).toFixed(2)) + "</a>" + "<br>" + customRound(totalNavTWInflowDay0) +
                         "</div>";
                 } else {
                     level6AmCell.innerHTML = "<div title='" + latest6AMValue.date + " " + latest6AMValue.value + "'>" +
-                        "<a href='https://wm.mvs.ds.usace.army.mil/district_templates/chart/public/chart.html?office=MVS&cwms_ts_id=" + tsid + "' target='_blank'>" +
+                        "<a href='https://wm.mvs.ds.usace.army.mil/district_templates/chart/index.html?office=MVS&cwms_ts_id=" + tsid + "' target='_blank'>" +
                         (tsid_forecast_location === true ? "<strong>" + (Math.round((latest6AMValue.value) * 100) / 100).toFixed(2) + "</strong>" : (Math.round((latest6AMValue.value) * 100) / 100).toFixed(2)) + "</a>" +
                         "</div>";
                 }
             } else {
                 level6AmCell.innerHTML = "<div title='" + latest6AMValue.date + " " + latest6AMValue.value + "'>" +
-                    "<a href='https://wm.mvs.ds.usace.army.mil/district_templates/chart/public/chart.html?office=MVS&cwms_ts_id=" + tsid + "' target='_blank'>" +
+                    "<a href='https://wm.mvs.ds.usace.army.mil/district_templates/chart/index.html?office=MVS&cwms_ts_id=" + tsid + "' target='_blank'>" +
                     (tsid_forecast_location === true ? "<strong>" + "No Data" + "</strong>" : "No Data") + "</a>" +
                     "</div>";
             }
@@ -1729,7 +1741,7 @@ async function processAllData(data) {
                 } else {
                     day1 = "<div title='" + "--" + "'>" + "totalHardinDay1 is null" + "</div>";
                 }
-            } 
+            }
             day1Cell.innerHTML = day1;
 
             // DAY2
@@ -2614,7 +2626,7 @@ async function processAllData(data) {
                 } else {
                     day2 = "<div title='" + "--" + "'>" + "totalHardinDay2 is null" + "</div>";
                 }
-            } 
+            }
             day2Cell.innerHTML = day2;
 
             // DAY3
@@ -3491,7 +3503,7 @@ async function processAllData(data) {
                 } else {
                     day3 = "<div title='" + "--" + "'>" + "totalHardinDay3 is null" + "</div>";
                 }
-            } 
+            }
             day3Cell.innerHTML = day3;
 
             // DAY4
@@ -4370,7 +4382,7 @@ async function processAllData(data) {
                 } else {
                     day4 = "<div title='" + "--" + "'>" + "totalHardinDay4 is null" + "</div>";
                 }
-            } 
+            }
             day4Cell.innerHTML = day4;
 
             // DAY5
@@ -5409,7 +5421,7 @@ async function processAllData(data) {
                 // console.log("totalMosierLdgDay5 = ", totalMosierLdgDay5);
 
                 day5 = "<div title='" + "--" + "'>" + totalMosierLdgDay5.toFixed(1) + "</div>";
-            } 
+            }
             day5Cell.innerHTML = day5;
 
             // DAY6
@@ -6288,7 +6300,7 @@ async function processAllData(data) {
                 } else {
                     day6 = "<div title='" + "--" + "'>" + "totalHardinDay6 is null" + "</div>";
                 }
-            } 
+            }
             day6Cell.innerHTML = day6;
 
             // DAY7
@@ -6651,7 +6663,7 @@ async function processAllData(data) {
             } else if (location_id === "Hardin-Illinois") {
                 totalHardinDay7 = "--";
                 day7 = "<div title='" + "No Day7 Forecast" + "'>" + totalHardinDay7 + "</div>";
-            } 
+            }
             day7Cell.innerHTML = day7;
 
             // ================================================================
@@ -7494,81 +7506,1093 @@ async function processAllData(data) {
                 timeseriesPayload.push(payloadPriceLdg);
             }
 
+            if (location_id === "Thompson Ldg-Mississippi") {
+                const payloadThompsonLdg = {
+                    "name": "Thompson Ldg-Mississippi.Stage.Inst.~1Day.0.netmiss-fcst",
+                    "office-id": "MVS",
+                    "units": "ft",
+                    "values": [
+                        [
+                            getDateWithTimeSet(1, 6, 0),
+                            totalThompsonLdgDay1,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(2, 6, 0),
+                            totalThompsonLdgDay2,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(3, 6, 0),
+                            totalThompsonLdgDay3,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(4, 6, 0),
+                            totalThompsonLdgDay4,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(5, 6, 0),
+                            totalThompsonLdgDay5,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(6, 6, 0),
+                            totalThompsonLdgDay6,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(7, 6, 0),
+                            totalThompsonLdgDay7,
+                            0
+                        ],
+                    ]
+                };
+                timeseriesPayload.push(payloadThompsonLdg);
+            }
+
             // ================================================================
             // PREPARE DELETE PAYLOAD FOR ALL GAGES
             // ================================================================
+            if (location_id === "LD 22 TW-Mississippi") {
+                const payloadDeleteLd22Tw = {
+                    "name": "LD 22 TW-Mississippi.Stage.Inst.~1Day.0.netmiss-fcst",
+                    "office-id": "MVS",
+                    "units": "ft",
+                    "begin": beginDeleteDate,
+                    "end": endDeleteDate,
+                    "values": [
+                        [
+                            getDateWithTimeSet(1, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(2, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(3, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(4, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(5, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(6, 6, 0),
+                            null,
+                            0
+                        ],
+                    ]
+                };
+                timeseriesDeletePayload.push(payloadDeleteLd22Tw);
+            }
+
+            if (location_id === "Louisiana-Mississippi") {
+                const payloadDeleteLouisiana = {
+                    "name": "Louisiana-Mississippi.Stage.Inst.~1Day.0.netmiss-fcst",
+                    "office-id": "MVS",
+                    "units": "ft",
+                    "begin": beginDeleteDate,
+                    "end": endDeleteDate,
+                    "values": [
+                        [
+                            getDateWithTimeSet(1, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(2, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(3, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(4, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(5, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(6, 6, 0),
+                            null,
+                            0
+                        ],
+                    ]
+                };
+                timeseriesDeletePayload.push(payloadDeleteLouisiana);
+            }
+
+            if (location_id === "Mosier Ldg-Mississippi") {
+                const payloadDeleteMosierLdg = {
+                    "name": "Mosier Ldg-Mississippi.Stage.Inst.~1Day.0.netmiss-fcst",
+                    "office-id": "MVS",
+                    "units": "ft",
+                    "begin": beginDeleteDate,
+                    "end": endDeleteDate,
+                    "values": [
+                        [
+                            getDateWithTimeSet(1, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(2, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(3, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(4, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(5, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(6, 6, 0),
+                            null,
+                            0
+                        ],
+                    ]
+                };
+                timeseriesDeletePayload.push(payloadDeleteMosierLdg);
+            }
+
+            if (location_id === "Meredosia-Illinois") {
+                const payloadDeleteMeredosia = {
+                    "name": "Meredosia-Illinois.Stage.Inst.~1Day.0.netmiss-fcst",
+                    "office-id": "MVS",
+                    "units": "ft",
+                    "begin": beginDeleteDate,
+                    "end": endDeleteDate,
+                    "values": [
+                        [
+                            getDateWithTimeSet(1, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(2, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(3, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(4, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(5, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(6, 6, 0),
+                            null,
+                            0
+                        ],
+                    ]
+                };
+                timeseriesDeletePayload.push(payloadDeleteMeredosia);
+            }
+
+            if (location_id === "Valley City-Illinois") {
+                const payloadDeleteValleyCity = {
+                    "name": "Valley City-Illinois.Stage.Inst.~1Day.0.netmiss-fcst",
+                    "office-id": "MVS",
+                    "units": "ft",
+                    "begin": beginDeleteDate,
+                    "end": endDeleteDate,
+                    "values": [
+                        [
+                            getDateWithTimeSet(1, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(2, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(3, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(4, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(5, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(6, 6, 0),
+                            null,
+                            0
+                        ],
+                    ]
+                };
+                timeseriesDeletePayload.push(payloadDeleteValleyCity);
+            }
+
+            if (location_id === "Hardin-Illinois") {
+                const payloadDeleteHardin = {
+                    "name": "Hardin-Illinois.Stage.Inst.~1Day.0.netmiss-fcst",
+                    "office-id": "MVS",
+                    "units": "ft",
+                    "begin": beginDeleteDate,
+                    "end": endDeleteDate,
+                    "values": [
+                        [
+                            getDateWithTimeSet(1, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(2, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(3, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(4, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(5, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(6, 6, 0),
+                            null,
+                            0
+                        ],
+                    ]
+                };
+                timeseriesDeletePayload.push(payloadDeleteHardin);
+            }
+
+            if (location_id === "LD 27 Pool-Mississippi") {
+                const payloadDeleteLd27Pool = {
+                    "name": "LD 27 Pool-Mississippi.Elev.Inst.~1Day.0.netmiss-fcst",
+                    "office-id": "MVS",
+                    "units": "ft",
+                    "begin": beginDeleteDate,
+                    "end": endDeleteDate,
+                    "values": [
+                        [
+                            getDateWithTimeSet(1, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(2, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(3, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(4, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(5, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(6, 6, 0),
+                            null,
+                            0
+                        ],
+                    ]
+                };
+                timeseriesDeletePayload.push(payloadDeleteLd27Pool);
+            }
+
+            if (location_id === "LD 27 TW-Mississippi") {
+                const payloadDeleteLd27Tw = {
+                    "name": "LD 27 TW-Mississippi.Elev.Inst.~1Day.0.netmiss-fcst",
+                    "office-id": "MVS",
+                    "units": "ft",
+                    "begin": beginDeleteDate,
+                    "end": endDeleteDate,
+                    "values": [
+                        [
+                            getDateWithTimeSet(1, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(2, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(3, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(4, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(5, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(6, 6, 0),
+                            null,
+                            0
+                        ],
+                    ]
+                };
+                timeseriesDeletePayload.push(payloadDeleteLd27Tw);
+            }
+
+            if (location_id === "Engineers Depot-Mississippi") {
+                const payloadDeleteEngineersDepot = {
+                    "name": "Engineers Depot-Mississippi.Stage.Inst.~1Day.0.netmiss-fcst",
+                    "office-id": "MVS",
+                    "units": "ft",
+                    "begin": beginDeleteDate,
+                    "end": endDeleteDate,
+                    "values": [
+                        [
+                            getDateWithTimeSet(0, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(1, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(2, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(3, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(4, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(5, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(6, 6, 0),
+                            null,
+                            0
+                        ],
+                    ]
+                };
+                timeseriesDeletePayload.push(payloadDeleteEngineersDepot);
+            }
+
+            if (location_id === "Herculaneum-Mississippi") {
+                const payloadDeleteHerculaneum = {
+                    "name": "Herculaneum-Mississippi.Stage.Inst.~1Day.0.netmiss-fcst",
+                    "office-id": "MVS",
+                    "units": "ft",
+                    "begin": beginDeleteDate,
+                    "end": endDeleteDate,
+                    "values": [
+                        [
+                            getDateWithTimeSet(0, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(1, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(2, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(3, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(4, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(5, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(6, 6, 0),
+                            null,
+                            0
+                        ],
+                    ]
+                };
+                timeseriesDeletePayload.push(payloadDeleteHerculaneum);
+            }
+
+            if (location_id === "Nav TW-Kaskaskia") {
+                const payloadDeleteNavTw = {
+                    "name": "Nav TW-Kaskaskia.Stage.Inst.~1Day.0.netmiss-fcst",
+                    "office-id": "MVS",
+                    "units": "ft",
+                    "begin": beginDeleteDate,
+                    "end": endDeleteDate,
+                    "values": [
+                        [
+                            getDateWithTimeSet(0, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(1, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(2, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(3, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(4, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(5, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(6, 6, 0),
+                            null,
+                            0
+                        ],
+                    ]
+                };
+                timeseriesDeletePayload.push(payloadDeleteNavTw);
+
+                const payloadNavTwInflow = {
+                    "name": "Nav TW-Kaskaskia.Flow-In.Ave.~1Day.1Day.netmiss-fcst",
+                    "office-id": "MVS",
+                    "units": "cfs",
+                    "values": [
+                        [
+                            getDateWithTimeSet(1, 6, 0),
+                            totalNavTWInflowDay0,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(2, 6, 0),
+                            totalNavTWInflowDay1,
+                            0
+                        ],
+                    ]
+                };
+                // console.log("payloadNavTwInflow: ", payloadNavTwInflow);
+                timeseriesPayload.push(payloadNavTwInflow);
+            }
+
+            if (location_id === "Red Rock Ldg-Mississippi") {
+                const payloadDeleteRedRockLdg = {
+                    "name": "Red Rock Ldg-Mississippi.Stage.Inst.~1Day.0.netmiss-fcst",
+                    "office-id": "MVS",
+                    "units": "ft",
+                    "begin": beginDeleteDate,
+                    "end": endDeleteDate,
+                    "values": [
+                        [
+                            getDateWithTimeSet(0, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(1, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(2, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(3, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(4, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(5, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(6, 6, 0),
+                            null,
+                            0
+                        ],
+                    ]
+                };
+                timeseriesDeletePayload.push(payloadDeleteRedRockLdg);
+            }
+
+            if (location_id === "Grand Tower-Mississippi") {
+                const payloadDeleteGrandTower = {
+                    "name": "Grand Tower-Mississippi.Stage.Inst.~1Day.0.netmiss-fcst",
+                    "office-id": "MVS",
+                    "units": "ft",
+                    "begin": beginDeleteDate,
+                    "end": endDeleteDate,
+                    "values": [
+                        [
+                            getDateWithTimeSet(0, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(1, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(2, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(3, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(4, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(5, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(6, 6, 0),
+                            null,
+                            0
+                        ],
+                    ]
+                };
+                timeseriesDeletePayload.push(payloadDeleteGrandTower);
+            }
+
+            if (location_id === "Moccasin Springs-Mississippi") {
+                const payloadDeleteMoccasinSprings = {
+                    "name": "Moccasin Springs-Mississippi.Stage.Inst.~1Day.0.netmiss-fcst",
+                    "office-id": "MVS",
+                    "units": "ft",
+                    "begin": beginDeleteDate,
+                    "end": endDeleteDate,
+                    "values": [
+                        [
+                            getDateWithTimeSet(0, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(1, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(2, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(3, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(4, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(5, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(6, 6, 0),
+                            null,
+                            0
+                        ],
+                    ]
+                };
+                timeseriesDeletePayload.push(payloadDeleteMoccasinSprings);
+            }
+
             if (location_id === "Grays Pt-Mississippi") {
                 const payloadDeleteGraysPt = {
                     "name": "Grays Pt-Mississippi.Stage.Inst.~1Day.0.netmiss-fcst",
                     "office-id": "MVS",
                     "units": "ft",
+                    "begin": beginDeleteDate,
+                    "end": endDeleteDate,
                     "values": [
                         [
                             getDateWithTimeSet(0, 6, 0),
-                            -3.40282346639e+38,
+                            null,
                             0
                         ],
                         [
                             getDateWithTimeSet(1, 6, 0),
-                            -3.40282346639e+38,
+                            null,
                             0
                         ],
                         [
                             getDateWithTimeSet(2, 6, 0),
-                            -3.40282346639e+38,
+                            null,
                             0
                         ],
                         [
                             getDateWithTimeSet(3, 6, 0),
-                            -3.40282346639e+38,
+                            null,
                             0
                         ],
                         [
                             getDateWithTimeSet(4, 6, 0),
-                            -3.40282346639e+38,
+                            null,
                             0
                         ],
                         [
                             getDateWithTimeSet(5, 6, 0),
-                            -3.40282346639e+38,
+                            null,
                             0
                         ],
                         [
                             getDateWithTimeSet(6, 6, 0),
-                            -3.40282346639e+38,
+                            null,
                             0
                         ],
                     ]
                 };
-                // console.log("payloadDeleteGraysPt: ", payloadDeleteGraysPt);
                 timeseriesDeletePayload.push(payloadDeleteGraysPt);
             }
 
-            // ================================================================
-            // PREPARE SAVE PAYLOAD FOR NAV POOL
-            // ================================================================
-            // let navPoolFcst = null;
-            // if (isChecked === true) {
-            //     navPoolFcst = 68.8;
-            // } else {
-            //     navPoolFcst = 68.5; 
-            // }
-            // if (location_id === "Nav Pool-Kaskaskia") {
-            //     const payloadNavPool = {
-            //         "name": "Nav Pool-Kaskaskia.Stage.Inst.~1Day.0.netmiss-fcst",
-            //         "office-id": "MVS",
-            //         "units": "ft",
-            //         "values": [
-            //             [
-            //                 getDateWithTimeSet(1, 6, 0),
-            //                 navPoolFcst,
-            //                 0
-            //             ],
-            //         ]
-            //     };
-            //     // console.log("payloadNavPool: ", payloadNavPool);
-            //     timeseriesNavPoolPayload.push(payloadNavPool);
-            // }
+            if (location_id === "Thebes-Mississippi") {
+                const payloadDeleteThebes = {
+                    "name": "Thebes-Mississippi.Stage.Inst.~1Day.0.netmiss-fcst",
+                    "office-id": "MVS",
+                    "units": "ft",
+                    "begin": beginDeleteDate,
+                    "end": endDeleteDate,
+                    "values": [
+                        [
+                            getDateWithTimeSet(0, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(1, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(2, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(3, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(4, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(5, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(6, 6, 0),
+                            null,
+                            0
+                        ],
+                    ]
+                };
+                timeseriesDeletePayload.push(payloadDeleteThebes);
+            }
+
+            if (location_id === "Commerce-Mississippi") {
+                const payloadDeleteCommerce = {
+                    "name": "Commerce-Mississippi.Stage.Inst.~1Day.0.netmiss-fcst",
+                    "office-id": "MVS",
+                    "units": "ft",
+                    "begin": beginDeleteDate,
+                    "end": endDeleteDate,
+                    "values": [
+                        [
+                            getDateWithTimeSet(0, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(1, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(2, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(3, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(4, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(5, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(6, 6, 0),
+                            null,
+                            0
+                        ],
+                    ]
+                };
+                timeseriesDeletePayload.push(payloadDeleteCommerce);
+            }
+
+            if (location_id === "Price Ldg-Mississippi") {
+                const payloadDeletePriceLdg = {
+                    "name": "Price Ldg-Mississippi.Stage.Inst.~1Day.0.netmiss-fcst",
+                    "office-id": "MVS",
+                    "units": "ft",
+                    "begin": beginDeleteDate,
+                    "end": endDeleteDate,
+                    "values": [
+                        [
+                            getDateWithTimeSet(0, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(1, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(2, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(3, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(4, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(5, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(6, 6, 0),
+                            null,
+                            0
+                        ],
+                    ]
+                };
+                timeseriesDeletePayload.push(payloadDeletePriceLdg);
+            }
+
+            if (location_id === "Thompson Ldg-Mississippi") {
+                const payloadDeleteThompsonLdg = {
+                    "name": "Thompson Ldg-Mississippi.Stage.Inst.~1Day.0.netmiss-fcst",
+                    "office-id": "MVS",
+                    "units": "ft",
+                    "begin": beginDeleteDate,
+                    "end": endDeleteDate,
+                    "values": [
+                        [
+                            getDateWithTimeSet(0, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(1, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(2, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(3, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(4, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(5, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(6, 6, 0),
+                            null,
+                            0
+                        ],
+                    ]
+                };
+                timeseriesDeletePayload.push(payloadDeleteThompsonLdg);
+            }
+
+            if (location_id === "Grafton-Mississippi") {
+                const payloadDeleteGrafton = {
+                    "name": "Grafton-Mississippi.Stage.Inst.~1Day.0.netmiss-fcst",
+                    "office-id": "MVS",
+                    "units": "ft",
+                    "begin": beginDeleteDate,
+                    "end": endDeleteDate,
+                    "values": [
+                        [
+                            getDateWithTimeSet(0, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(1, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(2, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(3, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(4, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(5, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(6, 6, 0),
+                            null,
+                            0
+                        ],
+                    ]
+                };
+    
+                timeseriesDeletePayload.push(payloadDeleteGrafton)
+            }
+    
+            if (location_id === "Birds Point-Mississippi") {
+                const payloadDeleteBirdsPoint = {
+                    "name": "Birds Point-Mississippi.Stage.Inst.~1Day.0.netmiss-fcst",
+                    "office-id": "MVS",
+                    "units": "ft",
+                    "begin": beginDeleteDate,
+                    "end": endDeleteDate,
+                    "values": [
+                        [
+                            getDateWithTimeSet(0, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(1, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(2, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(3, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(4, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(5, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(6, 6, 0),
+                            null,
+                            0
+                        ],
+                    ]
+                };
+    
+                timeseriesDeletePayload.push(payloadDeleteBirdsPoint)
+            }
+
+            if (location_id === "Cairo-Ohio") {
+                const payloadDeleteCairo = {
+                    "name": "Cairo-Ohio.Stage.Inst.~1Day.0.netmiss-fcst",
+                    "office-id": "MVS",
+                    "units": "ft",
+                    "begin": beginDeleteDate,
+                    "end": endDeleteDate,
+                    "values": [
+                        [
+                            getDateWithTimeSet(0, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(1, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(2, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(3, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(4, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(5, 6, 0),
+                            null,
+                            0
+                        ],
+                        [
+                            getDateWithTimeSet(6, 6, 0),
+                            null,
+                            0
+                        ],
+                    ]
+                };
+    
+                timeseriesDeletePayload.push(payloadDeleteCairo)
+            }
         }
     });
 }

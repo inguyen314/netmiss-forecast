@@ -292,7 +292,7 @@ function createTableInstructionsLD24(jsonDataFiltered) {
 }
 
 async function populateTableCellsInstructionsLD24(jsonDataFiltered, table, nws_day1_date) {
-    loadingIndicator.style.display = 'block';
+    loadingIndicatorInstructions.style.display = 'block';
     let promises = [];
     jsonDataFiltered.forEach(location => {
         // Create a new row for each data object
@@ -354,7 +354,7 @@ async function populateTableCellsInstructionsLD24(jsonDataFiltered, table, nws_d
         // do all drawing my combined data
         await processAllDataInstructionsLD24(d);
     })
-    loadingIndicator.style.display = 'none';
+    loadingIndicatorInstructions.style.display = 'none';
 }
 
 async function processAllDataInstructionsLD24(data) {
@@ -796,7 +796,7 @@ function createTableInstructionsLD25(jsonDataFiltered) {
 }
 
 async function populateTableCellsInstructionsLD25(jsonDataFiltered, table, nws_day1_date) {
-    loadingIndicator.style.display = 'block';
+    loadingIndicatorInstructions.style.display = 'block';
     let promises = [];
     jsonDataFiltered.forEach(location => {
         // Create a new row for each data object
@@ -858,7 +858,7 @@ async function populateTableCellsInstructionsLD25(jsonDataFiltered, table, nws_d
         // do all drawing my combined data
         await processAllDataInstructionsLD25(d);
     })
-    loadingIndicator.style.display = 'none';
+    loadingIndicatorInstructions.style.display = 'none';
 }
 
 async function processAllDataInstructionsLD25(data) {
@@ -1184,7 +1184,7 @@ function createTableInstructionsLDMP(jsonDataFiltered) {
 }
 
 async function populateTableCellsInstructionsLDMP(jsonDataFiltered, table, nws_day1_date) {
-    loadingIndicator.style.display = 'block';
+    loadingIndicatorInstructions.style.display = 'block';
     let promises = [];
     jsonDataFiltered.forEach(location => {
         // Create a new row for each data object
@@ -1246,7 +1246,7 @@ async function populateTableCellsInstructionsLDMP(jsonDataFiltered, table, nws_d
         // do all drawing my combined data
         await processAllDataInstructionsLDMP(d);
     })
-    loadingIndicator.style.display = 'none';
+    loadingIndicatorInstructions.style.display = 'none';
 }
 
 async function processAllDataInstructionsLDMP(data) {
@@ -1605,7 +1605,7 @@ function createTableInstructionsKASKYNAV(jsonDataFiltered) {
 }
 
 async function populateTableCellsInstructionsKASKYNAV(jsonDataFiltered, table, nws_day1_date) {
-    loadingIndicator.style.display = 'block';
+    loadingIndicatorInstructions.style.display = 'block';
     let promises = [];
     jsonDataFiltered.forEach(location => {
         // Create a new row for each data object
@@ -1667,7 +1667,7 @@ async function populateTableCellsInstructionsKASKYNAV(jsonDataFiltered, table, n
         // do all drawing my combined data
         await processAllDataInstructionsKASKYNAV(d);
     })
-    loadingIndicator.style.display = 'none';
+    loadingIndicatorInstructions.style.display = 'none';
 }
 
 async function processAllDataInstructionsKASKYNAV(data) {

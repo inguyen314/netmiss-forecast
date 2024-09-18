@@ -13,9 +13,9 @@ use PHPMailer\PHPMailer\Exception; // Add the Exception namespace
 
 
 // Check if the table HTML is received
-if(isset($_POST['tableHTML'])) {
+if (isset($_POST['tableHTMLPool'])) {
     // Get the table HTML from the POST request
-    $tableHTML = $_POST['tableHTML'];
+    $tableHTMLPool = $_POST['tableHTMLPool'];
 
     $mail = new PHPMailer(true); // Pass true to enable exceptions
     $mail->SMTPDebug = 0;
@@ -31,12 +31,12 @@ if(isset($_POST['tableHTML'])) {
 
     $paragraphHTMLForecastDate = '<p>Forecast Date: ' . $todayDate . '</p>';
 
-    $paragraphHTMLQPF = 'FORECAST NOTES:    7 day QPF - http://www.wpc.ncep.noaa.gov/medr/97ewbg.gif';
+    $paragraphHTMLQPF = 'Links of Interest:    http://www.wpc.ncep.noaa.gov/qpf/24hrqpfall.html, http://images.intellicast.com/WxImages/CurrentWinds/stl.jpg';
 
 
     $mail->setFrom('noreply@usace.army.mil', 'noreply@usace.army.mil');
     $mail->addAddress('ivan.h.nguyen@usace.army.mil', 'Ivan');
-    $mail->addAddress('chn262@gmail.com', 'Ivan Personal'); 
+    $mail->addAddress('chn262@gmail.com', 'Ivan Personal');
     // $mail->addAddress('liam.wallace@usace.army.mil', 'Liam'); 
     // $mail->addAddress('davor.karic@usace.army.mil', 'Davor'); 
     // $mail->addAddress('rob.n.holmquist@usace.army.mil', 'Rob'); 
@@ -49,8 +49,8 @@ if(isset($_POST['tableHTML'])) {
     $mail->ContentType = 'text/html; charset=UTF-8';
     $mail->CharSet = 'UTF-8'; // Set character set
     $mail->Subject = 'MVS Internal River Forecast';
-    $paragraphHTML = '<p>Note - This forecast is intended for internal use only for operational decision making.  Do not give out to the public unless requested.  If there are any questions, please call the water control office at (314) 331-8342 and ask for Joan, Davor, Liam, or Rob.</p>';
-    $mail->Body    = $paragraphHTMLForecastDate . $paragraphHTMLQPF . $paragraphHTML . $tableHTML;
+    $paragraphHTML = '<p>Note - Additional instructions may be issued as conditions change and will be issued via phone.  If there are any questions, please call the water control office at (314)331-8342 and ask for Joan, Davor, Liam, or Rob.  If there is no answer or for after-hours, below are the water managers duty cell phones.Joan: (314)630-6292, Davor: (314)675-8193, Liam: (314)857-8393, Rob: (314)928-7722</p>';
+    $mail->Body    = $paragraphHTMLForecastDate . $paragraphHTMLQPF . $paragraphHTML . $tableHTMLPool;
     $mail->AltBody = 'This is the plain text version of the email'; // Add plain text alternative
     // $mail->Body = '<p>Hello, this is a test email.</p>';
     // $mail->AltBody = 'This is the plain text version of the email';
@@ -75,4 +75,3 @@ if(isset($_POST['tableHTML'])) {
     echo 'Error: Table HTML not received';
 }
 db_disconnect($db);
-?>

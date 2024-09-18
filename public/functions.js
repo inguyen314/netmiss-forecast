@@ -787,33 +787,35 @@ async function writeTS(payload) {
 async function deleteTS(payloadDelete) {
     // Log the input payloadDelete and check if it's an array
     console.log("payloadDelete =", payloadDelete);
-    console.log("isPayloadAnArray =", Array.isArray(payloadDelete));
-    
+
     // Throw an error if payloadDelete is not specified
     if (!payloadDelete) throw new Error("You must specify a payloadDelete!");
 
-    // If the payloadDelete is not an array, convert it to an array
+    // If payloadDelete is not an array, convert it to an array
     if (!Array.isArray(payloadDelete)) {
         payloadDelete = [payloadDelete];
     }
 
     // Create an array of promises to handle multiple payloads
     let promises = payloadDelete.map(ts_payload => {
-        return fetch("https://wm.mvs.ds.usace.army.mil/mvs-data/timeseries?store-rule=REPLACE%20ALL", {
-            method: "POST",
+        // Ensure payload attributes are correctly referenced
+        const { name, begin, end } = ts_payload;
+
+        return fetch(`https://wm.mvs.ds.usace.army.mil/mvs-data/timeseries/${name}?office=MVS&begin=${begin.toISOString()}&end=${end.toISOString()}`, {
+            method: "DELETE",
             headers: {
                 "accept": "*/*",
                 "Content-Type": "application/json;version=2",
             },
-            body: JSON.stringify(ts_payload)
+            // body: JSON.stringify(ts_payload) // Not needed for DELETE requests
         }).then(async r => {
             // Get the response message and status
             const message = await r.text();
             const status = r.status;
-            return { 'message': message, 'status': status };
+            return { message, status };
         }).catch(error => {
             // Handle fetch errors
-            return { 'message': error.message, 'status': 'fetch_error' };
+            return { message: error.message, status: 'fetch_error' };
         });
     });
 
@@ -888,4 +890,14 @@ async function loginDeleteStateController(cdaBtnDelete) {
         // If not logged in, set the button text to "Login"
         cdaBtnDelete.innerText = "Login";
     }
+}
+
+// Function to get current data time
+function subtractHoursFromDate(date, hoursToSubtract) {
+    return new Date(date.getTime() - (hoursToSubtract * 60 * 60 * 1000));
+}
+
+// Function to get current data time
+function plusHoursFromDate(date, hoursToSubtract) {
+    return new Date(date.getTime() + (hoursToSubtract * 60 * 60 * 1000));
 }

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<script>
+    // Create a URL object with the current page URL
+    const urlParams = new URLSearchParams(window.location.search);
+
+    // Get the value of a specific parameter
+    const param1Value = urlParams.get('cda'); // Output: "value1"
+    const param2Value = urlParams.get('interpolate'); // Output: "value2"
+
+    urlParams.forEach(function (value, key) {
+        console.log(key, value);
+    });
+
+    var cda = urlParams.get('cda');
+    console.log('cda: ', cda);
+
+    var interpolate = urlParams.get('interpolate');
+    console.log('interpolate: ', interpolate);
+
+    // Append the 'cda' value to the text content of the <span>
+    var spanElement = document.querySelector('.titleLabel.title');
+    if (cda && spanElement) {
+        // spanElement.textContent += ' ' + cda;
+        spanElement.textContent += ' ' + ' ';
+    }
+</script>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pool Instructions</title>
+    <meta name="Description" content="U.S. Army Corps of Engineers St. Louis District Home Page" />
+    <link rel="stylesheet" href="../../css/body.css" />
+    <link rel="stylesheet" href="stylesheets/style.css" />
+    <link rel="stylesheet" href="../../css/breadcrumbs.css" />
+    <link rel="stylesheet" href="../../css/jumpMenu.css" />
+    <script type="text/javascript" src="../../js/main.js"></script>
+
+    <!-- Add sidebar.css IF NOT LOAD SIDEBAR TEMPLATE -->
+    <link rel="stylesheet" href="../../css/sidebar.css" />
+    <!-- Include Moment.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <!-- Include the Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Include the Moment.js adapter for Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@1.0.0"></script>
+</head>
+
+<body>
+    <div id="page-container">
+        <header id="header">
+            <!--Header content populated here by JavaScript Tag at end of body -->
+        </header>
+        <div class="page-wrap">
+            <div class="container-fluid">
+                <div id="breadcrumbs">
+                </div>
+                <div class="page-content">
+                    <div id="topPane" class="col-md backend-cp-collapsible">
+                        <div class="box-usace">
+                            <h2 class="box-header-striped">
+                                <span class="titleLabel title">Pool Instructions</span>
+                                <span class="rss"></span>
+                            </h2>
+                            <div class="box-content" style="background-color:white;margin:auto">
+                                <div class="content">
+                                    <!-- load js -->
+                                    <script type="text/javascript" src="ratings.js"></script>
+                                    <script type="text/javascript" src="functions.js"></script>
+                                    <script type="text/javascript" src="fetch.js"></script>
+                                    <p>Note - Additional instructions may be issued as conditions change and will be
+                                        issued via phone. If there are any questions, please call the water control
+                                        office at (314)331-8342 and ask for Joan, Davor, Liam, or Rob. If there is no
+                                        answer or for after-hours, below are the water managers' duty cell phones.
+                                        Joan: (314) 630-6292
+                                        Davor: (314) 675-8193
+                                        Liam: (314) 857-8393
+                                        Rob: (314) 928-7722
+                                    </p>
+                                    <!-- pool instructions data -->
+                                    <div id="loading_forecast_instructions" style="display: none;"><img
+                                            src="../../images/loading4.gif" style='height: 50px; width: 50px;'
+                                            alt="Loading..." /></div>
+                                    <div id="table_container_forecast_instructions"></div>
+                                    <script type="text/javascript" src="forecast_instructions_cda.js"></script>
+
+                                    <!-- email forecast button -->
+                                    <button id="sendEmailBtnPool">Send Pool Instructions Email</button>
+                                    <br>
+                                    <br>
+                                    <!-- send email -->
+                                    <script>
+                                        document.getElementById("sendEmailBtnPool").addEventListener("click", function () {
+                                            sendEmailPool();
+                                        });
+                                        function sendEmailPool() {
+                                            // Get table HTML
+                                            const tableHTMLPool = document.getElementById("table_container_forecast_instructions").innerHTML;
+                                            // Send table HTML to PHP script using AJAX
+                                            const xhr = new XMLHttpRequest();
+                                            xhr.open("POST", "send_email_pool_instructions.php", true);
+                                            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                                            xhr.onreadystatechange = function () {
+                                                if (xhr.readyState === 4) {
+                                                    if (xhr.status === 200) {
+                                                        // AJAX request completed successfully
+                                                        console.log(xhr.responseText); // Log response from PHP script
+                                                        // Display popup alert
+                                                        alert('Email sent successfully');
+                                                    } else {
+                                                        // AJAX request failed
+                                                        console.error('Error:', xhr.statusText);
+                                                    }
+                                                }
+                                            };
+                                            xhr.send("tableHTMLPool=" + encodeURIComponent(tableHTMLPool));
+                                        }
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button id="returnTop" title="Return to Top of Page">Top</button>
+        </div>
+    </div>
+    <footer id="footer">
+        <!--Footer content populated here by script tag at end of body -->
+    </footer>
+    <script src="../../js/libraries/jQuery-3.3.6.min.js"></script>
+    <script defer>
+        // When the document has loaded pull in the page header and footer skins
+        $(document).ready(function () {
+            // Change the v= to a different number to force clearing the cached version on the client browser
+            $('#header').load('../../templates/DISTRICT.header.html');
+            //$('#sidebar').load('../../templates/DISTRICT.sidebar.html');
+            $('#footer').load('../../templates/DISTRICT.footer.html');
+        })
+    </script>
+</body>
+
+</html>
