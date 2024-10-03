@@ -1,3 +1,11 @@
+// Store Birds Point Forcasts
+let ForecastValues = {
+};
+
+// Store Grafton Forcasts
+let GraftonForecast = {
+};
+
 const loadingIndicatorInstructions = document.getElementById('loading_forecast_instructions');
 const tableContainerInstructions = document.getElementById('table_container_forecast_instructions');
 
@@ -83,10 +91,8 @@ document.addEventListener('DOMContentLoaded', function () {
 function createTableInstructionsLD24(jsonDataFiltered) {
     // Create a table element
     const table = document.createElement('table');
-    table.style.width = '100%';
-    table.style.borderCollapse = 'collapse';
-    table.style.marginBottom = '50px';
-    // table.setAttribute('id', 'forecast'); // Set the id to "gage_data"
+
+    table.id = 'pool_instructions';
 
     // Create the first header row
     const headerRowTitle = document.createElement('tr');
@@ -94,12 +100,6 @@ function createTableInstructionsLD24(jsonDataFiltered) {
     // Create table header for the first column with rowspan of 3
     const thLocation = document.createElement('th');
     thLocation.textContent = "Lock Dam 24";
-    thLocation.rowSpan = 1;
-    thLocation.style.height = '50px';
-    thLocation.style.backgroundColor = 'darkblue';
-    thLocation.style.color = 'white'; // Set the text color to white
-    thLocation.style.border = '1px solid gray'; // Add border
-    thLocation.style.width = '20%';
     headerRowTitle.appendChild(thLocation);
 
     // Add the header row to the table (assuming you have a table element already)
@@ -107,7 +107,6 @@ function createTableInstructionsLD24(jsonDataFiltered) {
 
     // Create a table header row for the third header row
     const headerRowDate = document.createElement('tr');
-
 
     // =================================================================== // 
     // ========================== GET DATE TIME ========================== // 
@@ -202,10 +201,6 @@ function createTableInstructionsLD24(jsonDataFiltered) {
     columns2.forEach((columnName) => {
         const th = document.createElement('th');
         th.textContent = columnName;
-        th.style.height = '50px';
-        th.style.backgroundColor = 'darkblue';
-        th.style.color = 'white'; // Set the text color to white
-        th.style.border = '1px solid gray'; // Add border
         headerRowDate.appendChild(th);
     });
 
@@ -213,9 +208,8 @@ function createTableInstructionsLD24(jsonDataFiltered) {
     table.appendChild(headerRowDate);
 
     // Append the table to the document or a specific container
-    if (tableContainerInstructions) {
-        tableContainerInstructions.appendChild(table);
-    }
+    tableContainerInstructions.appendChild(table);
+    
 
     // get netmiss data here
     (async () => {
@@ -417,28 +411,7 @@ async function processAllDataInstructionsLD24(data) {
             return;
         }
 
-        // console.log("location_id: ", location_id);
-        // console.log("convertedData: ", convertedData);
-        // console.log("convertedNetmissUpstreamData: ", convertedNetmissUpstreamData);
-        // console.log("latest6AMValue: ", latest6AMValue);
-        // console.log("tsid: ", tsid);
-        // console.log("convertedNetmissDownstreamData: ", convertedNetmissDownstreamData);
-        // console.log("convertedNetmissForecastingPointUpstreamData: ", convertedNetmissForecastingPointUpstreamData);
-        // console.log("convertedNetmissForecastingPointDownstreamData: ", convertedNetmissForecastingPointDownstreamData);
-        // console.log("tsid_forecast_location: ", tsid_forecast_location);
-        // console.log("river_mile_hard_coded: ", river_mile_hard_coded);
-        // console.log("netmiss_river_mile_hard_coded_upstream: ", netmiss_river_mile_hard_coded_upstream);
-        // console.log("netmiss_river_mile_hard_coded_downstream: ", netmiss_river_mile_hard_coded_downstream);
-        // console.log("isNetmissForecastArrayLengthGreaterThanSeven: ", isNetmissForecastArrayLengthGreaterThanSeven);
-        // console.log("isRvfArrayLengthGreaterThanSeven: ", isRvfArrayLengthGreaterThanSeven);
-        // console.log("isCairoRvfForecastValuesGreaterThanSeven: ", isCairoRvfForecastValuesGreaterThanSeven);
-        // console.log("BirdsPointForecastValue: ", BirdsPointForecastValue);
-        // console.log("latest7AMRvfValue: ", latest7AMRvfValue);
-        // console.log("data23: ", data23);
-        // console.log("data24: ", data24);
-        // console.log("data25: ", data25);
-        // console.log("data26: ", data26);
-        // console.log("data27: ", data27);
+
 
         // Starting Processing All Gages
         if (location_id === "LD 22 TW-Mississippi") {
@@ -451,15 +424,11 @@ async function processAllDataInstructionsLD24(data) {
 
             // OBSERVED 6AM
             const level6AmCell = row.insertCell();
-            level6AmCell.style.textAlign = 'center';
-            level6AmCell.style.border = '1px solid gray'; // Add border
             level6AmCell.innerHTML = location_id.split('-')[0] + " (Flow)";
 
 
             // DAY1
             const day1Cell = row.insertCell();
-            day1Cell.style.textAlign = 'center';
-            day1Cell.style.border = '1px solid gray'; // Add border
             day1Cell.innerHTML = location_id.split('-')[0];
             let day1 = null;
             // Process netmiss interpolation for each gage here
@@ -468,8 +437,6 @@ async function processAllDataInstructionsLD24(data) {
 
             // DAY2
             const day2Cell = row.insertCell();
-            day2Cell.style.textAlign = 'center';
-            day2Cell.style.border = '1px solid gray'; // Add border
             day2Cell.innerHTML = location_id.split('-')[0];
             let day2 = null;
             // Process netmiss interpolation for each gage here
@@ -478,8 +445,6 @@ async function processAllDataInstructionsLD24(data) {
 
             // DAY3
             const day3Cell = row.insertCell();
-            day3Cell.style.textAlign = 'center';
-            day3Cell.style.border = '1px solid gray'; // Add border
             day3Cell.innerHTML = location_id.split('-')[0];
             let day3 = null;
             // Process netmiss interpolation for each gage here
@@ -488,8 +453,6 @@ async function processAllDataInstructionsLD24(data) {
 
             // DAY4
             const day4Cell = row.insertCell();
-            day4Cell.style.textAlign = 'center';
-            day4Cell.style.border = '1px solid gray'; // Add border
             day4Cell.innerHTML = location_id.split('-')[0];
             let day4 = null;
             // Process netmiss interpolation for each gage here
@@ -498,8 +461,6 @@ async function processAllDataInstructionsLD24(data) {
 
             // DAY5
             const day5Cell = row.insertCell();
-            day5Cell.style.textAlign = 'center';
-            day5Cell.style.border = '1px solid gray'; // Add border
             let day5 = null;
             // Process netmiss interpolation for each gage here
             day5 = "<div title='" + convertedDataInstructions.values[4] + "'>" + (convertedDataInstructions.values[4][1] / 1000).toFixed(0) + "</div>";
@@ -507,8 +468,6 @@ async function processAllDataInstructionsLD24(data) {
 
             // DAY6
             const day6Cell = row.insertCell();
-            day6Cell.style.textAlign = 'center';
-            day6Cell.style.border = '1px solid gray'; // Add border
             let day6 = null;
             // Process netmiss interpolation for each gage here
             day6 = "<div title='" + convertedDataInstructions.values[5] + "'>" + (convertedDataInstructions.values[5][1] / 1000).toFixed(0) + "</div>";
@@ -516,8 +475,6 @@ async function processAllDataInstructionsLD24(data) {
 
             // DAY7
             const day7Cell = row.insertCell();
-            day7Cell.style.textAlign = 'center';
-            day7Cell.style.border = '1px solid gray'; // Add border
             let day7 = null;
             // Process netmiss interpolation for each gage here
             day7 = "<div title='" + convertedDataInstructions.values[6] + "'>" + (convertedDataInstructions.values[6][1] / 1000).toFixed(0) + "</div>";
@@ -532,14 +489,10 @@ async function processAllDataInstructionsLD24(data) {
 
             // OBSERVED 6AM
             const level6AmCell = row.insertCell();
-            level6AmCell.style.textAlign = 'center';
-            level6AmCell.style.border = '1px solid gray'; // Add border
             level6AmCell.innerHTML = "Salt Daily Avg (kcfs)";
 
             // DAY1
             const day1Cell = row.insertCell();
-            day1Cell.style.textAlign = 'center';
-            day1Cell.style.border = '1px solid gray'; // Add border
             day1Cell.innerHTML = location_id.split('-')[0];
             let day1 = null;
             // Process netmiss interpolation for each gage here
@@ -548,35 +501,28 @@ async function processAllDataInstructionsLD24(data) {
 
             // DAY2
             const day2Cell = row.insertCell();
-            day2Cell.style.textAlign = 'center';
-            day2Cell.style.border = '1px solid gray'; // Add border
             day2Cell.innerHTML = location_id.split('-')[0];
             let day2 = null;
             // Process netmiss interpolation for each gage here
             day2 = "<div title='" + convertedDataInstructionsSaltDailyAvg.name + convertedDataInstructionsSaltDailyAvg.values[1] + "'>" + (convertedDataInstructionsSaltDailyAvg.values[1][1] / 1000).toFixed(0) + "</div>";
             day2Cell.innerHTML = day2;
         }
-        if (location_id === "LD 24 Pool-Mississippi") {
-            // Retrieve today's netmiss forecast value
-            let todayNetmissForecast = convertedData.values[0][1];
-            // console.log("todayNetmissForecast: ", todayNetmissForecast);
+        // if (location_id === "LD 24 Pool-Mississippi") {
+        //     // Retrieve today's netmiss forecast value
+        //     let todayNetmissForecast = convertedData.values[0][1];
 
-            // OBSERVED 6AM
-            const level6AmCell = row.insertCell();
-            level6AmCell.style.textAlign = 'center';
-            level6AmCell.style.border = '1px solid gray'; // Add border
-            level6AmCell.innerHTML = "Pool Instructions";
+        //     // OBSERVED 6AM
+        //     const level6AmCell = row.insertCell();
+        //     level6AmCell.innerHTML = "Pool Instructions";
 
-            // DAY1
-            const day1Cell = row.insertCell();
-            day1Cell.style.textAlign = 'center';
-            day1Cell.style.border = '1px solid gray'; // Add border
-            day1Cell.innerHTML = location_id.split('-')[0];
-            let day1 = null;
-            // Process netmiss interpolation for each gage here
-            day1 = "<div>" + "<b>" + todayNetmissForecast.toFixed(1) + " (+/-0.1)" + "</b>" + "</div>";
-            day1Cell.innerHTML = day1;
-        }
+        //     // DAY1
+        //     const day1Cell = row.insertCell();
+        //     day1Cell.innerHTML = location_id.split('-')[0];
+        //     let day1 = null;
+        //     // Process netmiss interpolation for each gage here
+        //     day1 = "<div>" + "<b>" + todayNetmissForecast.toFixed(1) + " (+/-0.1)" + "</b>" + "</div>";
+        //     day1Cell.innerHTML = day1;
+        // }
     });
 }
 
@@ -589,7 +535,7 @@ function createTableInstructionsLD25(jsonDataFiltered) {
     const table = document.createElement('table');
     table.style.width = '100%';
     table.style.borderCollapse = 'collapse';
-    table.style.marginBottom = '50px';
+    table.style.marginBottom = '25px';
     // table.setAttribute('id', 'forecast'); // Set the id to "gage_data"
 
     // Create the first header row
@@ -599,7 +545,7 @@ function createTableInstructionsLD25(jsonDataFiltered) {
     const thLocation = document.createElement('th');
     thLocation.textContent = "Lock Dam 25";
     thLocation.rowSpan = 1;
-    thLocation.style.height = '50px';
+    thLocation.style.height = '25px';
     thLocation.style.backgroundColor = 'darkblue';
     thLocation.style.color = 'white'; // Set the text color to white
     thLocation.style.border = '1px solid gray'; // Add border
@@ -706,7 +652,7 @@ function createTableInstructionsLD25(jsonDataFiltered) {
     columns2.forEach((columnName) => {
         const th = document.createElement('th');
         th.textContent = columnName;
-        th.style.height = '50px';
+        th.style.height = '25px';
         th.style.backgroundColor = 'darkblue';
         th.style.color = 'white'; // Set the text color to white
         th.style.border = '1px solid gray'; // Add border
@@ -977,7 +923,7 @@ function createTableInstructionsLDMP(jsonDataFiltered) {
     const table = document.createElement('table');
     table.style.width = '100%';
     table.style.borderCollapse = 'collapse';
-    table.style.marginBottom = '50px';
+    table.style.marginBottom = '25px';
     // table.setAttribute('id', 'forecast'); // Set the id to "gage_data"
 
     // Create the first header row
@@ -987,7 +933,7 @@ function createTableInstructionsLDMP(jsonDataFiltered) {
     const thLocation = document.createElement('th');
     thLocation.textContent = "Mel Price Lock Dam";
     thLocation.rowSpan = 1;
-    thLocation.style.height = '50px';
+    thLocation.style.height = '25px';
     thLocation.style.backgroundColor = 'darkblue';
     thLocation.style.color = 'white'; // Set the text color to white
     thLocation.style.border = '1px solid gray'; // Add border
@@ -1094,7 +1040,7 @@ function createTableInstructionsLDMP(jsonDataFiltered) {
     columns2.forEach((columnName) => {
         const th = document.createElement('th');
         th.textContent = columnName;
-        th.style.height = '50px';
+        th.style.height = '25px';
         th.style.backgroundColor = 'darkblue';
         th.style.color = 'white'; // Set the text color to white
         th.style.border = '1px solid gray'; // Add border
@@ -1398,7 +1344,7 @@ function createTableInstructionsKASKYNAV(jsonDataFiltered) {
     const table = document.createElement('table');
     table.style.width = '100%';
     table.style.borderCollapse = 'collapse';
-    table.style.marginBottom = '50px';
+    table.style.marginBottom = '25px';
     // table.setAttribute('id', 'forecast'); // Set the id to "gage_data"
 
     // Create the first header row
@@ -1408,7 +1354,7 @@ function createTableInstructionsKASKYNAV(jsonDataFiltered) {
     const thLocation = document.createElement('th');
     thLocation.textContent = "Kaskaskia Nav";
     thLocation.rowSpan = 1;
-    thLocation.style.height = '50px';
+    thLocation.style.height = '25px';
     thLocation.style.backgroundColor = 'darkblue';
     thLocation.style.color = 'white'; // Set the text color to white
     thLocation.style.border = '1px solid gray'; // Add border
@@ -1515,7 +1461,7 @@ function createTableInstructionsKASKYNAV(jsonDataFiltered) {
     columns2.forEach((columnName) => {
         const th = document.createElement('th');
         th.textContent = columnName;
-        th.style.height = '50px';
+        th.style.height = '25px';
         th.style.backgroundColor = 'darkblue';
         th.style.color = 'white'; // Set the text color to white
         th.style.border = '1px solid gray'; // Add border
@@ -1729,29 +1675,6 @@ async function processAllDataInstructionsKASKYNAV(data) {
             console.error('Invalid row:', row);
             return;
         }
-
-        // console.log("location_id: ", location_id);
-        // console.log("convertedData: ", convertedData);
-        // console.log("convertedNetmissUpstreamData: ", convertedNetmissUpstreamData);
-        // console.log("latest6AMValue: ", latest6AMValue);
-        // console.log("tsid: ", tsid);
-        // console.log("convertedNetmissDownstreamData: ", convertedNetmissDownstreamData);
-        // console.log("convertedNetmissForecastingPointUpstreamData: ", convertedNetmissForecastingPointUpstreamData);
-        // console.log("convertedNetmissForecastingPointDownstreamData: ", convertedNetmissForecastingPointDownstreamData);
-        // console.log("tsid_forecast_location: ", tsid_forecast_location);
-        // console.log("river_mile_hard_coded: ", river_mile_hard_coded);
-        // console.log("netmiss_river_mile_hard_coded_upstream: ", netmiss_river_mile_hard_coded_upstream);
-        // console.log("netmiss_river_mile_hard_coded_downstream: ", netmiss_river_mile_hard_coded_downstream);
-        // console.log("isNetmissForecastArrayLengthGreaterThanSeven: ", isNetmissForecastArrayLengthGreaterThanSeven);
-        // console.log("isRvfArrayLengthGreaterThanSeven: ", isRvfArrayLengthGreaterThanSeven);
-        // console.log("isCairoRvfForecastValuesGreaterThanSeven: ", isCairoRvfForecastValuesGreaterThanSeven);
-        // console.log("BirdsPointForecastValue: ", BirdsPointForecastValue);
-        // console.log("latest7AMRvfValue: ", latest7AMRvfValue);
-        // console.log("data23: ", data23);
-        // console.log("data24: ", data24);
-        // console.log("data25: ", data25);
-        // console.log("data26: ", data26);
-        // console.log("data27: ", data27);
 
         // Starting Processing All Gages
         if (location_id === "Red Bud-Kaskaskia") {

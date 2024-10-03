@@ -33,66 +33,16 @@
                 <div id="breadcrumbs">
                 </div>
                 <div class="page-content">
+                    <sidebar id="sidebar"></sidebar>
                     <div id="topPane" class="col-md backend-cp-collapsible">
                         <div class="box-usace">
                             <h2 class="box-header-striped">
-                                <span class="titleLabel title">7-Day Operational River Forecast</span>
+                                <span class="titleLabel title">Operation River Forecast</span>
                                 <span class="rss"></span>
                             </h2>
                             <div class="box-content" style="background-color:white;margin:auto">
                                 <div class="content">
-                                    <p><a href='#'>Step 01. Interpolate Mississippi Gages</a></p>
-                                    <p><a href='#'>Step 02. Interpolate Illinois Gages</a></p>
-                                    <p><a href='forecast_nav_pool.html' target="_blank">Step 03. Determine Nav Pool Instruction</a></p>
-                                    <p><a href='#'>Step 04. Enter Special Notes</a></p>
-                                    <p><a href='forecast.html?cda=internal&interpolate=true' target="_blank">Step 05. View/Send 7-Day Internal Forecast</a></p>
-                                    <p><a href='forecast.html?cda=internal&interpolate=true' target="_blank">Step 06. View/Send Pool Instructions</a></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="page-content">
-                    <sidebar id="sidebar">
-                        <!--Side bar content populated here by JavaScript Tag at end of body -->
-                    </sidebar>
-                    <div id="topPane" class="col-md backend-cp-collapsible">
-                        <!-- Page Content Here -->
-                        <div class="box-usace">
-                            <h2 class="box-header-striped">
-                                <span class="titleLabel title">30-Day Operational River Forecast</span>
-                                <span class="rss"></span>
-                            </h2>
-                            <div class="box-content" style="background-color:white;margin:auto">
-                                <div class="content">
-                                    <!-- Box Content Here -->
-                                    <p><a href='#'>Step 01. Interpolate Mississippi Gages</a></p>
-                                    <p><a href='#'>Step 02. Interpolate Illinois Gages</a></p>
-                                    <p><a href='forecast_nav_pool.html' target="_blank">Step 03. Determine Nav Pool Instruction</a></p>
-                                    <p><a href='#'>Step 04. Enter Special Notes</a></p>
-                                    <p><a href='#'>Step 05. View/Send 7-Day Internal Forecast</a></p>
-                                    <p><a href='#'>Step 06. View/Send 30-Day Internal Forecast</a></p>
-                                    <p><a href='#'>Step 07. View/Send Pool Instructions</a></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="page-content">
-                    <sidebar id="sidebar">
-                        <!--Side bar content populated here by JavaScript Tag at end of body -->
-                    </sidebar>
-                    <div id="topPane" class="col-md backend-cp-collapsible">
-                        <!-- Page Content Here -->
-                        <div class="box-usace">
-                            <h2 class="box-header-striped">
-                                <span class="titleLabel title">Note</span>
-                                <span class="rss"></span>
-                            </h2>
-                            <div class="box-content" style="background-color:white;margin:auto">
-                                <div class="content">
-                                    <!-- Box Content Here -->
-
+                                    
                                 </div>
                             </div>
                         </div>
@@ -111,7 +61,7 @@
         $(document).ready(function () {
             // Change the v= to a different number to force clearing the cached version on the client browser
             $('#header').load('../../templates/DISTRICT.header.html');
-            //$('#sidebar').load('../../templates/DISTRICT.sidebar.html');
+            $('#sidebar').load('../../templates/DISTRICT.sidebar.netmiss.html');
             $('#footer').load('../../templates/DISTRICT.footer.html');
         })
     </script>

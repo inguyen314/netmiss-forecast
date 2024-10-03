@@ -103,13 +103,6 @@
                 <script type="text/javascript" src="fetch.js"></script>
                 <script type="text/javascript" src="forecast_cda.js"></script>
 
-                <!-- nav pool forecast button -->
-                <button id="enterNavPoolForecast">Enter Nav Pool Forecast</button>
-                <script>
-                    document.getElementById('enterNavPoolForecast').addEventListener('click', function () {
-                        window.open('forecast_nav_pool.html', '_blank'); // Adjust the file path if needed
-                    });
-                </script>
                 <!-- images -->
                 <div
                     style="display: flex; justify-content: center; align-items: center; width: 100%; background-color: darkgray; margin-top: 50px">
@@ -123,34 +116,35 @@
                 <button id="sendEmailBtn">Send Internal River Forecast Email</button>
                 <br>
                 <br>
+                <p>Email List: example1@example.com, example2@example.com</p>
                 <!-- send email -->
                 <script>
-                    document.getElementById("sendEmailBtn").addEventListener("click", function () {
-                        sendEmail();
-                    });
+                    // document.getElementById("sendEmailBtn").addEventListener("click", function () {
+                    //     sendEmail();
+                    // });
 
-                    function sendEmail() {
-                        // Get table HTML
-                        const tableHTML = document.getElementById("table_container_forecast").innerHTML;
-                        // Send table HTML to PHP script using AJAX
-                        const xhr = new XMLHttpRequest();
-                        xhr.open("POST", "send_email.php", true);
-                        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                        xhr.onreadystatechange = function () {
-                            if (xhr.readyState === 4) {
-                                if (xhr.status === 200) {
-                                    // AJAX request completed successfully
-                                    console.log(xhr.responseText); // Log response from PHP script
-                                    // Display popup alert
-                                    alert('Email sent successfully');
-                                } else {
-                                    // AJAX request failed
-                                    console.error('Error:', xhr.statusText);
-                                }
-                            }
-                        };
-                        xhr.send("tableHTML=" + encodeURIComponent(tableHTML));
-                    }
+                    // function sendEmail() {
+                    //     // Get table HTML
+                    //     const tableHTML = document.getElementById("table_container_forecast").innerHTML;
+                    //     // Send table HTML to PHP script using AJAX
+                    //     const xhr = new XMLHttpRequest();
+                    //     xhr.open("POST", "send_email.php", true);
+                    //     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                    //     xhr.onreadystatechange = function () {
+                    //         if (xhr.readyState === 4) {
+                    //             if (xhr.status === 200) {
+                    //                 // AJAX request completed successfully
+                    //                 console.log(xhr.responseText); // Log response from PHP script
+                    //                 // Display popup alert
+                    //                 alert('Email sent successfully');
+                    //             } else {
+                    //                 // AJAX request failed
+                    //                 console.error('Error:', xhr.statusText);
+                    //             }
+                    //         }
+                    //     };
+                    //     xhr.send("tableHTML=" + encodeURIComponent(tableHTML));
+                    // }
                 </script>
             </div>
             <button id="returnTop" title="Return to Top of Page">Top</button>

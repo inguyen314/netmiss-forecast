@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Determine Nav Pool Instruction</title>
+    <title>Special Notes</title>
     <meta name="Description" content="U.S. Army Corps of Engineers St. Louis District Home Page" />
     <link rel="stylesheet" href="../../css/body.css" />
     <link rel="stylesheet" href="../../css/breadcrumbs.css" />
@@ -35,22 +35,20 @@
                     <div id="topPane" class="col-md backend-cp-collapsible">
                         <div class="box-usace">
                             <h2 class="box-header-striped">
-                                <span class="titleLabel title">Nav Pool Instruction</span>
+                                <span class="titleLabel title">Special Notes</span>
                                 <span class="rss"></span>
                             </h2>
                             <div class="box-content" style="background-color:white;margin:auto">
                                 <div class="content">
                                     <div class="status"></div>
                                     <button id="cda-btn" disabled>Login</button>
-                                    <label>
-                                        <input type="checkbox" id="myCheckbox"> 68.8
-                                    </label>
-                                    <label>
-                                        <input type="checkbox" id="myCheckbox2"> 68.5
-                                    </label>
+                                    <form id="myForm">
+                                        <label for="myInput">Enter Value:</label>
+                                        <input type="text" id="myInput" placeholder="68.8">
+                                    </form>
                                     <br>
                                     <br>
-                                    <p><a href="https://wm.mvs.ds.usace.army.mil/district_templates/chart/index.html?office=MVS&cwms_ts_id=Nav Pool-Kaskaskia.Stage.Inst.~1Day.0.netmiss-fcst&lookforward=96&lookback=96" target="_blank">Plot Nav Pool Instruction Forecast</a></p>
+                                    <p><a href="https://wm.mvs.ds.usace.army.mil/district_templates/chart/index.html?office=MVS&cwms_ts_id=LD 22 TW-Mississippi.Stage.Inst.~1Day.0.netmiss-fcst-note&lookforward=96&lookback=96" target="_blank">View Special Notes Time Series</a></p>
                                 </div>
                             </div>
                         </div>
@@ -67,9 +65,7 @@
     <script defer>
         // When the document has loaded pull in the page header and footer skins
         $(document).ready(function () {
-            // Change the v= to a different number to force clearing the cached version on the client browser
             $('#header').load('../../templates/DISTRICT.header.html');
-            // $('#sidebar').load('../../templates/DISTRICT.sidebar.html');
             $('#footer').load('../../templates/DISTRICT.footer.html');
         })
     </script>
@@ -105,7 +101,6 @@
                 throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorText}`);
             }
 
-            // Success
             return true;
 
         } catch (error) {
@@ -140,31 +135,10 @@
         window.location.href = `https://wm.mvs.ds.usace.army.mil:8243/CWMSLogin/login?OriginalLocation=${encodeURIComponent(window.location.href)}`;
     }
 
-    // Payloads for writing timeseries data
-    const payload1 = {
-        "name": "Nav Pool-Kaskaskia.Stage.Inst.~1Day.0.netmiss-fcst",
-        "office-id": "MVS",
-        "units": "ft",
-        "values": [
-            [getDateWithTimeSet(1, 6, 0), 68.8, 0]
-        ]
-    };
-
-    const payload2 = {
-        "name": "Nav Pool-Kaskaskia.Stage.Inst.~1Day.0.netmiss-fcst",
-        "office-id": "MVS",
-        "units": "ft",
-        "values": [
-            [getDateWithTimeSet(1, 6, 0), 68.5, 0]
-        ]
-    };
 
     // DOM elements
     const statusBtn = document.querySelector(".status");
     const cdaBtn = document.getElementById("cda-btn");
-
-    // Variable to store the state of the first checkbox
-    let isMyCheckBox = false;
 
     // Controller for login state
     async function loginStateController() {
@@ -176,28 +150,6 @@
         }
         cdaBtn.disabled = false;
     }
-
-    // Handle checkbox state management
-    function handleCheckboxChange() {
-        const checkbox1 = document.getElementById('myCheckbox');
-        const checkbox2 = document.getElementById('myCheckbox2');
-
-        if (checkbox1.checked) {
-            checkbox2.checked = false;
-            isMyCheckBox = true;
-        } else {
-            isMyCheckBox = false;
-        }
-    }
-
-    // Add event listeners to checkboxes
-    document.getElementById('myCheckbox').addEventListener('change', handleCheckboxChange);
-    document.getElementById('myCheckbox2').addEventListener('change', function () {
-        if (document.getElementById('myCheckbox2').checked) {
-            document.getElementById('myCheckbox').checked = false;
-            isMyCheckBox = false;
-        }
-    });
 
     document.addEventListener("DOMContentLoaded", () => {
         // Setup event listeners
@@ -211,17 +163,21 @@
                 }
             } else {
                 try {
-                    // Determine which payload to use based on checked checkbox
-                    const checkbox1 = document.getElementById('myCheckbox');
-                    const checkbox2 = document.getElementById('myCheckbox2');
+                    // Get value from textbox
+                    const inputValue = document.getElementById('myInput').value;
                     let selectedPayload;
 
-                    if (checkbox1.checked) {
-                        selectedPayload = payload1;
-                    } else if (checkbox2.checked) {
-                        selectedPayload = payload2;
+                    if (inputValue) {
+                        selectedPayload = {
+                            "name": "LD 22 TW-Mississippi.Stage.Inst.~1Day.0.netmiss-fcst-note",
+                            "office-id": "MVS",
+                            "units": "ft",
+                            "values": [
+                                [getDateWithTimeSet(1, 6, 0), parseFloat(inputValue), 0]
+                            ]
+                        };
                     } else {
-                        statusBtn.innerText = "No checkbox selected!";
+                        statusBtn.innerText = "No value entered!";
                         return;
                     }
 
@@ -242,5 +198,4 @@
             loginStateController();
         }, 10000); // Time in milliseconds
     });
-
 </script>
